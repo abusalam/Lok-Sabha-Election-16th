@@ -1,8 +1,8 @@
 <?php
 session_start();
 extract($_GET);
-include_once('inc\db_trans.inc.php');
-include_once('function\master_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/master_fun.php');
 $sub_cd=decode($_GET['sub_cd']);
 $act=$_GET['act'];
 $opn=$_GET['opn'];

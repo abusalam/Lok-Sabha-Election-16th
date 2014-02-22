@@ -24,7 +24,7 @@ if(isset($_REQUEST['district']))
 	if(isset($_REQUEST['Subdivision']))
 		$subdiv_cd=$_REQUEST['Subdivision'];
 }
-include("..\inc\db_trans.inc.php");
+include("../inc/db_trans.inc.php");
 ?>
 <table width="100%">
 <tr>

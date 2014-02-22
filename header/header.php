@@ -43,8 +43,8 @@ stm_bm(["menu4fd9",970,"","blank.gif",0,"","",1,0,0,0,1000,1,0,0,"","100%",0,0,1
 stm_bp("p0",[0,4,0,0,3,4,0,0,100,"",-2,"",-2,90,0,0,"#000000","#38557D","",3,0,0,"#000000"]);
 stm_ai("p0i0",[0,"Home","","",-1,-1,0,"home.php","_self","","","","",0,0,0,"","",0,0,0,1,1,"#38557D",0,"#B0B0C1",0,"","",3,3,0,0,"#FFFFF7","#FFFFF7","#FFFFFF","#000000","bold 8pt 'Arial','Verdana'","bold 8pt 'Arial','Verdana'",0,0,"","","","",0,0,0],80,25);
 <?php
-include_once('inc\db_trans.inc.php');
-include_once('function\add_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/add_fun.php');
 $dist_cd; $subdiv_cd;
 if(isset($_SESSION['dist_cd']))
 	$dist_cd=$_SESSION['dist_cd'];

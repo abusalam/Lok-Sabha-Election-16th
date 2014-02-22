@@ -1,8 +1,8 @@
 <?php
 session_start();
 extract($_GET);
-include_once('inc\db_trans.inc.php');
-include_once('function\add_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/add_fun.php');
 //=================================Replacement====================================
 //==========================Get Personnel Names===========================
 $ass; $polling_party; $post_stat;

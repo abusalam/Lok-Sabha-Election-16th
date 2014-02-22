@@ -26,8 +26,8 @@ label {page-break-after:always}
 </thead>
 <tr><td align="center">
 <?php
-include_once('..\inc\db_trans.inc.php');
-include_once('..\function\training_fun.php');
+include_once('../inc/db_trans.inc.php');
+include_once('../function/training_fun.php');
 extract($_POST);
 $training_venue=$_POST['training_venue'];
 $training_type=$_POST['training_type'];

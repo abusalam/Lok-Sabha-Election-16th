@@ -37,8 +37,8 @@ function validate()
 </script>
 </head>
 <?php
-include_once('inc\db_trans.inc.php');
-include_once('function\training_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/training_fun.php');
 ?>
 <body>
 <div width="100%" align="center">

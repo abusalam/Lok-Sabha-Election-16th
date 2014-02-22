@@ -335,7 +335,7 @@ function validateFileExtension(Source, args)
 </script>
 </head>
 <?php
-include_once('inc\db_trans_for_police.inc.php');
+include_once('inc/db_trans_for_police.inc.php');
 $action=$_REQUEST['submit'];
 if($action=='Save')
 {

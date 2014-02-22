@@ -1,8 +1,8 @@
 <?php
 session_start();
 extract($_GET);
-include_once('..\inc\db_trans.inc.php');
-include_once('..\function\report_fun.php');
+include_once('../inc/db_trans.inc.php');
+include_once('../function/report_fun.php');
 $opn=$_GET['opn'];
 if($opn=='office')
 {

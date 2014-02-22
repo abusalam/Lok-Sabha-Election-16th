@@ -1,8 +1,8 @@
 <?php
 session_start();
 extract($_GET);
-include_once('inc\db_trans.inc.php');
-include_once('function\training_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/training_fun.php');
 $tr_cd=decode($_GET['tr_cd']);
 $act=$_GET['act'];
 if($tr_cd!='' && $act=='del')

@@ -127,7 +127,7 @@ function tab1_selected()
 </script>
 </head>
 <?php
-include_once('inc\db_trans.inc.php');
+include_once('inc/db_trans.inc.php');
 $action=$_REQUEST['submit'];
 if($action=='Submit')
 {

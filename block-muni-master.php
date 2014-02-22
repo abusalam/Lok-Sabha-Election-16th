@@ -43,8 +43,8 @@ function validate()
 </script>
 </head>
 <?php
-include_once('inc\db_trans.inc.php');
-include_once('function\master_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/master_fun.php');
 $action=$_REQUEST['submit'];
 if($action=='Save')
 {

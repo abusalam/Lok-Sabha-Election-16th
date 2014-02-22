@@ -3,8 +3,8 @@ session_start();
     // paging code
     // Query to count rows.
 	extract($_GET);
-include_once('inc\db_trans.inc.php');
-include_once('function\add_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/add_fun.php');
 $officeid=$_GET["officeid"];
 $officename=$_GET["officename"];
 $frmdt=$_GET["frmdt"];

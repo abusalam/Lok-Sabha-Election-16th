@@ -8,7 +8,7 @@ session_start();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
-include_once('inc\db_trans.inc.php');
+include_once('inc/db_trans.inc.php');
 $action=$_REQUEST['submit'];
 if($action=='Log In')
 {

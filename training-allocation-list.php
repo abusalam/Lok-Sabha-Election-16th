@@ -74,8 +74,8 @@ function delete_training_allocation(str)
 <link type="text/css" rel="stylesheet" href="css/paging.css" />
 </head>
 <?php
-include_once('inc\db_trans.inc.php');
-include_once('function\training_fun.php');
+include_once('inc/db_trans.inc.php');
+include_once('function/training_fun.php');
 ?>
 <body oncontextmenu="return false;" onload="return office_list();">
 <div width="100%" align="center">

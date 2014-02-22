@@ -26,8 +26,8 @@ label {page-break-after:always}
 </thead>
 <tr><td align="center">
 <?php
-include_once('..\inc\db_trans.inc.php');
-include_once('..\function\ofc_fun.php');
+include_once('../inc/db_trans.inc.php');
+include_once('../function/ofc_fun.php');
 extract($_POST);
 $subdiv=$_POST['Subdivision'];
 $office_cd=$_POST['office'];
