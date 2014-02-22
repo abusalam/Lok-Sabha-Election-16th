@@ -1,0 +1,85 @@
+body {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	/*background: #E1F0FF;*/
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0;
+	text-align: center; /* this centers the container in IE 5* browsers. The text is then set to the left aligned default in the #container selector */
+	color: #000000;
+}
+#username, #password {border:1px solid #325C99; background-color: #F0F3F9; height: 25px; padding-left: 5px;}
+
+.oneColFixCtrHdr #container {
+	width: 450px;  /* using 20px less than a full 800px width allows for browser chrome and avoids a horizontal scroll bar */
+	margin: 0 auto; /* the auto margins (in conjunction with a width) center the page */
+	text-align: left; /* this overrides the text-align: center on the body element. */
+	margin-right: auto;
+	margin-left: auto;
+	padding-top:160px;
+}
+.oneColFixCtrHdr #header {
+	padding: 0 10px 0 20px;
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+	background-color: #06C;
+	background-image: url(images/glass-bg.png);
+	background-repeat: repeat-x;
+	
+}
+.oneColFixCtrHdr #header h1 {
+	margin: 0; /* zeroing the margin of the last element in the #header div will avoid margin collapse - an unexplainable space between divs. If the div has a border around it, this is not necessary as that also avoids the margin collapse */
+	padding: 10px 0; /* using padding instead of margin will allow you to keep the element away from the edges of the div */
+}
+.text1{font-size: 14px; color:#3F68A7; font-weight: bold; font-size:12px;}
+.oneColFixCtrHdr #msg {
+	font-size:10px;
+	float: inherit;
+}
+.error{
+	color:#F00;
+	padding:3px;
+}
+.oneColFixCtrHdr #mainContent {
+	padding: 0px ; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+	background: #FFFFFF;
+	-moz-box-shadow:0px 2px 25px -10px #888888;
+	-webkit-box-shadow:0px 2px 25px -10px #888888;
+	box-shadow: 0px 3px 20px -10px #888888;
+	border:1px solid #c3c3c3;
+	border-radius:5px;
+}
+.oneColFixCtrHdr #footer {
+	padding: 0 10px; /* this padding matches the left alignment of the elements in the divs that appear above it. */
+	background:
+#06C;
+}
+.oneColFixCtrHdr #footer h1 {
+	margin: 0; /* zeroing the margins of the first element in the footer will avoid the possibility of margin collapse - a space between divs */
+	padding: 10px 0; /* padding on this element will create space, just as the the margin would have, without the margin collapse issue */
+}
+
+.classname {
+
+	/*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');*/
+	background-color:#378de5;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:2px 15px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #528ecc;
+	border-radius:10px;
+	height:24px;
+}.classname:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	/*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');*/
+	background-color:#378de5;
+}.classname:active {
+	position:relative;
+	top:1px;
+}
+.invalid{border: 1px solid #F93; background:#FDEBD0; font-size: 10px; padding: 0px; color:#f00}
