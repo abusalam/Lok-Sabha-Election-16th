@@ -27,7 +27,7 @@ if($opn=='office')
 }
 if($opn=='for_sub_emp_office')
 {
-	include_once('function\ofc_fun.php');
+	include_once('function/ofc_fun.php');
 	$sub_div=$_GET['sub_div'];
 	echo "<select id='office' name='office' style='width:240px;' onchange='return office_change(this.value);'>\n";
 	$rsOfc=office_details_ag_forsub($sub_div);
@@ -70,7 +70,7 @@ if($opn=='assembly')
 	$pc=$_GET['pc'];
 	$sub_div=$_GET['sub_div'];
 	echo "<select id='assembly' name='assembly' style='width:180px;'>\n";
-	include_once('function\add_fun.php');
+	include_once('function/add_fun.php');
 	$rsAssembly=fatch_assembly_ag_pc($pc,$sub_div);
 	$num_rows = rowCount($rsAssembly);
 	if($num_rows>0)

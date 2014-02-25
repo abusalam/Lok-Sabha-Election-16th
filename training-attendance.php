@@ -137,8 +137,8 @@ if($action=='Submit')
 	$trn_dt_time=$_POST['trn_dt_time'];
 
 	$usercd=$user_cd;
-	include_once('function\training_fun.php');
-	include_once('mail\sendmail.php');
+	include_once('function/training_fun.php');
+	include_once('mail/sendmail.php');
 	$status=0;
 	for($i=1;$i<=$_POST['hidRow'];$i++)
 	{
@@ -173,7 +173,7 @@ if($action=='Submit')
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];

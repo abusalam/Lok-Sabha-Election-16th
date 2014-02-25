@@ -38,8 +38,8 @@ if($action=='Select PP')
 	$training_type=$_POST['training_type'];
 	$subdivision=$_POST['subdivision'];
 	$usercd=$user_cd;
-	include_once('function\training_fun.php');
-	include_once('inc\commit_con.php');
+	include_once('function/training_fun.php');
+	include_once('inc/commit_con.php');
 	$post_status[0]='PR'; $post_status[1]='P1'; $post_status[2]='P2'; $post_status[3]='P3';
 	$rec=0;
 	mysqli_autocommit($link,FALSE);
@@ -100,7 +100,7 @@ if($action=='Select PP')
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];

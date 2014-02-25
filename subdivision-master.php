@@ -147,7 +147,7 @@ function bind_all()
     <tr><td colspan="3" align="left"><div id="form1_errorloc" class="error"></div></td></tr>
     <tr><td colspan="3" align="center">
             <?php
-			//include_once('function\training_fun.php');
+			//include_once('function/training_fun.php');
 			$rsSubDiv=fatch_subdivision_master('',$dist_cd);
 			$num_rows = rowCount($rsSubDiv);
 			if($num_rows>0)

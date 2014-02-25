@@ -46,14 +46,14 @@ if($action=='Select PP')
 	$post_status=$_POST['post_status'];
 	$subdivision=$_POST['subdivision'];
 	$usercd=$user_cd;
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	
 	$rsEmp=fatch_employee_for_training_req($post_status,$subdivision,$training_type);
 	$num_rows_Emp=rowCount($rsEmp);
 	if($num_rows_Emp>0)
 	{
 		$rec=0;
-		include_once('inc\commit_con.php');
+		include_once('inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into training_pp (per_code,per_name,designation,training_type,post_stat,subdivision,for_subdivision,for_pc,assembly_temp,";
 		$sql.="assembly_off, assembly_perm, usercode,training_sch,training_booked,training_attended,training_showcause) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -103,7 +103,7 @@ if($action=='Select PP')
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];

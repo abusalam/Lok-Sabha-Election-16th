@@ -81,7 +81,7 @@ if($action=='Save')
 	$Remarks=$_POST['Remarks'];
 	$usercd=$user_cd;
     $ter_id=$_POST['hid_termination_code'];
-	include_once('function\add_fun.php');
+	include_once('function/add_fun.php');
 	
 	if(isset($_REQUEST['ter_id']))
 	{

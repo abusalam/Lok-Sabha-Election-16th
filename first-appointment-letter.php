@@ -126,11 +126,11 @@ if($action=='Submit')
 	//$subdivision=$_POST['Subdivision'];
 	$per_cd=$_POST['p_id'];
 	$usercd=$user_cd;
-	include_once('function\appointment_fun.php');
+	include_once('function/appointment_fun.php');
 
 	delete_temp_app_letter($usercd);
 	$count=0;
-	include_once('inc\commit_con.php');
+	include_once('inc/commit_con.php');
 	mysqli_autocommit($link,FALSE);
 	$sql="insert into tmp_app_let (per_code,usercode) values (?,?)";
 	$stmt = mysqli_prepare($link, $sql);
@@ -170,7 +170,7 @@ window.open("reports/training-app-letter.php");
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];

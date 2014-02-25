@@ -152,7 +152,7 @@ if($ass_cd!='' && $act=='del')
 //======================= Polling Station ============================
 if($opn=='assembly')
 {
-	include_once('function\add_fun.php');
+	include_once('function/add_fun.php');
 	$sub_div=$_GET['sub_div'];
 	echo "<select name='assembly' id='assembly' style='width:200px;' onchange='return assembly_change(this.value);'>\n";      						
 //	$dist=$_GET['dist'];

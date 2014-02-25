@@ -29,9 +29,9 @@ h7 {page-break-after:always;}
         </thead>
         <tbody>
             <?php
-			include_once('..\inc\db_trans.inc.php');
-			include_once('..\function\master_fun.php');
-			include_once('..\function\report_fun.php');
+			include_once('../inc/db_trans.inc.php');
+			include_once('../function/master_fun.php');
+			include_once('../function/report_fun.php');
 			if(isset($_REQUEST['district']))
 				$dist_cd=$_REQUEST['district'];
 			else
@@ -44,7 +44,7 @@ h7 {page-break-after:always;}
 				$govt_cat=$_REQUEST['govt_cat'];
 			else
 				$govt_cat=='';
-			include_once('..\function\add_fun.php');
+			include_once('../function/add_fun.php');
 			if($govt_cat!='' && $govt_cat!='0')
 			{
 				$rsBn=fatch_statusofoffice($govt_cat);

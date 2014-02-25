@@ -15,8 +15,8 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr><td align="center">
 <?php
-	include_once('..\inc\db_trans.inc.php');
-	include_once('..\function\appointment_fun.php');
+	include_once('../inc/db_trans.inc.php');
+	include_once('../function/appointment_fun.php');
 	$usercd=$_SESSION['user_cd'];
 	
 	$rstmp=fetch_id_temp_app_letter($usercd);
@@ -28,7 +28,7 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 	$num_rows=rowCount($rsId);
 	if($num_rows>0)
 	{
-		include_once('..\inc\commit_con.php');
+		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into first_rand_table (officer_name,person_desig,personcd,officer_desig,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);

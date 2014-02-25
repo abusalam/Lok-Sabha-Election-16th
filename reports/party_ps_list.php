@@ -19,8 +19,8 @@ h7 {page-break-after:always;}
 </style>
 </head>
 <?php
-	include_once('..\inc\db_trans.inc.php');
-	include_once('..\function\report_fun.php');
+	include_once('../inc/db_trans.inc.php');
+	include_once('../function/report_fun.php');
 	if(isset($_REQUEST['Subdivision']) && $_REQUEST['Subdivision']!='')
 	{
 		$sub_div=$_REQUEST['Subdivision'];

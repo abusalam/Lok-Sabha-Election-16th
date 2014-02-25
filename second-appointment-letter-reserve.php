@@ -78,7 +78,7 @@ if($submit=="Submit")
           <td align="left"><select name="PC" id="PC" style="width:180px;" onchange="return PC_change(this.value);">
           					<option value="0">-Select PC-</option>
                             <?php 	$districtcd=$dist_cd;
-									include_once('function\form_12_fun.php');
+									include_once('function/form_12_fun.php');
 									$rsPC=fatch_PC_ag_dist($districtcd);
 									$num_rows=rowCount($rsPC);
 									if($num_rows>0)

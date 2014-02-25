@@ -181,7 +181,7 @@ if($action=='Save')
 		$subdiv=$_POST['subdiv'];
 		$parliament=$_POST['parliament'];
 	}
-	include_once('function\user_fun.php');
+	include_once('function/user_fun.php');
 	$c_user=duplicate_user($userid);
 	if($c_user==0)
 	{

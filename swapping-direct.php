@@ -227,7 +227,7 @@ if($action=='Swapping')
 			{
 				$num_rows=$numberofemployee;
 			}
-			include_once('inc\commit_con.php');
+			include_once('inc/commit_con.php');
 			mysqli_autocommit($link,FALSE);
 			$sql="insert into personnela (personcd,officecd,officer_name,off_desg,present_addr1,present_addr2,";
 			$sql.="perm_addr1,perm_addr2,dateofbirth,gender,scale,basic_pay,grade_pay,workingstatus,email,resi_no, mob_no,";

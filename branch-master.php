@@ -194,7 +194,7 @@ function bind_all()
     <tr><td colspan="4" align="left"><div id="form1_errorloc" class="error"></div></td></tr>
     <tr><td colspan="4" align="center"><div class="scroller">
             <?php
-			//include_once('function\training_fun.php');
+			//include_once('function/training_fun.php');
 			if(isset($rsBranch))
 				unset($rsBranch,$rowBranch,$num_rows);
 			$rsBranch=fatch_branch_master('',$dist_cd);

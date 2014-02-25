@@ -414,7 +414,7 @@ if($action=='Save')
 	
 		
 	$usercd=$user_cd;
-	include_once('function\add_police_fun.php');
+	include_once('function/add_police_fun.php');
 	if(isset($_REQUEST['personcd']))
 	{
 		//$tr_cd=decode($_REQUEST['personcd']);

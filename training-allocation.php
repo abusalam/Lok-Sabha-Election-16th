@@ -239,7 +239,7 @@ if($action=='Submit')
 		if($num_rows>0)
 		{
 			$rec=0;
-			include_once('inc\commit_con.php');
+			include_once('inc/commit_con.php');
 			mysqli_autocommit($link,FALSE);
 			$sql="update training_pp set training_sch=?, training_booked='Y', training_attended='P' where training_type=? and
 	post_stat=? and per_code=?";

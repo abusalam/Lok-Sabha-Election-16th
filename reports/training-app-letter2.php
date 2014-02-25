@@ -9,8 +9,8 @@ session_start();
 </head>
 <body>
 <?php
-	include_once('..\inc\db_trans.inc.php');
-	include_once('..\function\appointment_fun.php');
+	include_once('../inc/db_trans.inc.php');
+	include_once('../function/appointment_fun.php');
 	$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
 	$office=(isset($_POST['office'])?$_POST['office']:'0');
 
@@ -25,7 +25,7 @@ session_start();
 	$num_rows=rowCount($rsApp);
 	if($num_rows>0)
 	{
-		include_once('..\inc\commit_con.php');
+		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into first_rand_table (officer_name,person_desig,personcd,officer_desig,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);

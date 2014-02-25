@@ -20,8 +20,8 @@ h7 {page-break-after:always;}
 </head>
 <body>
 <?php
-	include_once('..\inc\db_trans.inc.php');
-	include_once('..\function\report_fun.php');
+	include_once('../inc/db_trans.inc.php');
+	include_once('../function/report_fun.php');
 	extract($_GET);
 	$sub_div=($_REQUEST['sub_div']);
 	$ass=($_REQUEST['assembly']);

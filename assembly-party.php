@@ -227,7 +227,7 @@ if($action=='Submit')
 	$member=$_POST['member'];
 	$party_req=$_POST['party_req'];
 	$usercd=$user_cd;
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	
 	if(isset($_REQUEST['assembly']) && isset($_REQUEST['noofparty']) && isset($_REQUEST['poststat']))
 	{
@@ -269,7 +269,7 @@ if($action=='Submit')
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];

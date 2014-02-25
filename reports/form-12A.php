@@ -17,8 +17,8 @@ body{
 <body>
 <div align="center">
 <?php
-	include_once('..\inc\db_trans.inc.php');
-	include_once('..\function\form_12_fun.php');
+	include_once('../inc/db_trans.inc.php');
+	include_once('../function/form_12_fun.php');
 	$personcd=decode($_GET['personcd']);
 	$type=$_GET['type'];
 	$rsF12=form12A_report($personcd,$type);

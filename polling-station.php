@@ -304,7 +304,7 @@ function bind_all()
       <?php
 	  if(isset($_GET['psno']) && isset($_GET['assembly']))
 	  {
-		  	include_once('function\add_fun.php'); 						
+		  	include_once('function/add_fun.php'); 						
 			$rsAss=fatch_assembly($sub_div);
 			$num_rows=rowCount($rsAss);
 			if($num_rows>0)
@@ -361,7 +361,7 @@ function bind_all()
     <tr><td colspan="2" align="left"><div id="form1_errorloc" class="error"></div></td></tr>
     <tr><td colspan="2" align="center"><div class="scroller">
             <?php
-			//include_once('function\training_fun.php');
+			//include_once('function/training_fun.php');
 			$rsPS=fetch_polling_station('','',$dist_cd);
 			$num_rows = rowCount($rsPS);
 			if($num_rows>0)

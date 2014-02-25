@@ -39,7 +39,7 @@ include_once('inc/db_trans.inc.php');
 $action=$_REQUEST['submit'];
 if($action=='Save')
 {
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$training_desc=clean_spl($_POST['training_desc']);
 	$training_code=($_POST['hid_training_code']);
 	//=============== Getting Training Code ==================	
@@ -91,7 +91,7 @@ if($action=='Save')
 <?php
 if(isset($_REQUEST['tr_cd']))
 {
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$tr_cd=decode($_REQUEST['tr_cd']);
 
 	$rsTraining=fatch_training_type($tr_cd);
@@ -146,7 +146,7 @@ function bind_all()
     <tr><td colspan="2" align="left"><div id="form1_errorloc" class="error"></div></td></tr>
     <tr><td colspan="2" align="center">
             <?php
-			include_once('function\training_fun.php');
+			include_once('function/training_fun.php');
 			$rsTrainingType=fatch_training_type('');
 			$num_rows = rowCount($rsTrainingType);
 			if($num_rows>0)

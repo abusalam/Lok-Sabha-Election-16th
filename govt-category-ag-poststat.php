@@ -59,7 +59,7 @@ function validate()
 	  <td align="left">District</td>
 	  <td align="left"><select name="district" id="district" style="width:240px;" onchange="javascript:return district_change(this.value);">
       						<option value="0">-Select District-</option>
-                            <?php 	include_once("function\master_fun.php");
+                            <?php 	include_once("function/master_fun.php");
 									$rsDist=fatch_district_master('');
 									$num_rows=rowCount($rsDist);
 									if($num_rows>0)

@@ -146,7 +146,7 @@ if($action=='Submit')
 	$ed_pb=$_POST['ed_pb'];
 	
 	$usercd=$user_cd;
-	include_once('function\form_12_fun.php');
+	include_once('function/form_12_fun.php');
 
 	//delete_temp_app_letter($usercd);
 	
@@ -183,7 +183,7 @@ window.open("reports/form-12a.php?personcd=<?php print $personcd; ?>&type=ed");
 }
 ?>
 <?php
-	include_once('function\training_fun.php');
+	include_once('function/training_fun.php');
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];
@@ -250,7 +250,7 @@ window.open("reports/form-12a.php?personcd=<?php print $personcd; ?>&type=ed");
 	  <td align="left"><select name="pc" id="pc" style="width:240px;">
       						<option value="0">-Select PC-</option>
                             <?php /*?><?php 	$districtcd=$dist_cd;
-									include_once('function\form_12_fun.php');
+									include_once('function/form_12_fun.php');
 									$rsPC=fatch_PC_ag_dist($districtcd);
 									$num_rows=rowCount($rsPC);
 									if($num_rows>0)

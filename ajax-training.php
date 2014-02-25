@@ -353,7 +353,7 @@ if($opn=='personnel')
 }
 if($opn=='tal')
 {
-	include_once('function\pagination.php');
+	include_once('function/pagination.php');
 	global $subdivision; global $venuename; global $usercode;
 	$sub_div=$_GET["sub_div"];
 	$training_type=$_GET["training_type"];

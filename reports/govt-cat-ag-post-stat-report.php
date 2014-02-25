@@ -39,7 +39,7 @@ include("../inc/db_trans.inc.php");
             </tr>
         </thead>
         <?php
-		include_once('..\function\master_fun.php');
+		include_once('../function/master_fun.php');
 		$rsDist=fatch_district_master($dist_cd);
 		$num_rows=rowCount($rsDist);
 		$rowDist=getRows($rsDist);
@@ -74,7 +74,7 @@ include("../inc/db_trans.inc.php");
                             <td align="center">Autonomous Body</td>
                             <td align="center">Other</td></tr>
                         <?php
-						include_once('..\function\add_fun.php');
+						include_once('../function/add_fun.php');
 						$rsPostStat=fatch_postingstatus();
 						$num_rowsPostStat=rowCount($rsPostStat);
 						if($num_rowsPostStat>0)
@@ -86,7 +86,7 @@ include("../inc/db_trans.inc.php");
 								?>
                             <tr><td align="center"><?php echo $rowPostStat['post_stat']; ?></td>
                             <?php
-							include_once('..\function\report_fun.php');
+							include_once('../function/report_fun.php');
 							$c_g=0; $s_g=0; $c_g_u=0; $s_g_u=0; $l_b=0; $g_a_f=0; $a_b=0; $o_g=0;
 							$rsNo=govt_cat_ag_post_stat_report($post_stat,$sub_div);
 							$num_rows=rowCount($rsNo);
