@@ -35,7 +35,7 @@ function __construct($fpc,$pst,$var,$asm,$stat,$phase) {
 		}
 		}
 		
-echo $this->result->num_rows ;
+//echo $this->result->num_rows ;
 // GOING THROUGH THE DATA
 	if($this->result->num_rows > 0) {
 		$i=0;

@@ -37,7 +37,7 @@ $i=$i+1;
 		}
 	}
 	else {
-		echo 'NO ..Assembly RESULTS';	
+		echo 'NO .data in .Assembly table ';	
 	}
 
 

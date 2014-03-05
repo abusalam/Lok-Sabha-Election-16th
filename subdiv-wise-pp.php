@@ -50,22 +50,23 @@ function validate()
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">SUBDIVISION & OFFICE WISE POLLING PERSONNEL</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1" action="reports/ofc-wise-pp-list.php" target="_blank">
   <table width="60%" class="form" cellpadding="0">
     <tr>
-      <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
+      <td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="2" align="center"><span id="msg" class="error"></span></td>
     </tr>
     <tr>
-      <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
-      <tr><td align="left"><input type="hidden" id="district" name="district" <?php echo $dist_cd." - ".$district; ?>/></td></tr>
+      <td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td>    
     </tr>
+    <tr><td align="center" colspan="2"><input type="hidden" id="district" name="district" /></td></tr>
     <tr>
      <td align="left"><span class="error">*</span>Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:200px;" onchange="javascript:return subdivision_change(this.value);">
@@ -86,9 +87,9 @@ function validate()
       				</select></td></tr>
     
 	<tr>
-	  <td align="left" colspan="4">&nbsp;</td></tr>
+	  <td align="left" colspan="2">&nbsp;</td></tr>
     <tr>
-      <td colspan="4" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" /></td>
+      <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" /></td>
     </tr>
   </table>
 </form>

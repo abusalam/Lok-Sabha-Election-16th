@@ -67,7 +67,7 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/master_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$subdivisioncd=$_POST['Subdivision'];
@@ -99,7 +99,7 @@ if($action=='Save')
 			$ret=update_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date);
 			if($ret==1)
 			{
-				?> <script>location.replace("assembly_master.php?msg=success");</script> <?php
+				redirect("assembly_master.php?msg=success");
 			}
 		}
 		else
@@ -123,7 +123,7 @@ if($action=='Save')
 if(isset($_REQUEST['ass_cd']))
 {
 	$assembly_code=decode($_REQUEST['ass_cd']);
-	$sub_code=decode($_REQUEST['sub_code']);
+	//$sub_code=decode($_REQUEST['sub_code']);
 	$rsPerDiv=fatch_assembly_master($assembly_code);
 	$rowPerDiv=getRows($rsPerDiv);
 	$subdiv_cd=$rowPerDiv['subdivisioncd'];
@@ -139,6 +139,7 @@ if(isset($_REQUEST['msg']))
 <script language="javascript" type="text/javascript">
 function bind_all()
 {
+	<?php if(isset($rowPerDiv)) { ?>
 	var subdivision = document.getElementById('Subdivision');
 	subdivision.value = "<?php echo $rowPerDiv['subdivisioncd']; ?>";
 	
@@ -152,13 +153,15 @@ function bind_all()
 	assemblyname.value="<?php echo $rowPerDiv['assemblyname']; ?>";
 	var assembly_code=document.getElementById('hid_assembly_code');
 	assembly_code.value="<?php echo $rowPerDiv['assemblycd']; ?>";
+	<?php } ?>
 }
 </script>
 <body oncontextmenu="return false;" onload="javascript: return bind_all();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">ASSEMBLY CONSTITUENCY MASTER</td></tr>
@@ -168,12 +171,12 @@ function bind_all()
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
-      <tr><td align="left"><input type="hidden" id="district" name="district" <?php echo $dist_cd." - ".$district; ?>/></td></tr>
     </tr>
+    <tr><td align="left"><input type="hidden" id="district" name="district" <?php echo $dist_cd." - ".$district; ?>/></td></tr>
     <tr>
      <td align="left"><span class="error">*</span>Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:200px;" onchange="javascript:return subdivision_change(this.value);">
@@ -243,7 +246,7 @@ function bind_all()
 				{
 				  $rowAssDiv=getRows($rsAssDiv);
 				  $assembly_code='"'.encode($rowAssDiv['assemblycd']).'"';
-				  $sub_code='"'.encode($rowAssDiv['subdivisioncd']).'"';
+				  //$sub_code='"'.encode($rowAssDiv['subdivisioncd']).'"';
 				  echo "<tr><td align='right' width='10%'>$i.</td><td align='center' width='20%'>$rowAssDiv[assemblycd]</td><td width='35%' align='left'>$rowAssDiv[assemblyname]</td>";
 				  echo "<td width='35%' align='left'>$rowAssDiv[pcname]</td>";
 				  echo "<td align='center' width='10%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_assembly($assembly_code);' /></td>\n";

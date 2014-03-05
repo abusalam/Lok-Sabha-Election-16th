@@ -88,7 +88,7 @@ function form_12_report($personcd,$type)
   	  personnela.officer_name
 	From personnela
 	  Left Join assembly On personnela.acno = assembly.assemblycd
-	  Left Join pc On assembly.pccd = pc.pccd
+	  Left Join pc On assembly.pccd = pc.pccd and assembly.subdivisioncd = pc.subdivisioncd
 	  Inner Join po_ed On personnela.personcd = po_ed.personcd
 	  Inner Join pc pc1 On po_ed.pccd = pc1.pccd ";
 	$sql.=" where personnela.personcd='$personcd' and po_ed.ed_pb='$type'";
@@ -114,11 +114,12 @@ function form12A_report($personcd,$type)
 	  pollingstation.psname
 	From personnela
 	  Left Join assembly On personnela.acno = assembly.assemblycd
-	  Left Join pc On assembly.pccd = pc.pccd
+	  Left Join pc On assembly.pccd = pc.pccd and assembly.subdivisioncd = pc.subdivisioncd
 	  Inner Join po_ed On personnela.personcd = po_ed.personcd
 	  Inner Join pc pc1 On po_ed.pccd = pc1.pccd
 	  Inner Join pollingstation On personnela.groupid = pollingstation.groupid";	  
 	$sql.=" where personnela.personcd='$personcd' and po_ed.ed_pb='$type'";
+	//echo $sql; exit;
 	$rs=execSelect($sql);
 	return $rs;
 }

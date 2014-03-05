@@ -85,6 +85,7 @@ function replacement()
 	var new_p_id=document.getElementById('new_per_id').innerHTML;
 	var forassembly=document.getElementById('hid_forassembly').innerHTML;
 	var forpc=document.getElementById('hid_forpc').innerHTML;
+	var samevenuetraining=document.getElementById('chkSameVenueTraining').checked;
 	//alert(old_p_id+","+new_p_id+","+assembly+","+groupid);
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -105,25 +106,22 @@ function replacement()
 		document.getElementById('p_id').disabled=true;
 		}
 	  }
-	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc");
-	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc",true);
+	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
+	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining,true);
 	xmlhttp.send();
 }
 </script>
 </head>
-<?php
-$action=$_REQUEST['search'];
-if($action=='Search')
-echo "<script>alert('hi');</script>";
-?>
+
 <body>
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
   <td align="center"><table width="1000px" class="table_blue">
-  <tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
   </tr>
-<tr><td align="center"><?php print $subdiv_name." SUBDIVISION, ".$district." DISTRICT"; ?></td></tr>
+<tr><td align="center"><?php print $district." DISTRICT"; ?></td></tr>
+<tr><td align="center"><?php print $subdiv_name." SUBDIVISION"; ?></td></tr>
 <tr><td align="center">PRE GROUPING REPLACEMENT</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
 <table width="95%" class="form" cellpadding="0">
@@ -131,7 +129,7 @@ echo "<script>alert('hi');</script>";
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="3" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="3" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
@@ -145,7 +143,7 @@ echo "<script>alert('hi');</script>";
                 <tr><td align="center"><img src='images/blank.gif' alt='' height='5px' /></td></tr>
                 <tr>
                 	<td align="left"><b>Personnel ID:</b></td>
-                    <td align="left"><input type="text" name="per_id" id="per_id" style="width:152px;" onchange="return per_id_change(this.value);" /></td>
+                    <td align="left"><input type="text" name="per_id" id="per_id" style="width:152px;" onchange="return per_id_change(this.value);" maxlength="9" onkeypress="javascript:return wholenumbersonly(event);" /></td>
                     <td align="left"><b>Office ID:</b></td>
                     <td align="left" width="70px"><span id="ofc_id"></span></td>
                 </tr>
@@ -156,7 +154,10 @@ echo "<script>alert('hi');</script>";
         </td>
     	<td width="50%" class="table2  demo-section1" valign="top"><span id="new_personnel">&nbsp;</span></td>
     </tr>
-    <tr><td><img src="images/blank.gif" alt="" height="1" /></td></tr>
+    <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
+    <tr><td colspan="2" align="center"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" />
+    <label for="chkSameVenueTraining">Training at Same Venue</label></td></tr>
+    <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
     <tr>
     	<td align="center" colspan="2">
         	<input id="search" name="search" value="Search" type="button" onclick="return new_per_search();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

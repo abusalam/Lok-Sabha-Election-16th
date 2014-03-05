@@ -1,7 +1,7 @@
 <?php
 function clean_spl($string) {
    //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-   return preg_replace('/[^A-Za-z0-9\-.,+& ]/', '', $string); // Removes special chars.
+   return preg_replace('/[^A-Za-z0-9\-.,+&() ]/', '', $string); // Removes special chars.
 }
 function clean_alpha($string) {
    //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
@@ -28,5 +28,22 @@ if (!in_array(($num % 100),array(11,12,13))){
   }
 }
 return $num.'th';
+}
+
+function redirect($url){
+if (headers_sent()){
+  die('<script type="text/javascript">window.location.href="' . $url . '";</script>');
+}else{
+  header('Location: ' . $url);
+  die();
+}    
+}
+
+function wordcase($string)
+{
+	return ucwords(strtolower($string));
+}
+function uppercase($string) {
+	return strtoupper($string);
 }
 ?>

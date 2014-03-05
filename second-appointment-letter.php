@@ -41,12 +41,12 @@ function PC_change(str)
 <body>
 <?php
 extract($_POST);
-$submit=$_POST['search'];
+$submit=isset($_POST['search'])?$_POST['search']:"";
 if($submit=="Submit")
 {
-	$pc=encode($_POST['PC']);
-	$assembly=encode($_POST['assembly']);
-	$group_id=encode($_POST['txtGroupId']);
+	$pc=isset($_POST['PC'])?encode($_POST['PC']):"";
+	$assembly=isset($_POST['assembly'])?encode($_POST['assembly']):"";
+	$group_id=isset($_POST['txtGroupId'])?encode($_POST['txtGroupId']):"";
 	?>
     <script>
 		window.open("reports/2nd-app-letter.php?pc=<?php echo $pc; ?>&assembly=<?php echo $assembly; ?>&group_id=<?php echo $group_id; ?>");
@@ -57,10 +57,11 @@ if($submit=="Submit")
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $_SESSION[subdiv_name]; ?> SUBDIVISION</td></tr>
+<tr><td align="center"><?php echo isset($subdiv_name)?$subdiv_name." SUBDIVISION":""; ?></td></tr>
 <tr><td align="center">SECOND APPOINTMENT LETTER</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 	<table width="95%" class="form" cellpadding="0">

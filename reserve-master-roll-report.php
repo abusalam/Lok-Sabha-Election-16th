@@ -56,7 +56,7 @@ include_once('function/master_fun.php');
 
 <?php
 extract($_POST);
-$submit=$_POST['submit'];
+$submit=isset($_POST['submit'])?$_POST['submit']:"";
 if($submit=="Submit")
 {
 	$assembly=encode($_POST['assembly']);
@@ -74,7 +74,8 @@ if($submit=="Submit")
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 
@@ -85,7 +86,7 @@ if($submit=="Submit")
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php  print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>

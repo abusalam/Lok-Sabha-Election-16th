@@ -9,29 +9,14 @@ session_start();
 <?php
 include('header/header.php');
 ?>
-<script language="javascript" type="text/javascript">
-function openCalender(getObject)
-{
-	var theform;
-	var objectName;
-
-	/*if (window.navigator.appName.toLowerCase().indexOf("netscape") > -1) 
-		theform = document.forms["aspnetForm"];
-	else
-		theform = document.aspnetForm;*/
-	theform=document.form1;
-	objectName = eval('theform.' + getObject); 
-		
-	popUpCalendar(objectName,objectName,"yyyy-mm-dd");
-}
-</script>
 </head>
 
 <body >
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">Polling Personnel Checklist</td></tr>

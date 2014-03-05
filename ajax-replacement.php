@@ -6,9 +6,9 @@ include_once('function/add_fun.php');
 //=================================Replacement====================================
 //==========================Get Personnel Names===========================
 $ass; $polling_party; $post_stat;
-$ass=$_GET["ass"];
-$polling_party=$_GET["polling_party"];
-$post_stat=$_GET["post_stat"];
+$ass=isset($_GET["ass"])?$_GET["ass"]:"";
+$polling_party=isset($_GET["polling_party"])?$_GET["polling_party"]:"";
+$post_stat=isset($_GET["post_stat"])?$_GET["post_stat"]:"";
 if($ass!='' && $polling_party!='' && $post_stat!='')
 {
 	$rs_person_name; $row_person_name;
@@ -26,11 +26,11 @@ if($ass!='' && $polling_party!='' && $post_stat!='')
 		{
 		  $row_person_name=getRows($rs_person_name);
 		  echo "<option value='$row_person_name[0]'>$row_person_name[0]</option>\n";
+		  $row_person_name=NULL;
 		}
 		echo "</select>\n";
-		$row_person_name=null;
-		$rs_person_name=null;
-		$num_rows_pn=0;
+		
+		unset($rs_person_name,$num_rows_pn,$row_person_name);
 	}
 }
 else if($ass!='' && $polling_party=='' && $post_stat!='')
@@ -39,9 +39,9 @@ else if($ass!='' && $polling_party=='' && $post_stat!='')
 }
 
 //==========================Get Old Personnel Details=============================
-$p_id; $p_dtl;
-$p_id=$_GET["p_id"];
-$p_dtl=$_GET["p_dtl"];
+//$p_id; $p_dtl;
+$p_id=isset($_GET["p_id"])?$_GET["p_id"]:"";
+$p_dtl=isset($_GET["p_dtl"])?$_GET["p_dtl"]:"";
 if($p_id != '')
 {
 	$rs_person; $row_person;
@@ -58,7 +58,7 @@ if($p_id != '')
 	{
 		if($row_person['booked']=='C' || $row_person['booked']=='')
 		{
-			echo "Not Available for replacement";
+			echo "Not Available for Selected Operation";
 		}
 		else
 		{
@@ -87,13 +87,13 @@ else
 	echo " ";
 
 //============================Get New Personnel Details=================================
-$assembly; $forassembly; $forpc; $groupid;
-$for_subdiv=$_GET["for_subdiv"];
-$assembly=$_GET["assembly"];
-$posting_status=$_GET["posting_status"];
-$groupid=$_GET["groupid"];
-$gender=$_GET["gender"];
-if($assembly!='' && $posting_status!='' && $groupid!='' && gender!='')
+//$assembly; $forassembly; $forpc; $groupid;
+$for_subdiv=isset($_GET["for_subdiv"])?$_GET["for_subdiv"]:"";
+$assembly=isset($_GET["assembly"])?$_GET["assembly"]:"";
+$posting_status=isset($_GET["posting_status"])?$_GET["posting_status"]:"";
+$groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
+$gender=isset($_GET["gender"])?$_GET["gender"]:"";
+if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 {
 	$rs_new_per; $row_new_per;
 	$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_status,$groupid,$gender);
@@ -106,7 +106,7 @@ if($assembly!='' && $posting_status!='' && $groupid!='' && gender!='')
 		echo "<tr><td align='center' colspan='4'><b>NEW PERSONNEL</b></td></tr>\n";
 		echo "<tr><td align='left'><b>Personnel ID: </b></td><td align='left' id='new_per_id'>".$row_new_per['personcd']."</td><td align='left'><b>Office ID: </b></td><td>".$row_new_per['officecd']."</td></tr>\n";
 		echo "<tr><td align='left'>Name: </td><td align='left' colspan='3'>".$row_new_per['officer_name']."</td></tr>\n";
-		echo "<tr><td align='left'>Designation: </td><td align='left' colspan='3'>".$row_new_per['designation']."</td></tr>\n";
+		echo "<tr><td align='left'>Designation: </td><td align='left' colspan='3'>".$row_new_per['off_desg']."</td></tr>\n";
 		echo "<tr><td align='left'>Office Address: </td><td align='left' colspan='3'>".$row_new_per['address1'].",".$row_new_per['address2'].", PO-".$row_new_per['postoffice'].", PS-".$row_new_per['policestation'].", Subdiv-".$row_new_per['subdivision'].", Dist.-".$row_new_per['district'].",".$row_new_per['pin']."</td></tr>\n";
 		echo "<tr><td align='left'>Date of Birth: </td><td align='left'>".$row_new_per['dateofbirth']."</td><td align='left'>Sex: </td><td align='left'>".$row_new_per['gender']."</td></tr>\n";
 		echo "<tr><td align='left'>EPIC No: </td><td align='left'>".$row_new_per['epic']."</td><td align='left'>Posting Status: </td><td align='left'>".$row_new_per['poststatus']."</td></tr>\n";
@@ -121,13 +121,13 @@ if($assembly!='' && $posting_status!='' && $groupid!='' && gender!='')
 	}
 }
 //==============================Replace===============================
-$old_p_id; $new_p_id; $ass; $forpc; $groupid; $usercd;
-$old_p_id=$_GET["old_p_id"];
-$new_p_id=$_GET["new_p_id"];
-$ass=$_GET["ass"];
-$forpc=$_GET["forpc"];
-$groupid=$_GET["groupid"];
-$usercd=$_SESSION['user_cd'];
+//$old_p_id; $new_p_id; $ass; $forpc; $groupid; $usercd;
+$old_p_id=isset($_GET["old_p_id"])?$_GET["old_p_id"]:"";
+$new_p_id=isset($_GET["new_p_id"])?$_GET["new_p_id"]:"";
+$ass=isset($_GET["ass"])?$_GET["ass"]:"";
+$forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
+$groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
+$usercd=isset($_SESSION)?$_SESSION['user_cd']:"";
 if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 {
 	$selected=1;
@@ -144,7 +144,7 @@ if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 	}
 }
 //================================ Single Replacement Personnel =======================================
-$opn=$_GET["opn"];
+$opn=isset($_GET["opn"])?$_GET["opn"]:"";
 if($opn=='new_search')
 {
 	$forpc=$_GET["forpc"];
@@ -191,8 +191,23 @@ if($opn=='pg_rplc')
 	$new_p_id=$_GET["new_p_id"];
 	$forassembly=$_GET["forassembly"];
 	$forpc=$_GET["forpc"];
+	$samevenuetraining=$_GET["samevenuetraining"];
 	$usercd=$_SESSION['user_cd'];
 	
+	$rsNew=personnelDetails_PreGroupReplacement($new_p_id);
+	$rowNew=getRows($rsNew);
+	$per_name=$rowNew['officer_name'];
+	$desig=$rowNew['off_desg'];
+	$post_stat=$rowNew['poststat'];
+	$subdiv=$rowNew['subdivisioncd'];
+	$for_subdiv=$rowNew['forsubdivision'];$for_pc=$rowNew['forpc'];
+	$ass_temp=$rowNew['assembly_temp'];
+	$ass_off=$rowNew['assembly_off'];
+	$ass_perm=$rowNew['assembly_perm'];
+	$dt = new DateTime();
+	$posted_date=$dt->format('Y-m-d H:i:s');
+	//echo "$new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id";
+	//exit;
 	if($old_p_id!='' && $new_p_id!='' && $forassembly!='' && $forpc!='')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
@@ -200,7 +215,11 @@ if($opn=='pg_rplc')
 		$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,'P',$selected);
 		if($ret==1)
 		{
-		$selected=0;
+			if($samevenuetraining=='true')
+			{
+				update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
+			}
+			$selected=0;
 			$res1=update_personnel_PreGroupReplacement($old_p_id,$forassembly,'','C',$selected);
 			if($res1==1)
 			{

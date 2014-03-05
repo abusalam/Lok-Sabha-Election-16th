@@ -50,10 +50,11 @@ $this->stmt->bind_param('is',$rnd,$psd);
 	}
 	
 	else {
-		echo 'NO RESULTS';	
+		echo 'NO PP in table for this subdivision';	
 	}
 
 
 		
 }
 }
+?>

@@ -5,7 +5,8 @@ if(strpos($_SERVER['REQUEST_URI'],'header.php')==true)
 	echo "Invalid request";
 	exit;
 }
-if($_SESSION['alogin']==false)
+//echo isset($_SESSION['alogin'])?$_SESSION['alogin']:'false'; exit;
+if(isset($_SESSION['alogin'])==false)
 {
 	echo "<script>alert('Session Expired.');</script>";
 	echo "<script type='text/javascript'>\n";
@@ -13,6 +14,7 @@ if($_SESSION['alogin']==false)
 	echo "</script>";
 	exit();
 }
+date_default_timezone_set('Asia/Calcutta');
 ?>
 <!--<link href="css/style.css" rel="stylesheet" />
 <link href="css/stylemenu.css" rel="stylesheet" />
@@ -58,11 +60,11 @@ if(isset($_SESSION['pc_cd']))
 	$pc_cd=sprintf("%02d",$_SESSION['pc_cd']);
 else
 	$pc_cd="0";
-$district=district_name($dist_cd);
+$district=uppercase(district_name($dist_cd));
 $_SESSION['dist_name']=$district;
-$subdiv_name=Subdivision_ag_subdivcd($subdiv_cd);
+$subdiv_name=uppercase(Subdivision_ag_subdivcd($subdiv_cd));
 $_SESSION['subdiv_name']=$subdiv_name;
-$pc_name=pc_name($pc_cd);
+$pc_name=uppercase(pc_name($pc_cd));
 $_SESSION['pc_name']=$pc_name;
 $user_cd=$_SESSION['user_cd'];
 $sql="SELECT distinct menu.menu_cd, menu.menu, menu.link
@@ -150,7 +152,23 @@ $rs_env=execSelect($sql_env);
 if(rowCount($rs_env)>0)
 {
 	$row_env=getRows($rs_env);
-	$environment=$row_env['environment'];
+	$environment=uppercase($row_env['environment']);
 	$_SESSION['environment']=$environment;
+	$apt1_orderno=$row_env['apt1_orderno'];
+	$_SESSION['apt1_orderno']=$apt1_orderno;
+	$apt1_date = new DateTime($row_env['apt1_date']);
+	$_SESSION['apt1_date']=$apt1_date->format('d/m/Y');
+	$apt2_orderno=$row_env['apt2_orderno'];
+	$_SESSION['apt2_orderno']=$apt2_orderno;
+	$apt2_date = new DateTime($row_env['apt2_date']);
+	$_SESSION['apt2_date']=$apt2_date->format('d/m/Y');
+	$signature=$row_env['signature'];
+	$_SESSION['signature']=$signature;
+}
+else
+{
+	echo "\n<br />";
+	echo "<span class='error'>Please set Environment Table</span>";
+	exit;
 }
 ?>

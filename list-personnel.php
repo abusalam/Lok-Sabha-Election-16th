@@ -17,8 +17,8 @@ function personnel_list(str)
 	var personnelID=document.getElementById('personnelID').value;
 	var frmdt=document.getElementById("fromdt").value;
 	var todt=document.getElementById("todt").value;
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();

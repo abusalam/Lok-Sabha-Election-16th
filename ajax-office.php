@@ -4,13 +4,13 @@ extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 include_once('function/pagination.php');
-$officeid=$_GET["officeid"];
-$officename=$_GET["officename"];
-$sub_div=$_GET["sub_div"];
-$frmdt=$_GET["frmdt"];
-$todt=$_GET["todt"];
-$usercode=$_SESSION['user_cd'];
-$delcode=$_GET["delcode"];
+$officeid=isset($_GET["officeid"])?$_GET["officeid"]:"";
+$officename=isset($_GET["officename"])?$_GET["officename"]:"";
+$sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
+$frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
+$todt=isset($_GET["todt"])?$_GET["todt"]:"";
+$usercode=isset($_SESSION['user_cd'])?$_SESSION['user_cd']:"";
+$delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
 if($delcode!="" && $delcode!=null)
 {
 	$total=ofc_del_check(decode($delcode));

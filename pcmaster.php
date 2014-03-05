@@ -26,12 +26,18 @@ function delete_parliament(str,str1)
 function validate()
 {
 	var subdivision=document.getElementById("Subdivision").value;
-    var parliament=document.getElementById("parliament").value;
-	
+    var pc_cd=document.getElementById("pccode").value;
+	var parliament=document.getElementById("parliament").value;
 	if(subdivision=="0" || subdivision=="")
 	{
 		document.getElementById("msg").innerHTML="Select Subdivision";
 		document.getElementById("Subdivision").focus();
+		return false;
+	}
+	if(pc_cd=="")
+	{
+		document.getElementById("msg").innerHTML="Enter Parliament Code";
+		document.getElementById("pccode").focus();
 		return false;
 	}
 	if(parliament=="")
@@ -46,21 +52,21 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/master_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$parliament=clean_spl($_POST['parliament']);
-	$parliament_code=($_POST['hid_parliament_code']);
+	$parliament_code=($_POST['pccode']);
 	$subdivisioncd=($_POST['Subdivision']);
 	//=============== Getting Training Code ==================	
 	if($parliament_code=='')
 	{
 		$rspmaxcode=fatch_parliament_maxcode();
 		$rowpmaxcode=getRows($rspmaxcode);
-		if($rowpmaxcode['pccd']==null)
+		if($rowpmaxcode['pc_cd']==NULL)
 			$parliament_code="01";
 		else
-			$parliament_code=sprintf("%02d",$rowpmaxcode['pccd']+1);
+			$parliament_code=sprintf("%02d",$rowpmaxcode['pc_cd']+1);
 	}
 	$usercd=$user_cd;
 	
@@ -77,7 +83,7 @@ if($action=='Save')
 			$ret=update_parliament($parliament_code,$parliament,$dist_cd,$subdivisioncd,$usercd,$posted_date);
 			if($ret==1)
 			{
-				?> <script>location.replace("pcmaster.php?msg=success");</script> <?php
+				redirect("pcmaster.php?msg=success");
 			}
 		}
 		else
@@ -116,19 +122,23 @@ if(isset($_REQUEST['msg']))
 <script language="javascript" type="text/javascript">
 function bind_all()
 {
+	<?php if(isset($rowPerDiv)) { ?>
 	var subdivision = document.getElementById('Subdivision');
 	subdivision.value = "<?php echo $rowPerDiv['subdivisioncd']; ?>";
 	var parliament=document.getElementById('parliament');
 	parliament.value="<?php echo $rowPerDiv['pcname']; ?>";
-	var parliament_code=document.getElementById('hid_parliament_code');
+	//var parliament_code=document.getElementById('hid_parliament_code');
+	var parliament_code=document.getElementById('pccode');
 	parliament_code.value="<?php echo $rowPerDiv['pccd']; ?>";
+	<?php } ?>
 }
 </script>
 <body oncontextmenu="return false;" onload="javascript: return bind_all();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">PARLIAMENT CONSTITUENCY MASTER</td></tr>
@@ -138,7 +148,7 @@ function bind_all()
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
@@ -162,7 +172,8 @@ function bind_all()
 									$rowBn=null;
 									$districtcd=0;
 							?>
-      				</select></td></tr>
+      				</select></td>
+       <td><span class="error">*</span>PC Code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="pccode" id="pccode" style="width:30px" /></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Name</td>
       <td align="left"><input type="text" name="parliament" id="parliament" style="width:250px;" /></td>

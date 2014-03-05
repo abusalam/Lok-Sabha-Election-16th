@@ -50,7 +50,24 @@ function safe($value)
   		echo "Message: " .$e->getMessage();
   	}
   }
-
+  
+  function getObject($result)
+  {
+	try
+  	{
+		OpenDB();
+		global $DBLink;
+		$ret;
+		$ret=mysqli_fetch_object($result);
+		mysqli_close($DBLink);
+		return $ret;
+	}
+	catch(Exception $e)
+	{
+  		echo "Message: " .$e->getMessage();
+  	}
+  }
+  
   function execInsert($sql)
   {
 	try

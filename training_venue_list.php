@@ -17,9 +17,9 @@ function termination_list(str)
 	var qstr;
 	var subdivision=document.getElementById('subdivision').value;
 	var venuename=document.getElementById("venuename").value;
-	
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var dist="<?php echo isset($dist_cd)?$dist_cd:""; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -37,9 +37,9 @@ function termination_list(str)
 	  }
 
 	if(str=="search")
-    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename;
+    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist;
 	else
-    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&p="+page+"&a="+all;
+    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);
 	xmlhttp.send();
 }
@@ -58,8 +58,8 @@ function delete_trainingvenue(str)
 	var sub_div="<?php echo $subdiv_cd; ?>";
 	var subdivision=document.getElementById('subdivision').value;
 	var venuename=document.getElementById("venuename").value;
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -87,13 +87,13 @@ function delete_trainingvenue(str)
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">TRAINING VENUE LIST</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
-  <table width="95%" class="form" cellpadding="0">
-    
+  <table width="95%" class="form" cellpadding="0">    
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
@@ -110,12 +110,10 @@ function delete_trainingvenue(str)
 										{
 											$rowBn=getRows($rsBn);
 											echo "<option value='$rowBn[0]'>$rowBn[2]</option>";
+											$rowBn=NULL;
 										}
 									}
-									$rsBn=null;
-									$num_rows=0;
-									$rowBn=null;
-									$districtcd=0;
+									unset($rsBn,$num_rows,$rowBn,$districtcd);
 							?>
                             </select></td>
       <td align="left"><span class="error">*</span>Venue Name</td>

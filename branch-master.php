@@ -53,7 +53,7 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/master_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$bank=$_POST['bank'];
@@ -84,7 +84,7 @@ if($action=='Save')
 			$ret=update_branch($branch_code,$bank,$branch_name,$branch_address,$ifsc,$usercd,$posted_date);
 			if($ret==1)
 			{
-				?> <script>location.replace("branch-master.php?msg=success");</script> <?php
+				redirect("branch-master.php?msg=success");
 			}
 		}
 		else
@@ -124,6 +124,7 @@ if(isset($_REQUEST['msg']))
 <script language="javascript" type="text/javascript">
 function bind_all()
 {
+	<?php if(isset($rowBranch)) { ?>
 	var bank=document.getElementById('bank');
 	bank.value="<?php echo $rowBranch['bank_cd']; ?>";
 	var ifsc=document.getElementById('ifsc');
@@ -134,13 +135,15 @@ function bind_all()
 	branch_address.value="<?php echo $rowBranch['address']; ?>";
 	var branch_code=document.getElementById('hid_branch_code');
 	branch_code.value="<?php echo $rowBranch['branchcd']; ?>";
+	<?php } ?>
 }
 </script>
 <body oncontextmenu="return false;" onload="javascript: return bind_all();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">BRANCH MASTER</td></tr>
@@ -150,7 +153,7 @@ function bind_all()
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>

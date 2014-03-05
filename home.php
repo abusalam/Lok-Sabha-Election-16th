@@ -1,5 +1,8 @@
 <?php
-session_start();
+if(!isset($_SESSION))
+{
+	session_start();
+}
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,6 +32,7 @@ if(isset($_SESSION['hid_rand3']))
 <body>
 <h1>&nbsp;</h1>
 <div align="center">
+	<div class="welcome-message" align="center" style="width: 40%;">Version 1.1</div>
     <div class="welcome-message" align="left" style="width: 40%;">Recomended Browser for Proper Functionality & View:
     <ul style="font-size:85%">
     	<li>Internet Explorer 9 or above</li>

@@ -63,7 +63,11 @@ function first_appointment_letter_hdr($per_code)
 	  personnela.slno,
 	  personnela.epic,
 	  personnela.forpc,
-	  pc.pcname
+	  pc.pcname,
+	  bank.bank_name,
+	  branch.branch_name,
+	  personnela.bank_acc_no,
+	  branch.ifsc_code
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -73,8 +77,11 @@ function first_appointment_letter_hdr($per_code)
 	  Inner Join poststat On personnela.poststat = poststat.post_stat
 	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join pc On personnela.forpc = pc.pccd And pc.subdivisioncd =
-    personnela.forsubdivision ";
-	$sql.=" where personnela.personcd='$per_code'";
+		personnela.forsubdivision
+	  Left Join bank On bank.bank_cd = personnela.bank_cd
+	  Left Join branch On personnela.branchcd = branch.branchcd And
+		personnela.bank_cd = branch.bank_cd";
+	$sql.=" where personnela.personcd='$per_code' and personnela.selected='1'";
 	//print $sql;
 	$rs=execSelect($sql);
 	connection_close();
@@ -108,6 +115,28 @@ function delete_prev_data($str_sub_div)
 	connection_close();
 	return $i;
 }
+function first_appointment_letter2_subdiv($sub_div,$office)
+{
+	$sql="Select Distinct subdivision.subdivision
+	From personnela
+	  Inner Join office On office.officecd = personnela.officecd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join training_pp On personnela.personcd = training_pp.per_code
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+	  Inner Join pc On personnela.forpc = pc.pccd And pc.subdivisioncd =
+    personnela.forsubdivision where personnela.forsubdivision='$sub_div' and personnela.selected='1' ";
+	if($office!='0')
+	$sql.=" and office.officecd='$office'";
+	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
+	  poststat.poststatus, personnela.off_desg";
+	//print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 function first_appointment_letter2_hdr($sub_div,$office)
 {
 	$sql="Select Distinct personnela.officer_name,
@@ -130,7 +159,11 @@ function first_appointment_letter2_hdr($sub_div,$office)
 	  personnela.slno,
 	  personnela.epic,
 	  personnela.forpc,
-	  pc.pcname
+	  pc.pcname,
+	  bank.bank_name,
+	  branch.branch_name,
+	  personnela.bank_acc_no,
+	  branch.ifsc_code
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -140,7 +173,11 @@ function first_appointment_letter2_hdr($sub_div,$office)
 	  Inner Join poststat On personnela.poststat = poststat.post_stat
 	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join pc On personnela.forpc = pc.pccd And pc.subdivisioncd =
-    personnela.forsubdivision where personnela.forsubdivision='$sub_div' and personnela.selected='1' ";
+		personnela.forsubdivision
+	  Left Join bank On personnela.bank_cd = bank.bank_cd
+	  Left Join branch On personnela.branchcd = branch.branchcd And
+		personnela.bank_cd = branch.bank_cd
+	Where personnela.forsubdivision = '$sub_div' And personnela.selected = '1' ";
 	if($office!='0')
 	$sql.=" and office.officecd='$office'";
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
@@ -200,8 +237,6 @@ function second_app_hrd($forassembly,$forpc,$group_id)
 	  assembly.assemblyname,
 	  pc.pccd,
 	  pc.pcname,
-	  pollingstation.psno,
-	  pollingstation.psname,
 	  dcrcmaster.dc_venue,
 	  dcrcmaster.dc_addr,
 	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
@@ -210,10 +245,8 @@ function second_app_hrd($forassembly,$forpc,$group_id)
 	From personnela
 	  Inner Join pc On personnela.forpc = pc.pccd
 	  Inner Join assembly On personnela.forassembly = assembly.assemblycd
-	  Inner Join pollingstation On personnela.forassembly =
-		pollingstation.forassembly
-	  Inner Join dcrcmaster On pollingstation.dcrccd = dcrcmaster.dcrcgrp
-	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp 
+	  Inner Join dcrcmaster On personnela.forassembly = dcrcmaster.assemblycd
+	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp
 	Where personnela.groupid Is Not Null And personnela.groupid != '0'";
 	if($forassembly!='' && $forassembly!=null && $forassembly!=0)
 		$sql.=" and personnela.forassembly='$forassembly'";
@@ -222,14 +255,13 @@ function second_app_hrd($forassembly,$forpc,$group_id)
 	if($group_id!='' && $group_id!=null)
 		$sql.=" and personnela.groupid='$group_id'";
 	$sql.=" order by personnela.forpc,personnela.forassembly,personnela.groupid";
-//		print $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
 }
 function second_appointment_letter($group_id,$forassembly)
 {
-	$sql="Select personnela.groupid,
+/*	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
 	  pc.pccd,
@@ -266,7 +298,41 @@ function second_appointment_letter($group_id,$forassembly)
 	  Inner Join pollingstation On personnela.forassembly =
 		pollingstation.forassembly
 	  Inner Join dcrcmaster On pollingstation.dcrccd = dcrcmaster.dcrcgrp
-	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";
+	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp"; */
+	$sql="Select personnela.groupid,
+	  assembly.assemblycd,
+	  assembly.assemblyname,
+	  pc.pccd,
+	  pc.pcname,
+	  personnela.officer_name,
+	  personnela.personcd,
+	  office.office,
+	  office.address1,
+	  office.address2,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  dcrcmaster.dc_venue,
+	  dcrcmaster.dc_addr,
+	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
+	  dcrc_party.dc_time,
+	  dcrcmaster.rcvenue,
+	  personnela.poststat,
+	  personnela.off_desg
+	From personnela
+	  Inner Join office On personnela.officecd = office.officecd
+	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
+		pc.subdivisioncd
+	  Left Join assembly On personnela.forassembly = assembly.assemblycd
+	  Inner Join dcrcmaster On personnela.forassembly = dcrcmaster.assemblycd
+	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp ";
 	$sql.=" where personnela.groupid='$group_id' and personnela.forassembly='$forassembly' and personnela.booked='P'";
 	$sql.=" order by personnela.groupid, personnela.poststat";
 //		print $sql; exit;
@@ -284,14 +350,14 @@ function delete_prev_data_second_rand($forassembly,$forpc,$group_id)
 	if($group_id!="")
 		$sql.=" and groupid = '$group_id'";
 	$i=execDelete($sql);
-	//print $sql; exit;
+	//print $sql."   $forpc"; exit;
 	connection_close();
 	return $i;
 }
 //===================== Reserve ========================
 function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 {
-	$sql="Select personnela.groupid,
+	/*$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
 	  pc.pccd,
@@ -328,6 +394,40 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  Inner Join pollingstation On personnela.forassembly =
 		pollingstation.forassembly
 	  Inner Join dcrcmaster On pollingstation.dcrccd = dcrcmaster.dcrcgrp
+	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";*/
+	$sql="Select personnela.groupid,
+	  assembly.assemblycd,
+	  assembly.assemblyname,
+	  pc.pccd,
+	  pc.pcname,
+	  personnela.officer_name,
+	  personnela.personcd,
+	  office.office,
+	  office.address1,
+	  office.address2,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  dcrcmaster.dc_venue,
+	  dcrcmaster.dc_addr,
+	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
+	  dcrc_party.dc_time,
+	  dcrcmaster.rcvenue,
+	  personnela.poststat,
+	  personnela.off_desg
+	From personnela
+	  Inner Join office On personnela.officecd = office.officecd
+	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
+		pc.subdivisioncd
+	  Left Join assembly On personnela.forassembly = assembly.assemblycd
+	  Inner Join dcrcmaster On personnela.forassembly = dcrcmaster.assemblycd
 	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";
 	$sql.=" where personnela.booked='R'";
 	if($forassembly!='' && $forassembly!=null && $forassembly!=0)

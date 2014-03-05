@@ -66,8 +66,8 @@ h7 {page-break-after:always;}
                 <td align='left' style='padding:10px 25px; width:200px; vertical-align:top;'><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
-            	<td align='left' colspan='2'> Order No:  <span>&nbsp;</span></td>
-                <td align='right'>Date: ____________</td>
+            	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
+                <td align='right'>Date: <?php print $_SESSION['apt2_date']; ?></td>
             </tr>
             <tr>
             	<td class='spacer' colspan='3'>&nbsp;</td>
@@ -195,10 +195,10 @@ h7 {page-break-after:always;}
             	<td class='spacer' colspan='3'>&nbsp;</td>
             </tr>
             <tr>
-            	<td colspan='2' valign='middle' align='left'>Place : ________________ <br />
-                				Date : _______________</td>
-                <td align='center' valign='top'>Signature<br /><img src='../images/deo/signature.png' alt='0' height='80px' /><br />
-                (__________________)<br />District Election Officer<br />_______________ District</td>
+            	<td colspan='2' valign='middle' align='left'>Place : <?php print uppercase($_SESSION['dist_name']); ?><br />
+                				Date : <?php print date('d/m/Y'); ?></td>
+                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='0' height='50px' width='100px' /><br />
+                (__________________)<br />District Election Officer<br /><?php print wordcase($_SESSION['dist_name']) ?> District</td>
             </tr>
         </table>
       </td>

@@ -17,8 +17,8 @@ function office_list()
 	var officename=document.getElementById('officename').value;
 	var frmdt=document.getElementById("fromdt").value;
 	var todt=document.getElementById("todt").value;
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -34,6 +34,7 @@ function office_list()
 			document.getElementById("Office_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
+	  
 	xmlhttp.open("GET","ajax-office.php?sub_div="+sub_div+"&officeid="+officeid+"&officename="+officename+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
 	xmlhttp.send();
 }
@@ -52,8 +53,8 @@ function delete_office(str)
 	var officename=document.getElementById('officename').value;
 	var frmdt=document.getElementById("fromdt").value;
 	var todt=document.getElementById("todt").value;
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -80,13 +81,14 @@ function delete_office(str)
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">OFFICE DETAILS LIST</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
-    <tr><td colspan="4" align="center"><?php print $subdiv_name; ?> Subdivision</td></tr>
+    <tr><td colspan="4" align="center"><?php print $subdiv_name; ?> SUBDIVISION</td></tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>

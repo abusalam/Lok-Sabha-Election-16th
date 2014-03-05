@@ -57,22 +57,10 @@ function validate()
 	}	
 }
 </script>
-<script language="javascript" type="text/javascript">
-function openCalender(getObject)
-{
-	var theform;
-	var objectName;
-
-	theform=document.form1;
-	objectName = eval('theform.' + getObject); 
-		
-	popUpCalendar(objectName,objectName,"yyyy-mm-dd");
-}
-</script>
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$PersonalID=$_POST['PersonalID'];
@@ -85,13 +73,17 @@ if($action=='Save')
 	
 	if(isset($_REQUEST['ter_id']))
 	{
-	$dt = new DateTime();
-	$posted_date=$dt->format('Y-m-d H:i:s');
-	$ret=update_Termination($ter_id,$PersonalID,$TerminationCause,$DateofTermination,$Remarks,$usercd,$posted_date);
+		$dt = new DateTime();
+		$posted_date=$dt->format('Y-m-d H:i:s');
+		$ret=update_Termination($ter_id,$PersonalID,$TerminationCause,$DateofTermination,$Remarks,$usercd,$posted_date);
+		if($ret==1)
+		{
+			redirect("termination-details.php?msg=success");
+		}
     }
 	else
 	{
-	$ret=save_Termination($ter_id,$PersonalID,$TerminationCause,$DateofTermination,$Remarks,$usercd);
+		$ret=save_Termination($ter_id,$PersonalID,$TerminationCause,$DateofTermination,$Remarks,$usercd);
 	}
 	if($ret==1)
 	{
@@ -115,6 +107,13 @@ if(isset($_REQUEST['ter_id']))
 	$rsTermination=Termination_details($termination_id);
 	$rowTermination=getRows($rsTermination);
 }
+if(isset($_REQUEST['msg']))
+{
+	if($_REQUEST['msg']=='success')
+	{
+		$msg="<div class='alert-success'>Record updated successfully</div>";
+	}
+}
 ?>
 <script language="javascript" type="text/javascript">
 function bind_all()
@@ -127,7 +126,7 @@ function bind_all()
 	var Personaldtl=document.getElementById('Personal_details');
 	<?php
 	if($rowTermination['office']!="" && $rowTermination['off_desg']!="") { ?>
-		Personaldtl.innerHTML="<?php echo "<label class='text_small'><b>Employee Name: </b>".$rowTermination['officer_name']."<br/> <b>Name of Office: </b>".$rowTermination[       'office']." <b>Desig. of O/C: </b>".$rowTermination['designation']."<br/> <b>Present Address: </b>".$rowTermination['present_addr1']." <b>; </b>".$rowTermination['present_addr1']."<br/><b>Present Assembly: </b>".$rowTermination['assembly_temp']." <b>Permanent Assembly: </b>".$rowTermination['assembly_perm']." <b>Place of Posting: </b>".$rowTermination['assembly_off']."</label>"; ?>";
+		Personaldtl.innerHTML="<?php echo "<label class='text_small'><b>Employee Name: </b>".$rowTermination['officer_name']."<br/> <b>Name of Office: </b>".$rowTermination['office']." <b>Desig. of O/C: </b>".$rowTermination['designation']."<br/> <b>Present Address: </b>".$rowTermination['present_addr1']." <b>; </b>".$rowTermination['present_addr1']."<br/><b>Present Assembly: </b>".$rowTermination['assembly_temp']." <b>Permanent Assembly: </b>".$rowTermination['assembly_perm']." <b>Place of Posting: </b>".$rowTermination['assembly_off']."</label>"; ?>";
 		<?php } ?>
 	//fatch_Personaldtl(PersonalID);
 	var TerminationCause=document.getElementById('TerminationCause');
@@ -142,17 +141,18 @@ function bind_all()
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">TERMINATION DETAILS</td></tr>
-<tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
+<tr><td align="center"><form method="post" name="form1" id="form1" >
   <table width="95%" class="form" cellpadding="0">
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>

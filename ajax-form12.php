@@ -4,10 +4,10 @@ extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/form_12_fun.php');
 
-$opn=$_GET['opn'];
+$opn=isset($_GET['opn'])?$_GET['opn']:"";
 if($opn=='office')
 {
-	$sub_div=$_GET['sub_div'];
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
 	echo "<select id='office' name='office' style='width:240px;' onchange='return office_change(this.value);'>\n";
 	$rsOfc=fatch_Office_ag_subdiv($sub_div);
 	$num_rows=rowCount($rsOfc);
@@ -18,16 +18,15 @@ if($opn=='office')
 		{
 			$rowOfc=getRows($rsOfc);
 			echo "<option value='$rowOfc[0]'>$rowOfc[1]</option>\n";
-			$rowOfc=null;
+			$rowOfc=NULL;
 		}
 	}
-	$rsOfc=null;
-	$num_rows=0;
+	unset($rsOfc,$num_rows,$rowOfc);
 	echo "</select>";
 }
 if($opn=='personnel')
 {
-	$office=$_GET['office'];
+	$office=isset($_GET['office'])?$_GET['office']:"";
 	echo "<select id='personnel' name='personnel' style='width:240px;' onchange='return personnel_change(this.value);'>\n";
 	$rsPer=fatch_personnel_ag_office($office);
 	$num_rows=rowCount($rsPer);
@@ -38,17 +37,16 @@ if($opn=='personnel')
 		{
 			$rowPer=getRows($rsPer);
 			echo "<option value='$rowPer[0]'>$rowPer[0]</option>\n";
-			$rowPer=null;
+			$rowPer=NULL;
 		}
 	}
-	$rsPer=null;
-	$num_rows=0;
+	unset($rsPer,$num_rows,$rowPer);
 	echo "</select>";
 }
 if($opn=='per_dtl')
 {
-	$personcd=$_GET['personcd'];
-	$epic=$_GET['epic'];
+	$personcd=isset($_GET['personcd'])?$_GET['personcd']:"";
+	$epic=isset($_GET['epic'])?$_GET['epic']:"";
 	if($personcd!='' && $personcd!=null)
 	{
 		$rsPer=new_person_details($personcd);
@@ -67,6 +65,7 @@ if($opn=='per_dtl')
 		echo "<tr><td align='left'><span class='error'>&nbsp;</span>AC No:</td><td align='left'>".$assembly."</td><td align='left'> Part No:</td><td align='left'>".$rowPer['partno']."</td><td align='left'> Sl No:</td><td align='left'>".$rowPer['slno']."</td></tr>\n";
 		echo "<input type='hidden' id='hid_pc' name='hid_pc' value='".$rowPer['pccd']."' />\n";
 		echo "<input type='hidden' id='hid_per_cd' name='hid_per_cd' value='".$rowPer['personcd']."' />\n";
+		unset($rowPer,$rsPer,$assembly);
 	}
 	if($epic!='' && $epic!=null)
 	{
@@ -86,6 +85,8 @@ if($opn=='per_dtl')
 		echo "<tr><td align='left'><span class='error'>&nbsp;</span>AC No:</td><td align='left'>".$assembly."</td><td align='left'> Part No:</td><td align='left'>".$rowPer['partno']."</td><td align='left'> Sl No:</td><td align='left'>".$rowPer['slno']."</td></tr>\n";
 		echo "<input type='hidden' id='hid_pc' name='hid_pc' value='".$rowPer['pccd']."' />\n";
 		echo "<input type='hidden' id='hid_per_cd' name='hid_per_cd' value='".$rowPer['personcd']."' />\n";
+		
+		unset($rowPer,$rsPer,$assembly);
 	}
 }
 ?>

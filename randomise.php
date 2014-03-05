@@ -7,6 +7,7 @@ include 'postorderdata.php';
 include 'ppdata.php';
 include 'randno.php';
 include 'reserve.php';
+include 'countpp.php';
 
 if(isset($_GET['subdiv']) && $_GET['subdiv']!=null)
 {
@@ -63,7 +64,7 @@ while ($i<=$asmparty->countnumb()-1)
 	
 	$j=0;
 	$grpdata=new grpdtldata($assembly); // Subdivisionwise..change for 2nd randomisation
-	echo 'test1';
+	
 	while ($j<=($postdt->countnumb())-1) //Loop for all poststatus
 	{ 
 
@@ -204,7 +205,7 @@ while ($i<=$asmparty->countnumb()-1)
 				}
 				else
 				{
-					echo ' Check Data ....Group Can not be formed ...';
+					echo ' Check Data ....Group is not be formed properly  ...';
 					break;
 				
 				}
@@ -222,7 +223,9 @@ $stmt->close();
 $msqli->close();
 
     new reserve($subdiv,1);
-	echo ' PP Selection Complete';
+
+
+	new countpp($subdiv);
 //	new randno();
 
 ?>

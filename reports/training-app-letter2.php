@@ -6,6 +6,9 @@ session_start();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Order of Appointment for Training</title>
+<style type="text/css">
+body{font: 13px Verdana, Geneva, sans-serif;}
+</style>
 </head>
 <body>
 <?php
@@ -13,13 +16,9 @@ session_start();
 	include_once('../function/appointment_fun.php');
 	$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
 	$office=(isset($_POST['office'])?$_POST['office']:'0');
-
-	
-	$rstmp=first_appointment_letter2_hdr($subdiv,$office);
-	$tmprow=getRows($rstmp);
-	$str_sub_div=$tmprow['subdivision'];
-	$del_ret=delete_prev_data($str_sub_div);
-		//echo "vall=".$del_ret; exit;
+	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
+	$rstmp=first_appointment_letter2_subdiv($subdiv,$office);
+	$row=0;
 	$rsApp=first_appointment_letter2_hdr($subdiv,$office);
 	
 	$num_rows=rowCount($rsApp);
@@ -27,8 +26,23 @@ session_start();
 	{
 		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,officer_desig,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,epic,acno,partno,slno,bank,branch,bank_accno,ifsc) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
+		
+		$sql1="delete from first_rand_table where subdivision=?";
+		$stmt1 = mysqli_prepare($link, $sql1);
+		while($row <= rowCount($rstmp))
+		{
+			$tmprow=getRows($rstmp);
+			$str_sub_div=$tmprow['subdivision'];
+			//$del_ret=delete_prev_data($str_sub_div);
+			//	echo "vall=".$del_ret;
+			mysqli_stmt_bind_param($stmt1, 's', $str_sub_div);
+			mysqli_stmt_execute($stmt1);
+			$row++;
+		}
+		unset($row,$tmprow,$str_sub_div,$rstmp);
+		
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowApp=getRows($rsApp);
@@ -38,16 +52,17 @@ session_start();
   </tr>
 </table>
 <p align='center'><strong><u>ORDER OF APPOINTMENT FOR TRAINING</u></strong><br />
-<u>Assembly General Election, 2014</u></p>
+<u>$env</u></p>
 <table cellspacing='0' cellpadding='0' width='100%'>
   <tr>
-    <td width='70%' align='left'>Order No: </td>
-    <td width='20%' align='left'>Date:</td>
-	<td width='10%'>&nbsp;</td>
+    <td width='70%' align='left'>Order No: $_SESSION[apt1_orderno]</td>
+    <td width='20%' align='right'>Date: </td>
+	<td width='10%' align='left'>&nbsp;$_SESSION[apt1_date]</td>
   </tr>
 </table>
-<p>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as presiding Officer for undergoing training in connection with the conduct of General Election, 2014. </p>
-<div align='center'>
+<p>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as $rowApp[poststatus] for undergoing training in connection with the conduct of General Election to House of People, 2014</p>";
+ //from $rowApp[forpc]-$rowApp[pcname] PC
+echo "<div align='center'>
   <table width='470px' border='1' cellspacing='0' cellpadding='0'>
     <tr>
       <td align='center'><strong>Name of Polling Officer</strong></td>
@@ -90,7 +105,7 @@ session_start();
 			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
 			$venue_add=$rowAppDtl['venueaddress1'].", ".$rowAppDtl['venueaddress2'];
 			
-			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowAppDtl['training_desc'],$rowAppDtl['venuename'],$venue_add,$rowAppDtl['training_dt'],$rowAppDtl['training_time']);
+			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowAppDtl['training_desc'],$rowAppDtl['venuename'],$venue_add,$rowAppDtl['training_dt'],$rowAppDtl['training_time'],$rowApp['forpc'],$rowApp['pcname'],$rowApp['epic'],$rowApp['acno'],$rowApp['partno'],$rowApp['slno'],$rowApp['bank_name'],$rowApp['branch_name'],$rowApp['bank_acc_no'],$rowApp['ifsc_code']);
 			mysqli_stmt_execute($stmt);
 			$rowAppDtl=NULL;
 		}
@@ -100,14 +115,18 @@ session_start();
   </table>
 </div>
 <hr />
-<div align='left'><br />&nbsp;&nbsp;&nbsp;&nbsp; This is a compulsory duty on your part to attend the said programme, as per the provisions of The Representation of the People Act, 1951. <br />
+<div align='left'>&nbsp;&nbsp;&nbsp;&nbsp; This is a compulsory duty on your part to attend the said programme, as per the provisions of The Representation of the People Act, 1951. <br />
 &nbsp;&nbsp;&nbsp;&nbsp; You are directed to bring your Elector's Photo Identity Card (EPIC) or any proof of Identity affixed with your Photograph.</div>
-<div align='right'>Signature &nbsp;&nbsp;&nbsp;&nbsp;</div>
-<p align='left'><br />
-  Place: BURDWAN <br />
-  Date: ".date('d/m/Y')."</p>
-<p align='right'>District Election Officer &nbsp;&nbsp;&nbsp;&nbsp;<br />
-District Burdwan &nbsp;&nbsp;&nbsp;&nbsp;</p>
+<div align='center'>
+<table cellspacing='0' cellpadding='0' width='750'>
+	<tr><td height='20px' colspan='2'>&nbsp;</td></tr>
+	<tr><td align='right' colspan='2'>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></div>
+<tr><td align='left'>Place: ".uppercase($_SESSION['dist_name'])."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
+<tr><td align='left'>Date: ".date('d/m/Y')."</td></tr>
+<tr><td height='30px' align='right'>&nbsp;</td></tr>
+<tr><td align='right' colspan='2'>District Election Officer <br />
+District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
+</div>
 <hr />
 <table cellspacing='0' cellpadding='0' width='750'>
   <tr>
@@ -122,12 +141,16 @@ District Burdwan &nbsp;&nbsp;&nbsp;&nbsp;</p>
   <tr>
     <td valign='top'>3.</td>
     <td>Please write particulars on the supplied blank Identity Card and also affix your colour passport size photograph on it. Please bring it at training venue for attestation.</td>
-  </tr>";
-/*  <tr>
-    <td valign='top'>5.</td>
-    <td>Your electoral details: Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] &nbsp;&nbsp;. If not correct please inform PP Cell.</td>
   </tr>
-  */
+  <tr>
+    <td valign='top'>4.</td>
+    <td>Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.</td>
+  </tr>
+  <tr>
+    <td valign='top'>&nbsp;</td>
+    <td>EPIC No.- $rowApp[epic] &nbsp;&nbsp; Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] <br /> Bank- $rowApp[bank_name] &nbsp;&nbsp; Branch- $rowApp[branch_name] &nbsp;&nbsp; A/c No.- $rowApp[bank_acc_no] &nbsp;&nbsp; IFS Code- $rowApp[ifsc_code]</td>
+  </tr>";
+  
 echo "
 </table>
 <table width='750' cellspacing='0' cellpadding='0'>
@@ -159,13 +182,14 @@ echo "
 			
 			$rowApp=NULL;
 		}
-		unset($rsApp,$num_rows);
+		unset($rsApp,$num_rows,$rowApp);
 		
 		if (!mysqli_commit($link)) {
 			print("Transaction commit failed\n");
 			exit();
 		}
 		mysqli_stmt_close($stmt);
+		mysqli_stmt_close($stmt1);
 		mysqli_close($link);
 		
 		//delete_temp_app_letter($usercd);

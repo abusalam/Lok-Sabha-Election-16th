@@ -5,8 +5,8 @@ include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 include_once('function/pagination.php');
 //====================================================
-$pr_cd=decode($_GET['pr_cd']);
-$act=$_GET['act'];
+$pr_cd=isset($_GET['pr_cd'])?decode($_GET['pr_cd']):"";
+$act=isset($_GET['act'])?$_GET['act']:"";
 if($pr_cd!='' && $act=='del')
 {
 	    $f_cd=' ';
@@ -23,7 +23,7 @@ $personalid=$_GET["personalid"];
 $frmdt=$_GET["frmdt"];
 $todt=$_GET["todt"];
 $usercode=$_SESSION['user_cd'];
-$delcode=$_GET["delcode"];
+$delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
 if($delcode!="" && $delcode!=null)
 {
 //	$total=ofc_del_check(decode($delcode));

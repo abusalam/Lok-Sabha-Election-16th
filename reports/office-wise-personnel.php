@@ -30,7 +30,7 @@ include_once('../inc/db_trans.inc.php');
 include_once('../function/ofc_fun.php');
 extract($_POST);
 $subdiv=$_POST['hid_subdiv'];
-$office_cd=$_POST['office'];
+$office_cd=isset($_POST['office'])?$_POST['office']:"";
 $rsOff=office_details_ag_sub($office_cd,$subdiv);
 $num_rows_Off=rowCount($rsOff);
 for($i=1;$i<=$num_rows_Off;$i++)

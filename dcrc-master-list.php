@@ -34,7 +34,8 @@ function search_click()
 {
 	var subdiv=document.getElementById('Subdivision').value;
 	var assembly=document.getElementById('assembly').value;
-
+	var dist="<?php echo isset($dist_cd)?$dist_cd:""; ?>";
+	
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -50,7 +51,7 @@ function search_click()
 			document.getElementById("dcrc_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajaxfun.php?sub_div="+subdiv+"&ass="+assembly+"&opn=dcrc_result",true);
+	xmlhttp.open("GET","ajaxfun.php?sub_div="+subdiv+"&ass="+assembly+"&opn=dcrc_result&dist="+dist,true);
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });
@@ -79,7 +80,7 @@ function delete_dcrc(str)
 			document.getElementById("dcrc_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-//	  alert("ajaxfun.php?dcrc="+str+"&opn=del_dcrc&sub_div="+subdiv+"&assembly="+assembly);
+	  //alert("ajaxfun.php?dcrc="+str+"&opn=del_dcrc&sub_div="+subdiv+"&assembly="+assembly);
 	xmlhttp.open("GET","ajaxfun.php?dcrc="+str+"&opn=del_dcrc&sub_div="+subdiv+"&assembly="+assembly,true);
 	xmlhttp.send();
 	}
@@ -91,7 +92,8 @@ function delete_dcrc(str)
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">ASSEMBLY PARTY LIST</td></tr>

@@ -159,7 +159,7 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/user_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$district_cd=''; $subdiv=''; $parliament='';
@@ -182,17 +182,34 @@ if($action=='Save')
 		$parliament=$_POST['parliament'];
 	}
 	include_once('function/user_fun.php');
-	$c_user=duplicate_user($userid);
+	if(!isset($_REQUEST['user_cd']))
+	{
+		$c_user=duplicate_user($userid);
+	}
+	else
+	{
+		$c_user=0;
+	}
 	if($c_user==0)
 	{
-		$ret=save_user($userid,$password,$category,$district_cd,$subdiv,$parliament);
+		$ret=0;
+		if(isset($_REQUEST['user_cd']))
+		{
+			$ret=update_user(decode($_REQUEST['user_cd']),$password,$category,$district_cd,$subdiv,$parliament);
+			delete_permission(decode($_REQUEST['user_cd']));
+		}
+		else
+		{
+			$ret=save_user($userid,$password,$category,$district_cd,$subdiv,$parliament); 
+		}
+		
 		//$sql="select * from user where user_id='$username' and password='$password'";
 		if($ret==1) {		
 			$user_cd=get_user_cd_ag_username($userid);
 			$hid_menucount=$_POST['hid_menucount'];
 			for($i=1;$i<=$hid_menucount;$i++)
 			{				
-				if($_POST['chkmenu_'.$i]=='on')
+				if(isset($_POST['chkmenu_'.$i])?$_POST['chkmenu_'.$i]:""=='on')
 				{
 					$menu_cd=$_POST['hidmenu_'.$i];
 					$hid_submenucount=$_POST['hid_submenucount_'.$i];
@@ -201,11 +218,11 @@ if($action=='Save')
 						$ret1=save_user_permission($user_cd,$menu_cd,'');
 						if($ret1==1)
 							   $msg="<div class='alert-success'>Record added successfully</div>";
-						unset($user_cd,$ret1);
+						unset($ret1);
 					}
 					for($j=1;$j<=$hid_submenucount;$j++)
 					{
-						if($_POST['chksubmenu_'.$i.$j]=='on')
+						if(isset($_POST['chksubmenu_'.$i.$j])?$_POST['chksubmenu_'.$i.$j]:""=='on')
 						{
 							$submenu_cd=$_POST['hidsubmenu_'.$i.$j];
 							$ret1=save_user_permission($user_cd,$menu_cd,$submenu_cd);
@@ -217,6 +234,15 @@ if($action=='Save')
 					unset($menu_cd);
 				}
 			}
+			unset($user_cd);
+		}
+		if(isset($_REQUEST['user_cd']))
+		{
+			redirect("user-reg.php?msg=success");
+		}
+		else
+		{
+			$msg="<div class='alert-success'>Record added successfully</div>";
 		}
 	}
 	else
@@ -226,17 +252,89 @@ if($action=='Save')
 	unset($userid,$password,$category,$district_cd,$subdiv,$parliament,$c_user,$ret);
 }
 ?>
-<body>
+<?php
+if(isset($_REQUEST['user_cd']))
+{
+	$user_cd=decode($_REQUEST['user_cd']);
+
+	$rsUser=fatch_UserDtl($user_cd);
+	$rowUser=getRows($rsUser);
+	$usr_cat=$rowUser['category'];
+	$usr_dist=$rowUser['districtcd'];
+	$usr_sub=$rowUser['subdivisioncd'];
+	$usr_pc=$rowUser['parliamentcd'];
+}
+if(isset($_REQUEST['msg']))
+{
+	if($_REQUEST['msg']=='success')
+	{
+		$msg="<div class='alert-success'>Record updated successfully</div>";
+	}
+}
+?>
+<script language="javascript" type="text/javascript">
+function bind_all()
+{
+<?php	if(isset($_REQUEST['user_cd']))
+	{	?>
+	var userid=document.getElementById('userid');
+	userid.value="<?php echo $rowUser['user_id']; ?>";
+	userid.readOnly=true;
+	var password=document.getElementById('password');
+	password.value="";
+	var category=document.getElementById('category');
+	category.value="<?php echo $usr_cat; ?>";
+	if(category.value=='District' || category.value=='Sub-Division' || category.value=='Parliament')
+	{
+		document.getElementById('trDist').style.visibility="visible";
+		var district=document.getElementById('district');
+		for (var i = 0; i < district.options.length; i++) 
+		{
+			if (district.options[i].value == "<?php echo $usr_dist; ?>")
+			{
+				district.options[i].selected = true;
+			}
+		}
+	}
+	if(category.value=='Sub-Division' || category.value=='Parliament')
+	{
+		document.getElementById('trSubdiv').style.visibility="visible";
+		var subdiv=document.getElementById('subdiv');
+		for (var i = 0; i < subdiv.options.length; i++) 
+		{
+			if (subdiv.options[i].value == "<?php echo $usr_sub; ?>")
+			{
+				subdiv.options[i].selected = true;
+			}
+		}
+	}
+	if(category.value=='Parliament')
+	{
+		document.getElementById('trParliament').style.visibility="visible";
+		var parliament=document.getElementById('parliament');
+		for (var i = 0; i < parliament.options.length; i++) 
+		{
+			if (parliament.options[i].value == "<?php echo $usr_pc; ?>")
+			{
+				parliament.options[i].selected = true;
+			}
+		}
+	}
+<?php } ?>
+}
+</script>
+<body onload="javascript: bind_all();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">ADD USER</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="60%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td align="center"><img src="images/blank.gif" alt="" height="5px" /></td><td align="right"><strong>»</strong>&nbsp;<a href="list-users.php" class="k-button">List User</a></td></tr>
 	<tr><td align="left" width="50%"><span class="error">*</span>User Id</td><td align="left"><input type="text" name="userid" id="userid" style="width:192px;" /></td></tr>
     <tr><td align="left"><span class="error">*</span>Password</td><td align="left"><input type="password" name="password" id="password" style="width:192px;" /></td></tr>
     <tr><td align="left"><span class="error">*</span>Category</td><td align="left"><select name="category" id="category" style="width:200px;" onchange="change_category(this.value)">
@@ -255,16 +353,60 @@ if($action=='Save')
 										for($i=1;$i<=$num_rows;$i++)
 										{
 											$rowDist=getRows($rsDist);
-											echo "<option value='$rowDist[0]'>$rowDist[1]</option>";
+											echo "<option value='$rowDist[0]'>$rowDist[1]</option>\n";
 										}
 									}
 									unset($rsDist,$num_rows,$rowDist);
 								?>
     							
                             </select></td></tr>
-    <tr id="trSubdiv" style="visibility:hidden;"><td align="left"><span class="error">*</span>Sub-Division</td><td align="left" id="subdiv_result"><select name="subdiv" id="subdiv" style="width:200px;"></select></td></tr>
+    <tr id="trSubdiv" style="visibility:hidden;"><td align="left"><span class="error">*</span>Sub-Division</td><td align="left" id="subdiv_result"><select name="subdiv" id="subdiv" style="width:200px;" onchange='return subdiv_change(this.value);'>
+<?php
+include_once('function/add_fun.php');
+if(isset($user_cd))
+{
+	if($usr_cat=='Sub-Division' || $usr_cat=='Parliament')
+	{
+		$dist=$usr_dist;
+		$rsSubdiv=fatch_Subdivision($dist);
+		$num_rows=rowCount($rsSubdiv);
+		if($num_rows>0)
+		{
+			echo "<option value='0'>-Select Subdivision-</option>\n";
+			for($i=1;$i<=$num_rows;$i++)
+			{
+				$rowSubdiv=getRows($rsSubdiv);
+				echo "<option value='$rowSubdiv[0]'>$rowSubdiv[2]</option>\n";
+			}
+		}
+		unset($rsSubdiv,$$num_rows,$rowSubdiv);
+	}
+}
+?>
+</select></td></tr>
     <tr id="trParliament" style="visibility:hidden;"><td align="left"><span class="error">*</span>Parliament</td><td align="left" id="pc_result"><select name="parliament" id="parliament" style="width:200px;">
-    							</select></td></tr>
+<?php
+if(isset($user_cd))
+{
+	if($usr_cat=='Parliament')
+	{
+		$subdiv=$usr_sub;
+		$rsPC=fatch_pc($subdiv);
+		$num_rows=rowCount($rsPC);
+		if($num_rows>0)
+		{
+			echo "<option value='0'>-Select Parliament-</option>\n";
+			for($i=1;$i<=$num_rows;$i++)
+			{
+				$rowPC=getRows($rsPC);
+				echo "<option value='$rowPC[0]'>$rowPC[1]</option>\n";
+			}
+		}
+		unset($rsPC,$$num_rows,$rowPC);
+	}
+}
+?>
+</select></td></tr>
     <tr><td colspan="2" align="left">Permission</td></tr>
     <tr><td colspan="2">
     <table id="table1" width="100%"><tr><th>Menu</th><th>First Level Submenu</th></tr>

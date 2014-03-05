@@ -56,14 +56,15 @@ function validate()
 <body onload="return load_data();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr>
   <td align="center">Party PS List</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" action="reports/party_ps_list.php" target="_blank">
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>
@@ -86,7 +87,7 @@ function validate()
 							?>
       				</select></td></tr>
     <tr>
-      <td align="left"><span class="error">*</span>Assembly</td>
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Assembly</td>
       <td align="left" id="assembly_result"><select name="assembly" id="assembly" style="width:200px;"></select></td>
     </tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>

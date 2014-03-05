@@ -30,7 +30,7 @@ h7 {page-break-after:always;}
 	$group_id=decode($_GET['group_id']);
 	$forassembly=decode($_GET['assembly']);
 	$forpc=decode($_GET['pc']);
-	
+
 	$del_ret=delete_prev_data_second_rand($forassembly,$forpc,$group_id);
 	$rec_set_hdr=second_app_hrd($forassembly,$forpc,$group_id);
 	if(rowCount($rec_set_hdr)>0)
@@ -42,7 +42,7 @@ h7 {page-break-after:always;}
 			$grp_id=$rec_arr_hdr['groupid'];
 			$for_ass=$rec_arr_hdr['assemblycd']."-".$rec_arr_hdr['assemblyname'];
 			$for_pc=$rec_arr_hdr['pccd']."-".$rec_arr_hdr['pcname'];
-			$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
+			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
 			$dc=($rec_arr_hdr['dc_venue']!=''?$rec_arr_hdr['dc_venue'].", ".$rec_arr_hdr['dc_addr']:"___________________________________");
 			$dc_date=($rec_arr_hdr['dc_date']!=''?$rec_arr_hdr['dc_date']:"___________");
 			$dc_time=($rec_arr_hdr['dc_time']!=''?$rec_arr_hdr['dc_time']:"___________");
@@ -66,8 +66,8 @@ h7 {page-break-after:always;}
                 <td align='left' style='padding:10px 25px; width:200px; vertical-align:top;'><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
-            	<td align='left' colspan='2'> Order No:  <span>&nbsp;</span></td>
-                <td align='right'>Date: ____________</td>
+            	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
+                <td align='right'>Date: <?php print $_SESSION['apt2_date']; ?></td>
             </tr>
             <tr>
             	<td class='spacer' colspan='3'>&nbsp;</td>
@@ -189,10 +189,10 @@ $j=0;
             	<td class='spacer' colspan='3'>&nbsp;</td>
             </tr>
             <tr>
-            	<td colspan='2' valign='middle' align='left'>Place : ________________ <br />
-                				Date : _______________</td>
-                <td align='center' valign='top'>Signature<br /><img src='../images/signature.png' alt='0' height='80px' /><br />
-                (__________________)<br />District Election Officer<br />_______________ District</td>
+            	<td colspan='2' valign='middle' align='left'>Place : <?php print uppercase($_SESSION['dist_name']); ?><br />
+                				Date : <?php print date('d/m/Y'); ?></td>
+                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='0' height='50px' width='100px' /><br />
+                (__________________)<br />District Election Officer<br /><?php print wordcase($_SESSION['dist_name']) ?> District</td>
             </tr>
         </table>
       </td>

@@ -3,10 +3,10 @@ session_start();
 extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
-$offccd=$_GET["offccd"];
+$offccd=isset($_GET["offccd"])?$_GET["offccd"]:"";
 //$personid=$_GET["personid"];
-$bank=$_GET["bank"];
-$dist=$_GET["dist"];
+$bank=isset($_GET["bank"])?$_GET["bank"]:"";
+$dist=isset($_GET["dist"])?$_GET["dist"]:"";
 //=================Get office details===========================
 if($offccd != '')
 {
@@ -39,10 +39,12 @@ if($offccd != '')
 	}
 	$rsOffc=NULL;
 	$rowOffc=NULL;
+	unset($rsOffc,$rowOffc,$num_rows);
 }
 else
 {
 	$rsOffc=NULL;
+	unset($rsOffc);
 }
 //==========================Get Brance Name======================================
 if($bank != '')
@@ -66,10 +68,12 @@ if($bank != '')
 	}
 	$rsBranch=NULL;
 	$rowBranch=NULL;
+	unset($rsBranch,$rowBranch,$num_rows);
 }
 else
 {
 	$rsBranch=NULL;
+	unset($rsBranch);
 }
 
 
@@ -77,9 +81,9 @@ else
 //=============== Fatch Block/Municipality & Police Station===================
 
 $subdiv; $pol; $ofcid;
-$subdiv=$_GET["subdiv"];
-$pol=$_GET["pol"];
-$ofcid=$_GET["ofcid"];
+$subdiv=isset($_GET["subdiv"])?$_GET["subdiv"]:"";
+$pol=isset($_GET["pol"])?$_GET["pol"]:"";
+$ofcid=isset($_GET["ofcid"])?$_GET["ofcid"]:"";
 if($subdiv != '')
 {
 	if($pol=='n')
@@ -103,6 +107,7 @@ if($subdiv != '')
 		}
 		$rspol=NULL;
 		$rowpol=NULL;
+		unset($rspol,$rowpol,$num_rows);
 	}
 	else if($ofcid=='n')
 	{
@@ -127,6 +132,7 @@ if($subdiv != '')
 		}
 		$rsofc=NULL;
 		$rowofc=NULL;
+		unset($rsofc,$rowofc,$num_rows);
 	}
 	else
 	{
@@ -149,10 +155,12 @@ if($subdiv != '')
 		}
 		$rsblock=NULL;
 		$rowblock=NULL;
+		unset($rsblock,$rowblock,$num_rows);
 	}
 }
 
-//=================Get Personal details===========================
+//=================Get Personal details (Termination)===========================
+$PersonalCd=isset($_GET["PersonalCd"])?$_GET["PersonalCd"]:"";
 if($PersonalCd != '')
 {
 	$rsPersonal=fatch_Personaldtl($PersonalCd);
@@ -171,14 +179,17 @@ if($PersonalCd != '')
 	}
 	$rsPersonal=NULL;
 	$rowPersonal=NULL;
+	unset($rsPersonal,$rowPersonal,$num_rows);
 }
 else
 {
 	$rsPersonal=NULL;
+	unset($rsPersonal);
 }
 //===============================Data Transffer==================================
 $subdiv_swp; 
-$subdiv_swp=$_GET["subdiv_swp"];
+$subdiv_swp=isset($_GET["subdiv_swp"])?$_GET["subdiv_swp"]:"";
+$off=isset($_GET["off"])?$_GET["off"]:"";
 if($subdiv_swp != '' && $off=='n')
 {
 	
@@ -201,17 +212,18 @@ if($subdiv_swp != '' && $off=='n')
 		}
 		$rsoff=NULL;
 		$rowoff=NULL;
-	
+		unset($rsoff,$rowoff,$num_rows);
 }
 else
 {
 	$rsoff=NULL;
+	unset($rsoff);
 }
-$opn=$_GET['opn'];
+$opn=isset($_GET['opn'])?$_GET['opn']:"";
 if($opn=="poststat")
 {
-	$pc_swp=$_GET["pc_swp"];
-	$sub_swp=$_GET["sub_swp"];
+	$pc_swp=isset($_GET["pc_swp"])?$_GET["pc_swp"]:"";
+	$sub_swp=isset($_GET["sub_swp"])?$_GET["sub_swp"]:"";
 	$rs=fatch_post_stat_wise_dtl_available($sub_swp,$pc_swp);
 	$num_rows=rowCount($rs);
 	for($i=1;$i<=$num_rows;$i++)
@@ -222,6 +234,7 @@ if($opn=="poststat")
 	}
 	$num_rows=0;			
 	$rs=NULL;
+	unset($rs,$row,$num_rows);
 }
 if($opn=="pc_swp")
 {
@@ -246,11 +259,12 @@ if($opn=="pc_swp")
 	}
 	$num_rows=0;			
 	$rsPC=NULL;
+	unset($rsPC,$rowPC,$num_rows);
 }
 if($opn=="prev_poststat")
 {
-	$forpc_swp=$_GET["forpc_swp"];
-	$forsub_swp=$_GET["forsub_swp"];
+	$forpc_swp=isset($_GET["forpc_swp"])?$_GET["forpc_swp"]:"";
+	$forsub_swp=isset($_GET["forsub_swp"])?$_GET["forsub_swp"]:"";
 	$rs=fatch_post_stat_wise_dtl_transffered($forsub_swp,$forpc_swp);
 	$num_rows=rowCount($rs);
 	echo "Transffered &nbsp;: ";
@@ -262,6 +276,7 @@ if($opn=="prev_poststat")
 	}
 	$num_rows=0;			
 	$rs=NULL;
+	unset($rs,$row,$num_rows);
 }
 if($opn=="forpc_swp")
 {
@@ -286,9 +301,9 @@ if($opn=="forpc_swp")
 	}
 	$num_rows=0;			
 	$rsPC=NULL;
+	unset($rsPC,$rowPC,$num_rows);
 }
 //============================= Assembly Party ==============================
-$opn=$_GET["opn"];
 if($opn=='pc')
 {
 	$subdiv=$_GET["sub-div"];
@@ -312,6 +327,7 @@ if($opn=='pc')
 	}
 	$num_rows=0;			
 	$rsPC=NULL;
+	unset($rsPC,$rowPC,$num_rows);
 }
 if($opn=='assembly')
 {
@@ -337,6 +353,7 @@ if($opn=='assembly')
 	}
 	$num_rows=0;			
 	$rsAssembly=NULL;
+	unset($rsAssembly,$rowAssembly,$num_rows);
 }
 if($opn=='rowcreate')
 {
@@ -356,6 +373,7 @@ if($opn=='rowcreate')
 									$rsP=NULL;
 									$num_rows=0;
 									$rowP=NULL;
+									unset($rsP,$rowP,$num_rows);
 							
       	echo			"</select></td>\n
         <td align='center'><select name='per_num".$row."' id='per_num".$row."'>
@@ -395,7 +413,7 @@ if($opn=='reserve')
 			 //echo "<td align='center' width='8%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_reserve($ass,$no);' title='Click to delete' /></td></tr>\n";
 			 $rowReserve=NULL;
 		}
-		unset($rsReserve,$num_rows);
+		unset($rsReserve,$rowReserve,$num_rows);
 	}
 	else
 	{
@@ -436,7 +454,7 @@ if($opn=='assembly_paty')
 			 //echo "<td align='center' width='8%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_reserve($ass,$no);' title='Click to delete' /></td></tr>\n";
 			 $rowAP=NULL;
 		}
-		unset($rsAP,$num_rows);
+		unset($rsAP,$rowAP,$num_rows);
 	}
 	else
 	{
@@ -497,7 +515,7 @@ if($opn=='del_ass')
 			 //echo "<td align='center' width='8%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_reserve($ass,$no);' title='Click to delete' /></td></tr>\n";
 			 $rowAP=NULL;
 		}
-		unset($rsAP,$num_rows);
+		unset($rsAP,$rowAP,$num_rows);
 	}
 	else
 	{
@@ -528,14 +546,16 @@ if($opn=='assembly_ag_sub')
 	}
 	$num_rows=0;			
 	$rsAssembly=NULL;
+	unset($rowAssembly,$rsAssembly,$num_rows);
 }
 if($opn=='dcrc_result')
 {
 	include_once('function/master_fun.php');
 	$sub_div=$_GET["sub_div"];
 	$assembly=$_GET["ass"];
+	$dist=isset($_GET["dist"])?$_GET["dist"]:"";
 	
-	$rsDCRC=fatch_dcrc_list($sub_div,$assembly);
+	$rsDCRC=fatch_dcrc_list($sub_div,$assembly,$dist);
 	$num_rows=rowCount($rsDCRC);
 	if($num_rows>0)
 	{
@@ -565,7 +585,7 @@ if($opn=='dcrc_result')
 		}
 		echo "</table>\n";
 		$num_rows=0;			
-		unset($rsDCRC);
+		unset($rsDCRC,$num_rows,$rowDCRC);
 	}
 	else
 	{
@@ -595,7 +615,7 @@ if($opn=='del_dcrc')
 	}
 		
 	$sub_div=$_GET["sub_div"];
-	$assembly=$_GET["ass"];
+	$assembly=$_GET["assembly"];
 	
 	$rsDCRC=fatch_dcrc_list($sub_div,$assembly);
 	$num_rows=rowCount($rsDCRC);
@@ -627,7 +647,7 @@ if($opn=='del_dcrc')
 		}
 		echo "</table>\n";
 		$num_rows=0;			
-		unset($rsDCRC);
+		unset($rsDCRC,$rowDCRC,$num_rows);
 	}
 	else
 	{

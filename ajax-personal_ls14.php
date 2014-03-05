@@ -5,8 +5,8 @@ include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 include_once('function/pagination.php');
 //====================================================
-$pr_cd=decode($_GET['pr_cd']);
-$act=$_GET['act'];
+$pr_cd=isset($_GET['pr_cd'])?decode($_GET['pr_cd']):"";
+$act=isset($_GET['act'])?$_GET['act']:"";
 if($pr_cd!='' && $act=='del')
 {
 	    $f_cd=' ';
@@ -18,19 +18,19 @@ if($pr_cd!='' && $act=='del')
 		}
 }
 //========================================================================
-global $subdiv; global $post_status; global $officeid; global $frmdt; global $todt; global $usercode;
-$subdiv=$_GET["subdiv"];
-$post_status=$_GET["post_status"];
-$officeid=$_GET["officeid"];
-$frmdt=$_GET["frmdt"];
-$todt=$_GET["todt"];
-$usercode=$_SESSION['user_cd'];
+//global $subdiv; global $post_status; global $officeid; global $frmdt; global $todt; //global $usercode;
+$subdiv=isset($_GET["subdiv"])?$_GET["subdiv"]:"";
+$post_status=isset($_GET["post_status"])?$_GET["post_status"]:"";
+$officeid=isset($_GET["officeid"])?$_GET["officeid"]:"";
+$frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
+$todt=isset($_GET["todt"])?$_GET["todt"]:"";
+$usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
 
 $rsPersonnel_ls14_dum=fatch_Personnel_ls14List($subdiv,$post_status,$officeid,$frmdt,$todt,$usercode);
 $num_rows_dum = rowCount($rsPersonnel_ls14_dum);
 
 $items = 50; // number of items per page.
-$all = $_GET['a'];
+$all = isset($_GET['a'])?$_GET['a']:"";
 if($all == "all")
 {
 	$items = $num_rows_dum;
@@ -38,7 +38,7 @@ if($all == "all")
 $nrpage_amount = $num_rows_dum/$items;
 $page_amount = ceil($num_rows_dum/$items);
 $page_amount = $page_amount-1;
-$page = $_GET['p'];
+$page = isset($_GET['p'])?$_GET['p']:"";
 $section='list-personnel_ls14';
 if($page < "1")
 {

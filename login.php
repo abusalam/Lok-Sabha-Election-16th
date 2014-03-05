@@ -1,5 +1,8 @@
 <?php
-session_start();
+if(!isset($_SESSION))
+{
+	session_start();
+}
 session_destroy();
 session_start();
 ?>
@@ -9,6 +12,7 @@ session_start();
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
 include_once('inc/db_trans.inc.php');
+if(isset($_REQUEST['submit'])) {
 $action=$_REQUEST['submit'];
 if($action=='Log In')
 {
@@ -26,6 +30,7 @@ if($action=='Log In')
 		$_SESSION['alogin']="true";
 		$_SESSION['user']= $username;
 		$row=getRows($rs);
+		
 		$_SESSION['user_cd']= $row[0];
 		$_SESSION['user_cat']= $row[3];
 		$_SESSION['dist_cd']= $row[5];
@@ -54,6 +59,7 @@ if($action=='Log In')
 			}
 		}
 	}
+}
 }
 ?>
 <title>Login</title>
@@ -101,7 +107,7 @@ form {width:300px !important; font-family:verdana !important; border:1px solid #
   <div style="background:#009ADE; border-radius:4px 4px 0 0;"><img src="images/login-img.png" alt="" height="90px" width="100%" /></div>
   <form name="login" method="post">
     <table width="50%" cellpadding="2" cellspacing="0" border="0">
-    <tr><td align="center" height="30px"><span id="invalidsp"><?php print $msg; ?></span><span id="msg" class="error"></span></td></tr>
+    <tr><td align="center" height="30px"><span id="invalidsp"><?php print isset($msg)?$msg:"" ; ?></span><span id="msg" class="error"></span></td></tr>
     <tr><td align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     <tr><td class="text1" align="left">User Name</td></tr>
     <tr><td align="left"><input type="text" name="username" id="username" style="width:250px;" /></td></tr>

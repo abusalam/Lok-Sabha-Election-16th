@@ -18,7 +18,7 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/appointment_fun.php');
 	$usercd=$_SESSION['user_cd'];
-	
+	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
 	$rstmp=fetch_id_temp_app_letter($usercd);
 	$tmprow=getRows($rstmp);
 	$str_per_code=$tmprow['per_code'];
@@ -30,12 +30,17 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 	{
 		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,officer_desig,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,epic,acno,partno,slno, bank,branch,bank_accno,ifsc) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowId=getRows($rsId);
 			$rsApp=first_appointment_letter_hdr($rowId['per_code']);
+			if(rowCount($rsApp)==0)
+			{
+				echo "Appointment Letter not available. </td></tr></table></div></body></html>";
+				exit;
+			}
 			$rowApp=getRows($rsApp);
 			
 			echo "<table width='750'>
@@ -44,18 +49,19 @@ body{font: 12px Verdana, Geneva, sans-serif;}
   </tr>
 </table>
 <p align='center'><strong><u>ORDER OF APPOINTMENT FOR TRAINING</u></strong><br />
-<u>Assembly General Election, 2014</u></p>
+<u>$env</u></p>
 <table cellspacing='0' cellpadding='0' width='750'>
   <tr>
-    <td width='70%' align='left'>Order No: </td>
-    <td width='20%' align='left'>Date:</td>
-	<td width='10%'>&nbsp;</td>
+    <td width='70%' align='left'>Order No: $_SESSION[apt1_orderno]</td>
+    <td width='20%' align='right'>Date:&nbsp;</td>
+	<td width='10%' align='left'>&nbsp;$_SESSION[apt1_date]</td>
   </tr>
 </table>
 <table cellspacing='0' cellpadding='0' width='750'>
 	<tr><td>
-<p>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as $rowApp[poststatus] for undergoing training in connection with the conduct of Election to the Parliament House of the People, 2014 from $rowApp[pcname] </p>
-	</td></tr>
+<p>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as $rowApp[poststatus] for undergoing training in connection with the conduct of General Election to House of People, 2014</p>";
+ //from $rowApp[forpc]-$rowApp[pcname] PC
+echo "</td></tr>
 </table>
 <div align='center'>
   <table width='600px' border='1' cellspacing='0' cellpadding='0'>
@@ -83,7 +89,7 @@ body{font: 12px Verdana, Geneva, sans-serif;}
       <td width='12%'><strong>Date</strong></td>
       <td width='15%'><strong>Time</strong></td>
     </tr>";
-	$rsAppDtl=first_appointment_letter($rowId['per_code']);
+	$rsAppDtl=first_appointment_letter($rowApp['personcd']);
 	if(rowCount($rsAppDtl)>0)
 	{
 		for($j=1;$j<=rowCount($rsAppDtl);$j++)
@@ -100,7 +106,7 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
 			$venue_add=$rowAppDtl['venueaddress1'].", ".$rowAppDtl['venueaddress2'];
 			
-			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowAppDtl['training_desc'],$rowAppDtl['venuename'],$venue_add,$rowAppDtl['training_dt'],$rowAppDtl['training_time']);
+			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowAppDtl['training_desc'],$rowAppDtl['venuename'],$venue_add,$rowAppDtl['training_dt'],$rowAppDtl['training_time'],$rowApp['forpc'],$rowApp['pcname'],$rowApp['epic'],$rowApp['acno'],$rowApp['partno'],$rowApp['slno'],$rowApp['bank_name'],$rowApp['branch_name'],$rowApp['bank_acc_no'],$rowApp['ifsc_code']);
 			mysqli_stmt_execute($stmt);
 			$rowAppDtl=NULL;
 		}
@@ -116,13 +122,13 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 &nbsp;&nbsp;&nbsp;&nbsp; You are directed to bring your Elector's Photo Identity Card (EPIC) or any proof of Identity affixed with your Photograph.</td></tr></table></div>
 <div align='center'>
 <table cellspacing='0' cellpadding='0' width='750'>
-	<tr><td height='20px'>&nbsp;</td></tr>
-	<tr><td align='right'>Signature &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></div>
-<tr><td align='left'>Place: BURDWAN</td></tr>
+	<tr><td height='20px' colspan='2'>&nbsp;</td></tr>
+	<tr><td align='right' colspan='2'>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></div>
+<tr><td align='left'>Place: ".uppercase($_SESSION['dist_name'])."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
 <tr><td align='left'>Date: ".date('d/m/Y')."</td></tr>
-<tr><td height='30px'>&nbsp;</td></tr>
-<tr><td align='right'>District Election Officer <br />
-District Burdwan &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
+<tr><td height='30px' align='right'>&nbsp;</td></tr>
+<tr><td align='right' colspan='2'>District Election Officer <br />
+District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
 <hr  width='750px' />
 <table cellspacing='0' cellpadding='0' width='750px'>
   <tr>
@@ -137,6 +143,14 @@ District Burdwan &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
   <tr>
     <td valign='top'>3.</td>
     <td>Please write particulars on the supplied blank Identity Card and also affix your colour passport size photograph on it. Please bring it at training venue for attestation.</td>
+  </tr>
+  <tr>
+    <td valign='top'>4.</td>
+    <td>Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.</td>
+  </tr>
+  <tr>
+    <td valign='top'>&nbsp;</td>
+    <td>EPIC No.- $rowApp[epic] &nbsp;&nbsp; Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] <br /> Bank- $rowApp[bank_name] &nbsp;&nbsp; Branch- $rowApp[branch_name] &nbsp;&nbsp; A/c No.- $rowApp[bank_acc_no] &nbsp;&nbsp; IFS Code- $rowApp[ifsc_code]</td>
   </tr>
 </table>
 <table width='750px' cellspacing='0' cellpadding='0'>

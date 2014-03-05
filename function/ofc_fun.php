@@ -71,7 +71,6 @@ function office_details_ag_forsub($subdiv)
 }
 function office_wise_list($office)
 {
-	$sql=""; $rs=null;
 	$sql="Select Distinct personnela.personcd,
 	  personnela.officer_name,
 	  personnela.off_desg as designation,
@@ -89,7 +88,6 @@ function office_wise_list($office)
 }
 function office_n_forsub_wise_list($office,$subdiv)
 {
-	$sql=""; $rs=null;
 	$sql="Select Distinct personnela.personcd,
 	  personnela.officer_name,
 	  personnela.off_desg as designation,

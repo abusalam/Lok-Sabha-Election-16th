@@ -3,8 +3,8 @@ session_start();
 extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/training_fun.php');
-$tr_cd=decode($_GET['tr_cd']);
-$act=$_GET['act'];
+$tr_cd=isset($_GET['tr_cd'])?decode($_GET['tr_cd']):"";
+$act=isset($_GET['act'])?$_GET['act']:"";
 if($tr_cd!='' && $act=='del')
 {
 	$cnt=check_training_delete(sprintf("%02d",$tr_cd));
@@ -22,9 +22,9 @@ if($tr_cd!='' && $act=='del')
 }
 
 //=====================Training Area of Interest=========================
-$area=$_GET['area'];
-$subdivision=$_GET['subdivision'];
-$opn=$_GET['opn'];
+$area=isset($_GET['area'])?$_GET['area']:"";
+$subdivision=isset($_GET['subdivision'])?$_GET['subdivision']:"";
+$opn=isset($_GET['opn'])?$_GET['opn']:"";
 if($opn=='areadtl')
 {
 	if($area!='' && $subdivision!='')
@@ -32,8 +32,23 @@ if($opn=='areadtl')
 		if($area=='Subdivision of PP')
 		{
 			echo "<td align='left'><span class='error'>*</span>Subdivision</td><td align='left'>\n";
-			echo "<select id='area' style='width:220px;'><option value='$subdivision'>".$_SESSION['subdiv_name']."</option></select>\n";
-			echo "</td>";
+			//echo "<select id='area' style='width:220px;'><option value='$subdivision'>".$_SESSION['subdiv_name']."</option></select>\n";
+			echo "<select id='area' name='area' style='width:220px;'>\n";
+			$rsSub=fatch_subdiv_from_personal_trainingpp_ag_subdiv($subdivision);
+			$num_rows=rowCount($rsSub);
+			if($num_rows>0)
+			{
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowSub=getRows($rsSub);
+					echo "<option value='$rowSub[0]'>$rowSub[1]</option>\n";
+					$rowSub=NULL;
+				}
+			}
+			$rsSub=NULL;
+			$num_rows=0;
+			unset($rowSub,$rsSub,$num_rows);
+			echo "</select></td>\n";
 		}
 		if($area=='Alloted Subdivision')
 		{
@@ -47,11 +62,12 @@ if($opn=='areadtl')
 				{
 					$rowForSub=getRows($rsForSub);
 					echo "<option value='$rowForSub[0]'>$rowForSub[1]</option>\n";
-					$rowForSub=null;
+					$rowForSub=NULL;
 				}
 			}
-			$rsForSub=null;
+			$rsForSub=NULL;
 			$num_rows=0;
+			unset($rowForSub,$rsForSub,$num_rows);
 			echo "</select></td>\n";
 		}
 		if($area=='Alloted PC')
@@ -66,11 +82,12 @@ if($opn=='areadtl')
 				{
 					$rowForPC=getRows($rsForPC);
 					echo "<option value='$rowForPC[0]'>$rowForPC[1]</option>\n";
-					$rowForPC=null;
+					$rowForPC=NULL;
 				}
 			}
-			$rsForPC=null;
+			$rsForPC=NULL;
 			$num_rows=0;
+			unset($rowForPC,$rsForPC,$num_rows);
 			echo "</select></td>\n";
 		}
 		if($area=='Assembly of Temporary Address')
@@ -85,11 +102,12 @@ if($opn=='areadtl')
 				{
 					$row_tempAss=getRows($rs_tempAss);
 					echo "<option value='$row_tempAss[0]'>$row_tempAss[1]</option>\n";
-					$row_tempAss=null;
+					$row_tempAss=NULL;
 				}
 			}
-			$rs_tempAss=null;
+			$rs_tempAss=NULL;
 			$num_rows=0;
+			unset($rs_tempAss,$row_tempAss,$num_rows);
 			echo "</select></td>\n";
 		}
 		if($area=='Assembly of Permanent Address')
@@ -104,11 +122,12 @@ if($opn=='areadtl')
 				{
 					$row_permAss=getRows($rs_permAss);
 					echo "<option value='$row_permAss[0]'>$row_permAss[1]</option>\n";
-					$row_permAss=null;
+					$row_permAss=NULL;
 				}
 			}
-			$rs_permAss=null;
+			$rs_permAss=NULL;
 			$num_rows=0;
+			unset($rs_permAss,$row_permAss,$num_rows);
 			echo "</select></td>\n";
 		}
 		if($area=='Assembly of Office Address')
@@ -123,20 +142,21 @@ if($opn=='areadtl')
 				{
 					$row_permAss=getRows($rs_permAss);
 					echo "<option value='$row_permAss[0]'>$row_permAss[1]</option>\n";
-					$row_permAss=null;
+					$row_permAss=NULL;
 				}
 			}
-			$rs_permAss=null;
+			$rs_permAss=NULL;
 			$num_rows=0;
+			unset($rs_permAss,$row_permAss,$num_rows);
 			echo "</select></td>\n";
 		}
 	}
 }
 //========== training_tobe_alloted ==========
-$venue=$_GET['venue'];
+$venue=isset($_GET['venue'])?$_GET['venue']:"";
 if($opn=='venuecap')
-{
-	if($venue!='' || $venue!=null)
+{	
+	if($venue!='' || $venue!=NULL)
 	{
 		$v_Cap=0;
 		$rsCap=venue_capacity($venue);
@@ -155,24 +175,29 @@ if($opn=='venuecap')
 	}
 }
 
-$training_venue=$_GET['training_venue'];
-$tr_type=$_GET['tr_type'];
+$training_venue=isset($_GET['training_venue'])?$_GET['training_venue']:"";
+$tr_type=isset($_GET['tr_type'])?$_GET['tr_type']:"";
+$training_dt=isset($_GET['training_dt'])?$_GET['training_dt']:"";
+$training_time=isset($_GET['training_time'])?$_GET['training_time']:"";
 if($opn=='trnalloted')
 {
 	if($training_venue!='' && $tr_type!='')
 	{
 		$alloted=0;
-		$rsTraining=training_alloted($training_venue,$tr_type);
+		$rsTraining=training_alloted($training_venue,$tr_type,$training_dt,$training_time);
 		$num_rows_Training=rowCount($rsTraining);
 		if($num_rows_Training>0)
 		{
 			echo "<tr><td align='center' colspan='2'><b>For Selected Venue & Selected Training Type Training is scheduled</b></td></tr>";
+			echo "<tr><td>&nbsp;</td><td align='left'>Date: ".$training_dt." &amp; Time: ".$training_time."</td>";
 			echo "<tr><td>&nbsp;</td><td align='left'>";
 			for($i=0;$i<$num_rows_Training;$i++)
 			{
 				$rowTraining=getRows($rsTraining);
+				
 				echo $rowTraining['post_stat'].": ".$rowTraining['total']."; ";
 				$alloted=$alloted+$rowTraining['total'];
+				$rowTraining=NULL;
 			}
 			echo "</td></tr>";
 		}
@@ -180,13 +205,13 @@ if($opn=='trnalloted')
 			echo "";
 		
 		echo "<input type='hidden' id='trn_alloted' name='trn_alloted' value='$alloted' />";
-		unset($rowSelectedPP,$rsSelectedPP);
+		unset($rowTraining,$rsTraining,$num_rows_Training);
 	}
 }
-$subdiv=$_GET['subdiv'];
+$subdiv=isset($_GET['subdiv'])?$_GET['subdiv']:"";
 if($opn=='trnreq')
 {
-	if($subdiv!='' && $subdiv!=null)
+	if($subdiv!='' && $subdiv!=NULL)
 	{
 		$rsTr=fatch_training_type('');
 		for($k=0;$k<=rowCount($rsTr);$k++)
@@ -215,11 +240,12 @@ if($opn=='trnreq')
 			unset($rsSelectedPP,$num_rows_TrReq);
 			$rowTr=NULL;
 		}
+		unset($rsTr,$rowTr);
 	}
 }
 if($opn=='trnalloted_forsub')
 {
-	if($subdiv!='' && $subdiv!=null)
+	if($subdiv!='' && $subdiv!=NULL)
 	{
 		$rsTr=fatch_training_type('');
 		for($k=0;$k<=rowCount($rsTr);$k++)
@@ -248,13 +274,14 @@ if($opn=='trnalloted_forsub')
 			unset($rsSelectedPP,$num_rows_TrReq);
 			$rowTr=NULL;
 		}
+		unset($rsTr,$rowTr);
 	}
 }
 //===================== Member Available for Area & Post Status =========================
-$post_stat=$_GET['post_stat'];
+$post_stat=isset($_GET['post_stat'])?$_GET['post_stat']:"";
 //$subdivision=$_GET['subdivision'];
-$areapref=$_GET['areapref'];
-$area=$_GET['area'];
+$areapref=isset($_GET['areapref'])?$_GET['areapref']:"";
+//$area=$_GET['area'];
 if($opn=='membavl')
 {
 	if($areapref=='Subdivision of PP')
@@ -281,8 +308,9 @@ if($opn=='membavl')
 		else
 			echo "";
 		
-		$rowMembAvl=null;
-		$rsMembAvl=null;
+		$rowMembAvl=NULL;
+		$rsMembAvl=NULL;
+		unset($rsMembAvl,$rowMembAvl,$num_rows_MembAvl);
 	}
 }
 //=======================Training Attendance===========================
@@ -300,12 +328,12 @@ if($opn=='venue')
 				{
 					$rowTrainingVenue=getRows($rsTrainingVenue);
 					echo "<option value='$rowTrainingVenue[0]'>$rowTrainingVenue[1]</option>\n";
-					$rowTrainingVenue=null;
+					$rowTrainingVenue=NULL;
 				}
 			}
-			$rsTrainingVenue=null;
+			$rsTrainingVenue=NULL;
 			$num_rows=0;
-
+			unset($rsTrainingVenue,$rowTrainingVenue,$num_rows);
 	    echo "</select>\n";
 }
 if($opn=='date_time')
@@ -324,12 +352,12 @@ if($opn=='date_time')
 			{
 				$rowTrainingDtTime=getRows($rsTrainingDtTime);
 				echo "<option value='$rowTrainingDtTime[0]'>$rowTrainingDtTime[1]</option>\n";
-				$rowTrainingVenue=null;
+				$rowTrainingVenue=NULL;
 			}
 		}
-		$rsTrainingDtTime=null;
+		$rsTrainingDtTime=NULL;
 		$num_rows=0;
-
+		unset($rsTrainingDtTime,$rowTrainingVenue,$num_rows);
    echo "</select>\n";
 }
 if($opn=='personnel')
@@ -344,26 +372,26 @@ if($opn=='personnel')
 		{
 			$rowPer=getRows($rsPer);
 			echo "<tr><td align='center' width='25%'>$rowPer[0]<input type='hidden' name='hidId$i' value='$rowPer[0]' /></td><td align='left' width='65%'>$rowPer[1]</td><td align='center' width='10%'><input type='checkbox' name='chkbox$i' /></td></tr>";
-			$rowPer=null;
+			$rowPer=NULL;
 		}
 	}
-	$rsPer=null;
+	$rsPer=NULL;
 	$num_rows=0;
-
+	unset($rsPer,$rowPer,$num_rows);
 }
 if($opn=='tal')
 {
 	include_once('function/pagination.php');
 	global $subdivision; global $venuename; global $usercode;
-	$sub_div=$_GET["sub_div"];
-	$training_type=$_GET["training_type"];
-	$training_venue=$_GET["training_venue"];
-	$frmdt=$_GET["frmdt"];
-	$todt=$_GET["todt"];
+	$sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
+	$training_type=isset($_GET["training_type"])?$_GET["training_type"]:"";
+	$training_venue=isset($_GET["training_venue"])?$_GET["training_venue"]:"";
+	$frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
+	$todt=isset($_GET["todt"])?$_GET["todt"]:"";
 	
-	$usercode=$_SESSION['user_cd'];
-	$delcode=$_GET["delcode"];
-	if($delcode!="" && $delcode!=null)
+	$usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
+	$delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
+	if($delcode!="" && $delcode!=NULL)
 	{
 //		$total=chk_trainingvenue(decode($delcode));
 //		if($total=="0")
@@ -402,7 +430,7 @@ if($opn=='tal')
 	$num_rows = rowCount($rstraining_alloc_list);
 	if($num_rows<1)
 	{
-		echo "no record found";
+		echo "No record found";
 		//echo $officeid.",".$officename.",".$frmdt.",".$todt.",".$usercode;
 	}
 	else
@@ -422,10 +450,11 @@ if($opn=='tal')
 		  echo "<td width='15%' align='left'>$rowTraining_alloc_list[training_time]</td><td width='15%' align='left'>$rowTraining_alloc_list[poststatus]</td>";
 		  echo "<td width='10%' align='left'>$rowTraining_alloc_list[no_pp]</td>";
 		  echo "<td align='center' width='5%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_training_allocation($schedule_code);' /></td></tr>\n";
-		 
+		  $rowTraining_alloc_list=NULL;
 		}
 		echo "</table>\n";
 		paging();
 	}
+	unset($rstraining_alloc_list,$num_rows,$rowTraining_alloc_list);
 }
 ?>

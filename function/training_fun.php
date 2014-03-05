@@ -149,14 +149,17 @@ function venue_capacity($venue)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function training_alloted($training_venue,$tr_type)
+function training_alloted($training_venue,$tr_type,$tr_date,$tr_time)
 {
 	$sql; $rs;
-	$sql="Select Sum(training_schedule.no_pp) as total,training_schedule.post_status,poststat.poststatus,poststat.post_stat
+	$sql="Select Sum(training_schedule.no_pp) as total,training_schedule.post_status,poststat.poststatus,poststat.post_stat,
+			training_schedule.training_dt,training_schedule.training_time 
 			From training_schedule
 			  Inner Join poststat On training_schedule.post_status = poststat.post_stat
-			where training_schedule.training_venue='$training_venue' and training_schedule.training_type='$tr_type'
-			Group By training_schedule.post_status,
+			where training_schedule.training_venue='$training_venue' and training_schedule.training_type='$tr_type'";
+//	if($tr_date!="" && $tr_time!="")
+	$sql.=" and	training_schedule.training_dt='$tr_date' and training_schedule.training_time='$tr_time'";		
+	$sql.="Group By training_schedule.training_dt,training_schedule.training_time,training_schedule.post_status,
 			  poststat.poststatus,poststat.post_stat order by poststat.post_stat";
 	$rs=execSelect($sql);
 	return $rs;
@@ -168,6 +171,7 @@ function training_required($subdiv,$training_type)
 			From poststat
 			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
 			where training_pp.for_subdivision='$subdiv' and training_pp.training_type='$training_type' Group By poststat.poststatus,poststat.post_stat";
+	//		print $sql; exit;
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -233,17 +237,28 @@ function fatch_personnel_ag_training_pp($training_type,$post_status,$subdivision
 	else if($assembly_perm!=0)
 		$sql.=" and assembly_perm='$assembly_perm'";
 	$sql.=" limit 0, $no_pp";
+//	echo $sql; exit;
 	$rs=execSelect($sql);
 	return $rs;
 }
 			//Area of Pref//
+function fatch_subdiv_from_personal_trainingpp_ag_subdiv($subdiv_cd)
+{
+	$sql; $rs;
+	$sql="Select distinct training_pp.subdivision,  subdivision.subdivision
+			From subdivision
+			  Inner Join training_pp On training_pp.subdivision =
+			subdivision.subdivisioncd  where training_pp.for_subdivision='$subdiv_cd'";
+	$rs=execSelect($sql);
+	return $rs;
+}
 function fatch_forsubdiv_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 {
 	$sql; $rs;
 	$sql="Select distinct training_pp.for_subdivision,  subdivision.subdivision
 			From subdivision
 			  Inner Join training_pp On training_pp.for_subdivision =
-			subdivision.subdivisioncd  where training_pp.subdivision='$subdiv_cd'";
+			subdivision.subdivisioncd  where training_pp.for_subdivision='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -252,7 +267,7 @@ function fatch_forpc_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 	$sql; $rs;
 	$sql="Select distinct training_pp.for_pc, pc.pcname
 			From training_pp
-			  Inner Join pc On training_pp.for_pc = pc.pccd  where training_pp.subdivision='$subdiv_cd'";
+			  Inner Join pc On training_pp.for_pc = pc.pccd  where training_pp.for_subdivision='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -261,7 +276,7 @@ function fatch_tempass_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 	$sql; $rs;
 	$sql="Select distinct training_pp.assembly_temp, assembly.assemblyname
 			From training_pp
-			  Inner Join assembly On training_pp.assembly_temp = assembly.assemblycd where training_pp.subdivision='$subdiv_cd'";
+			  Inner Join assembly On training_pp.assembly_temp = assembly.assemblycd where training_pp.for_subdivision='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -270,7 +285,7 @@ function fatch_permass_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 	$sql; $rs;
 	$sql="Select distinct training_pp.assembly_perm, assembly.assemblyname
 			From training_pp
-			  Inner Join assembly On training_pp.assembly_perm = assembly.assemblycd where training_pp.subdivision='$subdiv_cd'";
+			  Inner Join assembly On training_pp.assembly_perm = assembly.assemblycd where training_pp.for_subdivision='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -279,7 +294,7 @@ function fatch_ofcass_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 	$sql; $rs;
 	$sql="Select distinct training_pp.assembly_off, assembly.assemblyname
 			From training_pp
-			  Inner Join assembly On training_pp.assembly_off = assembly.assemblycd where training_pp.subdivision='$subdiv_cd'";
+			  Inner Join assembly On training_pp.assembly_off = assembly.assemblycd where training_pp.for_subdivision='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -456,12 +471,12 @@ function update_trainingvenue($venue_cd,$subdiv_cd,$venuename,$venueaddress1,$ve
 	$i=execUpdate($sql);
 	return $i;
 }
-function fatch_trainingvenue_list($subdivision,$venuename,$usercode)
+function fatch_trainingvenue_list($subdivision,$venuename,$usercode,$dist)
 {
 	$sql="Select training_venue.venue_cd, subdivision.subdivision, training_venue.venuename, training_venue.venueaddress1, training_venue.venueaddress2,
   training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date,training_venue.subdivisioncd
 From training_venue
-  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0 and training_venue.usercode = '$usercode'";
+  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0 and subdivision.districtcd = '$dist'";
     if($subdivision!='' && $subdivision!='0')
 		$sql.=" and training_venue.subdivisioncd ='$subdivision'";
 	if($venuename!='')
@@ -471,14 +486,16 @@ From training_venue
 	return $rs;
 }
 
-function fatch_trainingvenue_listAct($subdivision,$venuename,$usercode,$p_num ,$items)
+function fatch_trainingvenue_listAct($subdivision,$venuename,$usercode,$p_num ,$items,$dist)
 {
 	$sql="Select training_venue.venue_cd, subdivision.subdivision, training_venue.venuename, training_venue.venueaddress1, training_venue.venueaddress2,
-  training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date,training_venue.subdivisioncd
+  training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date,training_venue.subdivisioncd,training_venue.usercode
 From training_venue
-  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0 and training_venue.usercode = '$usercode'";
+  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0 ";
     if($subdivision!='' && $subdivision!='0')
 		$sql.=" and training_venue.subdivisioncd ='$subdivision'";
+	if($dist!='' && $dist!='0')
+		$sql.=" and subdivision.districtcd = '$dist'";
 	if($venuename!='')
 		$sql.=" and training_venue.venuename like '$venuename%'";
 	$sql.=" order by subdivision.subdivision";

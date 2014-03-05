@@ -35,7 +35,7 @@ function subdivision_change(str)
 		document.getElementById("pc_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	  
+
 	xmlhttp.open("GET","ajaxfun.php?sub-div="+str+"&opn=pc",true);
 	xmlhttp.send();
 }
@@ -218,7 +218,7 @@ function validate()
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Submit')
 {
 	$subdivision=$_POST['Subdivision'];
@@ -237,7 +237,7 @@ if($action=='Submit')
 		$res=update_reserve($assembly,$member,$poststat,$no_or_pc,$numb,$usercd);
 		if($res==1)
 			{
-				?> <script>location.replace("assembly-party.php?msg=success");</script> <?php
+				redirect("assembly-party.php?msg=success");
 			}
 	}
 	else
@@ -347,14 +347,15 @@ function load_data()
 <body onload="return load_data();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr>
   <td align="center">ASSEMBLY PARTY</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>

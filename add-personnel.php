@@ -346,7 +346,7 @@ function validateFileExtension(Source, args)
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$offcode=$_POST['offcode'];
@@ -368,7 +368,7 @@ if($action=='Save')
 	$qualification=$_POST['qualification'];
 	$language=$_POST['language'];
 	$bank=$_POST['bank'];
-	$branch=$_POST['branch'];
+	$branch=isset($_POST['branch'])?$_POST['branch']:"";
 	$acc_no=clean_alpha($_POST['acc_no']);
 	$voterof=$_POST['voterof'];
 	$partno=$_POST['partno'];
@@ -379,7 +379,7 @@ if($action=='Save')
 	$ac_posting=$_POST['ac_posting'];
 	
 	$posting_status=$_POST['posting_status'];
-	$remarks=clean_spl($_POST['remarks']);
+	$remarks=$_POST['remarks'];
 	$group=$_POST['group'];
 
 	$upload_file="";
@@ -434,7 +434,7 @@ if($action=='Save')
 		$ret=update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$group,$upload_file,$usercd,$posted_date);
 		if($ret==1)
 		{
-			?> <script>location.replace("add-personnel.php?msg=success");</script> <?php
+			redirect("add-personnel.php?msg=success");
 		}
 	}
 	else
@@ -643,7 +643,13 @@ function bind_all()
 		}
     }
 	var remarks=document.getElementById('remarks');
-	remarks.value="<?php echo $rowPerson['remarks']; ?>";
+	for (var i = 0; i < posting_status.options.length; i++) 
+	{
+		if (remarks.options[i].value == "<?php echo $rowPerson['remarks']; ?>")
+		{
+			remarks.options[i].selected = true;
+		}
+    }
 	var group=document.getElementById('group');
 	for (var i = 0; i < group.options.length; i++) 
 	{
@@ -666,10 +672,11 @@ function bind_all()
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
-<tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $_SESSION[subdiv_name]; ?> SUBDIVISION</td></tr>
+<tr><td align="center"><?php print uppercase($district); ?> DISTRICT</td></tr>
+<tr><td align="center"><?php echo uppercase($subdiv_name)." SUBDIVISION"; ?></td></tr>
 <tr><td align="center">EMPLOYEE DETAILS ENTRY</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
   <table width="95%" class="form" cellpadding="0">
@@ -677,7 +684,7 @@ function bind_all()
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="4" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
@@ -923,15 +930,31 @@ function bind_all()
 										{
 											$rowP=getRows($rsP);
 											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+											$rowP=NULL;
 										}
 									}
-									$rsP=null;
-									$num_rows=0;
-									$rowP=null;
+									unset($rsP,$num_rows,$rowP);
 							?>
       				</select></td>
       <td align="left"><span class="error">*</span>Remarks</td>
-      <td align="left"><input type="text" name="remarks" id="remarks" style="width:142px;" maxlength="30" /></td>
+      <td align="left"><!--<input type="text" name="remarks" id="remarks" style="width:142px;" maxlength="30" />-->
+      <select name="remarks" id="remarks" style="width:150px;">
+      						<option value="0">-Select Remarks-</option>
+                            <?php 	$rsR=fatch_remarks();
+									$num_rows=rowCount($rsR);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowR=getRows($rsR);
+											echo "<option value='$rowR[remarks_cd]'>$rowR[remarks]</option>\n";
+											$rowR=NULL;
+										}
+									}
+									unset($rsP,$num_rows,$rowP);
+							?>
+      				</select>
+      </td>
     </tr>
     <tr>
       <td align="left"><span class="error">&nbsp;&nbsp;</span>Group</td>

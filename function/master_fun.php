@@ -81,7 +81,7 @@ function check_subdivision_delete($sub_cd)
 	$cnt6=$row['cnt6'];
 	unset($sql,$rs,$row);
 
-	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt3>0?$cnt3:($cnt4>0?$cnt4:($cnt>0?$cnt5:($cnt6>0?$cnt6:0))))));
+	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt3>0?$cnt3:($cnt4>0?$cnt4:($cnt5>0?$cnt5:($cnt6>0?$cnt6:0))))));
 }
 function delete_subdivision($sub_cd)
 {
@@ -286,7 +286,7 @@ function check_branch_delete($branch_code,$bank)
 	$row=getRows($rs);
 	$cnt2=$row['cnt2'];
 	unset($sql,$rs,$row);
-	return ($cnt1>0?$cnt1:(cnt2>0?cnt2:0));
+	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:0));
 }
 function delete_branch($branch_code,$bank)
 {
@@ -305,7 +305,7 @@ function fatch_parliament_maxcode()
 }
 function duplicate_parliament($parliament_code,$parliament,$subdivisioncd)
 {
-	$sql="select count(*) as c_parliament from pc Where pccd <> '$parliament_code' and pcname = '$parliament' and subdivisioncd = '$subdivisioncd'";
+	$sql="select count(*) as c_parliament from pc Where (pccd <> '$parliament_code' or pccd = '$parliament_code') and pcname = '$parliament' and subdivisioncd = '$subdivisioncd'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$c_parliament=$row['c_parliament'];
@@ -357,7 +357,7 @@ function fatch_parliament_masterlist($dist)
 	From pc                                
 	  Inner Join subdivision On pc.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join district On pc.district = district.districtcd";
-	if($parliament_code!='')
+	if($dist!='')
 		$sql.=" where pc.district='$dist'";
 	$sql.=" order by subdivision";
 	$rs=execSelect($sql);
@@ -379,7 +379,12 @@ function check_parliament_delete($pc_cd,$sub_div)
 	$row=getRows($rs);
 	$cnt3=$row['cnt3'];
 	unset($sql,$rs,$row);
-	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt2>0?$cnt3:0)));
+	$sql="Select count(*) as cnt4 From assembly_party  where pccd='$pc_cd' and subdivisioncd='$sub_div'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt4=$row['cnt4'];
+	unset($sql,$rs,$row);
+	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt2>0?$cnt3:($cnt4>0?$cnt4:0))));
 }
 function delete_parliament($pc_cd,$sub_div)
 {
@@ -466,7 +471,37 @@ function check_assembly_delete($ass_cd)
 	$row=getRows($rs);
 	$cnt3=$row['cnt3'];
 	unset($sql,$rs,$row);
-	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt3>0?$cnt3:0)));
+	$sql="Select count(*) as cnt4 From assembly_party where assemblycd='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt4=$row['cnt4'];
+	unset($sql,$rs,$row);
+	$sql="Select count(*) as cnt5 From reserve where forassembly='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt5=$row['cnt5'];
+	unset($sql,$rs,$row);
+	$sql="Select count(*) as cnt6 From dcrcmaster where assemblycd='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt6=$row['cnt6'];
+	unset($sql,$rs,$row);
+	$sql="Select count(*) as cnt7 From dcrc_party where assemblycd='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt7=$row['cnt7'];
+	unset($sql,$rs,$row);
+	$sql="Select count(*) as cnt8 From pollingstation where forassembly='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt8=$row['cnt8'];
+	unset($sql,$rs,$row);
+	$sql="select count(*) as cnt9 from training_pp where assembly_temp='$ass_cd' or assembly_off='$ass_cd' or assembly_perm='$ass_cd'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt9=$row['cnt9'];
+	unset($sql,$rs,$row);
+	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt3>0?$cnt3:($cnt4>0?$cnt4:($cnt5>0?$cnt5:($cnt6>0?$cnt6:($cnt7>0?$cnt7:($cnt8>0?$cnt8:($cnt9>0?$cnt9:0)))))))));
 }
 function delete_assembly($ass_cd)
 {
@@ -566,7 +601,7 @@ function save_dcrc_party($assembly,$member,$party_req,$dcrc_code,$subdivision,$p
 	$i=execInsert($sql);
 	return $i;
 }
-function fatch_dcrc_list($sub_div,$assembly)
+function fatch_dcrc_list($sub_div,$assembly,$dist)
 {
 	$sql="Select dcrcmaster.dcrcgrp,
 	  dcrcmaster.no_of_member,
@@ -577,12 +612,14 @@ function fatch_dcrc_list($sub_div,$assembly)
 	  dcrc_party.partyindcrc
 	From dcrcmaster
 	  Inner Join dcrc_party On dcrcmaster.dcrcgrp = dcrc_party.dcrcgrp
-	where dcrcmaster.dcrcgrp>0";
-	if($sub_div!='' || $sub_div!='0')
-		$SQL.=" AND dcrcmaster.subdivisioncd='$sub_div'";
-	if($assembly!='' || $assembly!='0')
-		$SQL.=" AND dcrcmaster.assemblycd='$assembly'";
-//	echo $sql;
+	where dcrcmaster.dcrcgrp>0 ";
+	if($sub_div!='' && $sub_div!='0')
+		$sql.=" AND dcrcmaster.subdivisioncd='$sub_div'";
+	if($assembly!='' && $assembly!='0')
+		$sql.=" AND dcrcmaster.assemblycd='$assembly'";
+	if($dist!='' && $dist!='0')
+		$sql.=" and dcrcmaster.districtcd='$dist'";
+	//echo $sql;
 	$rs=execSelect($sql);
 	return $rs;
 }

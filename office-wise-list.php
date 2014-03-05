@@ -50,15 +50,17 @@ include_once('function/training_fun.php');
 <body>
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
+<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
   <td align="center">OFFICE WISE LIST</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" action="reports/office-wise-personnel.php" target="_blank">
 <table width="50%" class="form" cellpadding="0">
 <input type="hidden" id="hid_subdiv"  name="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     <tr>
       <td align="center">&nbsp;</td><td align="left"><input type="text" name="ofc_ser" id="ofc_ser" onkeyup="return FilterItems(this.value);" maxlength="7" /></td>

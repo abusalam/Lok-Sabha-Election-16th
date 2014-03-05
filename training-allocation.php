@@ -37,9 +37,12 @@ function venue_capacity(str)
 	xmlhttp.send();
 	
 }
-function training_alloted(str)
+function training_alloted()
 {
 	var training_venue=document.getElementById('training_venue').value;
+	var training_type=document.getElementById('training_type').value;
+	var training_dt=document.getElementById('training_dt').value;
+	var training_time=document.getElementById('training_time').value;
 	if (window.XMLHttpRequest)
 	  {
 	  xmlhttp=new XMLHttpRequest();
@@ -55,7 +58,7 @@ function training_alloted(str)
 		document.getElementById("training_alloted").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-training.php?tr_type="+str+"&training_venue="+training_venue+"&opn=trnalloted",true);
+	xmlhttp.open("GET","ajax-training.php?tr_type="+training_type+"&training_venue="+training_venue+"&training_dt="+training_dt+"&training_time="+training_time+"&opn=trnalloted",true);
 	xmlhttp.send();
 	if(document.getElementById('post_status').selectedIndex>0)
 	{
@@ -81,7 +84,7 @@ function area_detail(str)
 		document.getElementById("area_of_preference").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision="+<?php print $subdiv_cd; ?>+"&opn=areadtl",true);
+	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision=<?php print $subdiv_cd; ?>&opn=areadtl",true);
 	xmlhttp.send();
 }
 function member_available(str)
@@ -109,7 +112,7 @@ function member_available(str)
 			document.getElementById("member_available").innerHTML="";
 		}
 	  }
-	xmlhttpMA.open("GET","ajax-training.php?post_stat="+str+"&tr_type="+training_type+"&subdivision="+<?php print $subdiv_cd; ?>+"&areapref="+areapref+"&area="+area+"&opn=membavl",true);
+	xmlhttpMA.open("GET","ajax-training.php?post_stat="+str+"&tr_type="+training_type+"&subdivision=<?php print $subdiv_cd; ?>&areapref="+areapref+"&area="+area+"&opn=membavl",true);
 	xmlhttpMA.send();
 }
 
@@ -197,7 +200,7 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/training_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Submit')
 {
 	$training_venue=$_POST['training_venue'];
@@ -211,7 +214,7 @@ if($action=='Submit')
 	
 	$subdivision=0; $for_subdivision=0; $for_pc=0; $assembly_temp=0; $assembly_perm=0; $assembly_off=0;
 	if($area_pref=='Subdivision of PP')
-		$subdivision=$subdiv_cd;
+		$subdivision=$_POST['area'];
 	if($area_pref=='Alloted Subdivision')
 		$for_subdivision=$_POST['area'];
 	if($area_pref=='Alloted PC')
@@ -229,7 +232,7 @@ if($action=='Submit')
 	if($rowmaxcode['schedule_code']==null)
 		$schedule_cd=$training_venue."001";
 	else
-		$schedule_cd=$rowmaxcode['schedule_code']+1;
+		$schedule_cd=sprintf("%09d",$rowmaxcode['schedule_code']+1);
 			
 	$ret=save_training_schedule($schedule_cd,$training_venue,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd);
 	if($ret==1)
@@ -276,7 +279,7 @@ function training_required()
 	if (window.XMLHttpRequest)
 	  {
 	  xmlhttp=new XMLHttpRequest();
-	  xmlhttp1=new XMLHttpRequest();
+	  xmlhttp1=new XMLHttpRequest(); 
 	  }
 	else
 	  {
@@ -284,14 +287,13 @@ function training_required()
 	  xmlhttp1=new ActiveXObject("Microsoft.XMLHTTP");
 	  }
 	xmlhttp.onreadystatechange=function()
-	  {
+	  {  
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("trng_req").innerHTML=xmlhttp.responseText;
 		}
-	  }
-	  //alert("ajax-training.php?subdiv="+<?php print $subdiv_cd; ?>);
-	xmlhttp.open("GET","ajax-training.php?subdiv="+<?php print $subdiv_cd; ?>+"&opn=trnreq",true);
+	  }	   
+	xmlhttp.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnreq",true);
 	xmlhttp.send();
 	
 	xmlhttp1.onreadystatechange=function()
@@ -301,29 +303,30 @@ function training_required()
 		document.getElementById("trng_alloted").innerHTML=xmlhttp1.responseText;
 		}
 	  }
-	  //alert("ajax-training.php?subdiv="+<?php print $subdiv_cd; ?>);
-	xmlhttp1.open("GET","ajax-training.php?subdiv="+<?php print $subdiv_cd; ?>+"&opn=trnalloted_forsub",true);
+	  //alert("ajax-training.php?subdiv="<?php /*?><?php print $subdiv_cd; ?><?php */?>);
+	xmlhttp1.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnalloted_forsub",true);
 	xmlhttp1.send();
 }
 </script>
 <body onload="javascript:return training_required();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $_SESSION[subdiv_name]; ?> SUBDIVISION</td></tr>
+<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
   <td align="center">TRAINING ALLOCATION</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
-    <tr><td align="left" colspan="2"><b>For Subdivision [<?php echo $_SESSION[subdiv_name]; ?>] Training to be alloted:</b></td></tr>
+    <tr><td align="left" colspan="2"><b>For Subdivision [<?php echo $subdiv_name; ?>] Training to be alloted:</b></td></tr>
     <tr><td align="left" colspan="2">
     	<table width="100%" id="trng_req" class="table2 demo-section" cellpadding="0" cellspacing="0" border="0"></table>
     </td></tr>
-    <tr><td align="left" colspan="2"><b>For Subdivision [<?php echo $_SESSION[subdiv_name]; ?>] Training is alloted:</b></td></tr>
+    <tr><td align="left" colspan="2"><b>For Subdivision [<?php echo $subdiv_name; ?>] Training is alloted:</b></td></tr>
     <tr><td align="left" colspan="2">
     	<table width="100%" id="trng_alloted" class="table2 demo-section" cellpadding="0" cellspacing="0" border="0"></table>
     </td></tr>
@@ -341,16 +344,15 @@ function training_required()
 				{
 					$rowTrainingVenue=getRows($rsTrainingVenue);
 					echo "<option value='$rowTrainingVenue[0]'>$rowTrainingVenue[1]</option>\n";
-					$rowTrainingVenue=null;
+					$rowTrainingVenue=NULL;
 				}
 			}
-			$rowTrainingVenue=null;
-			$num_rows=0;
+			unset($rowTrainingVenue,$num_rows);
 		?>
 	    </select>&nbsp;&nbsp;<span id="venue_capacity"></span></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Type</td>
-      <td align="left"><select name="training_type" id="training_type" style="width:220px;" onchange="javascript:return training_alloted(this.value);">
+      <td align="left"><select name="training_type" id="training_type" style="width:220px;">
 		<option value="0">-Select Training Type-</option>
                             <?php
 								$rsTrainingType=fatch_training_type('');
@@ -361,11 +363,10 @@ function training_required()
 									{
 										$rowTrainingType=getRows($rsTrainingType);
 										echo "<option value='$rowTrainingType[0]' >$rowTrainingType[1]</option>\n";
+										$rowTrainingType=NULL;
 									}
 								}
-								$rsTrainingType=null;
-								$num_rows=0;
-								$rowTrainingType=null;
+								unset($rsTrainingType,$num_rows,$rowTrainingType);
 							?>
       </select></td></tr>
     <tr>
@@ -382,11 +383,11 @@ function training_required()
     <tr id="area_of_preference"></tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Date</td>
-      <td align="left"><input type="text" name="training_dt" id="training_dt" maxlength="10" style="width:220px;" /></td>
+      <td align="left"><input type="text" name="training_dt" id="training_dt" maxlength="10" style="width:220px;" onchange="javascript:return training_alloted();" /></td>
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Time</td>
-      <td align="left"><input type="text" name="training_time" id="training_time" maxlength="20" style="width:212px;" /></td>
+      <td align="left"><input type="text" name="training_time" id="training_time" maxlength="20" style="width:212px;" onchange="javascript:return training_alloted();" /></td>
     </tr>
     <tr>
     <tr>
@@ -402,11 +403,10 @@ function training_required()
 										{
 											$rowP=getRows($rsP);
 											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+											$rowP=NULL;
 										}
 									}
-									$rsP=null;
-									$num_rows=0;
-									$rowP=null;
+									unset($rsP,$num_rows,$rowP);
 								?>
                             </select>&nbsp;&nbsp;<label id="member_available"><span id='memb_avl'></span></label></td></tr>
     <tr>

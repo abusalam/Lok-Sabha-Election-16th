@@ -1,6 +1,8 @@
 <?php
+if(!isset($_SESSION))
+{
 	session_start();
-	
+}
     $now = time(); // checking the time now when home page starts
 	if(isset($_SESSION['expire']))
 	{

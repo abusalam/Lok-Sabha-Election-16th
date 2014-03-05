@@ -102,7 +102,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 	}
 	
 	else {
-		echo 'NO RESULTS';	
+		echo 'Problem in reserve Formation ';	
 	}
 
 

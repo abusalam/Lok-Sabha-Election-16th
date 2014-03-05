@@ -40,7 +40,7 @@ function __construct($asm) {
 		}
 	}
 	else {
-		echo 'NO 5 RESULTS';	
+		echo ' Problem in assembly table entry ';	
 	}
 
 

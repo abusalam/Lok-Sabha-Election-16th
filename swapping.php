@@ -52,7 +52,7 @@ function fatch_office_agsubdiv(str)
 			document.getElementById("poststat_details").innerHTML=xmlhttp2.responseText;
 		}
 	  }
-	 
+	 //alert("ajaxfun.php?sub_swp="+str+"&opn=poststat");
     xmlhttp2.open("GET","ajaxfun.php?sub_swp="+str+"&opn=poststat",true);
 	xmlhttp2.send();
 }
@@ -87,7 +87,7 @@ function for_subdiv_change(str)
 			document.getElementById("for_poststat_details").innerHTML=xmlhttp2.responseText;
 		}
 	  }
-	 
+	 //alert("ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat");
     xmlhttp2.open("GET","ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat",true);
 	xmlhttp2.send();
 }
@@ -108,10 +108,11 @@ function chksetsubdivision_change()
 		document.getElementById('chksetpostingstatus').disabled=false;
 		document.getElementById('chksetnumberofemployee').disabled=false;
 		
+		fatch_office_agsubdiv('0');
+		//for_subdiv_change('0');
 		/*chksetoffice.disabled=false;*/
 	}
-	else if(document.getElementById('chksetsubdivision').checked==false)
-	
+	else if(document.getElementById('chksetsubdivision').checked==false)	
 	{
 		document.getElementById('chksetoffice').checked=false;
 		document.getElementById('chksetoffice').disabled=true;
@@ -130,6 +131,9 @@ function chksetsubdivision_change()
 		document.getElementById('chksetnumberofemployee').checked=false;
 		document.getElementById('numberofemployee').disabled=true;
 		document.getElementById('numberofemployee').value="";
+		
+		document.getElementById("poststat_details").innerHTML="";
+		document.getElementById("for_poststat_details").innerHTML="";
 	}
 }
 function pc_change(str)
@@ -239,12 +243,12 @@ function validate()
 {
 	var subdivision=document.getElementById("Subdivision").value;
 	var forsubdivision=document.getElementById("forsubdivision").value;
-	if(subdivision=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Subdivision Name";
-		document.getElementById("Subdivision").focus();
-		return false;
-	}
+//	if(subdivision=="0")
+//	{
+//		document.getElementById("msg").innerHTML="Select Subdivision Name";
+//		document.getElementById("Subdivision").focus();
+//		return false;
+//	}
 	if(forsubdivision=="0")
 	{
 		document.getElementById("msg").innerHTML="Select For Subdivision Name";
@@ -259,18 +263,18 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Swapping')
 {
-	$subdivision=$_POST['Subdivision'];
-	$forsubdivision=$_POST['forsubdivision'];
-	$pc=$_POST['pc'];
-	$forpc=$_POST['forpc'];
-	$officename=$_POST['officename'];
-	$posting_status=$_POST['posting_status'];
-	$numberofemployee=$_POST['numberofemployee'];
+	$subdivision=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
+	$forsubdivision=isset($_POST['forsubdivision'])?$_POST['forsubdivision']:"";
+	$pc=isset($_POST['pc'])?$_POST['pc']:"";
+	$forpc=isset($_POST['forpc'])?$_POST['forpc']:"";
+	$officename=isset($_POST['officename'])?$_POST['officename']:"";
+	$posting_status=isset($_POST['posting_status'])?$_POST['posting_status']:"";
+	$numberofemployee=isset($_POST['numberofemployee'])?$_POST['numberofemployee']:"";
 	$usercd=$user_cd;
-	if ($subdivision>0)
+	if ($forsubdivision>0)
 	{
 	    $rsEmp=fatch_PersonaldtlAgSubdiv($subdivision,$pc,$officename,$posting_status);
 		$num_rows=rowCount($rsEmp);
@@ -356,7 +360,7 @@ if($action=='Swapping')
 				$booked=NULL;
 				$rand_numb=NULL;
 				
-				mysqli_stmt_bind_param($stmt, 'sssssssssssiisssssssssssssssssssssssissisis', $personcd,$officecd,$officer_name,$off_desg,$present_addr1,$present_addr2,$perm_addr1,$perm_addr2,$dateofbirth,$gender,$scale,$basic_pay,$grade_pay,$workingstatus,$email,$resi_no,$mob_no,$qualificationcd,$languagecd,$epic,$acno,$slno,$partno,$poststat,$assembly_temp,$assembly_off ,$assembly_perm,$districtcd,$subdivision,$forsubdivision,$bank_acc_no,$bank_cd,$branchcd,$remarks,$pgroup,$upload_file,$usercd,$forpc,$forassembly,$groupid,$booked,$rand_numb,$edcpb);
+				mysqli_stmt_bind_param($stmt, 'sssssssssssiisssssssssssssssssssssssissisis', $personcd,$officecd,$officer_name,$off_desg,$present_addr1,$present_addr2,$perm_addr1,$perm_addr2,$dateofbirth,$gender,$scale,$basic_pay,$grade_pay,$workingstatus,$email,$resi_no,$mob_no,$qualificationcd,$languagecd,$epic,$acno,$slno,$partno,$poststat,$assembly_temp,$assembly_off ,$assembly_perm,$districtcd,$subdivisioncd,$forsubdivision,$bank_acc_no,$bank_cd,$branchcd,$remarks,$pgroup,$upload_file,$usercd,$forpc,$forassembly,$groupid,$booked,$rand_numb,$edcpb);
 				mysqli_stmt_execute($stmt);
 				mysqli_stmt_bind_param($stmt_up, 'is', $f_cd,$personcd);
 				mysqli_stmt_execute($stmt_up);
@@ -391,17 +395,18 @@ if($action=='Swapping')
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">EMPLOYEE SWAPPING DETAILS </td></tr>
-<tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
+<tr><td align="center"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
     <tr>
       <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="6" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="6" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="2px" /></td>
@@ -411,7 +416,7 @@ if($action=='Swapping')
         <label for="chksetsubdivision" class="text_small">Sub division wise<br />
           </label></td>
     
-      <td align="left" valign="top"><span class="error">*</span>Sub Division</td>
+      <td align="left" valign="top"><span class="error">&nbsp;&nbsp;</span>Sub Division</td>
       <td align="left" valign="top"><select name="Subdivision" id="Subdivision" style="width:170px;" disabled="disabled" onchange="return fatch_office_agsubdiv(this.value);">
       <option value="0">-Select Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;
@@ -452,7 +457,7 @@ if($action=='Swapping')
     </tr>
     <tr>
     <td align="left">&nbsp;</td>
-    <td align="left" valign="top"><span class="error">*</span>PC</td>
+    <td align="left" valign="top"><span class="error">&nbsp;&nbsp;</span>PC</td>
     <td align="left" valign="top" id="pc_result"><select name="pc" id="pc" style="width:170px;" disabled="disabled" onchange="return pc_change(this.value);"></select></td>
                 <td align="left" valign="top"><span class="error">*</span>For PC</td>
       <td align="left" valign="top" id="forpc_result"><select name="forpc" id="forpc" style="width:170px;" disabled="disabled" onchange="return forpc_change(this.value);"></select></td>

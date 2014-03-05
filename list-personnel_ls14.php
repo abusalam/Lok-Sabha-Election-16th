@@ -20,8 +20,8 @@ function personnel_ls14_list(str)
 	var officeid=document.getElementById('officeID').value;
 	var frmdt=document.getElementById("fromdt").value;
 	var todt=document.getElementById("todt").value;
-	var page="<?php echo $_GET['p']; ?>";
-	var all="<?php echo $_GET['a']; ?>";
+	var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+	var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -63,10 +63,11 @@ function delete_person(str)
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center">PERSONAL DETAILS LIST FROM LS14</td></tr>
+<tr><td align="center">PERSONAL DETAILS LIST FROM SWAPPING</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
     

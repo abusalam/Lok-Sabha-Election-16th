@@ -137,6 +137,13 @@ function fatch_postingstatus()
 	connection_close();
 	return $rs;
 }
+function fatch_remarks()
+{
+	$sql="select * from remarks order by remarks asc";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 function save_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$dist_code,$subdiv_cd,$acc_no,$bank,$branch,$remarks,$group,$upload_file,$usercd)
 {
 	try{
@@ -203,8 +210,8 @@ function update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$pre
 }
 function fatch_PersonDetails($p_id)
 {
-	$sql; $rs;
-	$sql.="SELECT personnela.officer_name, personnela.officecd, personnela.off_desg, office.address1, office.address2, office.postoffice,
+	//$sql; $rs;
+	$sql="SELECT personnela.officer_name, personnela.officecd, personnela.off_desg, office.address1, office.address2, office.postoffice,
 	policestation.policestation, office.pin, subdivision.subdivision, DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,
 	personnela.gender,personnela.epic,personnela.forpc,personnela.forassembly,personnela.groupid, personnela.booked, poststat.poststatus, personnela.present_addr1, personnela.present_addr2,
 	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision
@@ -218,6 +225,7 @@ function fatch_PersonDetails($p_id)
 	policestation ON office.policestn_cd = policestation.policestationcd
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sql.=" WHERE personnela.personcd='$p_id' and termination.personal_id is null";
+
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -473,18 +481,37 @@ function update_personnel_PreGroupReplacement($p_id,$forassembly,$forpc,$booked,
 	connection_close();
 	return $i;
 }
+function personnelDetails_PreGroupReplacement($p_id)
+{
+	$sql="Select personnela.personcd, personnela.officer_name,
+	  personnela.off_desg, personnela.poststat,
+	  personnela.assembly_temp, personnela.assembly_off,
+	  personnela.assembly_perm, personnela.forsubdivision,
+	  personnela.forpc, personnela.subdivisioncd
+	From personnela where personcd='$p_id'";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function update_personnel_PreGroupReplacement_training($per_code,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercode,$posted_date,$old_per_code)
+{
+	$sql="update training_pp set per_code='$per_code',per_name='$per_name',designation='$desig',post_stat='$post_stat', subdivision='$subdiv',for_subdivision='$for_subdiv',for_pc='$for_pc',assembly_temp='$ass_temp',assembly_off='$ass_off', assembly_perm='$ass_perm',usercode='$usercode',posted_date='$posted_date' where per_code='$old_per_code'";
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+}
 function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$usercd)
 {
 	$sql="insert into replacement_log_pregroup (old_personnel, new_personnel, forassembly, forpc, usercode) values ";
 	$sql.="('$old_p_id','$new_p_id','$forassembly','$forpc','$usercd')";
-	$i=execUpdate($sql);
+	$i=execInsert($sql);
 	connection_close();
 	return $i;
 }
 
 function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_status,$groupid,$gender)
 {
-	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly'";
+	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P'";
 	$rs_tmp=execSelect($sqltmp);
 	$num_rows_tmp=rowCount($rs_tmp);
 	for($i=0;$i<$num_rows_tmp;$i++)
@@ -554,7 +581,21 @@ function add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd)
 	connection_close();
 	return $i;
 }
-
+//============ Pre group Cancelletion =========================
+function save_pregroup_cancelletion($PersonalID,$usercd)
+{
+	$sql="delete from personnela where personcd='$PersonalID'";
+	$i=execDelete($sql);
+	if($i==1)
+	{
+		$sql1="delete from training_pp where per_code='$PersonalID'";
+		$j=execDelete($sql1);
+		$sql2="update personnel set f_cd=NULL where personcd='$PersonalID'";
+		$j=execUpdate($sql2);
+	}	
+	connection_close();
+	return $i;
+}
 //=========================FatchPersonal==============================
 function fatch_Personaldtl($PersonalCd)
 {
@@ -650,11 +691,14 @@ function fatch_post_stat_wise_dtl_available($subdiv,$pc)
 	  Inner Join assembly On personnel.acno = assembly.assemblycd
 	  Inner Join pc On assembly.pccd = pc.pccd And assembly.subdivisioncd =
 		pc.subdivisioncd";
-	$sql.=" where personnel.subdivisioncd='$subdiv'";
+	$sql.=" where 1";
+	if($subdiv!='' && $subdiv!=0)
+		$sql.=" and personnel.subdivisioncd='$subdiv'";
 	if($pc!='' && $pc!=0)
 		$sql.=" and pc.pccd='$pc'";
-	$sql.="Group By personnel.poststat
+	$sql.=" Group By personnel.poststat
 	Order By personnel.poststat";
+	//echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -666,12 +710,14 @@ function fatch_post_stat_wise_dtl_transffered($subdiv,$pc)
 	From personnela
 	  Inner Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
 		pc.subdivisioncd";
-	$sql.=" where personnela.forsubdivision='$subdiv'";
+	$sql.=" where 1";
+	if($subdiv!='' && $subdiv!=0)
+		$sql.=" and personnela.forsubdivision='$subdiv'";
 	if($pc!='' && $pc!=0)
 		$sql.=" and personnela.forpc='$pc'";
-	$sql.="Group By personnela.poststat
+	$sql.=" Group By personnela.poststat
 	Order By personnela.poststat";
-	
+	//echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -689,14 +735,17 @@ function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$officename,$posting_status)
 	From personnel
 	  Left Join termination On personnel.personcd = termination.personal_id
 	  Inner Join assembly On personnel.acno = assembly.assemblycd     
-          WHERE personnel.subdivisioncd= '$subdivision' and (personnel.f_cd IS NULL or personnel.f_cd='0') and termination.personal_id is null";
+          WHERE  (personnel.f_cd IS NULL or personnel.f_cd='0') and termination.personal_id is null";
+	if($subdivision!='' && $subdivision!='0')
+		  $sql.=" and personnel.subdivisioncd= '$subdivision'";
 	if($pc!='' && $pc!='0')
 		  $sql.=" and assembly.pccd='$pc'";
 	if($officename!='' && $officename!='0')
 		  $sql.=" and personnel.officecd='$officename'";
 	if($posting_status!='' && $posting_status!='0')
 		  $sql.=" and personnel.poststat ='$posting_status'";
-		  //echo $sql;
+	$sql.=" order by rand()";
+//		  echo $sql; exit;
 	$rs=execSelect($sql);
 //	connection_close();
 	return $rs;
@@ -937,8 +986,8 @@ function fatch_termination_listAct($personalid,$frmdt,$todt,$usercode,$p_num ,$i
   termination.posted_date 
 From personnel
   Inner Join termination On personnel.personcd = termination.personal_id where termination.personal_id >0 and termination.users_id='$usercode'";
-	 if($subdiv!='')
-		$sql.=" and termination.personal_id ='$subdiv'";
+	 if($personalid!='')
+		$sql.=" and termination.personal_id ='$personalid'";
 	if($frmdt!='')
 		$sql.=" and termination.posted_date >= '$frmdt'";
 	if($todt!='')

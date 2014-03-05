@@ -71,7 +71,8 @@ if($opn=='assembly')
 	$sub_div=$_GET['sub_div'];
 	echo "<select id='assembly' name='assembly' style='width:180px;'>\n";
 	include_once('function/add_fun.php');
-	$rsAssembly=fatch_assembly_ag_pc($pc,$sub_div);
+	//$rsAssembly=fatch_assembly_ag_pc($pc,$sub_div);
+	$rsAssembly=fatch_assembly_ag_pc1($pc);
 	$num_rows = rowCount($rsAssembly);
 	if($num_rows>0)
 	{
@@ -79,7 +80,7 @@ if($opn=='assembly')
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowAssembly=getRows($rsAssembly);
-			echo "<option value='$rowAssembly[0]'>$rowAssembly[1]</option>\n";
+			echo "<option value='$rowAssembly[assemblycd]'>$rowAssembly[assemblyname]</option>\n";
 		}
 	}
 	$rsAssembly=null;

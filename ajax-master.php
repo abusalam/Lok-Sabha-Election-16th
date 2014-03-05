@@ -3,9 +3,9 @@ session_start();
 extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/master_fun.php');
-$sub_cd=decode($_GET['sub_cd']);
-$act=$_GET['act'];
-$opn=$_GET['opn'];
+$sub_cd=isset($_GET['sub_cd'])?decode($_GET['sub_cd']):"";
+$act=isset($_GET['act'])?$_GET['act']:"";
+$opn=isset($_GET['opn'])?$_GET['opn']:"";
 //====================== District =========================
 if($opn=='subdiv')
 {
@@ -46,7 +46,7 @@ if($sub_cd!='' && $act=='del')
 	unset($cnt,$ret);
 }
 //=================== Block/ Muni ======================
-$blockminicd=decode($_GET['blockminicd']);
+$blockminicd=isset($_GET['blockminicd'])?decode($_GET['blockminicd']):"";
 if($blockminicd!='' && $act=='del')
 {
 	echo "<img src='images/loading.gif' alt='' />";
@@ -66,7 +66,7 @@ if($blockminicd!='' && $act=='del')
 	unset($cnt,$ret);
 }
 //=================== BANK ======================
-$bank_cd=decode($_GET['bank_cd']);
+$bank_cd=isset($_GET['bank_cd'])?decode($_GET['bank_cd']):"";
 if($bank_cd!='' && $act=='del')
 {
 	echo "<img src='images/loading.gif' alt='' />";
@@ -86,7 +86,7 @@ if($bank_cd!='' && $act=='del')
 	unset($cnt,$ret);
 }
 //=================== Branch ======================
-$branch_cd=decode($_GET['branch_cd']);
+$branch_cd=isset($_GET['branch_cd'])?decode($_GET['branch_cd']):"";
 if($branch_cd!='' && $act=='del')
 {
 	$bank=decode($_GET['bank']);
@@ -108,7 +108,7 @@ if($branch_cd!='' && $act=='del')
 }
 //===================================PC==========================================
 
-$pc_cd=decode($_GET['pc_cd']);
+$pc_cd=isset($_GET['pc_cd'])?decode($_GET['pc_cd']):"";
 if($pc_cd!='' && $act=='del')
 {
 	$subdiv=decode($_GET['subdiv']);
@@ -130,7 +130,7 @@ if($pc_cd!='' && $act=='del')
 }
 
 //=================================== ASSEMBLY =====================================
-$ass_cd=decode($_GET['ass_cd']);
+$ass_cd=isset($_GET['ass_cd'])?decode($_GET['ass_cd']):"";
 if($ass_cd!='' && $act=='del')
 {
 	echo "<img src='images/loading.gif' alt='' />";
@@ -209,8 +209,8 @@ if($opn=='member')
 	echo " />\n";
 	unset($rsDCRC,$num_rows);
 }
-$psno=decode($_GET['psno']);
-$assembly=decode($_GET['assembly']);
+$psno=isset($_GET['psno'])?decode($_GET['psno']):"";
+$assembly=isset($_GET['assembly'])?decode($_GET['assembly']):"";
 if($psno!='' && $assembly!='' && $act=='del')
 {
 	echo "<img src='images/loading.gif' alt='' />";

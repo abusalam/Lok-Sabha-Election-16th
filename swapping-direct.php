@@ -202,16 +202,16 @@ function validate()
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Swapping')
 {
-	$subdivision=$_POST['Subdivision'];
-	$forsubdivision=$_POST['forsubdivision'];
-	$pc=$_POST['pc'];
-	$forpc=$_POST['forpc'];
-	$officename=$_POST['officename'];
-	$posting_status=$_POST['posting_status'];
-	$numberofemployee=$_POST['numberofemployee'];
+	$subdivision=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
+	$forsubdivision=isset($_POST['forsubdivision'])?$_POST['forsubdivision']:"";
+	$pc=isset($_POST['pc'])?$_POST['pc']:"";
+	$forpc=isset($_POST['forpc'])?$_POST['forpc']:"";
+	$officename=isset($_POST['officename'])?$_POST['officename']:"";
+	$posting_status=isset($_POST['posting_status'])?$_POST['posting_status']:"";
+	$numberofemployee=isset($_POST['numberofemployee'])?$_POST['numberofemployee']:"";
 	$usercd=$user_cd;
 	if ($subdivision>0)
 	{
@@ -323,17 +323,18 @@ if($action=='Swapping')
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
-  <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
+  <td align="center"><table width="1000px" class="table_blue">
+  <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">EMPLOYEE SWAPPING DETAILS </td></tr>
-<tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
+<tr><td align="center"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
     <tr>
       <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-      <td height="16px" colspan="6" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td>
+      <td height="16px" colspan="6" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
       <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="2px" /></td>

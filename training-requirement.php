@@ -39,7 +39,7 @@ function validate()
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
-$action=$_REQUEST['submit'];
+$action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Select PP')
 {
 	$training_type=$_POST['training_type'];
@@ -148,15 +148,16 @@ function bind_data()
 <body onload="javascript:return bind_data();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
-<tr><td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td></tr>
+<tr><td align="center"><table width="1000px" class="table_blue">
+	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $_SESSION[subdiv_name]; ?> SUBDIVISION</td></tr>
+<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
   <td align="center">TRAINING REQUIREMENT</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print $msg; ?><span id="msg" class="error"></span></td></tr>
+    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     <tr><td align="left" valign="top" width="35%"><span class="error">&nbsp;&nbsp;</span>No of PP Selected</td><td align="left" id="no_pp_selected"></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
@@ -173,11 +174,10 @@ function bind_data()
 				{
 					$rowTrainingType=getRows($rsTrainingType);
 					echo "<option value='$rowTrainingType[0]' >$rowTrainingType[1]</option>\n";
+					$rowTrainingType=NULL;
 				}
 			}
-			$rsTrainingType=null;
-			$num_rows=0;
-			$rowTrainingType=null;
+			unset($rsTrainingType,$num_rows,$rowTrainingType);
 		?>
 	    </select></td></tr>
     <tr>
@@ -192,11 +192,10 @@ function bind_data()
 										{
 											$rowP=getRows($rsP);
 											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+											$rowP=NULL;
 										}
 									}
-									$rsP=null;
-									$num_rows=0;
-									$rowP=null;
+									unset($rsP,$num_rows,$rowP);
 							?>
       </select></td></tr>
     <tr>
@@ -211,11 +210,10 @@ function bind_data()
 											{
 												$rowSubDiv=getRows($rsSubDiv);
 												echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>\n";
+												$rowSubDiv=NULL;
 											}
 										}
-										$rsSubDiv=null;
-										$num_rows=0;
-										$rowSubDiv=null;
+										unset($rsSubDiv,$num_rows,$rowSubDiv);;
 								?>
                             </select></td></tr>
     
