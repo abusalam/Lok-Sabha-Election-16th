@@ -1,3 +1,102 @@
+CREATE USER 'pp4ds'@'%' IDENTIFIED BY  'ppds';
+
+GRANT 
+
+SELECT, INSERT, UPDATE, DELETE ON * . * TO  'pp4ds'@'%' IDENTIFIED BY  'ppds' 
+
+WITH 
+
+MAX_QUERIES_PER_HOUR 0 
+MAX_CONNECTIONS_PER_HOUR 0 
+MAX_UPDATES_PER_HOUR 0 
+MAX_USER_CONNECTIONS 0 ;
+
+--
+-- SW Version 1.0
+--
+
+ALTER TABLE  `personnela` CHANGE  `remarks`  `remarks` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ 
+ALTER TABLE  `personnel` CHANGE  `remarks`  `remarks` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ 
+DROP TABLE `environment`;
+DROP TABLE `first_rand_table`;
+ 
+CREATE TABLE `environment` (
+  `env_cd` int(2) NOT NULL AUTO_INCREMENT,
+  `environment` varchar(50) NOT NULL,
+  `dist_cd` char(2) NOT NULL,
+  `subdiv_cd` char(4) DEFAULT NULL,
+  `current_personnel` char(9) DEFAULT NULL,
+  `current_office` char(8) DEFAULT NULL,
+  `apt1_orderno` varchar(25) DEFAULT NULL,
+  `apt1_date` date DEFAULT NULL,
+  `apt2_orderno` varchar(25) DEFAULT NULL,
+  `apt2_date` date DEFAULT NULL,
+  `signature` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`env_cd`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+ 
+CREATE TABLE `first_rand_table` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `officer_name` varchar(50) DEFAULT NULL,
+  `person_desig` varchar(50) DEFAULT NULL,
+  `personcd` char(9) DEFAULT NULL,
+  `office` varchar(50) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `postoffice` varchar(30) DEFAULT NULL,
+  `subdivision` varchar(30) DEFAULT NULL,
+  `policestation` varchar(30) DEFAULT NULL,
+  `pc_code` char(2) DEFAULT NULL,
+  `pc_name` char(35) DEFAULT NULL,
+  `district` char(20) DEFAULT NULL,
+  `pin` char(6) DEFAULT NULL,
+  `officecd` char(8) DEFAULT NULL,
+  `poststatus` char(20) DEFAULT NULL,
+  `mob_no` char(16) DEFAULT NULL,
+  `training_desc` char(20) DEFAULT NULL,
+  `venuename` varchar(50) DEFAULT NULL,
+  `venueaddress` varchar(100) DEFAULT NULL,
+  `training_dt` char(20) DEFAULT NULL,
+  `training_time` char(20) DEFAULT NULL,
+  `epic` varchar(30) DEFAULT NULL,
+  `acno` char(3) DEFAULT NULL,
+  `partno` char(10) DEFAULT NULL,
+  `slno` char(10) DEFAULT NULL,
+  `bank` varchar(50) DEFAULT NULL,
+  `branch` varchar(50) DEFAULT NULL,
+  `bank_accno` varchar(20) DEFAULT NULL,
+  `ifsc` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+ 
+CREATE TABLE `remarks` (
+  `remarks_cd` char(2) NOT NULL,
+  `remarks` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`remarks_cd`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `remarks` (`remarks_cd`, `remarks`) VALUES
+('01', 'Head of Office'),
+('02', 'Night Guard'),
+('03', 'Armed Guard'),
+('04', 'Sweeper'),
+('05', 'Key holder'),
+('06', 'Physically Challenged'),
+('07', 'Peoples Representative'),
+('08', 'Driver'),
+('99', 'Other');
+
+CREATE TABLE `tblsms` (
+  `name` varchar(50) NOT NULL,
+  `phone_no` char(12) NOT NULL,
+  `message` varchar(160) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- SW Version 1.1
+--
+
 delete from submenu;
 INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) VALUES
 (1, 2, 'Subdivision', 'subdivision-master.php', 1, '2013-12-23 15:29:12'),
