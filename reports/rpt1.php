@@ -23,6 +23,7 @@ $todate=$_REQUEST['todate'];
 <div align="center" class="heading">Checklist (Polling Personnel)</div>
 <?php
 //require_once('../inc/dbcon.inc.php');
+date_default_timezone_set('Asia/Calcutta');
 require_once('../inc/db_trans.inc.php');
 $sql="Select personnel.officer_name As officer_name,
 	  personnel.off_desg As designation,

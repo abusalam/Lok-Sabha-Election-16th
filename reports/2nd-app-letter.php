@@ -21,6 +21,7 @@ h7 {page-break-after:always;}
 </head>
 <body>
 <?php
+date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/appointment_fun.php');
 	include_once('../inc/commit_con.php');

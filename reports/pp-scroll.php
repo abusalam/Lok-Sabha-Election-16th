@@ -15,6 +15,7 @@ body{font: 12px Verdana, Geneva, sans-serif;}
 </style>
 </head>
 <?php
+date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/appointment_fun.php');
 	

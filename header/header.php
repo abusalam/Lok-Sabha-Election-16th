@@ -147,6 +147,7 @@ stm_em();
 
 &nbsp;<span class="form">Hi, <?php print $_SESSION['user']; ?></span>
 <?php
+$user_cat=isset($_SESSION['user_cat'])?$_SESSION['user_cat']:'';
 $sql_env="select * from environment where dist_cd='$dist_cd'";
 $rs_env=execSelect($sql_env);
 if(rowCount($rs_env)>0)
@@ -165,7 +166,7 @@ if(rowCount($rs_env)>0)
 	$signature=$row_env['signature'];
 	$_SESSION['signature']=$signature;
 }
-else
+else if($user_cat!="Administrator")
 {
 	echo "\n<br />";
 	echo "<span class='error'>Please set Environment Table</span>";

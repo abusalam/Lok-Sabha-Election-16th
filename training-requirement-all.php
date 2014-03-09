@@ -42,11 +42,13 @@ if($action=='Select PP')
 	include_once('inc/commit_con.php');
 	$post_status[0]='PR'; $post_status[1]='P1'; $post_status[2]='P2'; $post_status[3]='P3';
 	$rec=0;
+	$ct_emp=0;
 	mysqli_autocommit($link,FALSE);
 	for($n=0;$n<=3;$n++)
 	{
 		$rsEmp=fatch_employee_for_training_req($post_status[$n],$subdivision,$training_type);
 		$num_rows_Emp=rowCount($rsEmp);
+		$ct_emp=$num_rows_Emp;
 		if($num_rows_Emp>0)
 		{				
 			$sql="insert into training_pp (per_code,per_name,designation,training_type,post_stat,subdivision,for_subdivision,for_pc,assembly_temp,";
@@ -90,7 +92,7 @@ if($action=='Select PP')
 	{
 		if($rec>0){
 			$msg="<div class='alert-success'>$rec Record(s) saved successfully</div>"; }
-		else if($rec+$num_rows_Emp==0) {
+		else if($rec+$ct_emp==0) {
 			$msg="<div class='alert-error'>No record saved</div>"; }
 			
 	}

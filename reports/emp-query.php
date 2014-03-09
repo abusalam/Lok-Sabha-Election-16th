@@ -76,6 +76,7 @@ function person_details(str,str1)
 </script>
 </head>
 <?php
+date_default_timezone_set('Asia/Calcutta');
 include_once('../inc/db_trans.inc.php');
 include_once('../function/add_fun.php');
 if(isset($_REQUEST['Subdivision']) && $_REQUEST['Subdivision']!=null)

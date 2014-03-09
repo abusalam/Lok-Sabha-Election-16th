@@ -723,7 +723,7 @@ function fatch_post_stat_wise_dtl_transffered($subdiv,$pc)
 	return $rs;
 }
 //===========================Fatch Personal Details for Ls14=================================
-function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$officename,$posting_status)
+function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status)
 {
 	$sql="Select personnel.personcd, personnel.officecd, personnel.officer_name, personnel.off_desg, personnel.present_addr1,
 	  personnel.present_addr2, personnel.perm_addr1, personnel.perm_addr2, Date_Format(personnel.dateofbirth, '%Y-%m-%d') As dateofbirth,
@@ -740,6 +740,8 @@ function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$officename,$posting_status)
 		  $sql.=" and personnel.subdivisioncd= '$subdivision'";
 	if($pc!='' && $pc!='0')
 		  $sql.=" and assembly.pccd='$pc'";
+	if($ex_ass!='' && $ex_ass!='0')
+		  $sql.=" and personnel.assembly_temp<>'$ex_ass'and personnel.assembly_off<>'$ex_ass'and personnel.assembly_perm<>'$ex_ass'";
 	if($officename!='' && $officename!='0')
 		  $sql.=" and personnel.officecd='$officename'";
 	if($posting_status!='' && $posting_status!='0')

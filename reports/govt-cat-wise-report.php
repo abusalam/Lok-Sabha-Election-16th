@@ -29,6 +29,7 @@ h7 {page-break-after:always;}
         </thead>
         <tbody>
             <?php
+			date_default_timezone_set('Asia/Calcutta');
 			include_once('../inc/db_trans.inc.php');
 			include_once('../function/master_fun.php');
 			include_once('../function/report_fun.php');

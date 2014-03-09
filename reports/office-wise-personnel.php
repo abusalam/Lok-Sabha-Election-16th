@@ -26,6 +26,7 @@ label {page-break-after:always}
 </thead>
 <tr><td align="center">
 <?php
+date_default_timezone_set('Asia/Calcutta');
 include_once('../inc/db_trans.inc.php');
 include_once('../function/ofc_fun.php');
 extract($_POST);

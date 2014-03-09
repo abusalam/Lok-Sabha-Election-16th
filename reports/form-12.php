@@ -17,6 +17,7 @@ body{
 <body>
 <div align="center">
 <?php
+date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/form_12_fun.php');
 	$personcd=decode($_GET['personcd']);

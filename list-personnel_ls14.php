@@ -35,6 +35,7 @@ function personnel_ls14_list(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			document.getElementById("personnel_ls14_result").innerHTML=xmlhttp.responseText;
+			document.getElementById("form1").style="cursor:default";
 		}
 	  }
 
@@ -43,6 +44,8 @@ function personnel_ls14_list(str)
 	else
     qstr="ajax-personal_ls14.php?subdiv="+subdiv+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);
+	document.getElementById("personnel_ls14_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });

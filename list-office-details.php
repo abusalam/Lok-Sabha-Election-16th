@@ -32,10 +32,13 @@ function office_list()
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			document.getElementById("Office_result").innerHTML=xmlhttp.responseText;
+			document.getElementById("form1").style="cursor:default";
 		}
 	  }
 	  
 	xmlhttp.open("GET","ajax-office.php?sub_div="+sub_div+"&officeid="+officeid+"&officename="+officename+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
+	document.getElementById("Office_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });

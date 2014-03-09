@@ -25,9 +25,11 @@ function subdivision_change(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("office_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("loading").style.visibility="hidden";
 		}
 	  }
 	xmlhttp.open("GET","ajax-appointment.php?sub_div="+str+"&opn=for_sub_emp_office",true);
+	document.getElementById("loading").style.visibility="visible";
 	xmlhttp.send();
 }
 function validate()
@@ -62,9 +64,8 @@ function validate()
   <td align="center">FIRST APPOINTMENT LETTER ISSUE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" action="reports/training-app-letter2.php" target="_blank">
     <table width="70%" class="form" cellpadding="0">
-	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+    <tr><td colspan="2" style="height:100px" align="center"><img src="images/loading1.gif" alt="" height="90px" width="90px" id="loading" style="visibility:hidden" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="javascript:return subdivision_change(this.value);">

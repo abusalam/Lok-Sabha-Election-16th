@@ -12,6 +12,7 @@ body{font: 13px Verdana, Geneva, sans-serif;}
 </head>
 <body>
 <?php
+date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/appointment_fun.php');
 	$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
@@ -19,6 +20,18 @@ body{font: 13px Verdana, Geneva, sans-serif;}
 	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
 	$rstmp=first_appointment_letter2_subdiv($subdiv,$office);
 	$row=0;
+	$n=0;
+	while($row <= rowCount($rstmp))
+	{
+		$tmprow=getRows($rstmp);
+		$str_sub_div=$tmprow['subdivision'];
+		$del_ret=delete_prev_data($str_sub_div);
+		//	echo "vall=".$del_ret;
+		//mysqli_stmt_bind_param($stmt1, 's', $str_sub_div);
+		//mysqli_stmt_execute($stmt1);
+		$row++;
+	}
+	unset($row,$tmprow,$str_sub_div,$rstmp);
 	$rsApp=first_appointment_letter2_hdr($subdiv,$office);
 	
 	$num_rows=rowCount($rsApp);
@@ -26,29 +39,59 @@ body{font: 13px Verdana, Geneva, sans-serif;}
 	{
 		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,epic,acno,partno,slno,bank,branch,bank_accno,ifsc) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
 		
-		$sql1="delete from first_rand_table where subdivision=?";
-		$stmt1 = mysqli_prepare($link, $sql1);
-		while($row <= rowCount($rstmp))
-		{
-			$tmprow=getRows($rstmp);
-			$str_sub_div=$tmprow['subdivision'];
-			//$del_ret=delete_prev_data($str_sub_div);
-			//	echo "vall=".$del_ret;
-			mysqli_stmt_bind_param($stmt1, 's', $str_sub_div);
-			mysqli_stmt_execute($stmt1);
-			$row++;
-		}
-		unset($row,$tmprow,$str_sub_div,$rstmp);
-		
+		mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);
+				
 		for($i=1;$i<=$num_rows;$i++)
 		{
+		
 			$rowApp=getRows($rsApp);
-			echo "<table width='200' border='1'>
+			
+			$officer_name=$rowApp['officer_name'];
+			$person_desig=$rowApp['person_desig'];
+			$personcd=$rowApp['personcd'];
+			$office=$rowApp['office'];
+			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
+			$postoffice=$rowApp['postoffice'];
+			$subdivision=$rowApp['subdivision'];
+			$policestation=$rowApp['policestation'];
+			$district=$rowApp['district'];
+			$pin=$rowApp['pin'];
+			$officecd=$rowApp['officecd'];
+			$poststatus=$rowApp['poststatus'];
+			$mob_no=$rowApp['mob_no'];
+			
+			$training_desc=$rowApp['training_desc'];
+			$venuename=$rowApp['venuename'];
+			$venue_add=$rowApp['venueaddress1'].", ".$rowApp['venueaddress2'];
+			$training_dt=$rowApp['training_dt'];
+			$training_time=$rowApp['training_time'];	
+			
+			$forpc=$rowApp['forpc'];
+			$pcname=$rowApp['pcname'];
+			$epic=$rowApp['epic'];
+			$acno=$rowApp['acno'];
+			$partno=$rowApp['partno'];
+			$slno=$rowApp['slno'];
+			$bank_name=$rowApp['bank_name'];
+			$branch_name=$rowApp['branch_name'];
+			$bank_acc_no=$rowApp['bank_acc_no'];
+			$ifsc_code=$rowApp['ifsc_code'];
+			$forsubdivision=$rowApp['forsubdivision'];
+			$token=$rowApp['token'];
+			
+			mysqli_stmt_execute($stmt);
+			$n++;
+			if($n%1000==0)
+			{
+				mysqli_commit($link);
+			}
+			echo "<table width='100%'>
   <tr>
-    <td align='center'>ELECTION URGENT</td>
+    <td align='left'><div style='border:1px solid; width:150px;text-align:center;'>ELECTION URGENT</div></td>
+	<td align='right'><div style='border:0px solid; width:150px;text-align:center;'>Token No. $rowApp[token]</div></td>
   </tr>
 </table>
 <p align='center'><strong><u>ORDER OF APPOINTMENT FOR TRAINING</u></strong><br />
@@ -68,10 +111,10 @@ echo "<div align='center'>
       <td align='center'><strong>Name of Polling Officer</strong></td>
     </tr>
     <tr>
-      <td align='center'>".$rowApp['officer_name'].", ".$rowApp['person_desig']."&nbsp;&nbsp;&nbsp;&nbsp;<b>PIN-".$rowApp['personcd']."</b>
-      <br />O/O ".$rowApp['officer_desig'].", ".$rowApp['address1'].", ".$rowApp['address2'].", P.O.-".$rowApp['postoffice'].", Subdiv-".$rowApp['subdivision'].", P.S.-".$rowApp['policestation'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['pin']."
-      <br /><br />(".$rowApp['officecd'].")&nbsp;&nbsp;&nbsp;&nbsp;<b>".$rowApp['poststatus']."</b>
-      <br />Mobile : ".$rowApp['mob_no']."</td>
+      <td align='center'>".$officer_name.", ".$person_desig."&nbsp;&nbsp;&nbsp;&nbsp;<b>PIN-".$personcd."</b>
+      <br />".$office.", ".$office_address.", P.O.-".$postoffice.", Subdiv-".$subdivision.", P.S.-".$policestation.", Dist.-".$district.", PIN-".$pin."
+      <br /><br />(".$officecd.")&nbsp;&nbsp;&nbsp;&nbsp;<b>".$poststatus."</b>
+      <br />Mobile : ".$mob_no."</td>
     </tr>
   </table>
 </div>
@@ -88,30 +131,53 @@ echo "<div align='center'>
       <td width='86'><strong>Date</strong></td>
       <td width='104'><strong>Time</strong></td>
     </tr>";
-	$rsAppDtl=first_appointment_letter2($rowApp['personcd']);
-	if(rowCount($rsAppDtl)>0)
-	{
-		for($j=1;$j<=rowCount($rsAppDtl);$j++)
-		{
-			$rowAppDtl=getRows($rsAppDtl);
-			echo "<tr>
-			  <td height='70'>".$rowAppDtl['training_desc']."</td>
-			  <td>".$rowAppDtl['venuename']."</td>
-			  <td>".$rowAppDtl['venueaddress1'].", ".$rowAppDtl['venueaddress2']."</td>
-			  <td>".$rowAppDtl['training_dt']."</td>
-			  <td>".$rowAppDtl['training_time']."</td>
+			
+/*			
+			$rsAppDtl=first_appointment_letter2($personcd);
+			if(rowCount($rsAppDtl)>0)
+			{
+				for($j=1;$j<=rowCount($rsAppDtl);$j++)
+				{
+					$rowAppDtl=getRows($rsAppDtl);
+					$n++;
+				echo $n."<br />";
+					
+					$training_desc=$rowAppDtl['training_desc'];
+					$venuename=$rowAppDtl['venuename'];
+					$venue_add=$rowAppDtl['venueaddress1'].", ".$rowAppDtl['venueaddress2'];
+					$training_dt=$rowAppDtl['training_dt'];
+					$training_time=$rowAppDtl['training_time'];			
+					
+					mysqli_stmt_execute($stmt);
+					$rowAppDtl=NULL;
+					
+					
+				}
+				unset($rsAppDtl);
+			}
+			else
+			{
+					$n++;
+				echo $n."<br />";
+					$training_desc='';
+					$venuename='';
+					$venue_add='';
+					$training_dt='';
+					$training_time='';
+					
+					mysqli_stmt_execute($stmt);
+					
+			}
+*/			
+echo "<tr>
+			  <td height='70'>".$training_desc."</td>
+			  <td>".$venuename."</td>
+			  <td>".$venue_add."</td>
+			  <td>".$training_dt."</td>
+			  <td>".$training_time."</td>
 			</tr>";
 			
-			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
-			$venue_add=$rowAppDtl['venueaddress1'].", ".$rowAppDtl['venueaddress2'];
-			
-			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowAppDtl['training_desc'],$rowAppDtl['venuename'],$venue_add,$rowAppDtl['training_dt'],$rowAppDtl['training_time'],$rowApp['forpc'],$rowApp['pcname'],$rowApp['epic'],$rowApp['acno'],$rowApp['partno'],$rowApp['slno'],$rowApp['bank_name'],$rowApp['branch_name'],$rowApp['bank_acc_no'],$rowApp['ifsc_code']);
-			mysqli_stmt_execute($stmt);
-			$rowAppDtl=NULL;
-		}
-		unset($rsAppDtl);
-	}
-	echo "
+			echo "
   </table>
 </div>
 <hr />
@@ -168,7 +234,7 @@ echo "
 <div align='center'>
   <table width='750' border='0' cellspacing='0' cellpadding='0'>
     <tr>
-      <td width='437' valign='top'>Repeipt of Appointment Letter</td>
+      <td width='437' valign='top'>Receipt of Appointment Letter</td>
       <td width='215' valign='top'>Signature of the Recepient<br >
       Date:</td>
     </tr>
@@ -177,19 +243,17 @@ echo "
 //			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
 //			$venue_add=$rowApp['venueaddress1'].", ".$rowApp['venueaddress2'];
 			echo "\n<h6></h6>\n";
-//			mysqli_stmt_bind_param($stmt, 'ssssssssssssssssss', $rowApp['officer_name'],$rowApp['person_desig'],$rowApp['personcd'],$rowApp['officer_desig'],$office_address,$rowApp['postoffice'],$rowApp['subdivision'],$rowApp['policestation'],$rowApp['district'],$rowApp['pin'],$rowApp['officecd'],$rowApp['poststatus'],$rowApp['mob_no'],$rowApp['training_desc'],$rowApp['venuename'],$venue_add,$rowApp['training_dt'],$rowApp['training_time']);
-//			mysqli_stmt_execute($stmt);
 			
 			$rowApp=NULL;
 		}
 		unset($rsApp,$num_rows,$rowApp);
-		
-		if (!mysqli_commit($link)) {
+		mysqli_commit($link);
+	/*	if (!mysqli_commit($link)) {
 			print("Transaction commit failed\n");
 			exit();
 		}
+		*/
 		mysqli_stmt_close($stmt);
-		mysqli_stmt_close($stmt1);
 		mysqli_close($link);
 		
 		//delete_temp_app_letter($usercd);

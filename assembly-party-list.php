@@ -51,6 +51,7 @@ function search_click()
 		}
 	  }
 	xmlhttp.open("GET","ajaxfun.php?sub_div="+subdiv+"&pc="+pc+"&opn=assembly_paty",true);
+	document.getElementById("ap_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });

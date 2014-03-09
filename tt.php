@@ -1,5 +1,5 @@
 <?php
-$con=mysql_connect("127.0.0.1","root","root") or die();
+$con=mysql_connect("127.0.0.1","pp4ds","ppds") or die();
 $db=mysql_select_db("ppds",$con) or die();
 		$rResult = mysql_query("select name,phone_no,message from tblsms") or die();
 		$count = mysql_num_fields($rResult);

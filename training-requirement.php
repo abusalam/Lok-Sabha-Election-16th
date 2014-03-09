@@ -47,12 +47,13 @@ if($action=='Select PP')
 	$subdivision=$_POST['subdivision'];
 	$usercd=$user_cd;
 	include_once('function/training_fun.php');
+	$rec=0;	$ct_emp=0;
 	
 	$rsEmp=fatch_employee_for_training_req($post_status,$subdivision,$training_type);
 	$num_rows_Emp=rowCount($rsEmp);
+	$ct_emp=$num_rows_Emp;
 	if($num_rows_Emp>0)
-	{
-		$rec=0;
+	{	
 		include_once('inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into training_pp (per_code,per_name,designation,training_type,post_stat,subdivision,for_subdivision,for_pc,assembly_temp,";
@@ -89,7 +90,7 @@ if($action=='Select PP')
 		{
 			if($rec>0)
 				$msg="<div class='alert-success'>$rec Record(s) saved successfully</div>";
-			else if($rec+$num_rows_Emp==0)
+			else if($rec+$ct_emp==0)
 				$msg="<div class='alert-error'>No record saved</div>";
 		}
 		mysqli_stmt_close($stmt);

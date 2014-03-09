@@ -24,6 +24,7 @@ if(isset($_REQUEST['district']))
 	if(isset($_REQUEST['Subdivision']))
 		$subdiv_cd=$_REQUEST['Subdivision'];
 }
+date_default_timezone_set('Asia/Calcutta');
 include("../inc/db_trans.inc.php");
 ?>
 <table width="100%">

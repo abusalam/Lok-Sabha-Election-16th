@@ -33,6 +33,7 @@ function termination_list(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			document.getElementById("termination_list_result").innerHTML=xmlhttp.responseText;
+			document.getElementById("form1").style="cursor:default";
 		}
 	  }
 
@@ -41,6 +42,8 @@ function termination_list(str)
 	else
     	qstr="ajax-termination.php?personalid="+personalid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);
+	document.getElementById("termination_list_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });

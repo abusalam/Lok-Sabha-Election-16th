@@ -83,6 +83,7 @@ function chksetsubdivision_change()
 		document.getElementById('chksetoffice').disabled=false;
 		document.getElementById('chksetpostingstatus').disabled=false;
 		document.getElementById('chksetnumberofemployee').disabled=false;
+		fatch_office_agsubdiv('0');
 	}
 	else if(document.getElementById('chksetsubdivision').checked==false)
 	
@@ -92,7 +93,7 @@ function chksetsubdivision_change()
 		document.getElementById('Subdivision').disabled=true;
 		document.getElementById('Subdivision').selectedIndex="0";
 		document.getElementById('pc').disabled=true;
-		document.getElementById('pc').selectedIndex="0";
+		document.getElementById('pc').selectedIndex="-1";
 		document.getElementById('forsubdivision').disabled=true;
 		document.getElementById('forsubdivision').selectedIndex="0";
 		document.getElementById('officename').disabled=true;
@@ -177,7 +178,20 @@ function chksetnumberofemployee_change()
 		document.getElementById('numberofemployee').value="";
 	}
 }
-
+$(document).ready(function(){  $('.overlay').fadeOut();  });
+function fadein() {
+	$("#submit").click(function () {
+		$(".overlay").fadeIn();
+	});
+}
+function fadeout()
+{
+	$(function () {
+		$("#submit").click(function () {
+			$(".overlay").fadeOut();
+		});
+	});
+}
 function validate()
 {
 	var subdivision=document.getElementById("Subdivision").value;
@@ -186,15 +200,18 @@ function validate()
 	{
 		document.getElementById("msg").innerHTML="Select Subdivision Name";
 		document.getElementById("Subdivision").focus();
+		fadeout();
 		return false;
 	}
 	if(pc=="0")
 	{
 		document.getElementById("msg").innerHTML="Select PC Name";
 		document.getElementById("pc").focus();
+		fadeout();
 		return false;
 	}
-	
+	document.getElementById("msg").innerHTML="";
+	fadein();
 }
 </script>
 
@@ -215,7 +232,7 @@ if($action=='Swapping')
 	$usercd=$user_cd;
 	if ($subdivision>0)
 	{
-	    $rsEmp=fatch_PersonaldtlAgSubdiv($subdivision,$pc,$officename,$posting_status);
+	    $rsEmp=fatch_PersonaldtlAgSubdiv($subdivision,$pc,'',$officename,$posting_status);
 		$num_rows=rowCount($rsEmp);
 		if($num_rows<1)
 		{
@@ -337,7 +354,11 @@ if($action=='Swapping')
       <td height="16px" colspan="6" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td>
     </tr>
     <tr>
-      <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="2px" /></td>
+      <td align="center" colspan="6">
+      <div class="overlay">
+  			<img id="loading_spinner" src="images/loading1.gif" height="80px" width="80px" />
+	  </div>
+      </td>
     </tr>
     <tr>
     <td align="left"><input type="checkbox" id="chksetsubdivision" name="chksetsubdivision" onclick="return chksetsubdivision_change();" />
@@ -387,7 +408,7 @@ if($action=='Swapping')
     <tr>
     <td align="left"><input type="checkbox" id="chksetpostingstatus" name="chksetpostingstatus" onclick="return chksetpostingstatus_change();" disabled="disabled" />
         <label for="chksetpostingstatus" class="text_small">Post status wise<br /></label></td>
-      <td align="left" valign="top"><span class="error">&nbsp;</span>Posting Status</td>
+      <td align="left" valign="top"><span class="error">&nbsp;</span>Post Status</td>
       <td align="left" valign="top"><select name="posting_status" id="posting_status" disabled="disabled" style="width:170px;">
       						<option value="0">-Select Post Status-</option>
                             <?php 	$rsP=fatch_postingstatus();

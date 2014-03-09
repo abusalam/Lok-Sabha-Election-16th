@@ -32,6 +32,7 @@ function personnel_list(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			document.getElementById("personnel_result").innerHTML=xmlhttp.responseText;
+			document.getElementById("form1").style="cursor:default";
 		}
 	  }
 	if(str=="search")
@@ -39,6 +40,8 @@ function personnel_list(str)
 	else
 		qstr="ajax-personnel.php?officeid="+officeid+"&personcd="+personnelID+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);
+	document.getElementById("personnel_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });
@@ -68,10 +71,10 @@ function openCalender(getObject)
   <td align="center"><table width="1000px" class="table_blue"><tr><td align="center"><div width="50%" class="h2"><?php print $environment; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center">OFFICE DETAILS LIST</td></tr>
+<tr><td align="center">PERSONNEL DETAILS LIST</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
-    <tr><td colspan="4" align="center"><?php print $subdiv_name; ?> Subdivision</td></tr>
+    <tr><td colspan="4" align="center"><?php print $subdiv_name; ?> SUBDIVISION</td></tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>

@@ -27,8 +27,7 @@ function send_mail($recipient,$name)
 			$mail->Username = "info@burdwanindustry.com"; //  username
 			$mail->Password = "burd#123"; //  password
 		//}
-		
-		$recipient="admin@gmail.com";
+	
 		//Typical mail data
 		$email=$recipient; // Email Recipient
 		$name=$name;	// Recipient Name

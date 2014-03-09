@@ -29,6 +29,7 @@ if($frmdate=="" && $todate=="")
 <body>
 <div align="center" class="heading">Checklist (Office List)</div>
 <?php
+date_default_timezone_set('Asia/Calcutta');
 //require_once('../inc/dbcon.inc.php');
 require_once('../inc/db_trans.inc.php');
 $sql="Select office.officecd As officecd,

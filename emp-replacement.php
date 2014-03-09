@@ -249,7 +249,7 @@ function replacement()
     	<td align="center" colspan="2">
         	<input id="search" name="search" value="Search" type="button" onclick="return new_per_search();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input id="replace" name="replace" value="Replace" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="print" name="print" value="Print Appointment Letter" type="submit" />
+            <input id="print" name="print" value="Print Appointment Letter" type="submit" style="visibility:hidden" />
         </td>
     </tr>
 </table>
