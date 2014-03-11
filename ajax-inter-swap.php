@@ -34,9 +34,9 @@ if($opn=="poststat")
 {
 	$pc_swp=isset($_GET["pc_swp"])?$_GET["pc_swp"]:"";
 	$sub_swp=isset($_GET["sub_swp"])?$_GET["sub_swp"]:"";
-	$rs=fatch_post_stat_wise_dtl_transffered($sub_swp,$pc_swp);
+	$rs=fatch_post_stat_wise_dtl_unbooked($sub_swp,$pc_swp);
 	$num_rows=rowCount($rs);
-	echo "Transffered &nbsp;: ";
+	echo "Unbooked &nbsp;: ";
 	for($i=1;$i<=$num_rows;$i++)
 	{
 		$row=getRows($rs);

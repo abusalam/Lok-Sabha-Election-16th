@@ -2,11 +2,11 @@
 include_once("MICS_SMS.php");
 
 // Declare variables.
-$Username = "BWNMSE1";
-$Password = "bwnmse123";
-$MsgSender = "BWNMSE";
+$Username = "ceowb";
+$Password = "@ceowbelection14";
+$MsgSender = "WBELEC";
 $DestinationAddress = $mob_no;
-$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." at ".$training_time." at ".$venuename;
+//$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." at ".$training_time." at ".$venuename;
 
 // Create ViaNettSMS object with params $Username and $Password
 $MICS_SMS = new MICS_SMS($Username, $Password);

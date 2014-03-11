@@ -14,8 +14,8 @@ class MICS_SMS
 	public function SendSMS($MsgSender, $DestinationAddress, $Message)
 	{
 		// Build URL request for sending SMS.
-		$url = "http://sms1.infonetservices.in/TransSMS/SMSAPI.jsp?username=%s&password=%s&sendername=%s&mobileno=%s&message=%s";
-		$url = sprintf($url, urlencode($this->Username), urlencode($this->Password), urlencode($MsgSender), urlencode($DestinationAddress), urlencode($Message));
+		$url = "http://msdgweb.mgov.gov.in/esms/sendsmsrequest?username=%s&password=%s&smsservicetype=singlemsg&content=%s&mobileno=%s&senderid=%s";
+		$url = sprintf($url, urlencode($this->Username), urlencode($this->Password), urlencode($Message), urlencode($DestinationAddress), urlencode($MsgSender));
 		
 		// Check if MsgSender is numeric or alphanumeric.
 //		if (is_numeric($MsgSender))
