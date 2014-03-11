@@ -14,7 +14,7 @@ $rsPersonnel_dum=fatch_PersonnelList($officeid,$personcd,$frmdt,$todt,$usercode)
 $num_rows_dum = rowCount($rsPersonnel_dum);
 
 $items = 50; // number of items per page.
-$all = $_GET['a'];
+$all = isset($_GET['a'])?$_GET['a']:"";
 if($all == "all")
 {
 	$items = $num_rows_dum;
@@ -23,7 +23,7 @@ $items=($items==0?1:$items);
 $nrpage_amount = $num_rows_dum/$items;
 $page_amount = ceil($num_rows_dum/$items);
 $page_amount = $page_amount-1;
-$page = $_GET['p'];
+$page = isset($_GET['p'])? $_GET['p']:"";
 $section='list-personnel';
 if($page < "1")
 {

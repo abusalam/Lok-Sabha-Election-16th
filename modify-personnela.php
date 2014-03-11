@@ -5,7 +5,7 @@ session_start();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Employee Details</title>
+<title>Modify Employee Details</title>
 <?php
 include('header/header.php');
 ?>
@@ -239,24 +239,6 @@ function validate()
 		document.getElementById("language").focus();
 		return false;
 	}
-	/*if(bank=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Bank Name";
-		document.getElementById("bank").focus();
-		return false;
-	}
-	if(branch=="")
-	{
-		document.getElementById("msg").innerHTML="Select Branch Name";
-		document.getElementById("branch").focus();
-		return false;
-	}
-	if(acc_no=="")
-	{
-		document.getElementById("msg").innerHTML="Enter A/c No";
-		document.getElementById("acc_no").focus();
-		return false;
-	}*/
 	if(voterof=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Voter of Assembly";
@@ -311,13 +293,6 @@ function validate()
 		document.getElementById("remarks").focus();
 		return false;
 	}
-	/*if(file.value=="")
-	{
-		document.getElementById("msg").innerHTML="Select picture";
-		document.getElementById("file").focus();
-		return false;
-	}*/
-	
 }
 
 function validateFileExtension(Source, args)
@@ -412,16 +387,6 @@ if($action=='Save')
 		$subdiv_cd=$_SESSION['subdiv_cd'];
 	$p_id=$_POST['hid_personnel_code'];
 	//=============== Getting Person ID ==================
-	if($p_id=='')
-	{
-		$rsmaxcode=fatch_personnel_maxcode($subdiv_cd);
-		$rowmaxcode=getRows($rsmaxcode);
-		if($rowmaxcode[0]==null)
-			$p_id=$subdiv_cd."00001";
-		else
-			$p_id=$rowmaxcode[0]+1;
-	}
-	
 		
 	$usercd=$user_cd;
 	include_once('function/add_fun.php');
@@ -431,15 +396,17 @@ if($action=='Save')
 		$dt = new DateTime();
 		$posted_date=$dt->format('Y-m-d H:i:s');
 		//$ret=update_training_type($training_code,$training_desc,$usercd,$posted_date);
+		$ret=update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
 		$ret=update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
 		if($ret==1)
 		{
-			redirect("add-personnel.php?msg=success");
+			redirect("modify-personnela.php?msg=success");
 		}
 	}
 	else
 	{
-		$ret=save_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$dist_code,$subdiv_cd,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd);
+		echo "Data can't be added from this form.";
+		exit;
 	}
 	if($ret==1)
 	{
@@ -450,8 +417,8 @@ if($action=='Save')
 	{
 		$msg="<div class='alert-error'>User already exists</div>";
 	}*/
-	$rsmaxcode=null;
-	$rowmaxcode=null;
+	$rsmaxcode=NULL;
+	$rowmaxcode=NULL;
 }
 ?>
 
@@ -460,15 +427,21 @@ if(isset($_REQUEST['personcd']))
 {
 	$personcd=decode($_REQUEST['personcd']);
 
-	$rsPerson=person_details($personcd);
+	$rsPerson=personnela_details($personcd);
 	$rowPerson=getRows($rsPerson);
 }
-if(isset($_REQUEST['msg']))
+else if(isset($_REQUEST['msg']))
 {
 	if($_REQUEST['msg']=='success')
 	{
 		$msg="<div class='alert-success'>Record updated successfully</div>";
 	}
+}
+else
+{
+	echo "<br />";
+	echo "Unauthorised page access";
+	exit;
 }
 ?>
 <script language="javascript" type="text/javascript">
@@ -480,38 +453,10 @@ function bind_all4()
 		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/><b>Desig. of O/C: </b>".$rowPerson['off_desg']."</label>"; ?>";
 <?php } ?>
 }
-var ddlText, ddlValue, ddl, lblMesg;
 
-    //window.onload = CacheItems;
-    function FilterItems(value) {
-        ddl.options.length = 0;
-        for (var i = 0; i < ddlText.length; i++) {
-            if (ddlText[i].toLowerCase().indexOf(value) != -1) {
-                AddItem(ddlText[i], ddlValue[i]);
-            }
-        }
-    }
-    function AddItem(text, value) {
-        var opt = document.createElement("option");
-        opt.text = text;
-        opt.value = value;
-        ddl.options.add(opt);
-    }
 function bind_all()
 {
-<?php if(isset($_REQUEST['personcd'])) { ?>
-	ddlText = new Array();
-	ddlValue = new Array();
-	ddl = document.getElementById("offcode");
-	//lblMesg = document.getElementById("<%=lblMessage.ClientID%>");
-	for (var i = 0; i < ddl.options.length; i++) {
-		ddlText[ddlText.length] = ddl.options[i].text;
-		ddlValue[ddlValue.length] = ddl.options[i].value;
-	}
-	var tmp_p_cd="<?php echo $personcd; ?>";
-	if(tmp_p_cd!="")
-		document.getElementById('ofc_ser').disabled=true;
-		
+<?php if(isset($_REQUEST['personcd'])) { ?>		
 	var hid_personnel_code=document.getElementById('hid_personnel_code');
 	hid_personnel_code.value="<?php echo $rowPerson['personcd']; ?>";
 	var offcode=document.getElementById('offcode');
@@ -654,6 +599,7 @@ function bind_all()
 		}
     }
 	var pgroup=document.getElementById('pgroup');
+
 	for (var i = 0; i < pgroup.options.length; i++) 
 	{
 		if (pgroup.options[i].value == "<?php echo $rowPerson['pgroup']; ?>")
@@ -666,7 +612,7 @@ function bind_all()
 	var link_file=document.getElementById('link_file');
 	if(hid_file.value!='')
 		link_file.innerHTML="<a href='employee_photo/<?php echo $rowPerson['upload_file']; ?>' target='_blank' class='hp_link'>View Employee Photo</a>";
-<?php } ?>	
+<?php } ?>
 	//OfficeID.readOnly=true;
 }
 </script>
@@ -679,8 +625,8 @@ function bind_all()
   <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print uppercase($district); ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo uppercase($subdiv_name)." SUBDIVISION"; ?></td></tr>
-<tr><td align="center">EMPLOYEE DETAILS ENTRY</td></tr>
+<tr><td align="center"><?php //echo uppercase($subdiv_name)." SUBDIVISION"; ?></td></tr>
+<tr><td align="center">EMPLOYEE DETAILS MODIFY AFTER SWAPPING</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
   <table width="95%" class="form" cellpadding="0">
     <tr>
@@ -692,15 +638,12 @@ function bind_all()
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
-    <tr>
-      <td align="center">&nbsp;</td><td align="left" colspan="3"><input type="text" name="ofc_ser" id="ofc_ser" onkeyup="return FilterItems(this.value);" maxlength="7" /></td>
-    </tr>
     <tr height="40px">
       <td align="left" valign="top"><span class="error">*</span>Office Code</td>
       <td align="left" valign="top"><select name="offcode" id="offcode" style="width:150px;" onchange="fatch_offcdtl(this.value)">
       						<option value="0">-Select Office Code-</option>
                             <?php 	$sub_div=$subdiv_cd;
-									$rsOc=fatch_officecode($sub_div);
+									$rsOc=fatch_officecode('');
 									$num_rows=rowCount($rsOc);
 									if($num_rows>0)
 									{

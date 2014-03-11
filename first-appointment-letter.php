@@ -155,7 +155,7 @@ if($action=='Submit')
 	}
 	mysqli_stmt_close($stmt);
 	mysqli_close($link);
-	if($count<($i-1))
+//	if($count<($i-1))
 	{
 ?>
 <script>
@@ -163,10 +163,10 @@ window.open("reports/training-app-letter.php");
 </script>
 <?php
 	}
-	else
-	{
-		$msg="<div class='alert-error'>No person selected for appintment letter issue</div>";
-	}
+//	else
+//	{
+//		$msg="<div class='alert-error'>No person selected for appintment letter issue</div>";
+//	}
 }
 ?>
 <?php

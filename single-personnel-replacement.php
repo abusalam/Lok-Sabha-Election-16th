@@ -73,6 +73,7 @@ function new_per_search()
 			document.getElementById('replace').disabled=false;
 		else
 			document.getElementById('replace').disabled=true;	
+		document.getElementById('print').disabled=true;
 		}
 	  }
 	  
@@ -103,11 +104,35 @@ function replacement()
 		document.getElementById('n_booked').innerHTML='Yes';
 		document.getElementById('replace').disabled=true;
 		document.getElementById('search').disabled=true;
-		document.getElementById('p_id').disabled=true;
+		//document.getElementById('p_id').disabled=true;
+		document.getElementById('print').disabled=false;
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
 	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining,true);
+	xmlhttp.send();
+}
+function print_appletter()
+{
+	var new_p_id=document.getElementById('new_per_id').innerHTML;
+	var usercd=<?php print $user_cd; ?>;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		window.open(xmlhttp.responseText);
+		}
+	  }
+
+	xmlhttp.open("GET","ajax-appointment.php?p_id="+new_p_id+"&usercd="+usercd+"&opn=app_replacement",true);
 	xmlhttp.send();
 }
 </script>
@@ -162,7 +187,7 @@ function replacement()
     	<td align="center" colspan="2">
         	<input id="search" name="search" value="Search" type="button" onclick="return new_per_search();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input id="replace" name="replace" value="Replace" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <!--<input id="print" name="print" value="Print Appointment Letter" type="button" />-->
+            <input id="print" name="print" value="Print Appointment Letter" type="button" onclick="return print_appletter();" disabled="true" />
         </td>
     </tr>
     <tr><td><img src="images/blank.gif" alt="" height="5px" /></td></tr>

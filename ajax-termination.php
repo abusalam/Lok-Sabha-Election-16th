@@ -80,8 +80,16 @@ else
 	  $ter_id='"'.encode($rowTermination_list[0]).'"';
 	  echo "<tr><td align='right' width='3%'>$i.</td><td align='center' width='10%'>$rowTermination_list[1]</td><td width='24%' align='left'>$rowTermination_list[2]</td>";
 	  echo "<td width='44%' align='left'>$rowTermination_list[3]</td><td width='15%' align='left'>$rowTermination_list[4]</td>";
-	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_termination($ter_id);' /></td>";
-	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_termination($ter_id);' /></td></tr>\n";
+	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' ";
+	  if($rowTermination_list['users_id']==$usercode)
+	  	echo " onclick='javascript:edit_termination($ter_id);'";
+	  echo " /></td>";
+	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' ";
+	  if($rowTermination_list['users_id']==$usercode)
+	  	echo " onclick='javascript:delete_termination($ter_id);'";
+	  else
+	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	  echo " /></td></tr>\n";
 	 
 	}
 	echo "</table>\n";

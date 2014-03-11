@@ -449,7 +449,12 @@ if($opn=='tal')
 		  echo "<tr><td align='right' width='4%'>$i.</td><td align='left' width='30%'>$rowTraining_alloc_list[venuename]</td><td width='15%' align='center'>$rowTraining_alloc_list[training_dt]</td>";
 		  echo "<td width='15%' align='left'>$rowTraining_alloc_list[training_time]</td><td width='15%' align='left'>$rowTraining_alloc_list[poststatus]</td>";
 		  echo "<td width='10%' align='left'>$rowTraining_alloc_list[no_pp]</td>";
-		  echo "<td align='center' width='5%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_training_allocation($schedule_code);' /></td></tr>\n";
+		  echo "<td align='center' width='5%'><img src='images/delete.png' alt='' height='20px'";
+		  if($rowTraining_alloc_list['usercode']==$usercode)
+		  	echo " onclick='javascript:delete_training_allocation($schedule_code);' ";
+		  else
+	  		echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+		  echo " /></td></tr>\n";
 		  $rowTraining_alloc_list=NULL;
 		}
 		echo "</table>\n";

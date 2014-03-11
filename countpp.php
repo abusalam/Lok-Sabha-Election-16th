@@ -29,7 +29,7 @@ function __construct($subdiv) {
 		print 'Assembly requirement not filled  ';
 	}
 
-$this->result = $this->msqli->query("SELECT *   FROM `personnela` where forsubdivision='$subdiv' and booked='P' or booked='R'  ") or die($this->msqli->error.__LINE__);
+$this->result = $this->msqli->query("SELECT *   FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R')  ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 $prp=0;

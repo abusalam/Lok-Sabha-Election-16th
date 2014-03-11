@@ -54,8 +54,39 @@ function delete_person(str)
 {
 	if (confirm("Do you really want to delete the record?")==true)
 	{
-		location.replace("ajax-personal_ls14.php?pr_cd="+str+"&act=del");
+		var subdiv=document.getElementById('subdivision').value;
+		var post_status=document.getElementById('posting_status').value;
+		var officeid=document.getElementById('officeID').value;
+		var frmdt=document.getElementById("fromdt").value;
+		var todt=document.getElementById("todt").value;
+		var page="<?php echo isset($_GET['p'])?$_GET['p']:""; ?>";
+		var all="<?php echo isset($_GET['a'])?$_GET['a']:""; ?>";
+		if (window.XMLHttpRequest)
+		  {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		  }
+		else
+		  {// code for IE6, IE5
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		  }
+		xmlhttp.onreadystatechange=function()
+		  {
+		  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				document.getElementById("personnel_ls14_result").innerHTML=xmlhttp.responseText;
+				document.getElementById("form1").style="cursor:default";
+			}
+		  }
+	
+		var qstr="ajax-personal_ls14.php?pr_cd="+str+"&act=del&subdiv="+subdiv+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
+		xmlhttp.open("GET",qstr,true);
+		xmlhttp.send();
+		//location.replace("ajax-personal_ls14.php?pr_cd="+str+"&act=del");
 	}
+}
+function edit_personnela(str)
+{
+	location.replace("modify-personnela.php?personcd="+str);
 }
 //==========================================================
 </script>

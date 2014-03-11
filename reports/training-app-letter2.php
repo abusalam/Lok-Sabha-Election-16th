@@ -80,18 +80,19 @@ date_default_timezone_set('Asia/Calcutta');
 			$bank_acc_no=$rowApp['bank_acc_no'];
 			$ifsc_code=$rowApp['ifsc_code'];
 			$forsubdivision=$rowApp['forsubdivision'];
-			$token=$rowApp['token'];
+			$token=$rowApp['post_stat']."/".$rowApp['token'];
 			
 			mysqli_stmt_execute($stmt);
 			$n++;
 			if($n%1000==0)
 			{
+				echo $n;
 				mysqli_commit($link);
 			}
 			echo "<table width='100%'>
   <tr>
     <td align='left'><div style='border:1px solid; width:150px;text-align:center;'>ELECTION URGENT</div></td>
-	<td align='right'><div style='border:0px solid; width:150px;text-align:center;'>Token No. $rowApp[token]</div></td>
+	<td align='right'><div style='border:0px solid; width:150px;text-align:center;'>Token No. $token</div></td>
   </tr>
 </table>
 <p align='center'><strong><u>ORDER OF APPOINTMENT FOR TRAINING</u></strong><br />
@@ -196,7 +197,7 @@ District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
 <hr />
 <table cellspacing='0' cellpadding='0' width='750'>
   <tr>
-    <td width='5%' rowspan='5' valign='top'>NB.</td>
+    <td width='5%' rowspan='6' valign='top'>NB.</td>
     <td width='5%' valign='top'>1.</td>
     <td width='90%'>Please fillup form 12A (for Election Duty Certificate) if you have been deployed for poll duty within your home Parliamentary Constituency. In other cases fill up form form 12 (for Postal Ballot).</td>
   </tr>
@@ -215,6 +216,10 @@ District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
   <tr>
     <td valign='top'>&nbsp;</td>
     <td>EPIC No.- $rowApp[epic] &nbsp;&nbsp; Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] <br /> Bank- $rowApp[bank_name] &nbsp;&nbsp; Branch- $rowApp[branch_name] &nbsp;&nbsp; A/c No.- $rowApp[bank_acc_no] &nbsp;&nbsp; IFS Code- $rowApp[ifsc_code]</td>
+  </tr>
+  <tr>
+    <td valign='top'>5.</td>
+    <td>Please bring in the filled up data sheet, as attached herewith, during the first training.</td>
   </tr>";
   
 echo "

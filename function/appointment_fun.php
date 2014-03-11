@@ -69,7 +69,7 @@ function first_appointment_letter_hdr($per_code)
 	  personnela.bank_acc_no,
 	  branch.ifsc_code,
 	  personnela.forsubdivision,
-	  training_pp.token
+	  training_pp.token, poststat.post_stat
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -173,7 +173,7 @@ function first_appointment_letter2_hdr($sub_div,$office)
 	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
 	  training_schedule.training_time,
 	  personnela.forsubdivision,
-	  training_pp.token
+	  training_pp.token, poststat.post_stat
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -285,7 +285,7 @@ function first_appointment_letter3($sub_div,$post_stat)
 	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
 	  training_schedule.training_time,
 	  personnela.forsubdivision,
-	  training_pp.token
+	  training_pp.token, poststat.post_stat
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation

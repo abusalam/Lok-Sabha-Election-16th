@@ -101,7 +101,7 @@ if($submit=='Submit')
 			$bank_acc_no=$rowApp['bank_acc_no'];
 			$ifsc_code=$rowApp['ifsc_code'];
 			$forsubdivision=$rowApp['forsubdivision'];
-			$token=$rowApp['token'];
+			$token=$rowApp['post_stat']."/".$rowApp['token'];
 			
 			mysqli_stmt_execute($stmt);
 			$n+=mysqli_stmt_affected_rows($stmt);

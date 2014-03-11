@@ -326,7 +326,7 @@ function fatch_training_allocation_list($sub_div,$training_type,$training_venue,
 	  Inner Join poststat On training_schedule.post_status = poststat.post_stat
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
-	Where training_schedule.schedule_code > 0 and training_schedule.usercode = '$usercode'";
+	Where training_schedule.schedule_code > 0 ";
 	if($training_type!='0')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')
@@ -352,14 +352,14 @@ function fatch_training_allocation_listAct($sub_div,$training_type,$training_ven
 	  training_schedule.training_time,
 	  poststat.poststatus,
 	  training_schedule.no_pp,
-	  training_venue.subdivisioncd  
+	  training_venue.subdivisioncd,training_schedule.usercode  
 	From training_venue
 	  Inner Join training_schedule On training_schedule.training_venue =
 		training_venue.venue_cd
 	  Inner Join poststat On training_schedule.post_status = poststat.post_stat
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
-	Where training_schedule.schedule_code > 0 and training_schedule.usercode = '$usercode'";
+	Where training_schedule.schedule_code > 0 ";
 	if($training_type!='0')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')

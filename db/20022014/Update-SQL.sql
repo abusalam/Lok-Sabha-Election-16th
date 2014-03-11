@@ -223,3 +223,9 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 (56, 4, 'Inter Swap', 'inter-swap.php', 1, '2014-03-05 20:22:10'),
 (57, 9, 'First App Letter Populate', 'first-appointment-letter3.php', 1, '2014-03-07 11:09:11'),
 (58, 6, 'Token', 'token-creation.php', 1, '2014-03-07 11:09:11');
+
+--
+-- SW Version 1.3
+--
+
+ALTER TABLE  `first_rand_table` CHANGE  `token`  `token` CHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL

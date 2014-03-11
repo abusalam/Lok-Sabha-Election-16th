@@ -28,7 +28,7 @@ if($sub=="Save SMS")
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into tblsms (name,phone_no,message) values (?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
-		
+		mysqli_stmt_bind_param($stmt, 'sss', $name,$mob_no,$Message);
 		$subdiv_name=Subdivision_ag_subdivcd($subdiv_cd);
 
 		$rs_data=fetch_first_rand_tab_ag_subdiv($subdiv_name);
@@ -50,7 +50,7 @@ if($sub=="Save SMS")
 				$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." from ".$training_time." at ".$venuename;
 				//include('sms/Index.php');
 				
-				mysqli_stmt_bind_param($stmt, 'sss', $name,$mob_no,$Message);
+				
 				mysqli_stmt_execute($stmt);
 				$rec+=mysqli_stmt_affected_rows($stmt);
 				

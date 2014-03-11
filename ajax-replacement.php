@@ -1,6 +1,7 @@
 <?php
 session_start();
 extract($_GET);
+date_default_timezone_set('Asia/Calcutta');
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 //=================================Replacement====================================
@@ -208,7 +209,7 @@ if($opn=='pg_rplc')
 	$posted_date=$dt->format('Y-m-d H:i:s');
 	//echo "$new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id";
 	//exit;
-	if($old_p_id!='' && $new_p_id!='' && $forassembly!='' && $forpc!='')
+	if($old_p_id!='' && $new_p_id!='' && $forpc!='')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
 		$selected=1;

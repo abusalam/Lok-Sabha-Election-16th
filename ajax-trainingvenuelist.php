@@ -71,10 +71,14 @@ else
 	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' ";
 	  if($rowtrainingvenue_list['usercode']==$usercode)
 	  	echo "onclick='javascript:edit_trainingvenue($venue_cd);'";
-	  echo "/></td>";
+	  else
+	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	  echo " /></td>";
 	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' ";
 	  if($rowtrainingvenue_list['usercode']==$usercode)
 	  	echo "onclick='javascript:delete_trainingvenue($venue_cd);'";
+	  else
+	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
 	  echo " /></td></tr>\n";
 	 
 	}

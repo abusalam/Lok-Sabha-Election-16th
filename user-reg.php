@@ -441,6 +441,7 @@ if(isset($user_cd))
     ?>
     </table>
     </td></tr>
+	<tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     <tr><td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Save" class="button" onclick="javascript:return validate();" /></td></tr>
     <tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 </table></form>

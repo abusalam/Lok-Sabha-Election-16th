@@ -615,13 +615,13 @@ function fatch_Personaldtl($PersonalCd)
 //=========================Office List==============================
 function fatch_OfficeList($sub_div,$officeid,$officename,$frmdt,$todt,$usercode)
 {
-	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute
+	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute, office.usercode
 			From office
-		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 and office.usercode='$usercode'";
-	if($sub_div!='' && $sub_div!='0')
-		$sql.=" and office.subdivisioncd='$sub_div'";
+		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 ";
+//	if($sub_div!='' && $sub_div!='0')
+//		$sql.=" and office.subdivisioncd='$sub_div'";
 	if($officeid!='' && $officeid!='0')
-		$sql.=" and office.officecd='$officeid'";
+		$sql.=" and office.officecd like '$officeid%'";
 	if($officename!='')
 		$sql.=" and office.office like '$officename%'";
 	if($frmdt!='')
@@ -635,13 +635,13 @@ function fatch_OfficeList($sub_div,$officeid,$officename,$frmdt,$todt,$usercode)
 }
 function fatch_OfficeList1($sub_div,$officeid,$officename,$frmdt,$todt,$usercode,$p_num,$items)
 {
-	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute
+	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute,office.usercode
 			From office
-		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 and office.usercode='$usercode'";
-	if($sub_div!='' && $sub_div!='0')
-		$sql.=" and office.subdivisioncd='$sub_div'";
+		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 ";
+//	if($sub_div!='' && $sub_div!='0')
+//		$sql.=" and office.subdivisioncd='$sub_div'";
 	if($officeid!='' && $officeid!='0')
-		$sql.=" and office.officecd='$officeid'";
+		$sql.=" and office.officecd like '$officeid%'";
 	if($officename!='')
 		$sql.=" and office.office like '$officename%'";
 	if($frmdt!='')
@@ -650,6 +650,7 @@ function fatch_OfficeList1($sub_div,$officeid,$officename,$frmdt,$todt,$usercode
 		$sql.=" and office.posted_date <= '$todt'";
 	$sql.=" order by office.office";
 	$sql.=" ASC LIMIT $p_num , $items";
+//	echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -691,7 +692,7 @@ function fatch_post_stat_wise_dtl_available($subdiv,$pc)
 	  Inner Join assembly On personnel.acno = assembly.assemblycd
 	  Inner Join pc On assembly.pccd = pc.pccd And assembly.subdivisioncd =
 		pc.subdivisioncd";
-	$sql.=" where 1";
+	$sql.=" where (personnel.f_cd Is Null Or personnel.f_cd = 0)";
 	if($subdiv!='' && $subdiv!=0)
 		$sql.=" and personnel.subdivisioncd='$subdiv'";
 	if($pc!='' && $pc!=0)
@@ -800,9 +801,9 @@ function update_personnelafttransf($personcd,$f_cd)
 //===================================Personal_LS14=================================
 function fatch_Personnel_ls14List($subdiv,$post_status,$officeid,$frmdt,$todt,$usercode)
 {
-	$sql="Select personnela.personcd, personnela.officer_name, personnela.present_addr1, personnela.present_addr2, poststat.poststatus
+	$sql="Select personnela.personcd, personnela.officer_name, personnela.present_addr1, personnela.present_addr2, poststat.poststatus, personnela.usercode
           FROM poststat
-          INNER JOIN personnela ON poststat.post_stat = personnela.poststat where personnela.personcd >0 and personnela.usercode='$usercode'";
+          INNER JOIN personnela ON poststat.post_stat = personnela.poststat where personnela.personcd >0 ";
     if($subdiv!='0')
 		$sql.=" and personnela.forsubdivision='$subdiv'";
 	 if($post_status!='' && $post_status!='0')
@@ -820,9 +821,9 @@ function fatch_Personnel_ls14List($subdiv,$post_status,$officeid,$frmdt,$todt,$u
 }
 function fatch_Personnel_ls14List1($subdiv,$post_status,$officeid,$frmdt,$todt,$usercode,$p_num ,$items)
 {
-	$sql="Select personnela.personcd, personnela.officer_name, personnela.present_addr1, personnela.present_addr2, poststat.poststatus
+	$sql="Select personnela.personcd, personnela.officer_name, personnela.present_addr1, personnela.present_addr2, poststat.poststatus, personnela.usercode
           FROM poststat
-          INNER JOIN personnela ON poststat.post_stat = personnela.poststat where personnela.personcd >0 and personnela.usercode='$usercode'";
+          INNER JOIN personnela ON poststat.post_stat = personnela.poststat where personnela.personcd >0 ";
 	 if($subdiv!='0')
 		$sql.=" and personnela.forsubdivision='$subdiv'";
 	 if($post_status!='' && $post_status!='0')
@@ -839,8 +840,75 @@ function fatch_Personnel_ls14List1($subdiv,$post_status,$officeid,$frmdt,$todt,$
 	connection_close();
 	return $rs;
 }
+function personnela_details($personcd)
+{
+	$sql="SELECT personnela.personcd, personnela.officecd, office.office, personnela.officer_name, personnela.off_desg, personnela.present_addr1, personnela.present_addr2, personnela.perm_addr1, personnela.perm_addr2, Date_Format( personnela.dateofbirth, '%Y-%m-%d' ) AS dateofbirth, personnela.gender, personnela.scale, personnela.basic_pay, personnela.grade_pay, personnela.workingstatus, personnela.email, personnela.resi_no, personnela.mob_no, personnela.qualificationcd, personnela.languagecd, personnela.epic, personnela.slno, personnela.partno, personnela.poststat, personnela.assembly_temp, personnela.assembly_off, personnela.assembly_perm, personnela.acno, personnela.bank_acc_no, personnela.bank_cd, personnela.branchcd, personnela.remarks, personnela.pgroup, personnela.upload_file
+FROM personnela
+INNER JOIN office ON personnela.officecd = office.officecd";
+  	$sql.=" where personnela.personcd='$personcd'";                            
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$group,$upload_file,$usercd,$posted_date)
+{
+	$sql="update personnela set 
+			officecd='$offcode',
+			officer_name='$empname',
+			off_desg='$designation',
+			present_addr1='$preaddress1',
+			present_addr2='$preaddress2',
+			perm_addr1='$peraddress1',
+			perm_addr2='$peraddress2',
+			workingstatus='$workingstatus',
+			dateofbirth='$dob',
+			gender='$sex',
+			scale='$scale',
+			basic_pay='$basicpay',
+			grade_pay='$gradepay',
+			email='$email',
+			resi_no='$r_no',
+			mob_no='$m_no',
+			qualificationcd='$qualification',
+			languagecd='$language',
+			epic='$epic_no',
+			slno='$sl_no',
+			partno='$partno',	
+			poststat='$posting_status',
+			assembly_temp='$ac_pre',
+			assembly_off='$ac_posting',
+			assembly_perm='$ac_per',
+			acno='$voterof',
+			bank_acc_no='$acc_no',
+			bank_cd='$bank',
+			branchcd='$branch',	
+			remarks='$remarks',
+			pgroup='$group',
+			upload_file='$upload_file',
+			usercode='$usercd',
+			posted_date='$posted_date'";
+	$sql.=" where personcd='$p_id'";
 
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+}
 //=======================Delete Personal LS14================================
+function personnela_del_check($per_code)
+{
+	$sql="Select count(personcd) as total1 From personnela where selected=1 and personcd='$per_code'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$total1=$row['total1'];
+	unset($sql,$rs,$row);
+	$sql="Select count(per_code) as total2 From training_pp where per_code='$per_code'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$total2=$row['total2'];
+	unset($sql,$rs,$row);
+	connection_close();
+	return ($total1>0?$total1:($total2>0?$total2:0));
+}
 function delete_personnela($pr_cd)
 {
 	$sql="DELETE FROM personnela WHERE personcd='$pr_cd'";
@@ -967,9 +1035,9 @@ function delete_assembly_party_reserve($ass,$no)
 function fatch_termination_list($personalid,$frmdt,$todt,$usercode)
 {
 	$sql="Select termination.termination_id, termination.personal_id, personnel.officer_name, termination.termination_cause, Date_Format( termination.termination_date, '%Y-%m-%d' ) As termination_date, termination.users_id,
-  termination.posted_date 
+  termination.posted_date
 From personnel
-  Inner Join termination On personnel.personcd = termination.personal_id where termination.personal_id >0 and termination.users_id='$usercode'";
+  Inner Join termination On personnel.personcd = termination.personal_id where termination.personal_id >0 ";
     if($personalid!='')
 		$sql.=" and termination.personal_id='$personalid'";
 	if($frmdt!='')
@@ -987,7 +1055,7 @@ function fatch_termination_listAct($personalid,$frmdt,$todt,$usercode,$p_num ,$i
 	$sql="Select termination.termination_id, termination.personal_id, personnel.officer_name, termination.termination_cause, Date_Format( termination.termination_date, '%Y-%m-%d' ) As termination_date, termination.users_id,
   termination.posted_date 
 From personnel
-  Inner Join termination On personnel.personcd = termination.personal_id where termination.personal_id >0 and termination.users_id='$usercode'";
+  Inner Join termination On personnel.personcd = termination.personal_id where termination.personal_id >0 ";
 	 if($personalid!='')
 		$sql.=" and termination.personal_id ='$personalid'";
 	if($frmdt!='')

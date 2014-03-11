@@ -88,4 +88,31 @@ if($opn=='assembly')
 	$rowAssembly=null;
 	echo "</select>";
 }
+
+if($opn=='app_replacement')
+{
+	$per_cd=$_GET['p_id'];
+	$usercd=$_GET['usercd'];
+	include_once('function/appointment_fun.php');
+
+	delete_temp_app_letter($usercd);
+	$count=0;
+	include_once('inc/commit_con.php');
+	mysqli_autocommit($link,FALSE);
+	$sql="insert into tmp_app_let (per_code,usercode) values (?,?)";
+	$stmt = mysqli_prepare($link, $sql);
+	mysqli_stmt_bind_param($stmt, 'si', $per_cd,$usercd);
+	mysqli_stmt_execute($stmt);
+
+	if (!mysqli_commit($link)) {
+		print("Transaction commit failed\n");
+		exit();
+	}
+	mysqli_stmt_close($stmt);
+	mysqli_close($link);
+//	if($count<($i-1))
+	{
+		echo "reports/training-app-letter.php";
+	}
+}
 ?>

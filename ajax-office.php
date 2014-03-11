@@ -71,8 +71,18 @@ else
 	  $ofc_cd='"'.encode($rowOffice[0]).'"';
 	  echo "<tr><td align='right' width='3%'>$i.</td><td align='center' width='8%'>$rowOffice[0]</td><td width='28%' align='left'>$rowOffice[1]</td>";
 	  echo "<td width='38%' align='left'>$rowOffice[2],$rowOffice[3], PO-$rowOffice[4], Pin-$rowOffice[5]</td><td width='15%' align='left'>$rowOffice[6]</td>";
-	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_office($ofc_cd);' title='Click to edit' /></td>\n";
-	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_office($ofc_cd);' title='Click to delete' /></td></tr>\n";
+	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' ";
+	  if($rowOffice['usercode']==$usercode)
+	  	echo " onclick='javascript:edit_office($ofc_cd);' title='Click to edit' ";
+	  else
+	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	  echo " /></td>\n";
+	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' ";
+	  if($rowOffice['usercode']==$usercode)
+	  	echo " onclick='javascript:delete_office($ofc_cd);' title='Click to delete' ";
+	  else
+	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	  echo " /></td></tr>\n";
 	}
 	echo "</table>\n";
 	paging();

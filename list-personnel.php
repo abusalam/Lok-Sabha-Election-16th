@@ -50,18 +50,7 @@ function edit_person(str)
 	location.replace("add-personnel.php?personcd="+str);
 }
 </script>
-<script language="javascript" type="text/javascript">
-function openCalender(getObject)
-{
-	var theform;
-	var objectName;
 
-	theform=document.form1;
-	objectName = eval('theform.' + getObject);
-
-	popUpCalendar(objectName,objectName,"yyyy-mm-dd");
-}
-</script>
 <link type="text/css" rel="stylesheet" href="css/paging.css" />
 </head>
 <body oncontextmenu="return false;" onload="javascript:return personnel_list('pload');">
