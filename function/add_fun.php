@@ -723,6 +723,25 @@ function fatch_post_stat_wise_dtl_transffered($subdiv,$pc)
 	connection_close();
 	return $rs;
 }
+function fatch_post_stat_wise_dtl_unbooked($subdiv,$pc)
+{
+	$sql="Select personnela.poststat,
+	  Count(personnela.personcd) As total
+	From personnela
+	  Inner Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
+		pc.subdivisioncd";
+	$sql.=" where (booked='' or booked is null)";
+	if($subdiv!='' && $subdiv!=0)
+		$sql.=" and personnela.forsubdivision='$subdiv'";
+	if($pc!='' && $pc!=0)
+		$sql.=" and personnela.forpc='$pc'";
+	$sql.=" Group By personnela.poststat
+	Order By personnela.poststat";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 //===========================Fatch Personal Details for Ls14=================================
 function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status)
 {

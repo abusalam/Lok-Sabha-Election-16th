@@ -204,7 +204,8 @@ if($action=='Save')
 		}
 		
 		//$sql="select * from user where user_id='$username' and password='$password'";
-		if($ret==1) {		
+		//print $ret; exit;
+		if($ret>=0) {		
 			$user_cd=get_user_cd_ag_username($userid);
 			$hid_menucount=$_POST['hid_menucount'];
 			for($i=1;$i<=$hid_menucount;$i++)

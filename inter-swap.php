@@ -78,7 +78,7 @@ function for_subdiv_change(str)
 		}
 	  }
 	 //alert("ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat");
-    xmlhttp2.open("GET","ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat",true);
+    xmlhttp2.open("GET","ajax-inter-swap.php?sub_swp="+str+"&opn=poststat",true);
 	xmlhttp2.send();
 }
 	
@@ -122,7 +122,7 @@ function forpc_change(str)
 			document.getElementById("for_poststat_details").innerHTML=xmlhttp.responseText;
 		}
 	  }	 
-    xmlhttp.open("GET","ajaxfun.php?forpc_swp="+str+"&forsub_swp="+forsub_swp+"&opn=prev_poststat",true);
+    xmlhttp.open("GET","ajax-inter-swap.php?pc_swp="+str+"&sub_swp="+forsub_swp+"&opn=poststat",true);
 	xmlhttp.send();
 }
 
