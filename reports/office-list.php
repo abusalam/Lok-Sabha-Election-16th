@@ -80,7 +80,7 @@ if($num_rows>0)
 		echo "<div width='100%'>\n";
 		echo $i."<div style='padding-left:10px;'><span align='left'><b>Code :</b></span><span align='left' ";
 		echo "style='margin-right: ".(80-strlen($row['officecd'])*5)."pt;'";
-		echo "> <b>$row[0]</b></span><span class='sp1'>&nbsp;</span><span align='left'><b>Name and Address :</b></span><span align='left'> $row[2], $row[3], PO-$row[4], Dist.-$row[5], PIN-$row[7]</span></div>\n";
+		echo "> <b>$row[0]</b></span><span class='sp1'>&nbsp;</span><span align='left'><b>Name and Address :</b></span><span align='left'> $row[1], $row[2], $row[3], PO-$row[4], Dist.-$row[5], PIN-$row[7]</span></div>\n";
 		echo "<div  style='padding-left:10px;'><span align='left'><b>PS :</b></span><span align='left' ";
 		echo "style='margin-right: ".(100-strlen($row[6])*5)."pt;'";
 		echo ">&nbsp;$row[6]</span></div>\n";
