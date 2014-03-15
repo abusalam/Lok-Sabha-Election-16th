@@ -189,7 +189,7 @@ function member_available($post_stat,$subdivision,$areapref,$area,$tr_type)
 {
 	$sql; $rs;
 	$sql="Select Count(training_pp.per_code) as memb_avl From training_pp where post_stat='$post_stat' and training_type='$tr_type'";
-	//$sql.=" and subdivision='$subdivision'";
+	$sql.=" and for_subdivision='$subdivision'";
 	if($areapref=='1')
 		$sql.=" and subdivision='$area'";
 	if($areapref=='2')
@@ -252,6 +252,59 @@ function fatch_subdiv_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 	$rs=execSelect($sql);
 	return $rs;
 }
+//---- Dist wise ----//
+function fatch_subdiv_from_personal_trainingpp_ag_dist($dist)
+{
+	$sql="Select distinct training_pp.subdivision,  subdivision.subdivision
+			From subdivision
+			  Inner Join training_pp On training_pp.subdivision =
+			subdivision.subdivisioncd  where subdivision.districtcd='$dist'";
+	$rs=execSelect($sql);
+	return $rs;
+}
+function member_available_ag_dist($post_stat,$dist,$areapref,$area,$tr_type)
+{
+	$sql="Select Count(training_pp.per_code) as memb_avl From training_pp where post_stat='$post_stat' and training_type='$tr_type'";
+	//$sql.=" and for_subdivision='$subdivision'";
+	if($areapref=='1')
+		$sql.=" and subdivision='$area'";
+	/*if($areapref=='2')
+		$sql.=" and for_subdivision='$area'";
+	if($areapref=='3')
+		$sql.=" and for_pc='$area'";
+	if($areapref=='4')
+		$sql.=" and assembly_temp='$area'";
+	if($areapref=='5')
+		$sql.=" and assembly_perm='$area'";
+	if($areapref=='6')
+		$sql.=" and assembly_off='$area'";*/
+	$sql.=" and (training_booked='' or training_booked is null)";
+	$rs=execSelect($sql);
+	return $rs;
+}
+function training_required_ag_dist($dist,$training_type)
+{
+	$sql="Select Count(training_pp.per_code) As total,
+		  poststat.poststatus,  poststat.post_stat
+		From poststat
+		  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
+		  Inner Join personnela On training_pp.per_code = personnela.personcd
+		where personnela.districtcd ='$dist' and training_pp.training_type='$training_type' Group By poststat.poststatus,poststat.post_stat";
+	//		print $sql; exit;
+	$rs=execSelect($sql);
+	return $rs;
+}
+function training_alloted_ag_dist($dist,$training_type)
+{
+	$sql="Select Count(training_pp.per_code) as total,poststat.poststatus,poststat.post_stat
+			From poststat
+			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
+			  Inner Join personnela On training_pp.per_code = personnela.personcd
+			where personnela.districtcd ='$dist' and training_pp.training_type='$training_type' and training_pp.training_sch Is Not Null Group By poststat.poststatus,poststat.post_stat";
+	$rs=execSelect($sql);
+	return $rs;
+}
+//---- End Dist Wise ----//
 function fatch_forsubdiv_from_personal_trainingpp_ag_subdiv($subdiv_cd)
 {
 	$sql; $rs;

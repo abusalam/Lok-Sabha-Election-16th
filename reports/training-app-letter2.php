@@ -18,19 +18,25 @@ date_default_timezone_set('Asia/Calcutta');
 	$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
 	$office=(isset($_POST['office'])?$_POST['office']:'0');
 	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
+	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
 	$rstmp=first_appointment_letter2_subdiv($subdiv,$office);
 	$row=0;
 	$n=0;
-	while($row <= rowCount($rstmp))
+	//while($row <= rowCount($rstmp))
+	//{
+	$str_office="";
+	if(rowCount($rstmp)>0)
 	{
 		$tmprow=getRows($rstmp);
-		$str_sub_div=$tmprow['subdivision'];
-		$del_ret=delete_prev_data($str_sub_div);
+		$str_office=$tmprow['office'];
+	}
+	
+	$del_ret=delete_prev_data($subdiv,$str_office);
 		//	echo "vall=".$del_ret;
 		//mysqli_stmt_bind_param($stmt1, 's', $str_sub_div);
 		//mysqli_stmt_execute($stmt1);
-		$row++;
-	}
+		//$row++;
+	//}
 	unset($row,$tmprow,$str_sub_div,$rstmp);
 	$rsApp=first_appointment_letter2_hdr($subdiv,$office);
 	
@@ -188,11 +194,11 @@ echo "<tr>
 <table cellspacing='0' cellpadding='0' width='750'>
 	<tr><td height='20px' colspan='2'>&nbsp;</td></tr>
 	<tr><td align='right' colspan='2'>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></div>
-<tr><td align='left'>Place: ".uppercase($_SESSION['dist_name'])."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
+<tr><td align='left'>Place: ".uppercase($distnm_cap)."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
 <tr><td align='left'>Date: ".date('d/m/Y')."</td></tr>
 <tr><td height='30px' align='right'>&nbsp;</td></tr>
 <tr><td align='right' colspan='2'>District Election Officer <br />
-District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
+District ".wordcase($distnm_cap)." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
 </div>
 <hr />
 <table cellspacing='0' cellpadding='0' width='750'>

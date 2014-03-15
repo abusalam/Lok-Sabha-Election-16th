@@ -155,6 +155,8 @@ if(rowCount($rs_env)>0)
 	$row_env=getRows($rs_env);
 	$environment=uppercase($row_env['environment']);
 	$_SESSION['environment']=$environment;
+	$distnm_cap=$row_env['distnm_cap'];
+	$_SESSION['distnm_cap']=$distnm_cap;
 	$apt1_orderno=$row_env['apt1_orderno'];
 	$_SESSION['apt1_orderno']=$apt1_orderno;
 	$apt1_date = new DateTime($row_env['apt1_date']);

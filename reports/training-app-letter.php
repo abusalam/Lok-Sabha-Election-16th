@@ -20,6 +20,7 @@ date_default_timezone_set('Asia/Calcutta');
 	include_once('../function/appointment_fun.php');
 	$usercd=$_SESSION['user_cd'];
 	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
+	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
 	$rstmp=fetch_id_temp_app_letter($usercd);
 	$tmprow=getRows($rstmp);
 	$str_per_code=$tmprow['per_code'];
@@ -142,11 +143,11 @@ echo "</td></tr>
 <table cellspacing='0' cellpadding='0' width='750'>
 	<tr><td height='20px' colspan='2'>&nbsp;</td></tr>
 	<tr><td align='right' colspan='2'>Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></div>
-<tr><td align='left'>Place: ".uppercase($_SESSION['dist_name'])."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
+<tr><td align='left'>Place: ".uppercase($distnm_cap)."</td><td rowspan='3' align='right'><img src='../images/deo/$_SESSION[signature]' alt='' height='50px' width='100px' /></td></tr>
 <tr><td align='left'>Date: ".date('d/m/Y')."</td></tr>
 <tr><td height='30px' align='right'>&nbsp;</td></tr>
 <tr><td align='right' colspan='2'>District Election Officer <br />
-District ".wordcase($_SESSION['dist_name'])." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
+District ".wordcase($distnm_cap)." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
 <hr  width='750px' />
 <table cellspacing='0' cellpadding='0' width='750px'>
   <tr>

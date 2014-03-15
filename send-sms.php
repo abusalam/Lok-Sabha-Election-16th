@@ -61,7 +61,7 @@ if(isset($_REQUEST['msg']))
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
-  <td align="center">SAVE SMS FOR POLLING PERSONNEL</td></tr>
+  <td align="center">SEND SMS</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="50%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>

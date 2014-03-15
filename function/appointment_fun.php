@@ -69,7 +69,9 @@ function first_appointment_letter_hdr($per_code)
 	  personnela.bank_acc_no,
 	  branch.ifsc_code,
 	  personnela.forsubdivision,
-	  training_pp.token, poststat.post_stat
+	  training_pp.token,
+	  poststat.post_stat,
+	  subdivision1.subdivision As pp_subdivision
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -82,7 +84,9 @@ function first_appointment_letter_hdr($per_code)
 		personnela.forsubdivision
 	  Left Join bank On bank.bank_cd = personnela.bank_cd
 	  Left Join branch On personnela.branchcd = branch.branchcd And
-		personnela.bank_cd = branch.bank_cd";
+		personnela.bank_cd = branch.bank_cd
+	  Inner Join subdivision subdivision1 On training_pp.subdivision =
+		subdivision1.subdivisioncd";
 	$sql.=" where personnela.personcd='$per_code' and personnela.selected='1'";
 	//print $sql;
 	$rs=execSelect($sql);
@@ -110,16 +114,18 @@ function first_appointment_letter($per_code)
 	connection_close();
 	return $rs;
 }
-function delete_prev_data($str_sub_div)
+function delete_prev_data($sub_div,$str_office)
 {
-	$sql="delete from first_rand_table where subdivision='$str_sub_div'";
+	$sql="delete from first_rand_table where forsubdivision='$sub_div'";
+	if($str_office!="")
+		$sql.=" and first_rand_table.office='$str_office'";
 	$i=execDelete($sql);
 	connection_close();
 	return $i;
 }
 function first_appointment_letter2_subdiv($sub_div,$office)
 {
-	$sql="Select Distinct subdivision.subdivision
+	$sql="Select Distinct office.office
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -130,7 +136,7 @@ function first_appointment_letter2_subdiv($sub_div,$office)
 	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join pc On personnela.forpc = pc.pccd And pc.subdivisioncd =
     personnela.forsubdivision where personnela.forsubdivision='$sub_div' and personnela.selected='1' ";
-	if($office!='0')
+	//if($office!='0')
 	$sql.=" and office.officecd='$office'";
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
 	  poststat.poststatus, personnela.off_desg";
@@ -173,7 +179,9 @@ function first_appointment_letter2_hdr($sub_div,$office)
 	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
 	  training_schedule.training_time,
 	  personnela.forsubdivision,
-	  training_pp.token, poststat.post_stat
+	  training_pp.token,
+	  poststat.post_stat,
+	  subdivision1.subdivision As pp_subdivision
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -189,10 +197,12 @@ function first_appointment_letter2_hdr($sub_div,$office)
 		personnela.bank_cd = branch.bank_cd
 	  Inner Join training_type On training_type.training_code =
 		training_pp.training_type
-	  left Join training_schedule On training_schedule.schedule_code =
+	  Left Join training_schedule On training_schedule.schedule_code =
 		training_pp.training_sch
-	  left Join training_venue On training_venue.venue_cd =
+	  Left Join training_venue On training_venue.venue_cd =
 		training_schedule.training_venue
+	  Inner Join subdivision subdivision1 On training_pp.subdivision =
+		subdivision1.subdivisioncd
 	Where personnela.forsubdivision = '$sub_div' And personnela.selected = '1' ";
 	if($office!='0')
 	$sql.=" and office.officecd='$office'";
@@ -226,7 +236,7 @@ function first_appointment_letter2($per_code)
 }
 function first_appointment_letter3_subdiv($sub_div,$post_stat)
 {
-	$sql="Select Distinct subdivision.subdivision,poststat.poststatus 
+	$sql="Select Distinct poststat.poststatus 
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -244,9 +254,9 @@ function first_appointment_letter3_subdiv($sub_div,$post_stat)
 	connection_close();
 	return $rs;
 }
-function delete_prev_data_app3($str_sub_div,$post_stat)
+function delete_prev_data_app3($sub_div,$post_stat)
 {
-	$sql="delete from first_rand_table where subdivision='$str_sub_div' and poststatus='$post_stat'";
+	$sql="delete from first_rand_table where forsubdivision='$str_sub_div' and poststatus='$post_stat'";
 	$i=execDelete($sql);
 	connection_close();
 	return $i;
@@ -285,7 +295,9 @@ function first_appointment_letter3($sub_div,$post_stat)
 	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
 	  training_schedule.training_time,
 	  personnela.forsubdivision,
-	  training_pp.token, poststat.post_stat
+	  training_pp.token,
+	  poststat.post_stat,
+	  subdivision1.subdivision As pp_subdivision
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
 	  Inner Join policestation
@@ -301,10 +313,12 @@ function first_appointment_letter3($sub_div,$post_stat)
 		personnela.bank_cd = branch.bank_cd
 	  Inner Join training_type On training_type.training_code =
 		training_pp.training_type
-	  left Join training_schedule On training_schedule.schedule_code =
+	  Left Join training_schedule On training_schedule.schedule_code =
 		training_pp.training_sch
-	  left Join training_venue On training_venue.venue_cd =
+	  Left Join training_venue On training_venue.venue_cd =
 		training_schedule.training_venue
+	  Inner Join subdivision subdivision1 On training_pp.subdivision =
+		subdivision1.subdivisioncd
 	Where personnela.forsubdivision = '$sub_div' And personnela.selected = '1' and personnela.poststat='$post_stat'";
 //	if($office!='0')
 //	$sql.=" and office.officecd='$office'";

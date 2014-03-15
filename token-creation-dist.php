@@ -4,7 +4,7 @@ session_start();
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Token</title>
+<title>Token Creation</title>
 <?php
 include('header/header.php');
 ?>
@@ -26,7 +26,7 @@ if($sub=="Token Create")
 		<script type="text/javascript" language="javascript">
 function randomise_click()
 {
-	var sub_div=document.getElementById('hid_subdiv').value;
+	var dist=document.getElementById('hid_dist').value;
 	//window.history.back();
 	//document.getElementById("rand_result").innerHTML="";
 	if (window.XMLHttpRequest)
@@ -45,7 +45,7 @@ function randomise_click()
 		document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","run.php?subdiv="+sub_div+"&opn=sub",true);
+	xmlhttp.open("GET","run.php?dist="+dist+"&opn=district",true);
 	document.getElementById("token_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
@@ -68,14 +68,14 @@ function randomise_click()
 </tr>
 <tr><td align="center"><?php echo $subdiv_name." SUBDIVISION"; ?></td></tr>
 <tr>
-  <td align="center">TOKEN CREATION</td></tr>
+  <td align="center">TOKEN CREATION DISTRICT WISE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="50%" class="form" cellpadding="0">
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
 	<tr>
       <td align="center" colspan="2"><div id="token_result"></div></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
-	<input type="hidden" id="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
+	<input type="hidden" id="hid_dist" value="<?php print $dist_cd; ?>" />
     <input type="hidden" name="hid_rando" value="<?php echo rand(0,500); ?>" />
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<tr>

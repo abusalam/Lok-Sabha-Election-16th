@@ -46,9 +46,9 @@ if($submit=='Submit')
 	while($row <= rowCount($rstmp))
 	{
 		$tmprow=getRows($rstmp);
-		$str_sub_div=$tmprow['subdivision'];
+		//$str_sub_div=$tmprow['subdivision'];
 		$str_post_stat=$tmprow['poststatus'];
-		$del_ret=delete_prev_data_app3($str_sub_div,$str_post_stat);
+		$del_ret=delete_prev_data_app3($subdiv,$str_post_stat);
 		//	echo "vall=".$del_ret;
 		//mysqli_stmt_bind_param($stmt1, 's', $str_sub_div);
 		//mysqli_stmt_execute($stmt1);
