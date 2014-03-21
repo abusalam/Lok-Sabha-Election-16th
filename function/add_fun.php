@@ -437,15 +437,15 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sqlc.="WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.forpc='$forpc' and ";
 	$sqlc.="(personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat'";
-	$fsql=$sqlc."and personnela.officecd='$ofc_id'";
+	$fsql=$sqlc."and personnela.subdivisioncd=substr('$ofc_id',1,4)";
 	$rsc=execSelect($fsql);
 	$rowc=getRows($rsc);
-	$mode="own-ofc";
+	$mode="own-sub";
 	if($rowc['cnt']==0)
 	{
 		$rsc=execSelect($sqlc);
 		$rowc=getRows($rsc);
-		$mode="other-ofc";
+		$mode="other-sub";
 	}
 	$limit=$rowc['cnt'];
 	$random_no=rand(0,$limit-1);
@@ -466,8 +466,8 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.="WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.forpc='$forpc' and ";
 	$sql.="(personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat' ";
-	if($mode=="own-ofc")
-		$sql.=" and personnela.officecd='$ofc_id'";
+	if($mode=="own-sub")
+		$sql.=" and personnela.subdivisioncd=substr('$ofc_id',1,4)";
 	$sql.=" limit 1 offset $random_no";
 	
 	$rs=execSelect($sql);
@@ -500,10 +500,17 @@ function update_personnel_PreGroupReplacement_training($per_code,$per_name,$desi
 	connection_close();
 	return $i;
 }
-function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$usercd)
+function delete_old_pp_trainingpp($old_p_id)
 {
-	$sql="insert into replacement_log_pregroup (old_personnel, new_personnel, forassembly, forpc, usercode) values ";
-	$sql.="('$old_p_id','$new_p_id','$forassembly','$forpc','$usercd')";
+	$sql="delete from training_pp where per_code='$old_p_id'";
+	$i=execDelete($sql);
+	connection_close();
+	return $i;
+}
+function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd)
+{
+	$sql="insert into replacement_log_pregroup (old_personnel, new_personnel, forassembly, forpc,reason, usercode) values ";
+	$sql.="('$old_p_id','$new_p_id','$forassembly','$forpc','$reason','$usercd')";
 	$i=execInsert($sql);
 	connection_close();
 	return $i;

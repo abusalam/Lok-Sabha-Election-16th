@@ -187,6 +187,7 @@ if($opn=='new_search')
 if($opn=='pg_rplc')
 {
 	$old_p_id=''; $new_p_id=''; $forassembly=''; $forpc=''; $usercd=0;
+	$reason=$_GET["reason"];
 	$booked=$_GET["booked"];
 	$old_p_id=$_GET["old_p_id"];
 	$new_p_id=$_GET["new_p_id"];
@@ -220,13 +221,17 @@ if($opn=='pg_rplc')
 			{
 				update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
 			}
+			else
+			{
+				delete_old_pp_trainingpp($old_p_id);
+			}
 			$selected=0;
 			$res1=update_personnel_PreGroupReplacement($old_p_id,$forassembly,'','C',$selected);
 			if($res1==1)
 			{
 				echo "Changed";
 			}
-			$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$usercd);
+			$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
 		}
 	}
 	

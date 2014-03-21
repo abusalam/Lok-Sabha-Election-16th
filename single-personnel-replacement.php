@@ -87,6 +87,7 @@ function replacement()
 	var new_p_id=document.getElementById('new_per_id').innerHTML;
 	var forassembly=document.getElementById('hid_forassembly').innerHTML;
 	var forpc=document.getElementById('hid_forpc').innerHTML;
+	var reason=document.getElementById('reason').value;
 	var samevenuetraining=document.getElementById('chkSameVenueTraining').checked;
 	//alert(old_p_id+","+new_p_id+","+assembly+","+groupid);
 	if (window.XMLHttpRequest)
@@ -110,7 +111,7 @@ function replacement()
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
-	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining,true);
+	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining+"&reason="+reason,true);
 	xmlhttp.send();
 }
 function print_appletter()
@@ -181,6 +182,8 @@ function print_appletter()
     	<td width="50%" class="table2  demo-section1" valign="top"><span id="new_personnel">&nbsp;</span></td>
     </tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
+	<tr><td colspan="2" align="right">Reason for Replacement: &nbsp;<input type="text" name="reason" id="reason" maxlength="30" style="width:250px" /></td></tr>
+	<tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
     <tr><td colspan="2" align="center"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" />
     <label for="chkSameVenueTraining">Training at Same Venue</label></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>

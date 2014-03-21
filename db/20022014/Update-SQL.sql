@@ -376,3 +376,9 @@ ALTER TABLE `tblsms` CHANGE `message` `message` VARCHAR( 320 ) CHARACTER SET lat
 
 create index asm_dcrc  on grp_dcrc(forassembly,groupid,member);
 create index fasm_personnela  on personnela(forassembly,groupid,poststat);
+
+--
+-- SW Version 1.6 Update 3
+--
+
+ALTER TABLE  `replacement_log_pregroup` ADD  `reason` VARCHAR( 30 ) NULL AFTER  `forpc`;
