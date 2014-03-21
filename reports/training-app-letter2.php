@@ -86,8 +86,9 @@ date_default_timezone_set('Asia/Calcutta');
 			$bank_acc_no=$rowApp['bank_acc_no'];
 			$ifsc_code=$rowApp['ifsc_code'];
 			$forsubdivision=$rowApp['forsubdivision'];
-			$token=$rowApp['post_stat']."/".$rowApp['token'];
-			
+			$token=substr($rowApp['pp_subdivision'], 0, 4)."/".$rowApp['post_stat']."/".$rowApp['token'];
+			//$token=$rowApp['post_stat']."/".$rowApp['token'];
+
 			mysqli_stmt_execute($stmt);
 			$n++;
 			if($n%1000==0)
@@ -98,7 +99,7 @@ date_default_timezone_set('Asia/Calcutta');
 			echo "<table width='100%'>
   <tr>
     <td align='left'><div style='border:1px solid; width:150px;text-align:center;'>ELECTION URGENT</div></td>
-	<td align='right'><div style='border:0px solid; width:150px;text-align:center;'>Token No. $token</div></td>
+	<td align='right'><div style='border:0px solid; width:250px;text-align:right;'>Token No. $token</div></td>
   </tr>
 </table>
 <p align='center'><strong><u>ORDER OF APPOINTMENT FOR TRAINING</u></strong><br />
@@ -110,7 +111,7 @@ date_default_timezone_set('Asia/Calcutta');
 	<td width='10%' align='left'>&nbsp;$_SESSION[apt1_date]</td>
   </tr>
 </table>
-<p>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as $rowApp[poststatus] for undergoing training in connection with the conduct of General Election to House of People, 2014</p>";
+<p align='left'>&nbsp;&nbsp; In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as $rowApp[poststatus] for undergoing training in connection with the conduct of General Election to House of People, 2014 from $rowApp[forpc]-$rowApp[pcname] PC</p>";
  //from $rowApp[forpc]-$rowApp[pcname] PC
 echo "<div align='center'>
   <table width='470px' border='1' cellspacing='0' cellpadding='0'>
@@ -205,27 +206,27 @@ District ".wordcase($distnm_cap)." &nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
   <tr>
     <td width='5%' rowspan='6' valign='top'>NB.</td>
     <td width='5%' valign='top'>1.</td>
-    <td width='90%'>Please fillup form 12A (for Election Duty Certificate) if you have been deployed for poll duty within your home Parliamentary Constituency. In other cases fill up form form 12 (for Postal Ballot).</td>
+    <td width='90%' align='left'>Please fillup form 12A (for Election Duty Certificate) if you have been deployed for poll duty within your home Parliamentary Constituency. In other cases fill up form form 12 (for Postal Ballot).</td>
   </tr>
   <tr>
     <td valign='top'>2.</td>
-    <td>Please submit duly filled in form 12/12A allong with duplicate copy of appointment letter at training venue on the first day of training.</td>
+    <td align='left'>Please submit duly filled in form 12/12A allong with duplicate copy of appointment letter at training venue on the first day of training.</td>
   </tr>
   <tr>
     <td valign='top'>3.</td>
-    <td>Please write particulars on the supplied blank Identity Card and also affix your colour passport size photograph on it. Please bring it at training venue for attestation.</td>
+    <td align='left'>Please write particulars on the supplied blank Identity Card and also affix your colour passport size photograph on it. Please bring it at training venue for attestation.</td>
   </tr>
   <tr>
     <td valign='top'>4.</td>
-    <td>Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.</td>
+    <td align='left'>Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.</td>
   </tr>
   <tr>
     <td valign='top'>&nbsp;</td>
-    <td>EPIC No.- $rowApp[epic] &nbsp;&nbsp; Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] <br /> Bank- $rowApp[bank_name] &nbsp;&nbsp; Branch- $rowApp[branch_name] &nbsp;&nbsp; A/c No.- $rowApp[bank_acc_no] &nbsp;&nbsp; IFS Code- $rowApp[ifsc_code]</td>
+    <td align='left'>EPIC No.- $rowApp[epic] &nbsp;&nbsp; Assembly- $rowApp[acno] &nbsp;&nbsp; Part No.- $rowApp[partno] &nbsp;&nbsp; Sl. No.- $rowApp[slno] <br /> Bank- $rowApp[bank_name] &nbsp;&nbsp; Branch- $rowApp[branch_name] &nbsp;&nbsp; A/c No.- $rowApp[bank_acc_no] &nbsp;&nbsp; IFS Code- $rowApp[ifsc_code]</td>
   </tr>
   <tr>
     <td valign='top'>5.</td>
-    <td>Please bring in the filled up data sheet, as attached herewith, during the first training.</td>
+    <td align='left'>Please bring in the filled up data sheet, as attached herewith, during the first training.</td>
   </tr>";
   
 echo "

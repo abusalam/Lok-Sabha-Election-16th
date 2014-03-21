@@ -363,3 +363,9 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 (59, 7, 'Send SMS', 'send-sms.php', 1, '2014-03-11 17:41:07'),
 (60, 6, 'Training Allocation District From District', 'training-allocation-dist.php', 1, '2014-03-12 13:54:51'),
 (61, 6, 'Token From District', 'token-creation-dist.php', 1, '2014-03-12 13:56:35');
+
+--
+-- SW Version 1.6
+--
+
+ALTER TABLE `tblsms` CHANGE `message` `message` VARCHAR( 320 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;

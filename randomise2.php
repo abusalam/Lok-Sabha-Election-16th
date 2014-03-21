@@ -1,4 +1,3 @@
-b
 <?php
 include 'mysqliconn.php';
 include 'assemblydata1.php';
@@ -13,7 +12,7 @@ include 'dcrcreserve.php';
 if(isset($_GET['pc_cd']) && $_GET['pc_cd']!=null)
 {
 	$fpc=$_GET['pc_cd'];
-	echo $fpc;
+	//echo $fpc;
 }
 else
 {
@@ -23,7 +22,7 @@ else
 if(isset($_GET['dist']) && $_GET['dist']!=null)
 {
 	$dist=$_GET['dist'];
-	echo $dist;
+	//echo $dist;
 }
 else
 {
@@ -148,7 +147,7 @@ while ($i<=$asmparty->countnumb()-1)
 					{  
 					if ($k==0)
 					{
-					echo $k;
+					//echo $k;
 					echo ' ';
 					}
 					
@@ -232,5 +231,6 @@ $msqli->close();
 new reserve1($dist,$fpc);
 new dcrc($dist,$fpc);
 new dcrcreserve($dist,$fpc);
-
+include 'countpp1.php';
+new countpp($fpc);
 ?>

@@ -40,6 +40,7 @@ if($sub=="Save SMS")
 				$name=$row_data['officer_name'];
 				$personcd=$row_data['personcd'];
 				$mob_no=$row_data['mob_no'];
+				$post_status=$row_data['poststatus'];
 				$training_desc=$row_data['training_desc'];
 				$venuename=$row_data['venuename'];
 				$venueaddress=$row_data['venueaddress'];
@@ -47,7 +48,7 @@ if($sub=="Save SMS")
 				$training_time=$row_data['training_time'];
 				
 				$DestinationAddress = $mob_no;
-				$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." from ".$training_time." at ".$venuename;
+				$Message = $name.", you are appointed as ".$post_status." for LS-14 election. Your training venue: ".$venuename.",date: ".$training_dt.", time:".$training_time.".";
 				$Msg=$Message;
 				//include('sms/Index.php');
 				
