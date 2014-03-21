@@ -10,7 +10,7 @@ session_start();
 include('header/header.php');
 ?>
 <script type="text/javascript" language="javascript">
-function office_list()
+function office_list(str)
 {
 	var sub_div="<?php echo $subdiv_cd; ?>";
 	var officeid=document.getElementById('officeID').value;
@@ -35,8 +35,10 @@ function office_list()
 			document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	  
-	xmlhttp.open("GET","ajax-office.php?sub_div="+sub_div+"&officeid="+officeid+"&officename="+officename+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
+	  if(str=="search")
+		xmlhttp.open("GET","ajax-office.php?sub_div="+sub_div+"&officeid="+officeid+"&officename="+officename+"&frmdt="+frmdt+"&todt="+todt+"&p=''&a="+all+"&search="+str,true);
+	else
+		xmlhttp.open("GET","ajax-office.php?sub_div="+sub_div+"&officeid="+officeid+"&officename="+officename+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
 	document.getElementById("Office_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
@@ -80,7 +82,7 @@ function delete_office(str)
 </script>
 <link type="text/css" rel="stylesheet" href="css/paging.css" />
 </head>
-<body oncontextmenu="return false;" onload="return office_list();">
+<body oncontextmenu="return false;" onload="return office_list('');">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
@@ -108,7 +110,7 @@ function delete_office(str)
       <td align="left"><input type="text" name="todt" id="todt" maxlength="10" style="width:142px;" /></td>
     </tr>
     <tr>
-      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list();" /></td>
+      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list('search');" /></td>
     </tr>
     <tr><td colspan="2" align="left">&nbsp;</td></tr>
     <tr>

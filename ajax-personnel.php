@@ -4,12 +4,26 @@ extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 include_once('function/pagination.php');
-$officeid=$_GET["officeid"];
-$personcd=$_GET["personcd"];
-$frmdt=$_GET["frmdt"];
-$todt=$_GET["todt"];
+$search=isset($_GET["search"])?$_GET["search"]:"";
+$officeid=isset($_GET["officeid"])?$_GET["officeid"]:"";
+$personcd=isset($_GET["personcd"])?$_GET["personcd"]:"";
+$frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
+$todt=isset($_GET["todt"])?$_GET["todt"]:"";
 $usercode=$_SESSION['user_cd'];
-	
+if($search=="search")
+{
+	$_SESSION['officeid_p']=$officeid;
+	$_SESSION['personcd_p']=$personcd;
+	$_SESSION['frmdt']=$frmdt;
+	$_SESSION['todt']=$todt;
+}
+else
+{
+	$officeid=isset($_SESSION['officeid_p'])?$_SESSION['officeid_p']:'';
+	$personcd=isset($_SESSION['personcd_p'])?$_SESSION['personcd_p']:'';
+	$frmdt=isset($_SESSION['frmdt'])?$_SESSION['frmdt']:'';
+	$todt=isset($_SESSION['todt'])?$_SESSION['todt']:'';
+}
 $rsPersonnel_dum=fatch_PersonnelList($officeid,$personcd,$frmdt,$todt,$usercode);
 $num_rows_dum = rowCount($rsPersonnel_dum);
 

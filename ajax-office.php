@@ -4,6 +4,7 @@ extract($_GET);
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
 include_once('function/pagination.php');
+$search=isset($_GET["search"])?$_GET["search"]:"";
 $officeid=isset($_GET["officeid"])?$_GET["officeid"]:"";
 $officename=isset($_GET["officename"])?$_GET["officename"]:"";
 $sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
@@ -11,6 +12,22 @@ $frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
 $todt=isset($_GET["todt"])?$_GET["todt"]:"";
 $usercode=isset($_SESSION['user_cd'])?$_SESSION['user_cd']:"";
 $delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
+if($search=="search")
+{
+	$_SESSION['officeid_o']=$officeid;
+	$_SESSION['officename_o']=$officename;
+	$_SESSION['sub_div_o']=$sub_div;
+	$_SESSION['frmdt']=$frmdt;
+	$_SESSION['todt']=$todt;
+}
+else
+{
+	$officeid=isset($_SESSION['officeid_o'])?$_SESSION['officeid_o']:'';
+	$officename=isset($_SESSION['officename_o'])?$_SESSION['officename_o']:'';
+	$sub_div=isset($_SESSION['sub_div_o'])?$_SESSION['sub_div_o']:'';
+	$frmdt=isset($_SESSION['frmdt'])?$_SESSION['frmdt']:'';
+	$todt=isset($_SESSION['todt'])?$_SESSION['todt']:'';
+}
 if($delcode!="" && $delcode!=null)
 {
 	$total=ofc_del_check(decode($delcode));

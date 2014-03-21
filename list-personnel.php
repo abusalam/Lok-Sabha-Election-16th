@@ -36,7 +36,7 @@ function personnel_list(str)
 		}
 	  }
 	if(str=="search")
-		qstr="ajax-personnel.php?officeid="+officeid+"&personcd="+personnelID+"&frmdt="+frmdt+"&todt="+todt;
+		qstr="ajax-personnel.php?officeid="+officeid+"&personcd="+personnelID+"&frmdt="+frmdt+"&todt="+todt+"&search="+str;
 	else
 		qstr="ajax-personnel.php?officeid="+officeid+"&personcd="+personnelID+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);

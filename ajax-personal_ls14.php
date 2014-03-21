@@ -27,14 +27,33 @@ if($pr_cd!='' && $act=='del')
 }
 //========================================================================
 //global $subdiv; global $post_status; global $officeid; global $frmdt; global $todt; //global $usercode;
+$search=isset($_GET["search"])?$_GET["search"]:"";
 $subdiv=isset($_GET["subdiv"])?$_GET["subdiv"]:"";
+$p_id=isset($_GET["p_id"])?$_GET["p_id"]:"";
 $post_status=isset($_GET["post_status"])?$_GET["post_status"]:"";
 $officeid=isset($_GET["officeid"])?$_GET["officeid"]:"";
 $frmdt=isset($_GET["frmdt"])?$_GET["frmdt"]:"";
 $todt=isset($_GET["todt"])?$_GET["todt"]:"";
 $usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
-
-$rsPersonnel_ls14_dum=fatch_Personnel_ls14List($subdiv,$post_status,$officeid,$frmdt,$todt,$usercode);
+if($search=="search")
+{
+	$_SESSION['subdiv_ls14']=$subdiv;
+	$_SESSION['p_id_ls14']=$p_id;
+	$_SESSION['post_status_ls14']=$post_status;
+	$_SESSION['officeid_ls14']=$officeid;
+	$_SESSION['frmdt']=$frmdt;
+	$_SESSION['todt']=$todt;
+}
+else
+{
+	$subdiv=isset($_SESSION['subdiv_ls14'])?$_SESSION['subdiv_ls14']:'0';
+	$p_id=isset($_SESSION['p_id_ls14'])?$_SESSION['p_id_ls14']:'';
+	$post_status=isset($_SESSION['post_status_ls14'])?$_SESSION['post_status_ls14']:'';
+	$officeid=isset($_SESSION['officeid_ls14'])?$_SESSION['officeid_ls14']:'';
+	$frmdt=isset($_SESSION['frmdt'])?$_SESSION['frmdt']:'';
+	$todt=isset($_SESSION['todt'])?$_SESSION['todt']:'';
+}
+$rsPersonnel_ls14_dum=fatch_Personnel_ls14List($subdiv,$p_id,$post_status,$officeid,$frmdt,$todt,$usercode);
 $num_rows_dum = rowCount($rsPersonnel_ls14_dum);
 
 $items = 50; // number of items per page.
@@ -54,7 +73,7 @@ if($page < "1")
 }
 $p_num = $items*$page;
 
-$rsPersonnel_ls14 = fatch_Personnel_ls14List1($subdiv,$post_status,$officeid,$frmdt,$todt,$usercode,$p_num ,$items);
+$rsPersonnel_ls14 = fatch_Personnel_ls14List1($subdiv,$p_id,$post_status,$officeid,$frmdt,$todt,$usercode,$p_num ,$items);
 $num_rows = rowCount($rsPersonnel_ls14);
 if($num_rows<1)
 {

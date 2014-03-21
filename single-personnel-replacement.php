@@ -83,6 +83,7 @@ function new_per_search()
 function replacement()
 {
 	var old_p_id=document.getElementById('hid_per_cd').innerHTML;
+	var booked=document.getElementById('hid_booked').innerHTML;
 	var new_p_id=document.getElementById('new_per_id').innerHTML;
 	var forassembly=document.getElementById('hid_forassembly').innerHTML;
 	var forpc=document.getElementById('hid_forpc').innerHTML;
@@ -109,7 +110,7 @@ function replacement()
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
-	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining,true);
+	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining,true);
 	xmlhttp.send();
 }
 function print_appletter()

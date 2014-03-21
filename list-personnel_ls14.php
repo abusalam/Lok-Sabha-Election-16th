@@ -16,6 +16,7 @@ function personnel_ls14_list(str)
 {
 	var qstr;
 	var subdiv=document.getElementById('subdivision').value;
+	var p_id=document.getElementById('personnelID').value;
 	var post_status=document.getElementById('posting_status').value;
 	var officeid=document.getElementById('officeID').value;
 	var frmdt=document.getElementById("fromdt").value;
@@ -40,9 +41,9 @@ function personnel_ls14_list(str)
 	  }
 
 	if(str=="search")
-    qstr="ajax-personal_ls14.php?subdiv="+subdiv+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt;
+    qstr="ajax-personal_ls14.php?subdiv="+subdiv+"&p_id="+p_id+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&search="+str;
 	else
-    qstr="ajax-personal_ls14.php?subdiv="+subdiv+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
+    qstr="ajax-personal_ls14.php?subdiv="+subdiv+"&p_id="+p_id+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);
 	document.getElementById("personnel_ls14_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
@@ -55,6 +56,7 @@ function delete_person(str)
 	if (confirm("Do you really want to delete the record?")==true)
 	{
 		var subdiv=document.getElementById('subdivision').value;
+		var p_id=document.getElementById('personnelID').value;
 		var post_status=document.getElementById('posting_status').value;
 		var officeid=document.getElementById('officeID').value;
 		var frmdt=document.getElementById("fromdt").value;
@@ -78,7 +80,7 @@ function delete_person(str)
 			}
 		  }
 	
-		var qstr="ajax-personal_ls14.php?pr_cd="+str+"&act=del&subdiv="+subdiv+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
+		var qstr="ajax-personal_ls14.php?pr_cd="+str+"&act=del&subdiv="+subdiv+"&p_id="+p_id+"&post_status="+post_status+"&officeid="+officeid+"&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all;
 		xmlhttp.open("GET",qstr,true);
 		xmlhttp.send();
 		//location.replace("ajax-personal_ls14.php?pr_cd="+str+"&act=del");
@@ -108,8 +110,8 @@ function edit_personnela(str)
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
-    <tr><td align="left" valign="top"><span class="error">*</span>Sub Division</td>
-      <td align="left" valign="top"><select name="subdivision" id="subdivision" style="width:200px;">
+    <tr><td align="left"><span class="error">&nbsp;&nbsp;</span>Sub Division</td>
+      <td align="left"><select name="subdivision" id="subdivision" style="width:200px;">
     							<option value="0">-Select Subdivision-</option>
 								<?php 	$rsSubDiv=fatch_Subdivision($dist_cd);
 										$num_rows=rowCount($rsSubDiv);
@@ -125,12 +127,14 @@ function edit_personnela(str)
 										$num_rows=0;
 										$rowSubDiv=null;
 								?>
-                            </select></td> </tr>
+                            </select></td>
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Personnel ID</td>
+      <td align="left"><input type="text" name="personnelID" id="personnelID" style="width:142px;" /></td></tr>
     <tr>
       <td align="left"><span class="error">&nbsp;&nbsp;</span>Office ID</td>
       <td align="left"><input type="text" name="officeID" id="officeID" style="width:192px;" /></td>
-      <td align="left" valign="top"><span class="error">&nbsp;</span>Post Status</td>
-      <td align="left" valign="top"><select name="posting_status" id="posting_status" style="width:150px;">
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Post Status</td>
+      <td align="left"><select name="posting_status" id="posting_status" style="width:150px;">
       						<option value="0">-Select Post Status-</option>
                             <?php 	$rsP=fatch_postingstatus();
 									$num_rows=rowCount($rsP);

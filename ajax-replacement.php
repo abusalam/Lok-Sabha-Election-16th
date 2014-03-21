@@ -187,7 +187,7 @@ if($opn=='new_search')
 if($opn=='pg_rplc')
 {
 	$old_p_id=''; $new_p_id=''; $forassembly=''; $forpc=''; $usercd=0;
-	
+	$booked=$_GET["booked"];
 	$old_p_id=$_GET["old_p_id"];
 	$new_p_id=$_GET["new_p_id"];
 	$forassembly=$_GET["forassembly"];
@@ -213,7 +213,7 @@ if($opn=='pg_rplc')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
 		$selected=1;
-		$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,'P',$selected);
+		$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
 		if($ret==1)
 		{
 			if($samevenuetraining=='true')
