@@ -417,9 +417,9 @@ if($action=='Save')
 		$rsmaxcode=fatch_personnel_maxcode($subdiv_cd);
 		$rowmaxcode=getRows($rsmaxcode);
 		if($rowmaxcode[0]==null)
-			$p_id=$subdiv_cd."00001";
+			$p_id=sprintf("%09d",$subdiv_cd."00001");
 		else
-			$p_id=$rowmaxcode[0]+1;
+			$p_id=sprintf("%09d",$rowmaxcode[0]+1);
 	}
 	
 		

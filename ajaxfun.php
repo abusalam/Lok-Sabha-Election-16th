@@ -123,11 +123,11 @@ if($subdiv != '')
 			$rowofc=getRows($rsofc);
 			if($rowofc['officecd']==NULL)
 				if ($subdiv!="0000")
-					$ofccd=$subdiv."0001";
+					$ofccd=sprintf("%08d",$subdiv."0001");
 				else
 					$ofccd="";
 			else
-				$ofccd=$rowofc['officecd']+1;
+				$ofccd=sprintf("%08d",$rowofc['officecd']+1);
 			echo "<input type='text' name='OfficeID' id='OfficeID' style='width:142px;' value='$ofccd' readonly='readonly' />\n";
 		}
 		$rsofc=NULL;
