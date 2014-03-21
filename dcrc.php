@@ -13,7 +13,7 @@ function __construct($dist,$pc) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->msqli->query("delete from grp_dcrc where substr(for subdivision,1,2)='$dist' and forpc='$pc'");
+	$this->msqli->query("delete from grp_dcrc where substr(forsubdivision,1,2)='$dist' and forpc='$pc'");
 	
 	$this->result = $this->msqli->query("select * from dcrc_party where substr(subdivisioncd,1,2)='$dist' and forpc='$pc' ") or die($this->msqli->error.__LINE__);
 	

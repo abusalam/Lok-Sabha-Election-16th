@@ -369,3 +369,10 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 --
 
 ALTER TABLE `tblsms` CHANGE `message` `message` VARCHAR( 320 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+--
+-- SW Version 1.6 Update 1
+--
+
+create index asm_dcrc  on grp_dcrc(forassembly,groupid,member);
+create index fasm_personnela  on personnela(forassembly,groupid,poststat);
