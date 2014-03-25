@@ -382,3 +382,16 @@ create index fasm_personnela  on personnela(forassembly,groupid,poststat);
 --
 
 ALTER TABLE  `replacement_log_pregroup` ADD  `reason` VARCHAR( 30 ) NULL AFTER  `forpc`;
+
+--
+-- SW Version 1.6 Update 4
+--
+
+ALTER TABLE  `replacement_log_pregroup` ADD  `reason` VARCHAR( 30 ) NULL AFTER  `forpc`;
+ALTER TABLE  `first_rand_table` ADD  `block_muni` CHAR( 6 ) NULL AFTER  `address`;
+ALTER TABLE  `first_rand_table` ADD  `sl_no` INT NULL;
+ALTER TABLE `first_rand_table` ADD INDEX ( `officecd` ) ;
+ALTER TABLE `first_rand_table` ADD INDEX ( `personcd` ) ;
+ALTER TABLE `office` ADD INDEX ( `officecd` ) ;
+ALTER TABLE `office` ADD INDEX ( `subdivisioncd` ) ;
+ALTER TABLE `personnela` ADD INDEX ( `officecd` ) ;

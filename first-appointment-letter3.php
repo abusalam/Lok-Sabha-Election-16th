@@ -60,10 +60,10 @@ if($submit=='Submit')
 	{
 		include_once('inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
 		
-		mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);
+		mysqli_stmt_bind_param($stmt, 'sssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$block_muni,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);
 				
 		for($i=1;$i<=$num_rows;$i++)
 		{
@@ -75,6 +75,7 @@ if($submit=='Submit')
 			$personcd=$rowApp['personcd'];
 			$office=$rowApp['office'];
 			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
+			$block_muni=$rowApp['blockormuni_cd'];
 			$postoffice=$rowApp['postoffice'];
 			$subdivision=$rowApp['subdivision'];
 			$policestation=$rowApp['policestation'];
@@ -101,7 +102,7 @@ if($submit=='Submit')
 			$bank_acc_no=$rowApp['bank_acc_no'];
 			$ifsc_code=$rowApp['ifsc_code'];
 			$forsubdivision=$rowApp['forsubdivision'];
-			$token=$rowApp['post_stat']."/".$rowApp['token'];
+			$token=substr($rowApp['pp_subdivision'], 0, 4)."/".$rowApp['post_stat']."/".$rowApp['token'];
 			
 			mysqli_stmt_execute($stmt);
 			$n+=mysqli_stmt_affected_rows($stmt);
@@ -121,7 +122,7 @@ if($submit=='Submit')
 	}
 	else
 	{
-		$msg="<div class='alert-error'>Selected persons are not alloted for training</div>";
+		$msg="<div class='alert-error'>Selected persons are not available for training</div>";
 	}
 }
 ?>
@@ -137,6 +138,7 @@ if($submit=='Submit')
     <table width="70%" class="form" cellpadding="0">
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2" style="height:10px" align="center">&nbsp;</td></tr>
+    <tr><td align="center"><img src="images/blank.gif" alt="" height="5px" /></td><td align="right"><strong>»</strong>&nbsp;<a href="first-appointment-letter3-print.php" class="k-button">Print Letter</a></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;">

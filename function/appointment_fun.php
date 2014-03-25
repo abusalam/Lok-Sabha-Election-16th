@@ -50,6 +50,7 @@ function first_appointment_letter_hdr($per_code)
 	  office.office,
 	  office.address1,
 	  office.address2,
+	  office.blockormuni_cd,
 	  office.postoffice,
 	  subdivision.subdivision,
 	  policestation.policestation,
@@ -154,6 +155,7 @@ function first_appointment_letter2_hdr($sub_div,$office)
 	  office.office,
 	  office.address1,
 	  office.address2,
+	  office.blockormuni_cd,
 	  office.postoffice,
 	  subdivision.subdivision,
 	  policestation.policestation,
@@ -256,7 +258,7 @@ function first_appointment_letter3_subdiv($sub_div,$post_stat)
 }
 function delete_prev_data_app3($sub_div,$post_stat)
 {
-	$sql="delete from first_rand_table where forsubdivision='$str_sub_div' and poststatus='$post_stat'";
+	$sql="delete from first_rand_table where forsubdivision='$sub_div' and poststatus='$post_stat'";
 	$i=execDelete($sql);
 	connection_close();
 	return $i;
@@ -270,6 +272,7 @@ function first_appointment_letter3($sub_div,$post_stat)
 	  office.office,
 	  office.address1,
 	  office.address2,
+	  office.blockormuni_cd,
 	  office.postoffice,
 	  subdivision.subdivision,
 	  policestation.policestation,
@@ -325,6 +328,39 @@ function first_appointment_letter3($sub_div,$post_stat)
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
 	  poststat.poststatus, personnela.off_desg";
 	//print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function first_app_letter3_print($sub_div)
+{
+	$sql="Select Distinct first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
+	  first_rand_table.office,first_rand_table.address,first_rand_table.postoffice,first_rand_table.subdivision,first_rand_table.policestation,first_rand_table.district,first_rand_table.pin,
+	  first_rand_table.officecd,first_rand_table.mob_no,first_rand_table.poststatus,first_rand_table.acno,first_rand_table.partno,first_rand_table.slno,first_rand_table.epic,first_rand_table.pc_code as forpc,first_rand_table.pc_name as pcname,
+	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
+	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
+	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat
+	From first_rand_table 
+	Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
+	$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function first_app_letter3_print1($sub_div,$from,$to)
+{
+	$sql="Select Distinct first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
+	  first_rand_table.office,first_rand_table.address,first_rand_table.postoffice,first_rand_table.subdivision,first_rand_table.policestation,first_rand_table.district,first_rand_table.pin,
+	  first_rand_table.officecd,first_rand_table.mob_no,first_rand_table.poststatus,first_rand_table.acno,first_rand_table.partno,first_rand_table.slno,first_rand_table.epic,first_rand_table.pc_code as forpc,first_rand_table.pc_name as pcname,
+	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
+	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
+	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat
+	From first_rand_table 
+	Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
+	$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
