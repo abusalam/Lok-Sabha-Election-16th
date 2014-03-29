@@ -9,7 +9,7 @@ private $sobj;
 function __construct($dist,$pc) {
 
 // select QUERY ON A assembly TABreLE
-    echo $dist.' nnn '.$pc;
+   // echo $dist.' nnn '.$pc;
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();

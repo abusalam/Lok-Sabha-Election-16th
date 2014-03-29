@@ -572,6 +572,7 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  dcrcmaster.dc_venue,
 	  dcrcmaster.dc_addr,
 	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
+	  dcrc_party.dc_date As dc_dateD,
 	  dcrc_party.dc_time,
 	  dcrcmaster.rcvenue,
 	  personnela.poststat,
@@ -616,9 +617,16 @@ function amount_ag_poststat($poststat)
 	connection_close();
 	return $amount;
 }
+function fetch_polldate_n_time($forpc)
+{
+	$sql="select date_format(poll_date,'%d/%m/%Y') as poll_date,poll_date as poll_dateD, poll_time from poll_table where pc_cd='$forpc'";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 function delete_prev_data_second_rand_reserve($forassembly,$forpc,$group_id)
 {
-	$sql="delete from second_rand_table_reserve where code>0";
+	$sql="delete from second_rand_table_reserve where (slno<>0 or slno=0)";
 	if($forassembly!="0" && $forassembly!="")
 		$sql.=" and assembly like '$forassembly%'";
 	elseif($forpc!="0")

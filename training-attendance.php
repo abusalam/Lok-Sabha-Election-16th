@@ -138,7 +138,7 @@ if($action=='Submit')
 
 	$usercd=$user_cd;
 	include_once('function/training_fun.php');
-	include_once('mail/sendmail.php');
+	//include_once('mail/sendmail.php');
 	$status=0;
 	for($i=1;$i<=$_POST['hidRow'];$i++)
 	{
@@ -159,6 +159,10 @@ if($action=='Submit')
 			$ph_no=$ra['mob_no'];
 			
 			send_mail($recipient,$name);
+			
+			$Message=$name.", You have not attended the training program conducted for election duty.";
+			$mob_no = $ph_no;
+			include('sms/Index.php');
 			}
 			unset($rs,$ra,$name,$recipient,$ph_no,$per_cd);
 		}
@@ -166,6 +170,7 @@ if($action=='Submit')
 	if($status>0)
 	{
 		$msg="<div class='alert-success'>$status Record(s) saved successfully</div>";
+		redirect("training-attendance.php?msg=success&rec=".$status);
 	}
 	else
 	{
@@ -178,8 +183,15 @@ if($action=='Submit')
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];
-
-
+		
+if(isset($_REQUEST['msg']))
+{
+	if($_REQUEST['msg']=='success')
+	{
+		$rec=isset($_REQUEST['rec'])?$_REQUEST['rec']:"";
+		$msg="<div class='alert-success'>$rec Record(s) saved successfully</div>";
+	}
+}
 ?>
 
 <body>

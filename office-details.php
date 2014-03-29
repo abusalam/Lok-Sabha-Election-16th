@@ -248,7 +248,7 @@ if($action=='Save')
 	$email=$_POST['email'];
 	$Ph_no=clean_alpha($_POST['Ph_no']);
 	$Mb_no=clean_alpha($_POST['Mb_no']);
-	$FAX_no=clean_alpha($_POST['FAX_no']);
+	$FAX_no=clean_alpha($_POST['FAX_No']);
 	$MaleStaff=only_num($_POST['MaleStaff']);
 	$FemaleStaff=only_num($_POST['FemaleStaff']);
 	$ExistingStaff=only_num($_POST['ExistingStaff']);
@@ -311,7 +311,7 @@ if(isset($_REQUEST['msg']))
 <script language="javascript" type="text/javascript">
 function bind_all()
 {
-<?php	if(! isset($offccd))
+<?php	if(!isset($offccd))
 	{	?>
 		var subdivision=document.getElementById('Subdivision');
 		for (var i = 0; i < subdivision.options.length; i++) 
@@ -323,6 +323,8 @@ function bind_all()
 		}
 		fatch_block(subdivision.value);
 <?php } ?>
+<?php	if(isset($_REQUEST['officeid']))
+	{	?>
 	var officename=document.getElementById('officename');
 	officename.value="<?php echo $rowOffice['office']; ?>";
 	var designationOic=document.getElementById('designationOic');
@@ -393,6 +395,7 @@ function bind_all()
 	var OfficeID=document.getElementById('OfficeID');
 	OfficeID.value="<?php echo $rowOffice['officecd']; ?>";
 	OfficeID.readOnly=true;
+	<?php } ?>
 }
 </script>
 <body oncontextmenu="return false;" onload="javascript: bind_all();">

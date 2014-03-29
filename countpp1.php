@@ -37,12 +37,14 @@ $p1p=0;
 $p2p=0;
 $p3p=0;
 $pap=0;
+$pbp=0;
 
 $prr=0;
 $p1r=0;
 $p2r=0;
 $p3r=0;
 $par=0;
+$pbr=0;
 
 
 
@@ -83,14 +85,22 @@ $par=0;
 			 
 			 	$p3r=$p3r+1;
 			 }
-			 /*if ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
+			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
 			 
 			 	$pap=$pap+1;
 			 }
 			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'R')==0) ){
 			 
 			 	$par=$par+1;
-			 }*/
+			 }
+			 if ((strcmp($pst,'PB')==0) and (strcmp($bk,'P')==0) ){
+			 
+			 	$pbp=$pbp+1;
+			 }
+			 if ((strcmp($pst,'PB')==0) and (strcmp($bk,'R')==0) ){
+			 
+			 	$pbr=$pbr+1;
+			 }
 		}
 	}
 	
@@ -99,7 +109,7 @@ $par=0;
 	}
 	echo ' <br />';
 		
-       if (($totreq-($prp+$p1p+$p2p+$p3p+$pap))>0) {
+       if (($totreq-($prp+$p1p+$p2p+$p3p+$pap+$pbp))>0) {
 	      		
 		   print 'Total PP requirement : ' .$totreq;
 		   print '.....Requirement not fulfilled ';
@@ -121,7 +131,9 @@ $par=0;
 		print 'P2 in Party :-- '.$p2p.' + '.$p2r .' ::   '; 
 		print 'P3 in Party :-- '.$p3p.' + '.$p3r .' ::   ';
 		echo ' <br>';
-		//print 'PP Addl in Party :-- '.$pap.' + '.$par .' ::   '; 
+		print 'P2 Addl-1 in Party :-- '.$pap.' + '.$par .' ::   '; 
+		echo ' <br>';
+		print 'P2 Addl-2 in Party :-- '.$pbp.' + '.$pbr .' ::   ';
 		/*print 'PR in reserve :-- '.$prr.'  ::   ';
 		print 'P1 in reserve :-- '.$p1r.'  ::  ';
 		print 'P2 in reserve :-- '.$p2r.'  ::  ';

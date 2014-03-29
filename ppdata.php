@@ -67,7 +67,7 @@ function __construct($fpc,$pst,$var,$asm,$stat,$phase) {
 
 	else {
 	//    echo $fpc. ' vf '.$var . ' '.$asm;
-		echo 'No data for' .$pst ;	
+	//	echo 'No data for' .$pst ;	
 	}
 
 

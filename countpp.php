@@ -29,18 +29,20 @@ function __construct($subdiv) {
 		print 'Assembly requirement not filled  ';
 	}
 
-$this->result = $this->msqli->query("SELECT *   FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R')  ") or die($this->msqli->error.__LINE__);
+$this->result = $this->msqli->query("SELECT *   FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 $prp=0;
 $p1p=0;
 $p2p=0;
 $p3p=0;
+$pap=0;
 
 $prr=0;
 $p1r=0;
 $p2r=0;
 $p3r=0;
+$par=0;
 
 
 
@@ -81,6 +83,14 @@ $p3r=0;
 			 
 			 	$p3r=$p3r+1;
 			 }
+			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
+			 
+			 	$pap=$pap+1;
+			 }
+			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'R')==0) ){
+			 
+			 	$par=$par+1;
+			 }
 		}
 	}
 	
@@ -89,7 +99,7 @@ $p3r=0;
 	}
 	echo ' <br />';
 		
-       if (($totreq-($prp+$p1p+$p2p+$p3p))>0) {
+       if (($totreq-($prp+$p1p+$p2p+$p3p+$pap))>0) {
 	      		
 		   print 'Total PP requirement : ' .$totreq;
 		   print '.....Requirement not fulfilled ';
@@ -98,7 +108,7 @@ $p3r=0;
 		}
 		else
 		{
-			print 'Total PP requirement : ' .$totreq;
+			print 'Total PP requirement (excluding Reserve) : ' .$totreq;
 			echo ' <br>';
 		echo ' <br>';
 		}
@@ -111,6 +121,7 @@ $p3r=0;
 		print 'P2 in Party :-- '.$p2p.' + '.$p2r .' ::   '; 
 		print 'P3 in Party :-- '.$p3p.' + '.$p3r .' ::   ';
 		echo ' <br>';
+		print 'PP Addl in Party :-- '.$pap.' + '.$par .' ::   '; 
 		/*print 'PR in reserve :-- '.$prr.'  ::   ';
 		print 'P1 in reserve :-- '.$p1r.'  ::  ';
 		print 'P2 in reserve :-- '.$p2r.'  ::  ';

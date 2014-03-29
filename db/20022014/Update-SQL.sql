@@ -395,3 +395,260 @@ ALTER TABLE `first_rand_table` ADD INDEX ( `personcd` ) ;
 ALTER TABLE `office` ADD INDEX ( `officecd` ) ;
 ALTER TABLE `office` ADD INDEX ( `subdivisioncd` ) ;
 ALTER TABLE `personnela` ADD INDEX ( `officecd` ) ;
+
+--
+-- SW Version 1.7
+--
+
+-- phpMyAdmin SQL Dump
+-- version 3.2.4
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Mar 27, 2014 at 04:37 PM
+-- Server version: 5.1.41
+-- PHP Version: 5.3.1
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `ppds`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `poll_table`
+--
+
+CREATE TABLE IF NOT EXISTS `poll_table` (
+  `pc_cd` char(2) NOT NULL,
+  `poll_date` datetime NOT NULL,
+  `poll_time` char(20) NOT NULL,
+  `usercode` int(11) NOT NULL,
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`pc_cd`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `second_appt`
+--
+
+CREATE TABLE IF NOT EXISTS `second_appt` (
+  `slno` bigint(7) NOT NULL DEFAULT '0',
+  `pers_off` char(8) DEFAULT NULL,
+  `groupid` int(6) DEFAULT NULL,
+  `assembly` varchar(30) DEFAULT NULL,
+  `assembly_name` varchar(30) DEFAULT NULL,
+  `mem_no` int(4) DEFAULT NULL,
+  `pccd` char(2) DEFAULT NULL,
+  `pcname` varchar(30) DEFAULT NULL,
+  `pr_personcd` char(9) DEFAULT NULL,
+  `p1_personcd` char(9) DEFAULT NULL,
+  `p2_personcd` char(9) DEFAULT NULL,
+  `p3_personcd` char(9) DEFAULT NULL,
+  `pa_personcd` char(9) DEFAULT NULL,
+  `pb_personcd` char(9) DEFAULT NULL,
+  `pr_name` varchar(50) DEFAULT NULL,
+  `p1_name` varchar(50) DEFAULT NULL,
+  `p2_name` varchar(50) DEFAULT NULL,
+  `p3_name` varchar(50) DEFAULT NULL,
+  `pa_name` varchar(50) DEFAULT NULL,
+  `pb_name` varchar(50) DEFAULT NULL,
+  `pr_designation` varchar(50) DEFAULT NULL,
+  `p1_designation` varchar(50) DEFAULT NULL,
+  `p2_designation` varchar(50) DEFAULT NULL,
+  `p3_designation` varchar(50) DEFAULT NULL,
+  `pa_designation` varchar(50) DEFAULT NULL,
+  `pb_designation` varchar(50) DEFAULT NULL,
+  `pr_status` char(2) DEFAULT NULL,
+  `p1_status` char(2) DEFAULT NULL,
+  `p2_status` char(2) DEFAULT NULL,
+  `p3_status` char(2) DEFAULT NULL,
+  `pa_status` char(2) DEFAULT NULL,
+  `pb_status` char(2) DEFAULT NULL,
+  `pr_post_stat` varchar(28) DEFAULT NULL,
+  `p1_post_stat` varchar(28) DEFAULT NULL,
+  `p2_post_stat` varchar(28) DEFAULT NULL,
+  `p3_post_stat` varchar(28) DEFAULT NULL,
+  `pa_post_stat` varchar(28) DEFAULT NULL,
+  `pb_post_stat` varchar(28) DEFAULT NULL,
+  `pr_officecd` char(8) DEFAULT NULL,
+  `p1_officecd` char(8) DEFAULT NULL,
+  `p2_officecd` char(8) DEFAULT NULL,
+  `p3_officecd` char(8) DEFAULT NULL,
+  `pa_officecd` char(8) DEFAULT NULL,
+  `pb_officecd` char(8) DEFAULT NULL,
+  `pr_officename` varchar(50) DEFAULT NULL,
+  `p1_officename` varchar(50) DEFAULT NULL,
+  `p2_officename` varchar(50) DEFAULT NULL,
+  `p3_officename` varchar(50) DEFAULT NULL,
+  `pa_officename` varchar(50) DEFAULT NULL,
+  `pb_officename` varchar(50) DEFAULT NULL,
+  `pr_officeaddress` varchar(100) DEFAULT NULL,
+  `p1_officeaddress` varchar(100) DEFAULT NULL,
+  `p2_officeaddress` varchar(100) DEFAULT NULL,
+  `p3_officeaddress` varchar(100) DEFAULT NULL,
+  `pa_officeaddress` varchar(100) DEFAULT NULL,
+  `pb_officeaddress` varchar(100) DEFAULT NULL,
+  `pr_postoffice` varchar(40) DEFAULT NULL,
+  `p1_postoffice` varchar(40) DEFAULT NULL,
+  `p2_postoffice` varchar(40) DEFAULT NULL,
+  `p3_postoffice` varchar(40) DEFAULT NULL,
+  `pa_postoffice` varchar(40) DEFAULT NULL,
+  `pb_postoffice` varchar(40) DEFAULT NULL,
+  `pr_subdivision` varchar(30) DEFAULT NULL,
+  `p1_subdivision` varchar(30) DEFAULT NULL,
+  `p2_subdivision` varchar(30) DEFAULT NULL,
+  `p3_subdivision` varchar(30) DEFAULT NULL,
+  `pa_subdivision` varchar(30) DEFAULT NULL,
+  `pb_subdivision` varchar(30) DEFAULT NULL,
+  `pr_policestn` varchar(30) DEFAULT NULL,
+  `p1_policestn` varchar(30) DEFAULT NULL,
+  `p2_policestn` varchar(30) DEFAULT NULL,
+  `p3_policestn` varchar(30) DEFAULT NULL,
+  `pa_policestn` varchar(30) DEFAULT NULL,
+  `pb_policestn` varchar(30) DEFAULT NULL,
+  `district` varchar(20) DEFAULT NULL,
+  `pr_pincode` char(6) DEFAULT NULL,
+  `p1_pincode` char(6) DEFAULT NULL,
+  `p2_pincode` char(6) DEFAULT NULL,
+  `p3_pincode` char(6) DEFAULT NULL,
+  `pa_pincode` char(6) DEFAULT NULL,
+  `pb_pincode` char(6) DEFAULT NULL,
+  `dcrcgrp` char(6) DEFAULT NULL,
+  `dc_venue` varchar(45) DEFAULT NULL,
+  `dc_address` varchar(45) DEFAULT NULL,
+  `dc_date` date DEFAULT NULL,
+  `dc_time` char(15) DEFAULT NULL,
+  `rc_venue` varchar(45) DEFAULT NULL,
+  `traingcode` char(9) DEFAULT NULL,
+  `training_venue` varchar(50) DEFAULT NULL,
+  `venuecode` char(6) DEFAULT NULL,
+  `venue_addr1` varchar(50) DEFAULT NULL,
+  `venue_addr2` varchar(50) DEFAULT NULL,
+  `training_date` date DEFAULT NULL,
+  `training_time` varchar(15) DEFAULT NULL,
+  `polldate` date DEFAULT NULL,
+  `polltime` varchar(20) DEFAULT NULL,
+  KEY `traingcode` (`traingcode`),
+  KEY `venuecode` (`venuecode`),
+  KEY `venuecode_2` (`venuecode`),
+  KEY `pers_off` (`pers_off`),
+  KEY `pr_personcd` (`pr_personcd`),
+  KEY `slno` (`slno`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `second_rand_table_reserve`
+--
+
+CREATE TABLE IF NOT EXISTS `second_rand_table_reserve` (
+  `slno` bigint(20) NOT NULL DEFAULT '0',
+  `groupid` int(6) DEFAULT NULL,
+  `assembly` varchar(30) DEFAULT NULL,
+  `pcname` varchar(30) DEFAULT NULL,
+  `personcd` char(9) DEFAULT NULL,
+  `person_name` varchar(50) DEFAULT NULL,
+  `person_designation` varchar(50) DEFAULT NULL,
+  `post_status` char(2) DEFAULT NULL,
+  `post_stat` varchar(28) DEFAULT NULL,
+  `officecd` char(8) DEFAULT NULL,
+  `office_name` varchar(50) DEFAULT NULL,
+  `office_address` varchar(100) DEFAULT NULL,
+  `post_office` varchar(40) DEFAULT NULL,
+  `subdivision` varchar(30) DEFAULT NULL,
+  `police_stn` varchar(30) DEFAULT NULL,
+  `district` varchar(20) DEFAULT NULL,
+  `pincode` char(6) DEFAULT NULL,
+  `dc_venue` varchar(45) DEFAULT NULL,
+  `dc_address` varchar(45) DEFAULT NULL,
+  `dc_date` date DEFAULT NULL,
+  `dc_time` char(15) DEFAULT NULL,
+  `rc_venue` varchar(45) DEFAULT NULL,
+  `traingcode` char(9) DEFAULT NULL,
+  `training_venue` varchar(50) DEFAULT NULL,
+  `venuecode` char(6) DEFAULT NULL,
+  `venue_addr1` varchar(50) DEFAULT NULL,
+  `venue_addr2` varchar(50) DEFAULT NULL,
+  `training_date` date DEFAULT NULL,
+  `training_time` varchar(15) DEFAULT NULL,
+  `polldate` date DEFAULT NULL,
+  `polltime` varchar(20) DEFAULT NULL,
+  KEY `traingcode` (`traingcode`),
+  KEY `officecd` (`officecd`),
+  KEY `personcd` (`personcd`),
+  KEY `slno` (`slno`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `second_training`
+--
+
+CREATE TABLE IF NOT EXISTS `second_training` (
+  `schedule_cd` char(9) NOT NULL,
+  `for_pc` char(2) NOT NULL,
+  `assembly` char(3) NOT NULL,
+  `party_reserve` char(1) NOT NULL,
+  `start_sl` int(11) NOT NULL,
+  `end_sl` int(11) NOT NULL,
+  `training_venue` char(6) NOT NULL,
+  `training_dt` datetime NOT NULL,
+  `training_time` char(20) NOT NULL,
+  `usercode` int(11) NOT NULL,
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`schedule_cd`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `training_venue_2`
+--
+
+CREATE TABLE IF NOT EXISTS `training_venue_2` (
+  `venue_cd` char(6) CHARACTER SET utf8 NOT NULL,
+  `subdivisioncd` char(4) CHARACTER SET utf8 NOT NULL,
+  `venuename` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `venueaddress1` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `venueaddress2` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
+  `usercode` int(5) NOT NULL,
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`venue_cd`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+create index asm_dcrc on grp_dcrc(forassembly,groupid,member);
+create index fasm_personnela  on personnela(forassembly,groupid,poststat);
+ALTER TABLE `personnela` ADD `training2_sch` CHAR( 9 ) NULL ;
+ALTER TABLE `personnela` ADD INDEX ( `officecd` ) ;
+ALTER TABLE `personnela` ADD INDEX ( `groupid` ) ;
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd` ,`menu_cd` ,`submenu` ,`link` ,`usercode` ,`posted_date`)
+VALUES (NULL , '6', 'Second Training Venue', 'training-venue2.php', '1',CURRENT_TIMESTAMP), 
+(NULL , '6', 'Second Training Allocation', 'second-training-allocation.php', '1',CURRENT_TIMESTAMP);
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd` ,`menu_cd` ,`submenu` ,`link` ,`usercode` ,`posted_date`)
+VALUES (NULL , '9', '2nd App. Letter Populate', 'second-appointment-letter-populate.php', '1',CURRENT_TIMESTAMP);
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) 
+VALUES (NULL, '9', '2nd App. Letter Populate (Reserve)', 'second-appointment-letter-populate-reserve.php', '1', CURRENT_TIMESTAMP), (NULL, '9', '2nd App. Letter2', 'second-appointment-letter2.php', '1', CURRENT_TIMESTAMP);
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) 
+VALUES (NULL, '9', '2nd App. Letter2 (6 member)', 'second-appointment-letter2-6mem.php', '1', CURRENT_TIMESTAMP), (NULL, '9', '2nd App. Letter2 (Reserve)', 'second-appointment-letter2-reserve.php', '1', CURRENT_TIMESTAMP);

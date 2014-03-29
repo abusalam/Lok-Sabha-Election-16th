@@ -1,3 +1,4 @@
+
 <?php
 include 'mysqliconn.php';
 include 'assemblydata1.php';
@@ -6,8 +7,10 @@ include 'postorderdata.php';
 include 'ppdata.php';
 include 'randno1.php';
 include 'reserve1.php';
+include 'reserve2.php';
 include 'dcrc.php';
 include 'dcrcreserve.php';
+include 'countpp1.php';
 
 if(isset($_GET['pc_cd']) && $_GET['pc_cd']!=null)
 {
@@ -68,9 +71,9 @@ while ($i<=$asmparty->countnumb()-1)
 	$sub=$asmparty->getsubpty($i);
 
 	$postdt=new postorderdata($membno);
-	
+	//echo $assembly.'  '.$membno;
 	$j=0;
-	$grpdata=new grpdtldata($assembly);
+	$grpdata=new grpdtldata($assembly,$membno);
 
 	while ($j<=($postdt->countnumb())-1) //Loop for all poststatus
 	{ 
@@ -86,6 +89,7 @@ while ($i<=$asmparty->countnumb()-1)
 		$k=0;
 		while( $x<$ppall->countnumb()) 
 		{
+			$cond=0;
 			$ofcd=$ppall->getofcdpp($x);
 			$bk=$ppall->getbookedpp($x);
 			if ($k<$grpdata->countnumb())
@@ -129,6 +133,7 @@ while ($i<=$asmparty->countnumb()-1)
 						echo '  ----      ';
 						*/
 						$cond=1;
+						
 					 }
 			
 			}
@@ -138,6 +143,7 @@ while ($i<=$asmparty->countnumb()-1)
 					{
 						$grpdata->setof3dtl($k,$ofcd);
 						$cond=1;
+						
 					 }
 			
 			}
@@ -147,18 +153,19 @@ while ($i<=$asmparty->countnumb()-1)
 					{  
 					if ($k==0)
 					{
-					//echo $k;
+				//	echo $k;
 					echo ' ';
 					}
 					
 						$grpdata->setof4dtl($k,$ofcd);
 						$cond=1;
+						
 					 }
 			
 			}
 			if ($memslno==5)
 			{	
-					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($of5,' ')==0) and (strcmp($bk,' ')==0))
+					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($of5,' ')==0) and (strcmp($bk,'')==0))
 					{
 						$grpdata->setof5dtl($k,$ofcd);
 						$cond=1;
@@ -167,12 +174,13 @@ while ($i<=$asmparty->countnumb()-1)
 			}
 			if ($memslno==6)
 			{	
-					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($ofcd,$of5)<>0) and (strcmp($of6,' ')==0) and (strcmp($bk,' ')==0))
+					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($ofcd,$of5)<>0) and (strcmp($of6,' ')==0) and (strcmp($bk,'')==0))
 					{
 						$grpdata->setof6dtl($k,$ofcd);
 						$cond=1;
 					 }
 			}
+			
 			if ($memslno<1 or $memslno>6)
 			{
 				break;
@@ -229,8 +237,10 @@ while ($i<=$asmparty->countnumb()-1)
 $stmt->close();
 $msqli->close();
 new reserve1($dist,$fpc);
+new  reserve2($dist,$fpc);
+new  reserve2($dist,$fpc);
 new dcrc($dist,$fpc);
 new dcrcreserve($dist,$fpc);
-include 'countpp1.php';
 new countpp($fpc);
+//print_r($grpdata);
 ?>

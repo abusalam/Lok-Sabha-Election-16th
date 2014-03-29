@@ -1,7 +1,7 @@
 <?php
 //include 'mysqliconn.php';
 //include 'ppdata.php';
-class reserve1 {
+class reserve2 {
 
 private $result;
 private $msqli; 
@@ -69,7 +69,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  echo ' ';
 		  */
 		  
-		  $totres=round(.8*$totres);
+		  $totres=$totres-round(.8*$totres);
 		  $ppall1=new ppdata($fpc,$pst,$dist,$fasm,'S',2); // pp for subdivision 
 		  $bk='R';
 		  $x=0;
@@ -106,7 +106,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 	}
 	
 	else {
-		echo 'NO  RESULTS';	
+		echo 'NO RESULTS';	
 	}
 $this->stmt->close();
 $this->msqli->close();

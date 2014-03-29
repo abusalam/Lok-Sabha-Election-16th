@@ -29,7 +29,7 @@ date_default_timezone_set('Asia/Calcutta');
 	$num_rows=rowCount($rsId);
 	if($num_rows>0)
 	{
-		include_once('../inc/commit_con.php');
+		include_once('..\inc\commit_con.php');
 		mysqli_autocommit($link,FALSE);
 		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno, bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);

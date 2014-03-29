@@ -11,13 +11,13 @@ private $grpdtl =array();
 private $result;
  private $msqli;
 private $sobj;
-function __construct($asm) {
+function __construct($asm,$memb) {
 
 // select QUERY ON A assembly TABLE
 	
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT * FROM assembly_party where assemblycd='$asm' ") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT * FROM assembly_party where assemblycd='$asm' and no_of_member='$memb'") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 	if($this->result->num_rows > 0) {
@@ -28,10 +28,11 @@ function __construct($asm) {
 			$pc=$row['pccd'];
 			$members=$row['no_of_member'];
 			$partyreqd=$row['no_party'];
+			$sl=$row['start_sl'];
 			for($j=0;$j<=$partyreqd-1;$j++)
 			{
-			  $this->grpdtl[$i]=new groupdtl($asm,$pc,$j+1,' ',' ',' ',' ',' ',' ',' ');
-
+			  $this->grpdtl[$i]=new groupdtl($asm,$pc,$sl+1,' ',' ',' ',' ',' ',' ',' ');
+			$sl=$sl+1;
 			$i=$i+1;
 			}
 

@@ -251,7 +251,7 @@ window.open("reports/form-12a.php?personcd=<?php print $personcd; ?>&type=ed");
 	  <td align="left"><select name="pc" id="pc" style="width:240px;">
       						<option value="0">-Select PC-</option>
                             <?php /*?><?php 	$districtcd=$dist_cd;
-									include_once('function/form_12_fun.php');
+									include_once('function\form_12_fun.php');
 									$rsPC=fatch_PC_ag_dist($districtcd);
 									$num_rows=rowCount($rsPC);
 									if($num_rows>0)

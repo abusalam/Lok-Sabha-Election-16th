@@ -390,7 +390,6 @@ function training_required()
       <td align="left"><input type="text" name="training_time" id="training_time" maxlength="20" style="width:212px;" onchange="javascript:return training_alloted();" /></td>
     </tr>
     <tr>
-    <tr>
       <td align="left"><span class="error">*</span>Post Status</td>
       <td align="left"><select name="post_status" id="post_status" style="width:220px;" onchange="javascript:return member_available(this.value)">
     							<option value="0">-Select Post Status-</option>

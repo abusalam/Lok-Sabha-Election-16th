@@ -79,6 +79,7 @@ while ($i<=$asmparty->countnumb()-1)
 		$k=0;
 		while( $x<$ppall->countnumb()) 
 		{
+			$cond=0;
 			$ofcd=$ppall->getofcdpp($x);
 			$bk=$ppall->getbookedpp($x);
 			if ($k<$grpdata->countnumb())

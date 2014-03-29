@@ -45,10 +45,10 @@ date_default_timezone_set('Asia/Calcutta');
 	{
 		include_once('../inc/commit_con.php');
 		mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		$stmt = mysqli_prepare($link, $sql);
 		
-		mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);
+		mysqli_stmt_bind_param($stmt, 'sssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$block_muni,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);
 				
 		for($i=1;$i<=$num_rows;$i++)
 		{
@@ -60,6 +60,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$personcd=$rowApp['personcd'];
 			$office=$rowApp['office'];
 			$office_address=$rowApp['address1'].", ".$rowApp['address2'];
+			$block_muni=$rowApp['blockormuni_cd'];
 			$postoffice=$rowApp['postoffice'];
 			$subdivision=$rowApp['subdivision'];
 			$policestation=$rowApp['policestation'];
@@ -93,7 +94,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$n++;
 			if($n%1000==0)
 			{
-				echo $n;
+				//echo $n;
 				mysqli_commit($link);
 			}
 			echo "<table width='100%'>

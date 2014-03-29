@@ -32,7 +32,7 @@ if($sub=="Send SMS")
 				$Message=$row_data['message'];
 				
 				$DestinationAddress = $mob_no;
-				include('sms/Index.php');				
+				include('sms/Index.php');			
 			}
 				
 		}

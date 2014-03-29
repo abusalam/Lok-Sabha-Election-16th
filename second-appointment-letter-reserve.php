@@ -61,7 +61,7 @@ if($submit=="Submit")
   <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo isset($_SESSION['subdiv_name'])?$_SESSION['subdiv_name']." SUBDIVISION":""; ?></td></tr>
+<tr><td align="center"><?php echo isset($subdiv_name)?$subdiv_name." SUBDIVISION":""; ?></td></tr>
 <tr><td align="center">SECOND APPOINTMENT LETTER FOR RESERVE PERSONNEL</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 	<table width="95%" class="form" cellpadding="0">

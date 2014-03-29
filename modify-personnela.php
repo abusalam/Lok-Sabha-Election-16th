@@ -591,7 +591,7 @@ function bind_all()
 		}
     }
 	var remarks=document.getElementById('remarks');
-	for (var i = 0; i < posting_status.options.length; i++) 
+	for (var i = 0; i < remarks.options.length; i++) 
 	{
 		if (remarks.options[i].value == "<?php echo $rowPerson['remarks']; ?>")
 		{
