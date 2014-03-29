@@ -498,7 +498,8 @@ function venue_wise_list($venue,$training_dt,$training_time)
 	  poststat.poststatus,
 	  personnela.acno,
 	  personnela.partno,
-	  personnela.slno
+	  personnela.slno,
+	  training_pp.token
 	From training_venue
 	  Inner Join training_schedule On training_venue.venue_cd =
 		training_schedule.training_venue

@@ -22,7 +22,7 @@ label {page-break-after:always}
 <tr><td align="center">
 <table width="800px" cellpadding="0" cellspacing="0" border="0">
 <thead>
-	<tr><th align="center" colspan="5"><?php print $_SESSION['environment']; ?></th></tr>
+	<tr><th align="center"><?php print $_SESSION['environment']; ?></th></tr>
 </thead>
 <tr><td align="center">
 <?php
@@ -45,12 +45,12 @@ for($i=1;$i<=$num_rows_TV;$i++)
 ?>
 	<table width="800px" cellpadding="0" cellspacing="0" border="0">
     <thead>
-    	<tr><th align="center" colspan="5">&nbsp;</th></tr>
-        <tr><th colspan="5" align="center"><hr width="100%" /></th></tr>
+    	<tr><th align="center" colspan="6">&nbsp;</th></tr>
+        <tr><th colspan="6" align="center"><hr width="100%" /></th></tr>
         <tr><th align="left">VENUE: </th><th colspan="4" align="left"><?php print $venue; ?></th></tr>
-        <tr><th colspan="5" align="center"><hr width="100%" /></th></tr>
-        <tr><th width="100px" align="center">PIN</th><th width="250px" align="left">Name</th><th width="190px" align="left">Designation</th><th width="120px" align="left">Posting Status</th><th width="140px" align="left">Enrollment Details AC/Part No./Sl No.</th></tr>
-        <tr><th colspan="5" align="center"><hr width="100%" /></th></tr>
+        <tr><th colspan="6" align="center"><hr width="100%" /></th></tr>
+        <tr><th width="90px" align="center">PIN</th><th width="220px" align="left">Name</th><th width="180px" align="left">Designation</th><th width="120px" align="left">Posting Status</th><th width="140px" align="left">Enrollment Details AC/Part No./Sl No.</th><th width="50px" align="left">Token No</th></tr>
+        <tr><th colspan="6" align="center"><hr width="100%" /></th></tr>
     </thead>
     <tbody>
     	<?php
@@ -63,16 +63,17 @@ for($i=1;$i<=$num_rows_TV;$i++)
 				$rowPersonnel=getRows($rsPersonnel);
 				echo "<tr><td align='center'>$rowPersonnel[personcd]</td><td align='left'>$rowPersonnel[officer_name]</td>
 				<td align='left'>$rowPersonnel[designation]</td><td align='left'>$rowPersonnel[poststatus]</td>
-				<td align='left'>$rowPersonnel[acno]/$rowPersonnel[partno]/$rowPersonnel[slno]</td></tr>\n";
+				<td align='left'>$rowPersonnel[acno]/$rowPersonnel[partno]/$rowPersonnel[slno]</td>
+				<td align='left'>$rowPersonnel[token]</td></tr>\n";
 			}
 		}
 		else
 		{
-			echo "<tr><td align='center' colspan='4'>No Officer Found</td></tr>";
+			echo "<tr><td align='center' colspan='6'>No Officer Found</td></tr>";
 		}
 		?>
     </tbody>
-    <tr><th colspan="5" align="center"><hr width="100%" /></th></tr>
+    <tr><th colspan="6" align="center"><hr width="100%" /></th></tr>
     </table>
     <label></label>
 <?php
@@ -80,7 +81,7 @@ for($i=1;$i<=$num_rows_TV;$i++)
 ?>
 </td></tr>
 <tfoot>
-    <tr><td align="left" colspan="5"><?php print date('l, F dS, Y'); ?></td></tr>
+    <tr><td align="left"><?php print date('l, F dS, Y'); ?></td></tr>
 </tfoot>
 </table>
 </td></tr></table>
