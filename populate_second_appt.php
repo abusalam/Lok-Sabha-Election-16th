@@ -110,7 +110,7 @@ $i=execUpdate($sql271);
 $sql272="update second_appt a join district b on substr(a.dcrcgrp,1,2)=b.districtcd set a.district=b.district";
 $i=execUpdate($sql272);
 
-$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pr_officecd";
+$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pr_officecd, second_appt.per_poststat= a.pr_status where second_appt.pccd='$pc_cd'";
 $i=execUpdate($sql28);
 
 echo "Completed";

@@ -652,3 +652,57 @@ VALUES (NULL, '9', '2nd App. Letter Populate (Reserve)', 'second-appointment-let
 
 INSERT INTO `ppds`.`submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) 
 VALUES (NULL, '9', '2nd App. Letter2 (6 member)', 'second-appointment-letter2-6mem.php', '1', CURRENT_TIMESTAMP), (NULL, '9', '2nd App. Letter2 (Reserve)', 'second-appointment-letter2-reserve.php', '1', CURRENT_TIMESTAMP);
+
+--
+-- SW Version 1.7 Update 2
+--
+
+-- phpMyAdmin SQL Dump
+-- version 4.0.4.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Mar 29, 2014 at 08:34 PM
+-- Server version: 5.2.3-falcon-alpha-community-nt
+-- PHP Version: 5.5.1
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `ppds`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password`
+--
+
+CREATE TABLE IF NOT EXISTS `password` (
+  `randomise` char(6) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `status` char(6) NOT NULL,
+  `usercode` int(11) DEFAULT NULL,
+  `posted_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`randomise`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `password`
+--
+
+INSERT INTO `password` (`randomise`, `password`, `status`, `usercode`, `posted_date`) VALUES
+('1', '5f4dcc3b5aa765d61d8327deb882cf99', 'lock', 1, '2014-03-29 19:10:46'),
+('2', '21232f297a57a5a743894a0e4a801fc3', 'lock', 1, '2014-03-29 18:32:05'),
+('3', 'ee10c315eba2c75b403ea99136f5b48d', 'lock', 1, '2014-03-29 18:49:29');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

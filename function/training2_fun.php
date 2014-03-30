@@ -173,7 +173,7 @@ function fatch_training2_allocation_listAct($sub_div,$training_venue,$PC,$assemb
 
 function second_appointment_letter2_print($from,$to,$mem_no)
 {
-	$sql="Select second_appt.slno,  second_appt.pers_off,  second_appt.groupid,  second_appt.assembly,  second_appt.assembly_name,
+	$sql="Select second_appt.slno,second_appt.pers_off,second_appt.per_poststat,second_appt.groupid,second_appt.assembly,second_appt.assembly_name,
 	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
 	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
 	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,

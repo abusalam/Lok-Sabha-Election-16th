@@ -46,6 +46,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$rowApp=getRows($rsApp);
 			
 			$pers_off=$rowApp['pers_off'];
+			$per_poststat=$rowApp['per_poststat'];
 			$grp_id=$rowApp['groupid'];
 			$for_ass=$rowApp['assembly']."-".$rowApp['assembly_name'];
 			$for_pc=$rowApp['pccd']."-".$rowApp['pcname'];
@@ -119,9 +120,9 @@ date_default_timezone_set('Asia/Calcutta');
       	<table width="800px" cellpadding="1" cellspacing="0">
             <tr>
             	<td align='left' style='padding:5px 25px 5px 2px;; width:150px; vertical-align:top'><div class='div1'>ELECTION URGENT</div></td>
-                <td align='center'><strong><u>ORDER OF APOINTMENT FOR POLLING DUTIES</u></strong><br />
+                <td align='center'><strong><u>ORDER OF APPOINTMENT FOR POLLING DUTIES</u></strong><br />
                 					<u>Assembly General Election, 2014</u></td>
-                <td align='right' style='padding:10px 1px 10px 25px; width:200px; vertical-align:top;'><?php print "Office Code: ".$pers_off; ?><br /><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
+                <td align='right' style='padding:10px 1px 10px 25px; width:200px; vertical-align:top;'><?php print $per_poststat."/".$pers_off; ?><br /><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
             	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
@@ -248,7 +249,7 @@ date_default_timezone_set('Asia/Calcutta');
             <tr>
             	<td colspan='2' valign='middle' align='left'>Place : <?php print uppercase($_SESSION['dist_name']); ?><br />
                 				Date : <?php print date('d/m/Y'); ?></td>
-                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='0' height='50px' width='100px' /><br />
+                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='' height='50px' width='100px' /><br />
                 (__________________)<br />District Election Officer<br /><?php print wordcase($_SESSION['dist_name']) ?> District</td>
             </tr>
             <tr><td colspan="3"><hr style="border:1px solid #999; width:100%;" /></td></tr>

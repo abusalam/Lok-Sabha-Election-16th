@@ -1,7 +1,7 @@
 <?php
 if(isset($_GET['pc_cd']) && $_GET['pc_cd']!=null)
 {
-	$fpc=$_GET['pc_cd'];
+	$pc=$_GET['pc_cd'];
 	//echo $fpc;
 }
 else

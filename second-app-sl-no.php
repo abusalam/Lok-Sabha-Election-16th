@@ -3,8 +3,11 @@ include_once('inc/db_trans.inc.php');
 include_once('function/training2_fun.php');
 $rec=0;
 include_once('inc/commit_con.php');
-try {
+//try {
 mysqli_autocommit($link,FALSE);
+$sql_empty_sl="update second_appt set slno=NULL";
+execUpdate($sql_empty_sl);
+
 $sql="update second_appt set slno=? where pers_off=? and pr_personcd=?";
 $stmt = mysqli_prepare($link, $sql);
 if($stmt!=false)
@@ -34,9 +37,9 @@ else
 }
 mysqli_stmt_close($stmt);
 mysqli_close($link);
-}
-catch(Exception $e)
-{
-	die("Error occured");//echo "error occured"; //$e->Message();
-}
+//}
+//catch(Exception $e)
+//{
+//	die("Error occured");//echo "error occured"; //$e->Message();
+//}
 ?>
