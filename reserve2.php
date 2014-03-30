@@ -76,7 +76,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  //echo $fasm."-".$fpc."-".$pst."<br>";
 		  $this->result_tmp = $this->msqli->query("SELECT max(groupid) maxgpid from personnela where forassembly='$fasm' and forpc='$fpc' and poststat='$pst' and booked='R'") or die($this->msqli->error.__LINE__);
 		  while($row = $this->result_tmp->fetch_assoc()) {
-		  	$x=$row['maxgpid'];
+		  	$gpnew=$row['maxgpid'];
 		  }
 		  $k=0;
 		  //
@@ -85,7 +85,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		        if ($x< $ppall1->countnumb())
 				{
 		  			$psd=$ppall1->getperscdpp($x);
-					$gpd=$x+1;
+					$gpd=$gpnew+1;
 					$this->stmt->execute();
 					$x=$x+1;
 				}
