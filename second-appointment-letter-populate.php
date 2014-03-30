@@ -89,6 +89,42 @@ function populate_click()
 </script>
 <?php
 }
+
+$multiply=isset($_POST['multiply'])?$_POST['multiply']:"";
+if($multiply=="Multiply")
+{
+ ?>
+<script type="text/javascript" language="javascript">
+function populate_click()
+{
+	var pc=document.getElementById('hid_pc').value;
+	//window.history.back();
+	//document.getElementById("rand_result").innerHTML="";
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("populate_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("multiply").disabled=true;
+		document.getElementById("form1").style="cursor:default";
+		}
+	  }
+	xmlhttp.open("GET","multiply-second-app.php",true);
+	document.getElementById("populate_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
+	xmlhttp.send();
+}
+</script>
+<?php
+}
 ?>
 <body onload="return populate_click();">
 <div width="100%" align="center">
@@ -101,27 +137,30 @@ function populate_click()
   <td align="center">SECOND APPOINTMENT LETTER POPULATE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="50%" class="form" cellpadding="0">
-	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
+	<tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
+    <tr><td height="18px" colspan="3" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
 	<tr>
-      <td align="center" colspan="2"><div id="populate_result">&nbsp;</div></td></tr>
-    <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
+      <td align="center" colspan="3"><div id="populate_result">&nbsp;</div></td></tr>
+    <tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<input type="hidden" id="hid_pc" value="<?php print $pc_cd; ?>" />
     <input type="hidden" name="hid_rand" value="<?php echo rand(0,500); ?>" />
 	<!--<tr><td align="center" colspan="2">Password: &nbsp;&nbsp;&nbsp;<input type="password" id="txt1" name="txt1" /></td></tr>-->
-    <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
+    <tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<tr>
 	  <td align="center"><input type="submit" name="populate" id="populate" value="Populate" class="button"  style="height:50px; width:100px;" /></td>
+      <td align="center"><input type="submit" name="multiply" id="multiply" value="Multiply" class="button"  style="height:50px; width:100px;" /></td>
       <td align="center"><input type="submit" name="gensl" id="gensl" value="Serial" class="button"  style="height:50px; width:100px;" /></td></tr>
     <tr>
       <td align="left">&nbsp;</td>
       <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
     </tr>
     <tr>
       <td align="left">&nbsp;</td>
       <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
     </tr>
-    <tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+    <tr><td colspan="3" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 </table></form>
 </td></tr></table>
 </td></tr>

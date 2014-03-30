@@ -36,7 +36,7 @@ date_default_timezone_set('Asia/Calcutta');
 		exit;
 	}
 	
-	$rec_set_hdr=second_appointment_letter_reserve2_print($from-1,$to-$from+1,$mem_no);
+	$rec_set_hdr=second_appointment_letter_reserve2_print($from-1,$to-$from+1);
 	if(rowCount($rec_set_hdr)>0)
 	{
 		for($n=0;$n<rowCount($rec_set_hdr);$n++)

@@ -58,7 +58,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$grp_id=$rec_arr_hdr['groupid'];
 			$for_ass=$rec_arr_hdr['assemblycd']."-".$rec_arr_hdr['assemblyname'];
 			$for_pc=$rec_arr_hdr['pccd']."-".$rec_arr_hdr['pcname'];
-			$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
+			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
 			$dc=($rec_arr_hdr['dc_venue']!=''?$rec_arr_hdr['dc_venue'].", ".$rec_arr_hdr['dc_addr']:"___________________________________");
 			$dc_date=($rec_arr_hdr['dc_date']!=''?$rec_arr_hdr['dc_date']:"___________");
 			$dc_dateD=$rec_arr_hdr['dc_dateD'];

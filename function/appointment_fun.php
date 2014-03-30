@@ -576,7 +576,8 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  dcrc_party.dc_time,
 	  dcrcmaster.rcvenue,
 	  personnela.poststat,
-	  personnela.off_desg
+	  personnela.off_desg,
+	  personnela.dcrccd
 	From personnela
 	  Inner Join office On personnela.officecd = office.officecd
 	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
@@ -586,7 +587,7 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
 		pc.subdivisioncd
 	  Left Join assembly On personnela.forassembly = assembly.assemblycd
-	  Inner Join dcrcmaster On personnela.forassembly = dcrcmaster.assemblycd
+	  Inner Join dcrcmaster On personnela.dcrccd = dcrcmaster.dcrcgrp
 	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";
 	$sql.=" where personnela.booked='R'";
 	if($forassembly!='' && $forassembly!=null && $forassembly!=0)

@@ -13,7 +13,8 @@ function __construct($dist,$pc) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	
+	$this->result = $this->msqli->query("update personnela set dcrccd=NULL where forpc='$pc' ") or die($this->msqli->error.__LINE__);
+
 	//SELECT a.assemblycd,a.partyindcrc,a.number_of_member,a.dcrcgrp,b.poststat,b.no_or_pc,b.numb FROM `dcrc_party`a , reserve b WHERE a.assemblycd=b.forassembly and a.subdivisioncd=b.forsubdivision and a.number_of_member=b.number_of_member and a.forpc=b.forp and a.forsubdivision='$sub' and a.forpc='$pc'
 	
 	$this->result = $this->msqli->query("SELECT a.assemblycd as asmcd ,a.partyindcrc as partyno ,a.number_of_member as member ,a.dcrcgrp as dcgrp ,b.poststat as post,b.no_or_pc as noorpc,b.numb as numberresv,a.subdivisioncd as subdiv,a.forpc as pccd FROM `dcrc_party` a , reserve b WHERE a.assemblycd=b.forassembly and a.subdivisioncd=b.forsubdivision and a.number_of_member=b.number_of_member and a.forpc=b.forpc and substr(a.subdivisioncd,1,2)='$dist' and a.forpc='$pc' ") or die($this->msqli->error.__LINE__);
@@ -69,6 +70,7 @@ $this->stmt->bind_param('ssiss',$dc,$fasm,$gpd,$post,$fpc);
 		   }
 		  
 		//  echo $nors;
+		
 		  
 		  $this->result1 = $this->msqli->query("select * from personnela where substr(forsubdivision,1,2)='$dist' and forpc='$fpc' and forassembly='$fasm' and booked='R' and poststat='$post' and (dcrccd='      ' or dcrccd is null) limit 0, $nors  ") or die($this->msqli->error.__LINE__);
 /*echo '  ';
@@ -82,7 +84,7 @@ echo $fasm;
 		  $k=0;
 		  //
 		  while($row1 = $this->result1->fetch_assoc() ) 
-		  {		
+		  {		//echo $fpc."-".$fasm."-".$dc."<br/>\n";
 	//	  echo  $this->result1->num_rows;
 		     //  $dc=$row1['dcrccd'];
 			   $gpd=$row1['groupid'];

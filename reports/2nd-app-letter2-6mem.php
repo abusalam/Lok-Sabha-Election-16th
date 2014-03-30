@@ -50,7 +50,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$for_ass=$rowApp['assembly']."-".$rowApp['assembly_name'];
 			$for_pc=$rowApp['pccd']."-".$rowApp['pcname'];
 			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
-			$dc=($rowApp['dc_venue']!=''?$rowApp['dc_venue'].", ".$rec_arr_hdr['dc_address']:"___________________________________");
+			$dc=($rowApp['dc_venue']!=''?$rowApp['dc_venue'].", ".$rowApp['dc_address']:"___________________________________");
 			$dc_date=($rowApp['dc_date']!=''?$rowApp['dc_date']:"___________");
 			$dc_time=($rowApp['dc_time']!=''?$rowApp['dc_time']:"___________");
 			$rcvenue=($rowApp['rc_venue']!=''?$rowApp['rc_venue']:"_______________________________");
@@ -61,6 +61,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$pr_office=$rowApp['pr_officename'];
 			$pr_ofc_address=$rowApp['pr_officeaddress'].", P.O.-".$rowApp['pr_postoffice'].", Subdiv.-".$rowApp['pr_subdivision'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['pr_pincode'];
 			$pr_ofc_cd=$rowApp['pr_officecd'];
+			$pr_post_stat=$rowApp['pr_post_stat'];
 			
 			$p1_name=$rowApp['p1_name'];
 			$p1_desig=$rowApp['p1_designation'];
@@ -69,6 +70,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$p1_ofc_address=$rowApp['p1_officeaddress'].", P.O.-".$rowApp['p1_postoffice'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['p1_pincode'];
 			$p1_ofc_address1=$rowApp['p1_officeaddress'].", P.O.-".$rowApp['p1_postoffice'].", Subdiv.-".$rowApp['p1_subdivision'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['p1_pincode'];
 			$p1_ofc_cd=$rowApp['p1_officecd'];
+			$p1_post_stat=$rowApp['p1_post_stat'];
 			
 			$p2_name=$rowApp['p2_name'];
 			$p2_desig=$rowApp['p2_designation'];
@@ -76,6 +78,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$p2_office=$rowApp['p2_officename'];
 			$p2_ofc_address=$rowApp['p2_officeaddress'].", P.O.-".$rowApp['p2_postoffice'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['p2_pincode'];
 			$p2_ofc_cd=$rowApp['p2_officecd'];
+			$p2_post_stat=$rowApp['p2_post_stat'];
 			
 			$p3_name=$rowApp['p3_name'];
 			$p3_desig=$rowApp['p3_designation'];
@@ -83,6 +86,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$p3_office=$rowApp['p3_officename'];
 			$p3_ofc_address=$rowApp['p3_officeaddress'].", P.O.-".$rowApp['p3_postoffice'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['p3_pincode'];
 			$p3_ofc_cd=$rowApp['p3_officecd'];
+			$p3_post_stat=$rowApp['p3_post_stat'];
 			
 			$pa_name=$rowApp['pa_name'];
 			$pa_desig=$rowApp['pa_designation'];
@@ -90,6 +94,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$pa_office=$rowApp['pa_officename'];
 			$pa_ofc_address=$rowApp['pa_officeaddress'].", P.O.-".$rowApp['pa_postoffice'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['pa_pincode'];
 			$pa_ofc_cd=$rowApp['pa_officecd'];
+			$pa_post_stat=$rowApp['pa_post_stat'];
 			
 			$pb_name=$rowApp['pb_name'];
 			$pb_desig=$rowApp['pb_designation'];
@@ -97,6 +102,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$pb_office=$rowApp['pb_officename'];
 			$pb_ofc_address=$rowApp['pb_officeaddress'].", P.O.-".$rowApp['pb_postoffice'].", Dist.-".$rowApp['district'].", PIN-".$rowApp['pb_pincode'];
 			$pb_ofc_cd=$rowApp['pb_officecd'];
+			$pb_post_stat=$rowApp['pr_post_stat'];
 			
 			$poll_date=$rowApp['polldate'];
 			$poll_time=$rowApp['polltime'];
@@ -162,6 +168,8 @@ date_default_timezone_set('Asia/Calcutta');
                         <td align='left'>
                         <?php	
 						echo $pr_name.", ".$pr_desig." (PIN-".$pr_code.")";
+						echo "<br />";
+						echo $pr_post_stat;
 						echo "<br /><br /><br />";
 						echo $pr_office.", ".$pr_ofc_address;
 						echo "<br /><br />";
@@ -171,6 +179,8 @@ date_default_timezone_set('Asia/Calcutta');
                         <td align='left'>
                         <?php	
 						echo "1. ".$p1_name.", ".$p1_desig." (PIN-".$p1_code.")";
+						echo "<br />";
+						echo $p1_post_stat;
 						echo "<br /><br />";
 						echo $p1_office.", ".$p1_ofc_address;
 						echo "<br /><br />";
@@ -178,6 +188,8 @@ date_default_timezone_set('Asia/Calcutta');
 						echo "<br /><br />";
 						
 						echo "2. ".$p2_name.", ".$p2_desig." (PIN-".$p2_code.")";
+						echo "<br />";
+						echo $p2_post_stat;
 						echo "<br /><br />";
 						echo $p2_office.", ".$p2_ofc_address;
 						echo "<br /><br />";
@@ -185,6 +197,8 @@ date_default_timezone_set('Asia/Calcutta');
 						echo "<br /><br />";
 						
 						echo "3. ".$pa_name.", ".$pa_desig." (PIN-".$pa_code.")";
+						echo "<br />";
+						echo $pa_post_stat;
 						echo "<br /><br />";
 						echo $pa_office.", ".$pa_ofc_address;
 						echo "<br /><br />";
@@ -192,6 +206,8 @@ date_default_timezone_set('Asia/Calcutta');
 						echo "<br /><br />";
 						
 						echo "4. ".$pb_name.", ".$pb_desig." (PIN-".$pb_code.")";
+						echo "<br />";
+						echo $pb_post_stat;
 						echo "<br /><br />";
 						echo $pb_office.", ".$pb_ofc_address;
 						echo "<br /><br />";
@@ -199,6 +215,8 @@ date_default_timezone_set('Asia/Calcutta');
 						echo "<br /><br />";
 						
 						echo "5. ".$p3_name.", ".$p3_desig." (PIN-".$p3_code.")";
+						echo "<br />";
+						echo $p3_post_stat;
 						echo "<br /><br />";
 						echo $p3_office.", ".$p3_ofc_address;
 						echo "<br /><br />";
@@ -209,6 +227,8 @@ date_default_timezone_set('Asia/Calcutta');
                         <td align='left'>
                         <?php	
 						echo "1. ".$p1_name.", ".$p1_desig." (PIN-".$p1_code.")";
+						echo "<br />";
+						echo $p1_post_stat;
 						echo "<br /><br />";
 						echo $p1_office.", ".$p1_ofc_address1;
 						echo "<br /><br />";
