@@ -577,24 +577,26 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  dcrcmaster.rcvenue,
 	  personnela.poststat,
 	  personnela.off_desg,
-	  personnela.dcrccd
+	  personnela.dcrccd,
+	  poststat.poststatus
 	From personnela
 	  Inner Join office On personnela.officecd = office.officecd
 	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd
-	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join district On office.districtcd = district.districtcd        
 	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
 		pc.subdivisioncd
 	  Left Join assembly On personnela.forassembly = assembly.assemblycd
 	  Inner Join dcrcmaster On personnela.dcrccd = dcrcmaster.dcrcgrp
-	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";
+	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp
+	  Inner Join poststat On personnela.poststat = poststat.post_stat ";
 	$sql.=" where personnela.booked='R'";
-	if($forassembly!='' && $forassembly!=null && $forassembly!=0)
+	if($forassembly!='' || $forassembly!=null || $forassembly!=0)
 		$sql.=" and personnela.forassembly='$forassembly'";
-	elseif($forpc!='' && $forpc!=null && $forpc!=0)
+	elseif($forpc!='' || $forpc!=null || $forpc!=0)
 		$sql.=" and personnela.forpc='$forpc'";
-	if($group_id!='' && $group_id!=null)
+	if($group_id!='' || $group_id!=null)
 		$sql.=" and personnela.groupid='$group_id'";
 	$sql.=" order by personnela.forpc,personnela.forassembly,office.subdivisioncd,office.blockormuni_cd,office.officecd,personnela.groupid, personnela.poststat";
 //	print $sql; exit;

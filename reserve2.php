@@ -73,6 +73,11 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  $ppall1=new ppdata($fpc,$pst,$dist,$fasm,'S',2); // pp for subdivision 
 		  $bk='R';
 		  $x=0;
+		  //echo $fasm."-".$fpc."-".$pst."<br>";
+		  $this->result_tmp = $this->msqli->query("SELECT max(groupid) maxgpid from personnela where forassembly='$fasm' and forpc='$fpc' and poststat='$pst' and booked='R'") or die($this->msqli->error.__LINE__);
+		  while($row = $this->result_tmp->fetch_assoc()) {
+		  	$x=$row['maxgpid'];
+		  }
 		  $k=0;
 		  //
 		  while( $k<$totres) 

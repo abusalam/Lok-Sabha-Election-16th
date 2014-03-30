@@ -5,15 +5,15 @@ date_default_timezone_set('Asia/Calcutta');
 	include_once('inc/commit_con.php');
 	mysqli_autocommit($link,FALSE);
 	
-	$sql="insert into second_rand_table_reserve (groupid,assembly,pcname,personcd,person_name,person_designation,post_status,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue, dc_address,dc_date,dc_time,rc_venue) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	$sql="insert into second_rand_table_reserve (groupid,assembly,pcname,personcd,person_name,person_designation,post_status,post_stat,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue, dc_address,dc_date,dc_time,rc_venue) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	$stmt = mysqli_prepare($link, $sql);
-	mysqli_stmt_bind_param($stmt, 'isssssssssssssssssss',$grp_id,$for_ass,$for_pc,$pp_code,$pp_name, $pp_desig,$post_status,$pp_ofc_cd,$pp_office,$ofc_add,$postofc,$subdiv, $ps,$dist,$pin,$dcvenue,$dc_addr,$dc_dateD,$dc_time,$rcvenue);
+	mysqli_stmt_bind_param($stmt, 'issssssssssssssssssss',$grp_id,$for_ass,$for_pc,$pp_code,$pp_name, $pp_desig,$post_status,$post_stat,$pp_ofc_cd,$pp_office,$ofc_add,$postofc,$subdiv, $ps,$dist,$pin,$dcvenue,$dc_addr,$dc_dateD,$dc_time,$rcvenue);
 	
 	$rec=0;
 	extract($_GET);
 	$group_id=isset($_GET['group_id'])?decode($_GET['group_id']):"";
 	$forassembly=isset($_GET['assembly'])?decode($_GET['assembly']):"";
-	$forpc=decode($_GET['pc_cd']);
+	$forpc=$_GET['pc_cd'];
 	//$forpc='40';
 	$del_ret=delete_prev_data_second_rand_reserve($forassembly,$forpc,$group_id);
 	$rec_set_hdr=second_appointment_letter_reserve($group_id,$forassembly,$forpc);
@@ -39,6 +39,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$pp_desig=$rec_arr_hdr['off_desg'];
 			$pp_code=$rec_arr_hdr['personcd'];
 			$post_status=$rec_arr_hdr['poststat'];
+			$post_stat=$rec_arr_hdr['poststatus'];
 			$pp_office=$rec_arr_hdr['office'];
 			$ofc_add=$rec_arr_hdr['address1'].", ".$rec_arr_hdr['address2'];
 			$postofc=$rec_arr_hdr['postoffice'];

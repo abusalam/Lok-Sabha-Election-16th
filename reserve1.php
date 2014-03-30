@@ -73,6 +73,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  $ppall1=new ppdata($fpc,$pst,$dist,$fasm,'S',2); // pp for subdivision 
 		  $bk='R';
 		  $x=0;
+		  
 		  $k=0;
 		  //
 		  while( $k<$totres) 
@@ -107,7 +108,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 	
 	else {
 		echo 'NO  RESULTS';	
-	}
+	} 
 $this->stmt->close();
 $this->msqli->close();
 		
