@@ -239,6 +239,8 @@ $msqli->close();
 new reserve1($dist,$fpc);
 new  reserve2($dist,$fpc);
 new  reserve2($dist,$fpc);
+new  reserve2($dist,$fpc);
+new  reserve2($dist,$fpc);
 new dcrc($dist,$fpc);
 new dcrcreserve($dist,$fpc);
 new countpp($fpc);

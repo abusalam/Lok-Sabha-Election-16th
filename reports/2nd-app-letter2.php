@@ -102,7 +102,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$pb_office=$rowApp['pb_officename'];
 			$pb_ofc_address=$rowApp['pb_officeaddress'].", P.O.-".$rowApp['pb_postoffice'].", Subdiv.-".$rowApp['pb_subdivision'].", Dist.-".$rowApp['district'];
 			$pb_ofc_cd=$rowApp['pb_officecd'];
-			$pb_post_stat=$rowApp['pr_post_stat'];
+			$pb_post_stat=$rowApp['pb_post_stat'];
 			
 			$poll_date=$rowApp['polldate'];
 			$poll_time=$rowApp['polltime'];
