@@ -3,6 +3,10 @@ date_default_timezone_set('Asia/Calcutta');
 	include_once('inc/db_trans.inc.php');
 	include_once('function/appointment_fun.php');
 	include_once('inc/commit_con.php');
+	
+	//$sql19="update personnela join second_training on personnela.forpc=second_training.for_pc and personnela.forassembly=second_training.assembly and personnela.booked=second_training.party_reserve set personnela.training2_sch=second_training.schedule_cd where  personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_pc='$pc_cd'";
+	//$i=execUpdate($sql19);
+	
 	mysqli_autocommit($link,FALSE);
 	
 	$sql="insert into second_rand_table_reserve (groupid,assembly,pcname,personcd,person_name,person_designation,post_status,post_stat,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue, dc_address,dc_date,dc_time,rc_venue) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -14,6 +18,10 @@ date_default_timezone_set('Asia/Calcutta');
 	$group_id=isset($_GET['group_id'])?decode($_GET['group_id']):"";
 	$forassembly=isset($_GET['assembly'])?decode($_GET['assembly']):"";
 	$forpc=$_GET['pc_cd'];
+	
+	$sql19="update personnela join second_training on personnela.forpc=second_training.for_pc and personnela.forassembly=second_training.assembly and personnela.booked=second_training.party_reserve set personnela.training2_sch=second_training.schedule_cd where  personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_pc='$pc_cd'";
+	$ret=execUpdate($sql19);
+	
 	//$forpc='40';
 	$del_ret=delete_prev_data_second_rand_reserve($forassembly,$forpc,$group_id);
 	$rec_set_hdr=second_appointment_letter_reserve($group_id,$forassembly,$forpc);

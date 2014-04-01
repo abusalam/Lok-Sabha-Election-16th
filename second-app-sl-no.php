@@ -5,7 +5,7 @@ $rec=0;
 include_once('inc/commit_con.php');
 //try {
 mysqli_autocommit($link,FALSE);
-$sql_empty_sl="update second_appt set slno=NULL";
+$sql_empty_sl="update second_appt set slno=0";
 execUpdate($sql_empty_sl);
 
 $sql="update second_appt set slno=? where pers_off=? and pr_personcd=?";
