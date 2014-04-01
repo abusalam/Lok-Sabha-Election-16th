@@ -38,7 +38,7 @@ WHERE personnela.forpc = '$pc_cd' and  personnela.booked = 'P'  and personnela.p
 $i=execUpdate($sql6);
 
 $sql7="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
-second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.`pb_status`='PB',second_appt.pa_post_stat='Addl. 2nd Polling Officer-2' 
+second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.`pb_status`='PB',second_appt.pb_post_stat='Addl. 2nd Polling Officer-2' 
 WHERE personnela.forpc = '$pc_cd' and  personnela.booked = 'P'  and personnela.poststat = 'PB'";
 $i=execUpdate($sql7);
 
