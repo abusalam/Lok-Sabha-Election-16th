@@ -158,7 +158,7 @@ if($action=='Submit')
 			$recipient=$ra['email'];
 			$ph_no=$ra['mob_no'];
 			
-			send_mail($recipient,$name);
+			//send_mail($recipient,$name);
 			
 			$Message=$name.", You have not attended the training program conducted for election duty.";
 			$mob_no = $ph_no;
