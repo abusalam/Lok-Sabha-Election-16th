@@ -102,9 +102,10 @@ function new_per_search()
 			document.getElementById('replace').disabled=false;
 		else
 			document.getElementById('replace').disabled=true;	
+		document.getElementById('print').disabled=true;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&assembly="+assembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender,true);
+	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&opn=g_new_per",true);
 	xmlhttp.send();
 }
 function replacement()
@@ -115,6 +116,9 @@ function replacement()
 	var groupid=document.getElementById('polling_party_no').value;
 	var forpc=document.getElementById('hid_forpc').innerHTML;
 	var forassembly=document.getElementById('hid_forassembly').innerHTML;
+	var booked=document.getElementById('hid_booked').innerHTML;
+	var dcrccd=document.getElementById('hid_dcrccd').innerHTML;
+	var training2_sch=document.getElementById('hid_training2_sch').innerHTML;
 	//alert(old_p_id+","+new_p_id+","+assembly+","+groupid);
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -133,9 +137,38 @@ function replacement()
 		document.getElementById('replace').disabled=true;
 		document.getElementById('search').disabled=true;
 		document.getElementById('p_id').disabled=true;
+		document.getElementById('print').disabled=false;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid,true);
+	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);
+	xmlhttp.send();
+}
+function print_appletter()
+{
+	var new_p_id=document.getElementById('new_per_id').innerHTML;
+	var booked=document.getElementById('hid_booked').innerHTML;
+	var forpc=document.getElementById('hid_forpc').innerHTML;
+	var forassembly=document.getElementById('assembly').value;
+	var groupid=document.getElementById('polling_party_no').value;
+	var usercd=<?php print $user_cd; ?>;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		window.open(xmlhttp.responseText);
+		//document.getElementById('msg').innerHTML=xmlhttp.responseText;
+		}
+	  }
+
+	xmlhttp.open("GET","ajax-appointment.php?p_id="+new_p_id+"&booked="+booked+"&forpc="+forpc+"&forassembly="+forassembly+"&groupid="+groupid+"&opn=gp_replacement",true);
 	xmlhttp.send();
 }
 </script>
@@ -249,7 +282,7 @@ function replacement()
     	<td align="center" colspan="2">
         	<input id="search" name="search" value="Search" type="button" onclick="return new_per_search();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input id="replace" name="replace" value="Replace" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="print" name="print" value="Print Appointment Letter" type="submit" style="visibility:hidden" />
+            <input id="print" name="print" value="Print Appointment Letter" type="button" onclick="return print_appletter();" disabled="true" />
         </td>
     </tr>
 </table>

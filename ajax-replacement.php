@@ -10,6 +10,7 @@ $ass; $polling_party; $post_stat;
 $ass=isset($_GET["ass"])?$_GET["ass"]:"";
 $polling_party=isset($_GET["polling_party"])?$_GET["polling_party"]:"";
 $post_stat=isset($_GET["post_stat"])?$_GET["post_stat"]:"";
+$opn=isset($_GET["opn"])?$_GET["opn"]:"";
 if($ass!='' && $polling_party!='' && $post_stat!='')
 {
 	$rs_person_name; $row_person_name;
@@ -74,7 +75,7 @@ if($p_id != '')
 		echo "<tr><td align='left' colspan='2'>Present Address: </td><td align='left' colspan='2'>".$row_person['pre_ass']."<hidden id='hid_pre_ass' name='hid_pre_ass' style='display:none;'>".$row_person['pre_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_person['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_person['per_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_person['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_person['post_ass_cd']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden></td></tr>\n";
+		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
 		echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='o_booked'>Yes</td></tr>\n";
 		echo "</table>";
 		}
@@ -94,31 +95,35 @@ $assembly=isset($_GET["assembly"])?$_GET["assembly"]:"";
 $posting_status=isset($_GET["posting_status"])?$_GET["posting_status"]:"";
 $groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
 $gender=isset($_GET["gender"])?$_GET["gender"]:"";
-if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
+if($opn=='g_new_per')
 {
-	$rs_new_per; $row_new_per;
-	$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_status,$groupid,$gender);
-	//$random_rs_person=array_rand($rs_new_per);
-	$num_rows_new_per=rowCount($rs_new_per);
-	if($num_rows_new_per>0)
+	$forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
+	if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 	{
-		$row_new_per=getRows($rs_new_per);
-		echo "<table>\n";
-		echo "<tr><td align='center' colspan='4'><b>NEW PERSONNEL</b></td></tr>\n";
-		echo "<tr><td align='left'><b>Personnel ID: </b></td><td align='left' id='new_per_id'>".$row_new_per['personcd']."</td><td align='left'><b>Office ID: </b></td><td>".$row_new_per['officecd']."</td></tr>\n";
-		echo "<tr><td align='left'>Name: </td><td align='left' colspan='3'>".$row_new_per['officer_name']."</td></tr>\n";
-		echo "<tr><td align='left'>Designation: </td><td align='left' colspan='3'>".$row_new_per['off_desg']."</td></tr>\n";
-		echo "<tr><td align='left'>Office Address: </td><td align='left' colspan='3'>".$row_new_per['address1'].",".$row_new_per['address2'].", PO-".$row_new_per['postoffice'].", PS-".$row_new_per['policestation'].", Subdiv-".$row_new_per['subdivision'].", Dist.-".$row_new_per['district'].",".$row_new_per['pin']."</td></tr>\n";
-		echo "<tr><td align='left'>Date of Birth: </td><td align='left'>".$row_new_per['dateofbirth']."</td><td align='left'>Sex: </td><td align='left'>".$row_new_per['gender']."</td></tr>\n";
-		echo "<tr><td align='left'>EPIC No: </td><td align='left'>".$row_new_per['epic']."</td><td align='left'>Posting Status: </td><td align='left'>".$row_new_per['poststatus']."</td></tr>\n";
-		echo "<tr><td align='left'>Present Address: </td><td align='left' colspan='3'>".$row_new_per['present_addr1'].", ".$row_new_per['present_addr2']."</td></tr>\n";
-		echo "<tr><td align='left' colspan='4'><b>Assembly of</b></td></tr>\n";
-		echo "<tr><td align='left' colspan='2'>Present Address: </td><td align='left' colspan='2'>".$row_new_per['pre_ass']."<hidden id='hid_pre_ass' name='hid_pre_ass' style='display:none;'>".$row_new_per['pre_ass']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_new_per['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_new_per['per_ass']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_new_per['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_new_per['post_ass']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_new_per['post_ass']."</hidden></td></tr>\n";
-		echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='n_booked'>No</td></tr>\n";
-		echo "</table>";
+		$rs_new_per; $row_new_per;
+		$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender);
+		//$random_rs_person=array_rand($rs_new_per);
+		$num_rows_new_per=rowCount($rs_new_per);
+		if($num_rows_new_per>0)
+		{
+			$row_new_per=getRows($rs_new_per);
+			echo "<table>\n";
+			echo "<tr><td align='center' colspan='4'><b>NEW PERSONNEL</b></td></tr>\n";
+			echo "<tr><td align='left'><b>Personnel ID: </b></td><td align='left' id='new_per_id'>".$row_new_per['personcd']."</td><td align='left'><b>Office ID: </b></td><td>".$row_new_per['officecd']."</td></tr>\n";
+			echo "<tr><td align='left'>Name: </td><td align='left' colspan='3'>".$row_new_per['officer_name']."</td></tr>\n";
+			echo "<tr><td align='left'>Designation: </td><td align='left' colspan='3'>".$row_new_per['off_desg']."</td></tr>\n";
+			echo "<tr><td align='left'>Office Address: </td><td align='left' colspan='3'>".$row_new_per['address1'].",".$row_new_per['address2'].", PO-".$row_new_per['postoffice'].", PS-".$row_new_per['policestation'].", Subdiv-".$row_new_per['subdivision'].", Dist.-".$row_new_per['district'].",".$row_new_per['pin']."</td></tr>\n";
+			echo "<tr><td align='left'>Date of Birth: </td><td align='left'>".$row_new_per['dateofbirth']."</td><td align='left'>Sex: </td><td align='left'>".$row_new_per['gender']."</td></tr>\n";
+			echo "<tr><td align='left'>EPIC No: </td><td align='left'>".$row_new_per['epic']."</td><td align='left'>Posting Status: </td><td align='left'>".$row_new_per['poststatus']."</td></tr>\n";
+			echo "<tr><td align='left'>Present Address: </td><td align='left' colspan='3'>".$row_new_per['present_addr1'].", ".$row_new_per['present_addr2']."</td></tr>\n";
+			echo "<tr><td align='left' colspan='4'><b>Assembly of</b></td></tr>\n";
+			echo "<tr><td align='left' colspan='2'>Present Address: </td><td align='left' colspan='2'>".$row_new_per['pre_ass']."<hidden id='hid_pre_ass' name='hid_pre_ass' style='display:none;'>".$row_new_per['pre_ass']."</hidden></td></tr>\n";
+			echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_new_per['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_new_per['per_ass']."</hidden></td></tr>\n";
+			echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_new_per['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_new_per['post_ass']."</hidden></td></tr>\n";
+			echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_new_per['post_ass']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_new_per['post_ass']."</hidden></td></tr>\n";
+			echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='n_booked'>No</td></tr>\n";
+			echo "</table>";
+		}
 	}
 }
 //==============================Replace===============================
@@ -129,23 +134,29 @@ $ass=isset($_GET["ass"])?$_GET["ass"]:"";
 $forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
 $groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
 $usercd=isset($_SESSION)?$_SESSION['user_cd']:"";
-if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
+if($opn=='g_rplc')
 {
-	$selected=1;
-	$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,'P',$selected);
-	if($ret==1)
+	$booked=isset($_GET["booked"])?$_GET["booked"]:"";
+	$dcrccd=isset($_GET["dcrccd"])?$_GET["dcrccd"]:"";
+	$training2_sch=isset($_GET["training2_sch"])?$_GET["training2_sch"]:"";
+	if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 	{
-		$selected=0;
-		$res1=update_personnel_replacement($old_p_id,' ',$ass,$forpc,'C',$selected);
-		if($res1==1)
+		$selected=1;
+		$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch);
+		if($ret==1)
 		{
-			echo "Changed";
+			$selected=0;
+			$res1=update_personnel_replacement($old_p_id,0,'',$forpc,'C',$selected,'','');
+			if($res1==1)
+			{
+				echo "Changed";
+			}
+			$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
 		}
-		$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
 	}
 }
 //================================ Single Replacement Personnel =======================================
-$opn=isset($_GET["opn"])?$_GET["opn"]:"";
+
 if($opn=='new_search')
 {
 	$forpc=$_GET["forpc"];

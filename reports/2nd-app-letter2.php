@@ -120,7 +120,7 @@ date_default_timezone_set('Asia/Calcutta');
             <tr>
             	<td align='left' style='padding:5px 25px 5px 2px;; width:150px; vertical-align:top'><div class='div1'>ELECTION URGENT</div></td>
                 <td align='center'><strong><u>ORDER OF APPOINTMENT FOR POLLING DUTIES</u></strong><br />
-                					<u>Assembly General Election, 2014</u></td>
+                					<u>General Parliamentary Election, 2014</u></td>
                 <td align='right' style='padding:10px 1px 10px 25px; width:200px; vertical-align:top;'><?php print $per_poststat."/".$pers_off; ?><br /><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>

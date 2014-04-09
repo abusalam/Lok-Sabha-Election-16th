@@ -214,7 +214,7 @@ function fatch_PersonDetails($p_id)
 	$sql="SELECT personnela.officer_name, personnela.officecd, personnela.off_desg, office.address1, office.address2, office.postoffice,
 	policestation.policestation, office.pin, subdivision.subdivision, DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,
 	personnela.gender,personnela.epic,personnela.forpc,personnela.forassembly,personnela.groupid, personnela.booked, poststat.poststatus, personnela.present_addr1, personnela.present_addr2,
-	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision
+	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision, personnela.dcrccd, personnela.training2_sch
 	 FROM personnela INNER JOIN
     office ON personnela.officecd = office.officecd INNER JOIN 
     assembly AS ass_pre ON personnela.assembly_temp = ass_pre.assemblycd INNER JOIN 
@@ -516,7 +516,7 @@ function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$
 	return $i;
 }
 
-function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_status,$groupid,$gender)
+function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender)
 {
 	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P'";
 	$rs_tmp=execSelect($sqltmp);
@@ -538,7 +538,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -563,7 +563,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
@@ -573,9 +573,9 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
 	connection_close();
 	return $rs;
 }
-function update_personnel_replacement($p_id,$groupid,$ass,$forpc,$booked,$selected)
+function update_personnel_replacement($p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch)
 {
-	$sql="update personnela set booked='$booked',groupid='$groupid',forpc='$forpc',forassembly='$ass',selected='$selected' where personcd='$p_id'";
+	$sql="update personnela set booked='$booked',groupid='$groupid',forpc='$forpc',forassembly='$ass',selected='$selected',dcrccd='$dcrccd', training2_sch='$training2_sch' where personcd='$p_id'";
 	$i=execUpdate($sql);
 	connection_close();
 	return $i;
