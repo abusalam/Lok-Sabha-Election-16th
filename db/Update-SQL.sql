@@ -706,3 +706,13 @@ INSERT INTO `password` (`randomise`, `password`, `status`, `usercode`, `posted_d
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+--
+-- SW Version 1.8 Update 8
+--
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) VALUES (NULL, '5', 'Post-Group Replacement (Including Reserve)', 'emp-replacement-reserve.php', '1', CURRENT_TIMESTAMP);
+
+delete from submenu where submenu='Second Appointment Letter';
+
+INSERT INTO `ppds`.`submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) VALUES (NULL, '9', 'Second Appointment Letter', 'second-appointment-letter.php', '1', CURRENT_TIMESTAMP);

@@ -5,7 +5,7 @@ session_start();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Employee Replacement</title>
+<title>Employee Replacement (Reserve)</title>
 <?php
 include('header/header.php');
 ?>
@@ -105,7 +105,7 @@ function new_per_search()
 		document.getElementById('print').disabled=true;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&opn=g_new_per",true);
+	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&opn=g_new_per_res",true);
 	xmlhttp.send();
 }
 function replacement()
@@ -142,6 +142,7 @@ function replacement()
 	  }
 	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);
 	xmlhttp.send();
+	document.getElementById('replace').disabled=true;
 }
 function print_appletter()
 {
@@ -184,7 +185,7 @@ function print_appletter()
   </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center"><?php echo $subdiv_name." SUBDIVISION"; ?></td></tr>
-<tr><td align="center">POLLING PERSONNEL REPLACEMENT</td></tr>
+<tr><td align="center">POLLING PERSONNEL REPLACEMENT (RESERVE)</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
 <table width="95%" class="form" cellpadding="0">
 	<tr>
@@ -251,23 +252,7 @@ function print_appletter()
                 </tr>
                 <tr>
                 	<td align="left"><b>Personnel ID:</b></td>
-                    <td align="left"><span id="personnel_list"><select id="p_id" name="p_id" style="width:150px;" onchange="fatch_personnel_dtl(this.value);">
-                    					<!--<option value="0">-Select Personnel ID-</option>-->
-                                        <?php	/*$rsEmp=fatch_employee();
-												$num_rows=rowCount($rsEmp);
-												if($num_rows>0)
-												{
-													for($i=1;$i<=$num_rows;$i++)
-													{
-														$rowEmp=getRows($rsEmp);
-														echo "<option value='$rowEmp[0]'>$rowEmp[0]</option>\n";
-													}
-												}
-												$rsEmp=null;
-												$num_rows=0;
-												$rowEmp=null;*/
-										?>
-                    				</select>
+                    <td align="left"><span id="personnel_list"><select id="p_id" name="p_id" style="width:150px;" onchange="fatch_personnel_dtl(this.value);"></select>
                                     </span></td>
                     <td align="left"><b>Office ID:</b></td>
                     <td align="left" width="60px"><span id="ofc_id"></span></td>

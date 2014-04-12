@@ -23,36 +23,91 @@ h7 {page-break-after:always;}
 <?php
 date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
-	include_once('../function/appointment_fun.php');
-	include_once('../inc/commit_con.php');
-	mysqli_autocommit($link,FALSE);
-		
+	include_once('../function/training2_fun.php');
+	//include_once('../inc/commit_con.php');
 	extract($_GET);
-	$group_id=decode($_GET['group_id']);
-	$forassembly=decode($_GET['assembly']);
-	$forpc=decode($_GET['pc']);
-
-	$del_ret=delete_prev_data_second_rand($forassembly,$forpc,$group_id);
-	$rec_set_hdr=second_app_hrd($forassembly,$forpc,$group_id);
-	if(rowCount($rec_set_hdr)>0)
+	$pc=(isset($_GET['pc'])?decode($_GET['pc']):'0');
+	$assembly=(isset($_GET['assembly'])?decode($_GET['assembly']):'0');
+	$group_id=(isset($_GET['group_id'])?decode($_GET['group_id']):'0');
+	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
+	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
+	$mem_no=4;
+	if($pc=='0')
 	{
-		for($n=0;$n<rowCount($rec_set_hdr);$n++)
+		echo "Select Parliament First";
+		exit;
+	}
+	$rsApp=second_appointment_letter_print($pc,$assembly,$group_id,$mem_no);
+	$num_rows=rowCount($rsApp);
+	if($num_rows>0)
+	{	
+		for($i=0;$i<$num_rows;$i++)
 		{
-			$rec_arr_hdr=getRows($rec_set_hdr);
-			
-			$grp_id=$rec_arr_hdr['groupid'];
-			$for_ass=$rec_arr_hdr['assemblycd']."-".$rec_arr_hdr['assemblyname'];
-			$for_pc=$rec_arr_hdr['pccd']."-".$rec_arr_hdr['pcname'];
+			$rowApp=getRows($rsApp);
+
+			$grp_id=$rowApp['groupid'];
+			$for_ass=$rowApp['assembly']."-".$rowApp['assembly_name'];
+			$for_pc=$rowApp['pccd']."-".$rowApp['pcname'];
 			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
-			$dc=($rec_arr_hdr['dc_venue']!=''?$rec_arr_hdr['dc_venue'].", ".$rec_arr_hdr['dc_addr']:"___________________________________");
-			$dc_date=($rec_arr_hdr['dc_date']!=''?$rec_arr_hdr['dc_date']:"___________");
-			$dc_time=($rec_arr_hdr['dc_time']!=''?$rec_arr_hdr['dc_time']:"___________");
-			$rcvenue=($rec_arr_hdr['rcvenue']!=''?$rec_arr_hdr['rcvenue']:"_______________________________");
+			$dc=($rowApp['dc_venue']!=''?$rowApp['dc_venue'].", ".$rowApp['dc_address']:"___________________________________");
+			$dc_date=($rowApp['dc_date']!=''?$rowApp['dc_date']:"___________");
+			$dc_time=($rowApp['dc_time']!=''?$rowApp['dc_time']:"___________");
+			$rcvenue=($rowApp['rc_venue']!=''?$rowApp['rc_venue']:"_______________________________");
 			
-			$rec_set=second_appointment_letter($grp_id,$rec_arr_hdr['assemblycd']);
-			$num_rows=rowCount($rec_set);
-			if($num_rows>0)
-			{
+			$pr_name=$rowApp['pr_name'];
+			$pr_desig=$rowApp['pr_designation'];
+			$pr_code=$rowApp['pr_personcd'];
+			$pr_office=$rowApp['pr_officename'];
+			$pr_ofc_address=$rowApp['pr_officeaddress'].", P.O.-".$rowApp['pr_postoffice'].", Subdiv.-".$rowApp['pr_subdivision'].", Dist.-".$rowApp['district'];
+			$pr_ofc_cd=$rowApp['pr_officecd'];
+			$pr_post_stat=$rowApp['pr_post_stat'];
+			
+			$p1_name=$rowApp['p1_name'];
+			$p1_desig=$rowApp['p1_designation'];
+			$p1_code=$rowApp['p1_personcd'];
+			$p1_office=$rowApp['p1_officename'];
+			$p1_ofc_address=$rowApp['p1_officeaddress'].", P.O.-".$rowApp['p1_postoffice'].", Subdiv.-".$rowApp['p1_subdivision'].", Dist.-".$rowApp['district'];
+			$p1_ofc_cd=$rowApp['p1_officecd'];
+			$p1_post_stat=$rowApp['p1_post_stat'];
+			
+			$p2_name=$rowApp['p2_name'];
+			$p2_desig=$rowApp['p2_designation'];
+			$p2_code=$rowApp['p2_personcd'];
+			$p2_office=$rowApp['p2_officename'];
+			$p2_ofc_address=$rowApp['p2_officeaddress'].", P.O.-".$rowApp['p2_postoffice'].", Subdiv.-".$rowApp['p2_subdivision'].", Dist.-".$rowApp['district'];
+			$p2_ofc_cd=$rowApp['p2_officecd'];
+			$p2_post_stat=$rowApp['p2_post_stat'];
+			
+			$p3_name=$rowApp['p3_name'];
+			$p3_desig=$rowApp['p3_designation'];
+			$p3_code=$rowApp['p3_personcd'];
+			$p3_office=$rowApp['p3_officename'];
+			$p3_ofc_address=$rowApp['p3_officeaddress'].", P.O.-".$rowApp['p3_postoffice'].", Subdiv.-".$rowApp['p3_subdivision'].", Dist.-".$rowApp['district'];
+			$p3_ofc_cd=$rowApp['p3_officecd'];
+			$p3_post_stat=$rowApp['p3_post_stat'];
+			
+			$pa_name=$rowApp['pa_name'];
+			$pa_desig=$rowApp['pa_designation'];
+			$pa_code=$rowApp['pa_personcd'];
+			$pa_office=$rowApp['pa_officename'];
+			$pa_ofc_address=$rowApp['pa_officeaddress'].", P.O.-".$rowApp['pa_postoffice'].", Subdiv.-".$rowApp['pa_subdivision'].", Dist.-".$rowApp['district'];
+			$pa_ofc_cd=$rowApp['pa_officecd'];
+			$pa_post_stat=$rowApp['pa_post_stat'];
+			
+			$pb_name=$rowApp['pb_name'];
+			$pb_desig=$rowApp['pb_designation'];
+			$pb_code=$rowApp['pb_personcd'];
+			$pb_office=$rowApp['pb_officename'];
+			$pb_ofc_address=$rowApp['pb_officeaddress'].", P.O.-".$rowApp['pb_postoffice'].", Subdiv.-".$rowApp['pb_subdivision'].", Dist.-".$rowApp['district'];
+			$pb_ofc_cd=$rowApp['pb_officecd'];
+			$pb_post_stat=$rowApp['pb_post_stat'];
+			
+			$poll_date=$rowApp['polldate'];
+			$poll_time=$rowApp['polltime'];
+			$training_venue=$rowApp['training_venue'];
+			$venue_addr=$rowApp['venue_addr1'].", ".$rowApp['venue_addr2'];
+			$training_date=$rowApp['training_date'];
+			$training_time=$rowApp['training_time'];
 				?>
                 
 <div align="center">
@@ -62,9 +117,9 @@ date_default_timezone_set('Asia/Calcutta');
       	<table width="800px" cellpadding="1" cellspacing="0">
             <tr>
             	<td align='left' style='padding:5px 25px 5px 2px;; width:150px; vertical-align:top'><div class='div1'>ELECTION URGENT</div></td>
-                <td align='center'><strong><u>ORDER OF APOINTMENT FOR POLLING DUTIES</u></strong><br />
+                <td align='center'><strong><u>ORDER OF APPOINTMENT FOR POLLING DUTIES</u></strong><br />
                 					<u>General Parliamentary Election, 2014</u></td>
-                <td align='left' style='padding:10px 25px; width:200px; vertical-align:top;'><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
+                <td align='right' style='padding:10px 1px 10px 25px; width:200px; vertical-align:top;'><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
             	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
@@ -108,44 +163,11 @@ date_default_timezone_set('Asia/Calcutta');
                     </tr>
                     <tr>
                     	<td align='center'><?php echo $grp_id; //echo $polling_station; ?></td>
-<?php
-$j=0;
-	for($i=0;$i<$num_rows;$i++)
-	{
-		
-		$sql="insert into second_rand_table (groupid,assembly,pcname,personcd,person_name,person_designation,post_status,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue, dc_address,dc_date,dc_time,rc_venue) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		$stmt = mysqli_prepare($link, $sql);
-		
-		$rec_arr=getRows($rec_set);
-		if($rec_arr['poststat']=='PR')
-		{
-			$pr_name=$rec_arr['officer_name'];
-			$pr_desig=$rec_arr['off_desg'];
-			$pr_code=$rec_arr['personcd'];
-			$pr_office=$rec_arr['office'];
-			$pr_ofc_address=$rec_arr['address1'].", ".$rec_arr['address2'].", P.O.-".$rec_arr['postoffice'].", Subdiv.-".$rec_arr['subdivision'].", P.S.-".$rec_arr['policestation'].", Dist.-".$rec_arr['district'].", PIN-".$rec_arr['pin'];
-			$pr_ofc_cd=$rec_arr['officecd'];
-		}
-		else
-		{
-			$pp_name[$j]=$rec_arr['officer_name'];
-			$pp_desig[$j]=$rec_arr['off_desg'];
-			$pp_code[$j]=$rec_arr['personcd'];
-			$pp_office[$j]=$rec_arr['office'];
-			$pp_ofc_address[$j]=$rec_arr['address1'].", ".$rec_arr['address2'].", P.O.-".$rec_arr['postoffice'].", Dist.-".$rec_arr['district'].", PIN-".$rec_arr['pin'];
-			$pp_ofc_address1[$j]=$rec_arr['address1'].", ".$rec_arr['address2'].", P.O.-".$rec_arr['postoffice'].", Subdiv.-".$rec_arr['subdivision'].", P.S.-".$rec_arr['policestation'].", Dist.-".$rec_arr['district'].", PIN-".$rec_arr['pin'];
-			$pp_ofc_cd[$j]=$rec_arr['officecd'];
-			$j++;
-		}
-		$ofc_add=$rec_arr['address1'].", ".$rec_arr['address2'];
-		mysqli_stmt_bind_param($stmt, 'ssssssssssssssssssss',$grp_id,$for_ass,$for_pc,$rec_arr['personcd'],$rec_arr['officer_name'], $rec_arr['off_desg'],$rec_arr['poststat'],$rec_arr['officecd'],$rec_arr['office'],$ofc_add,$rec_arr['postoffice'],$rec_arr['subdivision'], $rec_arr['policestation'],$rec_arr['district'],$rec_arr['pin'],$rec_arr_hdr['dc_venue'],$rec_arr_hdr['dc_addr'],$dc_date,$dc_time,$rec_arr_hdr['rcvenue']);
-		mysqli_stmt_execute($stmt);
-	}
-		
-?>
                         <td align='left'>
                         <?php	
 						echo $pr_name.", ".$pr_desig." (PIN-".$pr_code.")";
+						echo "<br />";
+						echo $pr_post_stat;
 						echo "<br /><br /><br />";
 						echo $pr_office.", ".$pr_ofc_address;
 						echo "<br /><br />";
@@ -154,29 +176,43 @@ $j=0;
                         </td>
                         <td align='left'>
                         <?php	
-						$k=0;
-						while($k!=$j)
-						{
-							echo ($k+1).". ".$pp_name[$k].", ".$pp_desig[$k]." (PIN-".$pp_code[$k].")";
-							echo "<br /><br />";
-							echo $pp_office[$k].", ".$pp_ofc_address[$k];
-							echo "<br /><br />";
-							echo "(".$pp_ofc_cd[$k].")";
-							echo "<br /><br />";
-							$k++;
-						}						
+						echo "1. ".$p1_name.", ".$p1_desig." (PIN-".$p1_code.")";
+						echo "<br />";
+						echo $p1_post_stat;
+						echo "<br /><br />";
+						echo $p1_office.", ".$p1_ofc_address;
+						echo "<br /><br />";
+						echo "(".$p1_ofc_cd.")";
+						echo "<br /><br />";
+						
+						echo "2. ".$p2_name.", ".$p2_desig." (PIN-".$p2_code.")";
+						echo "<br />";
+						echo $p2_post_stat;
+						echo "<br /><br />";
+						echo $p2_office.", ".$p2_ofc_address;
+						echo "<br /><br />";
+						echo "(".$p2_ofc_cd.")";
+						echo "<br /><br />";
+						
+						echo "3. ".$p3_name.", ".$p3_desig." (PIN-".$p3_code.")";
+						echo "<br />";
+						echo $p3_post_stat;
+						echo "<br /><br />";
+						echo $p3_office.", ".$p3_ofc_address;
+						echo "<br /><br />";
+						echo "(".$p3_ofc_cd.")";
+						echo "<br /><br />";
                         ?>  
                         </td>
                         <td align='left'>
                         <?php	
-						if($j>0)
-						{
-							echo $pp_name[0].", ".$pp_desig[0]." (PIN-".$pp_code[0].")";
-							echo "<br /><br />";
-							echo $pp_office[0].", ".$pp_ofc_address1[0];
-							echo "<br /><br />";
-							echo "(".$pp_ofc_cd[0].")";
-						}
+						echo "1. ".$p1_name.", ".$p1_desig." (PIN-".$p1_code.")";
+						echo "<br />";
+						echo $p1_post_stat;
+						echo "<br /><br />";
+						echo $p1_office.", ".$p1_ofc_address;
+						echo "<br /><br />";
+						echo "(".$p1_ofc_cd.")";
                         ?>
                         </td>
                     </tr>
@@ -184,7 +220,7 @@ $j=0;
                 </td>
             </tr>
             <tr>
-            	<td colspan='3' align='left'><span class="span">&nbsp;</span>The Poll will be taken on <i>____________</i> during the hours <i>________________</i>. The Presiding Officer should arrange to collect the Polling materials from <i><?php echo $dc; ?></i> on <i><?php echo $dc_date; ?></i> at <i><?php echo $dc_time; ?></i> and after the Poll, these should be returned to collecting centre at <i><?php echo $rcvenue; ?></i>.</td>
+            	<td colspan='3' align='left'><span class="span">&nbsp;</span>The Poll will be taken on <i><?php print $poll_date; ?></i> during the hours <i><?php print $poll_time; ?></i>. The Presiding Officer should arrange to collect the Polling materials from <i><?php echo $dc; ?></i> on <i><?php echo $dc_date; ?></i> at <i><?php echo $dc_time; ?></i> and after the Poll, these should be returned to collecting centre at <i><?php echo $rcvenue; ?></i>.</td>
             </tr>
             <tr>
             	<td class='spacer' colspan='3'>&nbsp;</td>
@@ -192,25 +228,18 @@ $j=0;
             <tr>
             	<td colspan='2' valign='middle' align='left'>Place : <?php print uppercase($_SESSION['dist_name']); ?><br />
                 				Date : <?php print date('d/m/Y'); ?></td>
-                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='0' height='50px' width='100px' /><br />
+                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='' height='50px' width='100px' /><br />
                 (__________________)<br />District Election Officer<br /><?php print wordcase($_SESSION['dist_name']) ?> District</td>
             </tr>
+            <tr><td colspan="3"><hr style="border:1px solid #999; width:100%;" /></td></tr>
+            <tr><td colspan="3" align="left">You are requested to attend the training at <?php print $training_venue.", ".$venue_addr ?> on <?php print $training_date; ?> from <?php print $training_time; ?></td></tr>
         </table>
       </td>
     </tr>
   </table>
 </div><h7></h7>
 <?php
-			}
-			else
-				echo "No valid data found.";
 		}
-		if (!mysqli_commit($link)) {
-			print("Transaction commit failed\n");
-			exit();
-		}
-		mysqli_stmt_close($stmt);
-		mysqli_close($link);
 	}
 	else
 		echo "No valid data found.";

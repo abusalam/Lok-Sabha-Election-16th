@@ -573,6 +573,63 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
 	connection_close();
 	return $rs;
 }
+function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender)
+{
+	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P'";
+	$rs_tmp=execSelect($sqltmp);
+	$num_rows_tmp=rowCount($rs_tmp);
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$row_tmp=getRows($rs_tmp);
+		$office[$i]=$row_tmp['officecd'];
+	}
+	$row_tmp=NULL; $rs_tmp=NULL;
+	$sqlc="select count(*) as cnt
+	From personnela Inner Join office On personnela.officecd = office.officecd 
+  	Inner Join policestation On office.policestn_cd = policestation.policestationcd
+  	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+  	Inner Join poststat On personnela.poststat = poststat.post_stat
+  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd
+  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd 
+  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
+  	Inner Join district On district.districtcd = subdivision.districtcd 
+	Left Join termination On personnela.personcd = termination.personal_id";
+	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
+	$sqlc.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$sqlc.=" and personnela.officecd<>'$office[$i]'";
+	}
+	$rsc=execSelect($sqlc);
+	$rowc=getRows($rsc);
+	$limit=$rowc['cnt'];
+	//echo $limit; exit;
+	$random_no=rand(0,$limit-1);
+	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
+  	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
+  office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,ass_pre.assemblyname As pre_ass,
+  	ass_per.assemblyname As per_ass,ass_ofc.assemblyname As post_ass
+	From personnela Inner Join office On personnela.officecd = office.officecd
+  	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
+  	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+  	Inner Join poststat On personnela.poststat = poststat.post_stat
+  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd 
+  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
+  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
+  	Inner Join district On district.districtcd = subdivision.districtcd
+	Left Join termination On personnela.personcd = termination.personal_id ";
+	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
+	$sql.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$sql.=" and personnela.officecd<>'$office[$i]'";
+	}
+	$sql.=" limit 1 offset $random_no";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 function update_personnel_replacement($p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch)
 {
 	$sql="update personnela set booked='$booked',groupid='$groupid',forpc='$forpc',forassembly='$ass',selected='$selected',dcrccd='$dcrccd', training2_sch='$training2_sch' where personcd='$p_id'";

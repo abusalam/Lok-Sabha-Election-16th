@@ -36,6 +36,16 @@ function PC_change(str)
 	xmlhttp.open("GET","ajax-appointment.php?pc="+str+"&sub_div="+sub_div+"&opn=assembly",true);
 	xmlhttp.send();
 }
+function validate()
+{
+	var pc=document.getElementById('PC');
+	if(pc.value=='0')
+	{
+		document.getElementById('msg').innerHTML="Select PC Name";
+		pc.focus();
+		return false;
+	}
+}
 </script>
 </head>
 <body>
@@ -65,6 +75,9 @@ if($submit=="Submit")
 <tr><td align="center">SECOND APPOINTMENT LETTER</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 	<table width="95%" class="form" cellpadding="0">
+    <tr>
+      <td align="center" colspan="4"><span id='msg' class='error'></span></td>
+    </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
@@ -107,7 +120,7 @@ if($submit=="Submit")
         <td>Group ID</td><td><input type="text" name="txtGroupId" id="txtGroupId" width="130px" /></td>
     </tr>
     <tr><td colspan="4" align="center"><img src="images/blank.gif" alt="" height="10px" /></td></tr>
-    <tr><td colspan="4" align="center"><input type="submit" name="search" id="search" value="Submit" class="button" /></td></tr>
+    <tr><td colspan="4" align="center"><input type="submit" name="search" id="search" value="Submit" class="button" onclick='return validate();' /></td></tr>
     <tr><td colspan="4" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     </table>
 </form></td></tr>
