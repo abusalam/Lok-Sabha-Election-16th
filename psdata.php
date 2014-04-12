@@ -17,7 +17,7 @@ function __construct($assembly,$membno,$dccd) {
 	
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
-		$this->result = $this->msqli->query("SELECT * from pollingstation where forassembly='$assembly' and member='$membno' and dcrccd='$dccd' ") or die($this->msqli->error.__LINE__);
+		$this->result = $this->msqli->query("SELECT * from pollingstation where forassembly='$assembly' and member='$membno' and dcrccd='$dccd' order by rand_numb ") or die($this->msqli->error.__LINE__);
 	
 			
 
