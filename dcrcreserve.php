@@ -63,12 +63,10 @@ $this->stmt->bind_param('ssiss',$dc,$fasm,$gpd,$post,$fpc);
 		  if (strcmp($np,'N')==0) 
 		  {
 		    $nors=$numb;
-			$nors=$nors+10;
 			}
 		   else
 		   {
 		     $nors=round((($pdcrc*$numb/100)+1),0);
-			 $nors=$nors+10;
 		   }
 		  
 		//  echo $nors;

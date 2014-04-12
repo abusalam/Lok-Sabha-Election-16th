@@ -20,7 +20,7 @@ if($sub=="Send SMS")
 {
 		$from=isset($_REQUEST['from'])?$_REQUEST['from']:0;
 		$to=isset($_REQUEST['to'])?$_REQUEST['to']:0;
-		$limit=$to-$from;
+		$limit=$to-$from+1;
 		$rs_data=fatch_SMS_from_sms_table(($from-1),$limit);
 		if(rowCount($rs_data)>0)
 		{

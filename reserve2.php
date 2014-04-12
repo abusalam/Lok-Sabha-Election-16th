@@ -88,7 +88,6 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 					$gpd=$gpnew+1;
 					$this->stmt->execute();
 					$x=$x+1;
-					$gpnew=$gpnew+1;
 				}
 				else
 				{

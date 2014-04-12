@@ -13,7 +13,7 @@ function __construct($dist,$fpc) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT a.forassembly as fasm, a.forsubdivision as fsub , a.forpc as fpc, a.number_of_member  as memb, a.no_or_pc as npc, a.numb as pnumb , a.poststat as pst, b.no_party as ptyrqd FROM reserve a,  `assembly_party` b WHERE a.forassembly = b.assemblycd AND a.forsubdivision = b.subdivisioncd AND a.number_of_member = b.no_of_member and substr(a.forsubdivision,1,2)='$dist' and a.forpc='$fpc' ") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT a.forassembly as fasm, a.forsubdivision as fsub , a.forpc as fpc, a.number_of_member  as memb, a.no_or_pc as npc, a.numb as pnumb , a.poststat as pst, b.no_party as ptyrqd FROM reserve a,  `assembly_party` b WHERE a.forassembly = b.assemblycd AND a.forsubdivision = b.subdivisioncd AND a.number_of_member = b.no_of_member and substr(a.forsubdivision,1,2)='$dist' and a.forpc='$fpc' order by b.usercode") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 

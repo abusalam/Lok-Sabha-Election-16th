@@ -18,7 +18,7 @@ function __construct($dist,$fpc) {
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
 		if (strcmp($stat,'S'==0)) {
-	        $this->result = $this->msqli->query("SELECT * FROM `assembly_party` where substr(subdivisioncd,1,2)='$dist' and pccd='$fpc'") or die($this->msqli->error.__LINE__);
+	        $this->result = $this->msqli->query("SELECT * FROM `assembly_party` where substr(subdivisioncd,1,2)='$dist' and pccd='$fpc' order by usercode") or die($this->msqli->error.__LINE__);
 			}
 
 // GOING THROUGH THE DATA
