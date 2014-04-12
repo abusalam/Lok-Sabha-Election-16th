@@ -19,6 +19,9 @@ date_default_timezone_set('Asia/Calcutta');
 	$forassembly=isset($_GET['assembly'])?decode($_GET['assembly']):"";
 	$forpc=$_GET['pc_cd'];
 	
+	$sql1="update personnela set training2_sch='' where forpc='$pc_cd'";
+	$ret1=execUpdate($sql1);
+	
 	$sql19="update personnela join second_training on personnela.forpc=second_training.for_pc and personnela.forassembly=second_training.assembly and personnela.booked=second_training.party_reserve set personnela.training2_sch=second_training.schedule_cd where  personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_pc='$pc_cd'";
 	$ret=execUpdate($sql19);
 	

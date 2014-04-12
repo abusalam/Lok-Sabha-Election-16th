@@ -538,7 +538,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forpc='$forpc'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -563,7 +563,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null)  and personnela.forpc='$forpc'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
@@ -595,7 +595,7 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
+	$sqlc.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -620,7 +620,7 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv' and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
+	$sql.=" and (personnela.booked='R' or personnela.booked='' or personnela.booked is null) and personnela.forpc='$forpc' and personnela.forassembly='$assembly'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
