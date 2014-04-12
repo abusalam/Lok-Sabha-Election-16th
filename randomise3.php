@@ -20,8 +20,10 @@ else
 	exit;
 }
 include 'pollingstn.php';
+include 'randno3.php';
 //$dist='18';
 //$pc='41';
+new randno3($dist,$pc);
 
 new pollingstn($dist,$pc);
 
