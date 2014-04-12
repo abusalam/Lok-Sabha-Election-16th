@@ -63,7 +63,7 @@ while ($i<=$asmparty->countnumb()-1)
 	$postdt=new postorderdata($membno);
 	
 	$j=0;
-	$grpdata=new grpdtldata($assembly); // Subdivisionwise..change for 2nd randomisation
+	$grpdata=new grpdtldata($assembly,$membno); // Subdivisionwise..change for 2nd randomisation
 	
 	while ($j<=($postdt->countnumb())-1) //Loop for all poststatus
 	{ 
