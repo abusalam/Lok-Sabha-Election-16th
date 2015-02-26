@@ -1,8 +1,0 @@
-alter table training_pp add column token int(5) default null;
-
-alter table first_rand_table add column (forsubdivision char(4) default null, token char(5) default null);
-
-delete from submenu;
-
-ALTER TABLE `environment` ADD `distnm_sml` VARCHAR( 30 ) NULL AFTER `dist_cd` ,
-ADD `distnm_cap` VARCHAR( 30 ) NULL AFTER `distnm_sml`;

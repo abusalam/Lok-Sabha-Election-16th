@@ -228,7 +228,7 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 -- SW Version 1.3
 --
 
-ALTER TABLE  `first_rand_table` CHANGE  `token`  `token` CHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+ALTER TABLE  `first_rand_table` CHANGE  `token`  `token` CHAR( 8 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 --
 -- SW Version 1.4 SMS Gateway
@@ -299,7 +299,7 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 -- SW Version 1.5
 --
 
-ALTER TABLE  `first_rand_table` CHANGE  `token`  `token` CHAR( 13 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+ALTER TABLE  `first_rand_table` CHANGE  `token`  `token` CHAR( 13 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 TRUNCATE TABLE `submenu`;
 
@@ -387,7 +387,6 @@ ALTER TABLE  `replacement_log_pregroup` ADD  `reason` VARCHAR( 30 ) NULL AFTER  
 -- SW Version 1.6 Update 4
 --
 
-ALTER TABLE  `replacement_log_pregroup` ADD  `reason` VARCHAR( 30 ) NULL AFTER  `forpc`;
 ALTER TABLE  `first_rand_table` ADD  `block_muni` CHAR( 6 ) NULL AFTER  `address`;
 ALTER TABLE  `first_rand_table` ADD  `sl_no` INT NULL;
 ALTER TABLE `first_rand_table` ADD INDEX ( `officecd` ) ;
@@ -633,9 +632,6 @@ CREATE TABLE IF NOT EXISTS `training_venue_2` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-
-create index asm_dcrc on grp_dcrc(forassembly,groupid,member);
-create index fasm_personnela  on personnela(forassembly,groupid,poststat);
 ALTER TABLE `personnela` ADD `training2_sch` CHAR( 9 ) NULL ;
 ALTER TABLE `personnela` ADD INDEX ( `officecd` ) ;
 ALTER TABLE `personnela` ADD INDEX ( `groupid` ) ;
