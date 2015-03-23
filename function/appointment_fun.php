@@ -598,7 +598,7 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 		$sql.=" and personnela.forpc='$forpc'";
 	if($group_id!='' || $group_id!=null)
 		$sql.=" and personnela.groupid='$group_id'";
-	$sql.=" order by personnela.forpc,personnela.forassembly,office.subdivisioncd,office.blockormuni_cd,office.officecd,personnela.groupid, personnela.poststat";
+	$sql.=" order by personnela.groupid, personnela.poststat";
 //	print $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();

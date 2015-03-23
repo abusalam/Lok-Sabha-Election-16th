@@ -56,8 +56,9 @@ date_default_timezone_set('Asia/Calcutta');
 			$rec_arr_hdr=getRows($rec_set_hdr);
 			
 			$grp_id=$rec_arr_hdr['groupid'];
-			$for_ass=$rec_arr_hdr['assemblycd']."-".$rec_arr_hdr['assemblyname'];
+			$for_ass=$rec_arr_hdr['assemblyname'];
 			$for_pc=$rec_arr_hdr['pccd']."-".$rec_arr_hdr['pcname'];
+            $Signature=$rec_arr_hdr['pccd'].'.jpg';
 			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
 			$dc=($rec_arr_hdr['dc_venue']!=''?$rec_arr_hdr['dc_venue'].", ".$rec_arr_hdr['dc_addr']:"___________________________________");
 			$dc_date=($rec_arr_hdr['dc_date']!=''?$rec_arr_hdr['dc_date']:"___________");
@@ -93,19 +94,31 @@ date_default_timezone_set('Asia/Calcutta');
             	<td class='spacer' colspan='3'>&nbsp;</td>
             </tr>
             <tr>
-            	<td colspan='3' align='left'><span class="span">&nbsp;</span>In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act, 1963(43 of 1951), I hereby appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling Station specified in corresponding entry in column(1) of the table provided by me for <i><?php echo $for_ass; ?></i> L.A. Constituency forming part of <i><?php echo $for_pc; ?></i> Parliamentary Constituency.</td>
+                <td colspan='3' align='left'>
+                    <span class="span">&nbsp;</span>
+                    In pursuance of sub-selection(4) of section 6 of the West Bengal State Election
+                    Commission Act, 1994 (West Bengal Act VIII of 1994) read with sub-section(1) and sub-
+                    section (3) of Section 13 of the West Bengal Municipal Election Elections Act, 1994 (West Bengal
+                    Act XXXIV of 1994). I hereby appoint the officers specified in columb 2 and 3 of the
+                    Table below as Presiding Officer and Polling Officers respectively for the Polling Party
+                    specified in column 1 of the Table below.
+                </td>
+            </tr>
+            <tr>
+                <td class='spacer' colspan='3'>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan='3' align='left'>
+                    <span class="span">&nbsp;</span>
+                    I also authorise the Polling Officer specified in column 4 of the Table to perform the
+                    functions of the Presiding Officer during the unavoidable absence, if any, of the Presiding Officer.
+                </td>
             </tr>
             <tr>
             	<td class='spacer' colspan='3'>&nbsp;</td>
             </tr>
             <tr>
-            	<td colspan='3' align='left'><span class="span">&nbsp;</span>I also authorise the Polling Officer specified in column(4) of the table against that entry to perform the functions of the Presiding Officer during the unavoidable absence, if any, of the Presiding Officer.</td>
-            </tr>
-            <tr>
-            	<td class='spacer' colspan='3'>&nbsp;</td>
-            </tr>
-            <tr>
-            	<td align='center' colspan='3'>Table</td>
+            	<td align='center' colspan='3'><strong>Table</strong></td>
             </tr>
             <tr>
             	<td align='center' colspan='3'>
@@ -117,10 +130,10 @@ date_default_timezone_set('Asia/Calcutta');
                         <td align='center' width='29%'>Polling Officer authorised to perform the functions of the Presiding Officer in the latter's absence</td>
                     </tr>
                     <tr>
-                    	<td align='center'>(1)</td>
-                        <td align='center'>(2)</td>
-                        <td align='center'>(3)</td>
-                        <td align='center'>(4)</td>
+                    	<td align='center'>1</td>
+                        <td align='center'>2</td>
+                        <td align='center'>3</td>
+                        <td align='center'>4</td>
                     </tr>
                     <tr>
                     	<td align='center'>&nbsp;</td>
@@ -156,7 +169,7 @@ date_default_timezone_set('Asia/Calcutta');
 							echo "<br /><br /><br />";
 							echo $pp_office.", ".$pp_ofc_address;
 							echo "<br /><br />";
-							echo "(".$pp_ofc_cd.")";
+							echo "(Office: ".$pp_ofc_cd.")";
 						}
                         ?>
                         </td>
@@ -171,7 +184,7 @@ date_default_timezone_set('Asia/Calcutta');
 							echo "<br /><br />";
 							echo $pp_office.", ".$pp_ofc_address;
 							echo "<br /><br />";
-							echo "(".$pp_ofc_cd.")";
+							echo "(Office: ".$pp_ofc_cd.")";
 							echo "<br /><br />";
 //							$k++;
 						}						
@@ -185,7 +198,7 @@ date_default_timezone_set('Asia/Calcutta');
 							echo "<br /><br />";
 							echo $pp_office.", ".$pp_ofc_address;
 							echo "<br /><br />";
-							echo "(".$pp_ofc_cd.")";
+							echo "(Office: ".$pp_ofc_cd.")";
 						}
                         ?>
                         </td>
@@ -202,8 +215,14 @@ date_default_timezone_set('Asia/Calcutta');
             <tr>
             	<td colspan='2' valign='middle' align='left'>Place : <?php print uppercase($_SESSION['dist_name']); ?><br />
                 				Date : <?php print date('d/m/Y'); ?></td>
-                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$_SESSION[signature]"; ?> alt='0' height='50px' width='100px' /><br />
-                (__________________)<br />District Election Officer<br /><?php print wordcase($_SESSION['dist_name']) ?> District</td>
+                <td align='center' valign='top'>Signature<br /><img src=<?php print "../images/deo/$Signature"; ?> alt='' height='50px' width='100px' /><br />
+                    (__________________)<br />Municipal Returning Officer<br /><?php print wordcase($for_ass) ?></td>
+            </tr>
+            <tr><td colspan="3"><hr style="border:1px solid #999; width:100%;" /></td></tr>
+            <tr>
+                <td colspan="3" align="left">
+                    <strong>Training Schedule Attached Seperately</strong>
+                </td>
             </tr>
         </table>
       </td>
