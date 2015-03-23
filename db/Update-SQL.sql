@@ -798,6 +798,6 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 
 ALTER TABLE `pollingstation` CHANGE `forsubbdivision` `forsubdivision` CHAR(4) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
-ALTER TABLE `pollingstation` ADD `forpc` CHAR(3) NOT NULL AFTER `forsubdivision`, ADD `rand_num` INT NOT NULL AFTER `forpc`;
+ALTER TABLE `pollingstation` ADD `forpc` CHAR(3) NOT NULL AFTER `forsubdivision`, ADD `rand_numb` INT NOT NULL AFTER `forpc`;
 
 UPDATE `pollingstation` INNER JOIN `assembly` ON `pollingstation`.`forassembly` = `assembly`.`assemblycd` SET `pollingstation`.`forpc` = `assembly`.`pccd`;

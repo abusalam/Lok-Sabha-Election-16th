@@ -7,7 +7,7 @@ include 'postorderdata.php';
 include 'ppdata.php';
 include 'randno.php';
 include 'reserve.php';
-include 'countpp_mo.php';
+include 'countpp.php';
 
 if(isset($_GET['subdiv']) && $_GET['subdiv']!=null)
 {
@@ -223,10 +223,10 @@ while ($i<=$asmparty->countnumb()-1)
 $stmt->close();
 $msqli->close();
 
-   // new reserve($subdiv,1);
+    new reserve($subdiv,1);
 
 
-	new countpp_mo($subdiv);
+	new countpp($subdiv);
 //	new randno();
 
 ?>

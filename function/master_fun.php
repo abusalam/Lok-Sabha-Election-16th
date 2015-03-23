@@ -539,7 +539,7 @@ function duplicate_polling_stn($psno,$assembly,$psname)
 }
 function save_polling_stn($psno,$postfix,$subdivision,$assembly,$dcrc,$member,$psname,$usercd)
 {
-	$sql="insert into pollingstation (psno,forassembly,psfix,forsubbdivision,dcrccd,member,psname,usercode) values ('$psno','$assembly','$postfix','$subdivision','$dcrc','$member','$psname','$usercd')";
+	$sql="insert into pollingstation (psno,forassembly,psfix,forsubdivision,dcrccd,member,psname,usercode) values ('$psno','$assembly','$postfix','$subdivision','$dcrc','$member','$psname','$usercd')";
 	$i=execInsert($sql);
 	return $i;
 }
@@ -554,7 +554,7 @@ function fetch_polling_station($psno,$assembly,$dist)
 	$sql="Select pollingstation.psno,
 	  pollingstation.forassembly,
 	  pollingstation.psfix,
-	  pollingstation.forsubbdivision,
+	  pollingstation.forsubdivision,
 	  pollingstation.dcrccd,
 	  pollingstation.member,
 	  pollingstation.psname,
@@ -562,7 +562,7 @@ function fetch_polling_station($psno,$assembly,$dist)
 	  subdivision.subdivision
 	From pollingstation
 	  Inner Join assembly On pollingstation.forassembly = assembly.assemblycd
-	  Inner Join subdivision On pollingstation.forsubbdivision =
+	  Inner Join subdivision On pollingstation.forsubdivision =
 		subdivision.subdivisioncd where pollingstation.psno>0 and subdivision.districtcd='$dist'";
 	if($psno!='' && $assembly!='')
 		$sql.=" and pollingstation.psno='$psno' and pollingstation.forassembly='$assembly'";

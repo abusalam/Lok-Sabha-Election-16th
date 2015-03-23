@@ -216,7 +216,7 @@ if(isset($_GET['psno']) && isset($_GET['assembly']))
 	
 	$rsPS_E=fetch_polling_station($ps_no,$ass_cd,$dist_cd);
 	$rowPS_E=getRows($rsPS_E);
-	$sub_div=$rowPS_E['forsubbdivision'];
+	$sub_div=$rowPS_E['forsubdivision'];
 	$ass_cd=$rowPS_E['forassembly'];
 	$dcrccd=$rowPS_E['dcrccd'];
 }
@@ -239,7 +239,7 @@ function bind_all()
 		var postfix=document.getElementById('postfix');
 		postfix.value="<?php echo $rowPS_E['psfix']; ?>";
 		var subdivision=document.getElementById('subdivision');
-		subdivision.value="<?php echo $rowPS_E['forsubbdivision']; ?>";
+		subdivision.value="<?php echo $rowPS_E['forsubdivision']; ?>";
 		var assembly=document.getElementById('assembly');
 		assembly.value="<?php echo $rowPS_E['forassembly']; ?>";
 		var dcrc=document.getElementById('dcrc');
