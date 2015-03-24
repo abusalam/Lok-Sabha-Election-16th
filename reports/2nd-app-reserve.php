@@ -65,7 +65,7 @@ date_default_timezone_set('Asia/Calcutta');
 			$dc_dateD=$rec_arr_hdr['dc_dateD'];
 			$dc_time=($rec_arr_hdr['dc_time']!=''?$rec_arr_hdr['dc_time']:"___________");
 			$rcvenue=($rec_arr_hdr['rcvenue']!=''?$rec_arr_hdr['rcvenue']:"_______________________________");
-			
+			$apt2_orderno=($rec_arr_hdr['training_time']!=''?$rec_arr_hdr['training_time']:"___________");
 //			$rec_set=second_appointment_letter($grp_id,$rec_arr_hdr['assemblycd']);
 //			$num_rows=rowCount($rec_set);
 //			if($num_rows>0)
@@ -79,12 +79,15 @@ date_default_timezone_set('Asia/Calcutta');
       	<table width="800px" cellpadding="1" cellspacing="0">
             <tr>
             	<td align='left' style='padding:5px 25px 5px 2px;; width:150px; vertical-align:top'><div class='div1'>ELECTION URGENT</div></td>
-                <td align='center'><strong><u>ORDER OF APOINTMENT FOR POLLING DUTIES</u></strong><br />
-                					<u>General Parliamentary Election, 2014</u></td>
+                <td align='center'>
+                    <strong>ORDER OF APPOINTMENT OF RESERVE PRESIDING AND POLLING OFFICER</strong>
+                    <br/>
+                    General Election to the <?php echo $for_ass; ?>
+                </td>
                 <td align='left' style='padding:10px 25px; width:200px; vertical-align:top;'><strong>* Reserve Serial No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
-            	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
+            	<td align='left' colspan='2'> Order No:  <span><?php print $apt2_orderno; ?></span></td>
                 <td align='right'>Date: <?php print $_SESSION['apt2_date']; ?></td>
             </tr>
             <tr>

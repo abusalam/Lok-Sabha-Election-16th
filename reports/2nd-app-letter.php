@@ -47,7 +47,7 @@ date_default_timezone_set('Asia/Calcutta');
 
 			$grp_id=$rowApp['groupid'];
 			$for_ass=$rowApp['assembly_name'];
-			$for_pc=$rowApp['pccd']."-".$rowApp['pcname'];
+			$for_pc=$rowApp['pccd'];
             $Signature=$rowApp['pccd'].'.jpg';
 			//$polling_station=$rec_arr_hdr['psno'].", ".$rec_arr_hdr['psname'];
 			$dc=($rowApp['dc_venue']!=''?$rowApp['dc_venue'].", ".$rowApp['dc_address']:"___________________________________");
@@ -123,7 +123,7 @@ date_default_timezone_set('Asia/Calcutta');
                 <td align='right' style='padding:10px 1px 10px 25px; width:200px; vertical-align:top;'><strong>* Polling Party No. <?php echo $grp_id; ?></strong></td>
             </tr>
             <tr>
-            	<td align='left' colspan='2'> Order No:  <span><?php print $_SESSION['apt2_orderno']; ?></span></td>
+            	<td align='left' colspan='2'> Order No:  <span><?php print $training_time; ?></span></td>
                 <td align='right'>Date: <?php print $_SESSION['apt2_date']; ?></td>
             </tr>
             <tr>
