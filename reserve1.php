@@ -69,7 +69,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  echo ' ';
 		  */
 		  
-		  $totres=round(.8*$totres);
+		  //$totres=round(.8*$totres);
 		  $ppall1=new ppdata($fpc,$pst,$dist,$fasm,'S',2); // pp for subdivision 
 		  $bk='R';
 		  $x=0;
