@@ -11,6 +11,11 @@ if(!isset($_SESSION))
 <title>Home</title><?php
 include('header/header.php');
 ?>
+    <style type="text/css">
+        li{
+            padding: 5px;
+        }
+    </style>
 </head>
 <?php
 if(isset($_SESSION['hid_rand']))
@@ -30,7 +35,15 @@ if(isset($_SESSION['hid_rand3']))
 }
 ?>
 <body>
-<h1>&nbsp;</h1>
+<div style="float:left; padding: 20px;">
+    <ol>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/branch-master.php">Add New Branch</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/office-details.php">Add New Office</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-office-details.php">List of Offices</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/add-personnel.php">Add New Polling Personnel</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-personnel.php">List of Polling Personnel</a></li>
+    </ol>
+</div>
 <div align="center">
 	<div class="welcome-message" align="center" style="width: 40%;">Version 1.8</div>
     <div class="welcome-message" align="left" style="width: 40%;">Recomended Browser for Proper Functionality & View:
