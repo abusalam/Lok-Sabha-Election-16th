@@ -1,4 +1,9 @@
 <?php
+if (file_exists(__DIR__ . '/config.inc.php')) {
+    require_once __DIR__ . '/config.inc.php';
+} else {
+    require_once __DIR__ . '/config.default.inc.php';
+}
  $DBLink;
  $DBName;
  function OpenDB()
@@ -7,8 +12,8 @@
 	  {
 		   global $DBLink;
 		   global $DBName;
-		   $DBName="ppds";
-		   $DBLink=mysqli_connect("127.0.0.1", "pp4ds", "ppds");
+		   $DBName=MySQL_DB;
+		   $DBLink=mysqli_connect(HOST_Name, MySQL_User, MySQL_Pass);
 
 		   if(!$DBLink)
 		   	die('<script>alert("Could Not Connect to DataBase Server'.mysqli_error($DBLink).'");</script>');
