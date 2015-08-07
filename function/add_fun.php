@@ -25,7 +25,7 @@ function fatch_officecode($sub_div)
 	$sql;$rs;
 	$sql="select * from office";
 	if($sub_div!="0" && $sub_div!="")
-		$sql.=" where subdivisioncd='$sub_div'";
+		$sql.=" where usercode=".$_SESSION['user_cd'];
 	$sql.=" order by officecd asc";
 	$rs=execSelect($sql);
 	connection_close();
