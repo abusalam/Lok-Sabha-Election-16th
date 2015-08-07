@@ -86,7 +86,7 @@ function fatch_bank($dist_cd)
 function fatch_branch($bank_cd)
 {
 	$sql;$rs;
-	$sql="select * from branch where bank_cd='$bank_cd' order by branch_name asc";
+	$sql="select * from branch where bank_cd='$bank_cd' order by ifsc_code asc";
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;

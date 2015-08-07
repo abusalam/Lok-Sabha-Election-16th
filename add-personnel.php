@@ -837,7 +837,7 @@ function bind_all()
 										for($i=1;$i<=$num_rows;$i++)
 										{
 										  $rowBranch=getRows($rsBranch);
-										  echo "<option value='$rowBranch[0]'>$rowBranch[2]</option>\n";
+										  echo "<option value='$rowBranch[0]'>$rowBranch[4]".' - '."$rowBranch[2]</option>\n";
 										}
 									}
 									$rsBranch=null;
