@@ -37,15 +37,15 @@ if(isset($_SESSION['hid_rand3']))
 <body>
 <div style="float:left; padding: 20px;">
     <ol>
-        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/branch-master.php">Add New Branch</a></li>
-        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/office-details.php">Add New Office</a></li>
-        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-office-details.php">List of Offices</a></li>
-        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/add-personnel.php">Add New Polling Personnel</a></li>
-        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-personnel.php">List of Polling Personnel</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/branch-master.php" target="_blank">Add New Branch</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/office-details.php" target="_blank">Add New Office</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-office-details.php" target="_blank">List of Offices</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/add-personnel.php" target="_blank">Add New Polling Personnel</a></li>
+        <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-personnel.php" target="_blank">List of Polling Personnel</a></li>
     </ol>
 </div>
 <div align="center">
-	<div class="welcome-message" align="center" style="width: 40%;">Version 1.8</div>
+	<div class="welcome-message" align="center" style="width: 40%;">Version WBLAE2016 1.9</div>
     <div class="welcome-message" align="left" style="width: 40%;">Recomended Browser for Proper Functionality & View:
     <ul style="font-size:85%">
     	<li>Internet Explorer 9 or above</li>
