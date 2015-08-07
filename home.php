@@ -32,6 +32,10 @@ if(isset($_SESSION['hid_rand3']))
 	$_SESSION['hid_rand3']='';
 	unset($_SESSION['hid_rand3']);
 }
+$sql='select `URL` from `user` where code='.$_SESSION['user_cd'];
+$rsUser=execSelect($sql);
+connection_close();
+$rowUser=getRows($rsUser);
 ?>
 <body>
 <div style="float:left; padding: 20px;">
@@ -41,11 +45,12 @@ if(isset($_SESSION['hid_rand3']))
         <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-office-details.php" target="_blank">List of Offices</a></li>
         <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/add-personnel.php" target="_blank">Add New Polling Personnel</a></li>
         <li><a href="//<?php echo $_SERVER['HTTP_HOST'];?>/election/list-personnel.php" target="_blank">List of Polling Personnel</a></li>
+        <li><a href="<?php echo $rowUser[0];?>" target="_blank">Data in Google Drive</a></li>
     </ol>
 </div>
 <div align="center">
     <div class="welcome-message" style="text-align: left;">
-        <span class="form">Welcome <?php print $_SESSION['user']; ?></span>
+        <span class="form">User: <?php print $_SESSION['user']; ?></span>
     </div>
 	<div class="welcome-message" align="center" style="width: 40%;">Version WBLAE2016 1.9</div>
     <div class="welcome-message" align="left" style="width: 40%;">Recomended Browser for Proper Functionality & View:
