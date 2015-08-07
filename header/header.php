@@ -144,8 +144,6 @@ stm_aix("p0i5","p0i0",[0,"Signout","","",-1,-1,0,"signout.php","_self"],80,25);
 stm_ep();
 stm_em();
 </script>
-
-&nbsp;<span class="form">Hi, <?php print $_SESSION['user']; ?></span>
 <?php
 $user_cat=isset($_SESSION['user_cat'])?$_SESSION['user_cat']:'';
 $sql_env="select * from environment where dist_cd='$dist_cd'";

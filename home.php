@@ -45,6 +45,9 @@ if(isset($_SESSION['hid_rand3']))
     </ol>
 </div>
 <div align="center">
+    <div class="welcome-message" style="text-align: left;">
+        <span class="form">Welcome <?php print $_SESSION['user']; ?></span>
+    </div>
 	<div class="welcome-message" align="center" style="width: 40%;">Version WBLAE2016 1.9</div>
     <div class="welcome-message" align="left" style="width: 40%;">Recomended Browser for Proper Functionality & View:
     <ul style="font-size:85%">
