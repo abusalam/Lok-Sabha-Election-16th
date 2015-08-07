@@ -8,9 +8,7 @@ if(!isset($_SESSION))
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Home</title><?php
-include('header/header.php');
-?>
+<title>Home</title>
     <style type="text/css">
         li{
             padding: 5px;
@@ -18,6 +16,7 @@ include('header/header.php');
     </style>
 </head>
 <?php
+include('header/header.php');
 if(isset($_SESSION['hid_rand']))
 {
 	$_SESSION['hid_rand']='';
