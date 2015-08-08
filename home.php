@@ -11,8 +11,9 @@ if (!isset($_SESSION)) {
     <style type="text/css">
         ol {
             margin: 10px;
-            padding: 0px;
+            padding: 0;
         }
+
         li {
             padding-bottom: 10px;
             list-style-position: inside;

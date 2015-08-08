@@ -681,7 +681,8 @@ function fatch_OfficeList($sub_div,$officeid,$officename,$frmdt,$todt,$usercode)
 {
 	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute, office.usercode
 			From office
-		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 ";
+		  Inner Join institute On office.institutecd = institute.institutecd "
+        . " where office.officecd>0 and office.usercode=" . $usercode;
 //	if($sub_div!='' && $sub_div!='0')
 //		$sql.=" and office.subdivisioncd='$sub_div'";
 	if($officeid!='' && $officeid!='0')
@@ -701,7 +702,8 @@ function fatch_OfficeList1($sub_div,$officeid,$officename,$frmdt,$todt,$usercode
 {
 	$sql="Select office.officecd, office.office, office.address1, office.address2, office.postoffice, office.pin, institute.institute,office.usercode
 			From office
-		  Inner Join institute On office.institutecd = institute.institutecd  where office.officecd>0 ";
+		  Inner Join institute On office.institutecd = institute.institutecd "
+        . " where office.officecd>0 and office.usercode=" . $usercode;
 //	if($sub_div!='' && $sub_div!='0')
 //		$sql.=" and office.subdivisioncd='$sub_div'";
 	if($officeid!='' && $officeid!='0')
