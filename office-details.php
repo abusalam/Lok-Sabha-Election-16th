@@ -69,7 +69,7 @@ function fatch_block(str)
 	xmlhttp2.open("GET","ajaxfun.php?subdiv="+str+"&ofcid=n",true);
 	xmlhttp.send();
 	xmlhttp1.send();
-	xmlhttp2.send();
+    xmlhttp2.send();
 }
 
 function email_valid()
@@ -252,7 +252,25 @@ if($action=='Save')
 	$MaleStaff=only_num($_POST['MaleStaff']);
 	$FemaleStaff=only_num($_POST['FemaleStaff']);
 	$ExistingStaff=only_num($_POST['ExistingStaff']);
-	$OfficeID=$_POST['OfficeID'];
+
+    if (isset($_REQUEST['officeid'])) {
+        $ofccd = decode($_REQUEST['officeid']);;
+    } else {
+        $rsofc = fatch_office_maxcode($Subdivision);
+        $num_rows = rowCount($rsofc);
+
+        if ($num_rows > 0) {
+            $rowofc = getRows($rsofc);
+            if ($rowofc['officecd'] == NULL)
+                if ($Subdivision != "0000")
+                    $ofccd = sprintf("%08d", $Subdivision . "0001");
+                else
+                    $ofccd = "";
+            else
+                $ofccd = sprintf("%08d", $rowofc['officecd'] + 1);
+        }
+    }
+	$OfficeID = $ofccd;
 
 	$dist_code=$dist_cd;
 	$usercd=$user_cd;
@@ -425,7 +443,7 @@ function bind_all()
         <td align="left" colspan="2" rowspan="2"
             style="border: 1px solid; padding: 5px;">
             <label for="OfficeStatus">
-                <input name="OfficeStatus" id="OfficeStatus" type="checkbox" value="[Uploaded]"/>
+                <input name="OfficeStatus" id="OfficeStatus" type="checkbox" value="Uploaded" disabled="disabled"/>
                 <span>Data Upload Complete and ready to import into database.</span>
             </label><br/><br/>
             <span style="display: inline-block; padding-left: 5px;"><strong>Queue Token No:</strong> NA</span>
