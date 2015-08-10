@@ -422,7 +422,16 @@ function bind_all()
     <tr>
       <td align="left"><span class="error">*</span>Name of Office</td>
       <td align="left"><input type="text" name="officename" id="officename" style="width:250px;"  /></td>
-      <td align="left" colspan="2">&nbsp;</td>
+        <td align="left" colspan="2" rowspan="2"
+            style="border: 1px solid; padding: 5px;">
+            <label for="OfficeStatus">
+                <input name="OfficeStatus" id="OfficeStatus" type="checkbox" value="[Uploaded]"/>
+                <span>Data Upload Complete and ready to import into database.</span>
+            </label><br/><br/>
+            <span style="display: inline-block; padding-left: 5px;"><strong>Queue Token No:</strong> NA</span>
+            <span style="display: inline-block; padding-left: 50px;"><strong>Current Status:</strong> [Uploading]</span>
+
+        </td>
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>Designation of office-in-charge</td>
