@@ -210,8 +210,10 @@ if (!isset($_SESSION)) {
                 $Queue = $Office[5] - $QueuePos;
                 if ($Queue <= 0) {
                     $Queue = '';
+                    $TokenID = '';
                 } else {
                     $Queue = '<span class="label label-success pull-right">Queue# ' . $Queue . '</span>';
+                    $TokenID = '<span class="badge pull-right">Token #' . $Office[5] . '</span>';
                 }
                 ?>
                 <tr>
@@ -222,8 +224,7 @@ if (!isset($_SESSION)) {
                             <?php echo $Status;?>
                         </span>
                     </td>
-                    <td><?php echo $Office[4]?>
-                    </td>
+                    <td><?php echo $TokenID.$Office[4]?></td>
                 </tr>
             <?php endfor; ?>
             </tbody>
