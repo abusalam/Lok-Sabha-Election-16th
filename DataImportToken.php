@@ -40,9 +40,9 @@ if (!isset($_SESSION)) {
 </div>
 <div class="container-fluid">
     <img alt="Emblem of India" src="images/Emblem_of_India.png"
-         class="img-responsive pull-left" style="padding: 10px;">
+         class="img-responsive pull-left hidden-print" style="padding: 10px;">
 
-    <div class="pull-left">
+    <div class="pull-left hidden-print">
         <h1 style="margin-top: 15px;margin-bottom: 0;">Generate Tokens
             <small> for Data Import and Monitoring</small>
         </h1>
@@ -70,7 +70,7 @@ if (!isset($_SESSION)) {
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default hidden-print">
         <div class="panel-heading">
             <h3 class="panel-title">Generate Token
                 <small>to import PP2 data from Google Sheets to MySQL</small>
