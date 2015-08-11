@@ -176,10 +176,10 @@ if (!isset($_SESSION)) {
             $QueuePos = $InQueueRow[0];
 
             if($_SESSION['user_cat']=='Administrator'){
-                $sql = 'select `officecd`, CONCAT_WS(\', \',`office`,`address1`), `tot_staff`, `Status`,'
-                    . ' `GeneratedOn`, `TokenID`'
+                $sql = 'select `officecd`, CONCAT(\'[\',`user_id`,\'] \',`office`,\', \',`address1`), `tot_staff`,'
+                    . ' `Status`, `GeneratedOn`, `TokenID`'
                     . ' from `office` join `WBLAE2016_OfficeStatus` on (`OfficeID`=`officecd` AND `Pending`=1)'
-                    . ' order by `GeneratedOn`';
+                    . ' join `user` on(`usercode`=`code`) order by `GeneratedOn`';
             } else {
                 $sql = 'select `officecd`, CONCAT_WS(\', \',`office`,`address1`), `tot_staff`, `Status`,'
                     . ' `GeneratedOn`, `TokenID`'
