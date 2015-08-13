@@ -14,6 +14,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
+date_default_timezone_set('Asia/Kolkata');
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -170,7 +171,7 @@ if (!isset($_SESSION)) {
             </thead>
             <tbody>
             <?php
-            $Query = 'select min(`TokenID`) from `WBLAE2016_OfficeStatus` where `Pending`=1';
+            $Query = 'select min(`TokenID`) from `WBLAE2016_OfficeStatus` where `Status`=\'Uploaded\' AND Pending=1';
             $RsQueue = execSelect($Query);
             $InQueueRow = getRows($RsQueue);
             $QueuePos = $InQueueRow[0];
@@ -178,8 +179,8 @@ if (!isset($_SESSION)) {
             if($_SESSION['user_cat']=='Administrator'){
                 $sql = 'select `officecd`, CONCAT(\'[\',`user_id`,\'] \',`office`,\', \',`address1`), `tot_staff`,'
                     . ' `Status`, `GeneratedOn`, `TokenID`'
-                    . ' from `office` join `WBLAE2016_OfficeStatus` on (`OfficeID`=`officecd` AND `Pending`=1)'
-                    . ' join `user` on(`usercode`=`code`) order by `GeneratedOn`';
+                    . ' from `office` join `WBLAE2016_OfficeStatus` on (`OfficeID`=`officecd`)'
+                    . ' join `user` on(`usercode`=`code`) Where `Pending`=1 order by `GeneratedOn`';
             } else {
                 $sql = 'select `officecd`, CONCAT_WS(\', \',`office`,`address1`), `tot_staff`, `Status`,'
                     . ' `GeneratedOn`, `TokenID`'
@@ -208,13 +209,17 @@ if (!isset($_SESSION)) {
                 }
                 $TotalPP += $Office[2];
                 $Queue = $Office[5] - $QueuePos;
-                if ($Queue <= 0) {
+                if (($Queue <= 0) || ($Status != 'Uploaded')) {
                     $Queue = '';
                     $TokenID = '';
                 } else {
                     $Queue = '<span class="label label-success pull-right">Queue# ' . $Queue . '</span>';
                     $TokenID = '<span class="badge pull-right">Token #' . $Office[5] . '</span>';
                 }
+                $dateTime = new DateTime($Office[4], new DateTimeZone('GMT'));
+
+                date_default_timezone_set('Asia/Kolkata');
+
                 ?>
                 <tr>
                     <td><?php echo $i + 1;?></td>
@@ -224,7 +229,7 @@ if (!isset($_SESSION)) {
                             <?php echo $Status;?>
                         </span>
                     </td>
-                    <td><?php echo $TokenID.$Office[4]?></td>
+                    <td><?php echo $TokenID.date("d-m-Y h:i:s A", $dateTime->format('U'))?></td>
                 </tr>
             <?php endfor; ?>
             </tbody>
