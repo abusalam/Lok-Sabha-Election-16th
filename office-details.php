@@ -584,7 +584,7 @@ function bind_all()
       <tr><td colspan="2" align="left"><b>Contact Number</b></td></tr>
     <tr>
       <td align="left"><span class="error">&nbsp;&nbsp;</span>Email ID</td>
-      <td align="left"><input type="text" name="email" id="email" style="width:142px;" onblur="return email_valid();" maxlength="30"  />
+      <td align="left"><input type="text" name="email" id="email" style="width:142px;" onblur="return email_valid();" maxlength="50"  />
         &nbsp;&nbsp; <span class="error">&nbsp;&nbsp;</span>Phone No</td>
       <td align="left"><input type="text" name="Ph_no" id="Ph_no" style="width:100px;" onkeypress="javascript:return wholenumbersonly(event);" maxlength="14" />
         &nbsp;&nbsp; <span class="error">*</span>Mobile No</td>
