@@ -171,7 +171,8 @@ date_default_timezone_set('Asia/Kolkata');
             </thead>
             <tbody>
             <?php
-            $Query = 'select min(`TokenID`) from `WBLAE2016_OfficeStatus` where `Status`=\'Uploaded\' AND Pending=1';
+            $Query = 'select min(`TokenID`) from `WBLAE2016_OfficeStatus` join `office` on(`OfficeID`=`officecd`)'
+                .' where `Status`=\'Uploaded\' AND Pending=1';
             $RsQueue = execSelect($Query);
             $InQueueRow = getRows($RsQueue);
             $QueuePos = $InQueueRow[0];
@@ -180,7 +181,8 @@ date_default_timezone_set('Asia/Kolkata');
                 $sql = 'select `officecd`, CONCAT(\'[\',`user_id`,\'] \',`office`,\', \',`address1`), `tot_staff`,'
                     . ' `Status`, `GeneratedOn`, `TokenID`'
                     . ' from `office` join `WBLAE2016_OfficeStatus` on (`OfficeID`=`officecd`)'
-                    . ' join `user` on(`usercode`=`code`) Where `Pending`=1 order by `GeneratedOn`';
+                    . ' join `user` on(`usercode`=`code`) Where `Pending`=1 and Status!=\'Imported\''
+                    . ' order by `GeneratedOn`';
             } else {
                 $sql = 'select `officecd`, CONCAT_WS(\', \',`office`,`address1`), `tot_staff`, `Status`,'
                     . ' `GeneratedOn`, `TokenID`'
@@ -209,11 +211,11 @@ date_default_timezone_set('Asia/Kolkata');
                 }
                 $TotalPP += $Office[2];
                 $Queue = $Office[5] - $QueuePos;
-                if (($Queue <= 0) || ($Status != 'Uploaded')) {
+                if (($Queue < 0) || ($Status != 'Uploaded')) {
                     $Queue = '';
                     $TokenID = '';
                 } else {
-                    $Queue = '<span class="label label-success pull-right">Queue# ' . $Queue . '</span>';
+                    $Queue = '<span class="label label-success pull-right">Queue# ' . ($Queue+1) . '</span>';
                     $TokenID = '<span class="badge pull-right">Token #' . $Office[5] . '</span>';
                 }
                 $dateTime = new DateTime($Office[4], new DateTimeZone('GMT'));
