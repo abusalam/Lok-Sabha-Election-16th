@@ -1,3 +1,8 @@
+<?php
+if (!isset($_SESSION)) {
+	session_start();
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -64,8 +69,8 @@ if($frmdate!='' && $frmdate!=null)
 	$sql.="and office.posted_date>='$frmdate' ";
 if($todate!='' && $todate!=null)
 	$sql.="and office.posted_date<='$todate' ";
-if($user!='' && $user!=null)
-	$sql.="and office.usercode='$user' ";	
+if($_SESSION['user_cd']!='' && $_SESSION['user_cd']!=null)
+	$sql.="and office.usercode='" . $_SESSION['user_cd'] . "' ";
 $sql.="order by office.office ASC";
 $rs=execSelect($sql);
 $num_rows=rowCount($rs);

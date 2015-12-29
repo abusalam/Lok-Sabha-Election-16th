@@ -14,7 +14,7 @@ h3 {page-break-after:always}
 </head>
 <?php
 $officename=$_REQUEST['officename'];
-$user=$_REQUEST['user'];
+$user=$_SESSION['user_cd'];
 $frmdate=$_REQUEST['frmdate'];
 $todate=$_REQUEST['todate'];
 ?>
@@ -56,7 +56,7 @@ $sql="Select personnel.officer_name As officer_name,
 	  branch.ifsc_code As ifsc_code,
 	  branch.branch_name As branch_name,
 	  branch.address As address,
-	  personnel.remarks As remarks,
+	  remarks.remarks As remarks,
 	  personnel.officecd As officecd,
 	  office.office As office,
 	  office.address1 As address1,
@@ -72,22 +72,23 @@ $sql="Select personnel.officer_name As officer_name,
 		personnel.qualificationcd)
 	  Join language On language.languagecd = personnel.languagecd)
 	  Join poststat On poststat.post_stat = personnel.poststat)
-	  Left Join branch On branch.branchcd = personnel.branchcd)
+	  Left Join branch On (branch.branchcd = personnel.branchcd) AND (branch.bank_cd=personnel.bank_cd))
 	  Join office On personnel.officecd = office.officecd)
-	  Join district On office.districtcd = district.districtcd";
+	  Join district On (office.districtcd = district.districtcd)
+	  join remarks on (personnel.remarks=remarks.remarks_cd)";
 $sql.=" where personnel.personcd>0 ";
 if($frmdate!='' && $frmdate!=null)
 	$sql.="and personnel.posted_date>='$frmdate' ";
 if($todate!='' && $todate!=null)
 	$sql.="and personnel.posted_date<='$todate' ";
-//if($user!='' && $user!=null)
-//	$sql.="and personnel.usercode='$user' ";
+if($user!='' && $user!=null)
+	$sql.="and personnel.usercode='$user' ";
 if($officename!='' && $officename!=null)
 	$sql.="and personnel.officecd='$officename' ";	
 $sql.="order by personnel.officer_name ASC";
 $rs=execSelect($sql);
 $num_rows=rowCount($rs);
-
+//echo "<span>" . $sql . "</span>";
 if($num_rows>0)
 {
 	echo "<hr width='100%' />\n";
@@ -96,7 +97,9 @@ if($num_rows>0)
 		$row=getRows($rs);
 		//<span>&nbsp;&nbsp;&nbsp;</span>
 		echo "<div width='100%'>\n";
-		echo $i."<div style='padding-left:10px;'><span align='left'><b>Name, Designation (code) :</b></span><span align='left' ";
+		echo $i . '<br/>Office: [' . $row[32] . '] ' . $row[33] . ', ' . $row[34] . ', '
+			. $row[35] . ', ' . $row[36] . ', ' . $row[38];
+		echo "<div style='padding-left:10px;'><span align='left'><b>Name, Designation (code) :</b></span><span align='left' ";
 		echo "style='margin-right: ".(350-strlen($row[0].', '.$row[1].', ('.$row[2].')')*5)."pt;'";
 		echo "> $row[0], $row[1], ($row[2])</span><span class='sp1'>&nbsp;</span><span align='left'><b>Date of Birth :</b></span><span align='left'> $row[3]</span><span class='sp1'>&nbsp;</span><span align='left'><b>Gender :</b></span><span align='left'> $row[4]</span></div>\n";
 		echo "<div  style='padding-left:10px;'><span align='left'><b>Pay Scale :</b></span><span align='left' ";
