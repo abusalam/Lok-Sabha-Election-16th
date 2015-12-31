@@ -1,32 +1,62 @@
 <?php
-/* This code will generate PDF file from the HTML file.
- You can also create a PDF file by providing the URL,get content by Curl or file_get_contents function and pass the content to
- WriteHTML function as used in below code.
- Hope this all will help,for more information/help mail to 
- 
- scriptarticle(at)gmail(dot)com
- http://www.scriptarticle.com
-*/
-/*
-require('html2fpdf.php');
-$pdf=new HTML2FPDF();
-$pdf->AddPage();
-$fp = fopen("scriptarticle-sample.html","r");
-$strContent = fread($fp, filesize("scriptarticle-sample.html"));
-fclose($fp);
-$pdf->WriteHTML($strContent);
-$pdf->Output("sample.pdf");
-echo "PDF file is generated successfully!";*/
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
+date_default_timezone_set('Asia/Calcutta');
+require_once('../inc/db_trans.inc.php');
+OpenDB();
+global $DBLink;
 
-require("../html2pdf/html2fpdf.php"); 
-$htmlFile = "http://localhost/election/reports/form-12.php?personcd=TVRnd01UQXdNREF4&type=pb"; 
-$buffer = file_get_contents($htmlFile); 
+/* Select queries return a resultset */
+if ($result = mysqli_query($DBLink, "SELECT * FROM `GovtCategoryGenderCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
 
-$pdf = new HTML2FPDF('P', 'mm', 'Legal'); 
-$pdf->AddPage(); 
-$pdf->WriteHTML($buffer); 
-$pdf->Output('my.pdf', 'F');
+function getHtmlTable($rs)
+{
+    // receive a record set and print
+    // it into an html table
+    $out = '<table rules="all" border="1">';
+    while ($field = $rs->fetch_field()) $out .= "<th>" . $field->name . "</th>";
+    while ($linea = $rs->fetch_assoc()) {
+        $out .= "<tr>";
+        foreach ($linea as $valor_col) $out .= '<td>' . $valor_col . '</td>';
+        $out .= "</tr>";
+    }
+    $out .= "</table>";
+    return $out;
+}
 
 ?>
-<script>window.open('my.pdf');</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+</head>
+
+<body>
+<?php
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoBankACC`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoMobile`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoEPIC`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+?>
+</body>
+
+</html>
