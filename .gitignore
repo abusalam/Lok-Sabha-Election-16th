@@ -1,2 +1,3 @@
 .idea/*
 /inc/instructions.inc.php
+/inc/config.inc.php

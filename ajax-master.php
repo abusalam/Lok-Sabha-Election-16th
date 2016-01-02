@@ -183,7 +183,7 @@ if($opn=='dcrc')
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowDCRC=getRows($rsDCRC);
-			echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[dcrcgrp]</option>\n";
+			echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[DCRC_Venue]</option>\n";
 			unset($rowDCRC);
 		}
 	}

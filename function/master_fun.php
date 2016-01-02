@@ -512,10 +512,10 @@ function delete_assembly($ass_cd)
 //======================== Polling Station ===========================
 function fatch_dcrc($assembly)
 {
-	$sql="Select dcrc_party.dcrcgrp,
+	$sql="Select dcrc_party.dcrcgrp,CONCAT('[',dcrc_party.dcrcgrp,'] ', dc_venue, ' - ', rcvenue) as DCRC_Venue,
 	  dcrc_party.number_of_member,
 	  dcrc_party.assemblycd
-	From dcrc_party where dcrc_party.assemblycd='$assembly'";
+	From dcrc_party join dcrcmaster on (dcrc_party.dcrcgrp=dcrcmaster.dcrcgrp) where dcrc_party.assemblycd='$assembly'";
 	$sql.=" order by dcrc_party.dcrcgrp";
 	$rs=execSelect($sql);
 	return $rs;
