@@ -50,7 +50,7 @@ $this->stmt->bind_param('is',$rnd,$psd);
 	}
 	
 	else {
-		echo 'NO PP in table for this subdivision';	
+		echo '[NO PP in table for this {' . $subdiv . '} subdivision ' . __FILE__ . ':' . __LINE__ . ']';
 	}
 
 

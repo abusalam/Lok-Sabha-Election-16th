@@ -26,7 +26,7 @@ function __construct($subdiv) {
 	}
 	
 	else {
-		print 'Assembly requirement not filled  ';
+		print '[Assembly requirement not filled ' . __FILE__ . ':' . __LINE__ .']';
 	}
 
 $this->result = $this->msqli->query("SELECT *   FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
@@ -44,65 +44,44 @@ $p2r=0;
 $p3r=0;
 $par=0;
 
-
-
 	if($this->result->num_rows > 0) {
 		while($row = $this->result->fetch_assoc()) {
 
 			 $pst=$row['poststat']	;
 			 $bk=$row['booked']	;
 			 if ((strcmp($pst,'PR')==0) and (strcmp($bk,'P')==0) ){
-			 
-			 	$prp=$prp+1;
-			 }
-			 if ((strcmp($pst,'PR')==0) and (strcmp($bk,'R')==0) ){
-			 
-			 	$prr=$prr+1;
-			 }
-			  if ((strcmp($pst,'P1')==0) and (strcmp($bk,'P')==0) ){
-			 
-			 	$p1p=$p1p+1;
-			 }
-			 if ((strcmp($pst,'P1')==0) and (strcmp($bk,'R')==0) ){
-			 
-			 	$p1r=$p1r+1;
-			 }
-			  if ((strcmp($pst,'P2')==0) and (strcmp($bk,'P')==0) ){
-			 
-			 	$p2p=$p2p+1;
-			 }
-			 if ((strcmp($pst,'P2')==0) and (strcmp($bk,'R')==0) ){
-			 
-			 	$p2r=$p2r+1;
-			 }
-			  if ((strcmp($pst,'P3')==0) and (strcmp($bk,'P')==0) ){
-			 
-			 	$p3p=$p3p+1;
-			 }
-			 if ((strcmp($pst,'P3')==0) and (strcmp($bk,'R')==0) ){
-			 
-			 	$p3r=$p3r+1;
-			 }
-			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
-			 
-			 	$pap=$pap+1;
-			 }
-			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'R')==0) ){
-			 
-			 	$par=$par+1;
+				 $prp=$prp+1;
+			 } elseif ((strcmp($pst,'PR')==0) and (strcmp($bk,'R')==0) ){
+				 $prr=$prr+1;
+			 } elseif ((strcmp($pst,'P1')==0) and (strcmp($bk,'P')==0) ){
+				 $p1p=$p1p+1;
+			 } elseif ((strcmp($pst,'P2')==0) and (strcmp($bk,'P')==0) ){
+				 $p2p=$p2p+1;
+			 } elseif ((strcmp($pst,'P2')==0) and (strcmp($bk,'R')==0) ){
+				 $p2r=$p2r+1;
+			 } elseif ((strcmp($pst,'P3')==0) and (strcmp($bk,'P')==0) ){
+				 $p3p=$p3p+1;
+			 } elseif ((strcmp($pst,'P3')==0) and (strcmp($bk,'R')==0) ){
+				 $p3r=$p3r+1;
+			 } elseif ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
+				 $pap=$pap+1;
+			 } elseif ((strcmp($pst,'PA')==0) and (strcmp($bk,'R')==0) ){
+				 $par=$par+1;
+			 } else {
+				 echo $row['personcd'] . ',';
 			 }
 		}
 	}
 	
 	else {
-		print 'Predsiding Officer  : '. ' NA';
+		print '[Predsiding Officer  : '. ' NA' . __FILE__ . ':' . __LINE__ .']';
 	}
 	echo ' <br />';
 		
        if (($totreq-($prp+$p1p+$p2p+$p3p+$pap))>0) {
 	      		
-		   print 'Total PP requirement : ' .$totreq;
-		   print '.....Requirement not fulfilled ';
+		   print 'Total PP requirement: ' .$totreq . ' Shortage: ' . ($totreq-($prp+$p1p+$p2p+$p3p+$pap));
+		   print ' [Requirement not fulfilled ' . __FILE__ . ':' . __LINE__ .']';
 		   echo ' <br>';
 		   echo ' <br>';
 		}

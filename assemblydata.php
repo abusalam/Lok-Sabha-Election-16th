@@ -37,7 +37,7 @@ $i=$i+1;
 		}
 	}
 	else {
-		echo 'NO .data in .Assembly table ';	
+		echo '<br/>[NO .data in .Assembly table'. __FILE__ . ':' .__LINE__.']';
 	}
 
 

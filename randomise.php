@@ -16,7 +16,7 @@ if(isset($_GET['subdiv']) && $_GET['subdiv']!=null)
 }
 else
 {
-	echo "You are not a valid subdivision user";
+	echo "You are not a valid subdivision user" . __FILE__ . ':' . __LINE__;
 	exit;
 }
 
@@ -206,7 +206,7 @@ while ($i<=$asmparty->countnumb()-1)
 				}
 				else
 				{
-					echo ' Check Data ....Group is not be formed properly  ...';
+					echo '<br/>[Check Data ....Group is not be formed properly ' . __FILE__ . ':' . __LINE__ . ']';
 					break;
 				
 				}

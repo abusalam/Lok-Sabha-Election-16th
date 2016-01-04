@@ -755,8 +755,8 @@ function fatch_post_stat_wise_dtl_available($subdiv,$pc)
 	$sql="Select personnel.poststat,
 	  Count(personnel.personcd) as total
 	From personnel
-	  Inner Join assembly On personnel.acno = assembly.assemblycd
-	  Inner Join pc On assembly.pccd = pc.pccd And assembly.subdivisioncd =
+	  left Join assembly On personnel.acno = assembly.assemblycd
+	  left Join pc On assembly.pccd = pc.pccd And assembly.subdivisioncd =
 		pc.subdivisioncd";
 	$sql.=" where (personnel.f_cd Is Null Or personnel.f_cd = 0)";
 	if($subdiv!='' && $subdiv!=0)
@@ -820,7 +820,7 @@ function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting
 	  personnel.remarks, personnel.pgroup, personnel.upload_file, personnel.usercode, personnel.posted_date, personnel.f_cd, assembly.pccd
 	From personnel
 	  Left Join termination On personnel.personcd = termination.personal_id
-	  Inner Join assembly On personnel.acno = assembly.assemblycd     
+	  left Join assembly On personnel.acno = assembly.assemblycd
           WHERE  (personnel.f_cd IS NULL or personnel.f_cd='0') and termination.personal_id is null";
 	if($subdivision!='' && $subdivision!='0')
 		  $sql.=" and personnel.subdivisioncd= '$subdivision'";

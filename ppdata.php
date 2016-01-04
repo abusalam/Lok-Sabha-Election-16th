@@ -25,12 +25,12 @@ function __construct($fpc,$pst,$var,$asm,$stat,$phase) {
 	if (strcmp($stat,'S')==0)
 	{ 
 	 if ($phase==1) {
-		$this->result = $this->msqli->query("SELECT * FROM `personnela` where poststat= '$pst' and forsubdivision='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and forpc='$fpc' order by rand_numb ") or die($this->msqli->error.__LINE__);
+		$this->result = $this->msqli->query("SELECT * FROM `personnela` where poststat= '$pst' and forsubdivision='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and forpc='$fpc' order by rand_numb ") or die($this->msqli->error.__FILE__ . ':' .__LINE__);
 		}
 		else
 		{
 	//	echo ' entered ';
-		$this->result = $this->msqli->query("SELECT * FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and selected=1 and forpc='$fpc' order by rand_numb ") or die($this->msqli->error.__LINE__);
+		$this->result = $this->msqli->query("SELECT * FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and selected=1 and forpc='$fpc' order by rand_numb ") or die($this->msqli->error.__FILE__ . ':' .__LINE__);
 		
 		}
 		}

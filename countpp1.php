@@ -26,7 +26,7 @@ function __construct($fpc) {
 	}
 	
 	else {
-		print 'Assembly requirement not filled  ';
+		print '[Assembly requirement not filled' . __FILE__ . ':' . __LINE__ . ']';
 	}
 
 $this->result = $this->msqli->query("SELECT *   FROM `personnela` where forpc='$fpc' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
