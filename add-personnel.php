@@ -529,9 +529,9 @@ function bind_all()
 		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/><b>Desig. of O/C: </b>".$rowPerson['off_desg']."</label>"; ?>";
 	<?php } ?>
 	var empname=document.getElementById('empname');
-	empname.value="<?php echo $rowPerson['officer_name']; ?>";
+	empname.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['officer_name'])); ?>";
 	var designation=document.getElementById('designation');
-	designation.value="<?php echo $rowPerson['off_desg']; ?>";
+	designation.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['off_desg'])); ?>";
 	var dob = document.getElementById('dob');
 	dob.value="<?php echo $rowPerson['dateofbirth']; ?>";
 	var sex = document.getElementById('sex');
@@ -549,13 +549,13 @@ function bind_all()
 	var gradepay=document.getElementById('gradepay');
 	gradepay.value="<?php echo $rowPerson['grade_pay']; ?>";
 	var preaddress1=document.getElementById('preaddress1');
-	preaddress1.value="<?php echo $rowPerson['present_addr1']; ?>";
+	preaddress1.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['present_addr1'])); ?>";
 	var preaddress2=document.getElementById('preaddress2');
-	preaddress2.value="<?php echo $rowPerson['present_addr2']; ?>";
+	preaddress2.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['present_addr2'])); ?>";
 	var peraddress1=document.getElementById('peraddress1');
-	peraddress1.value="<?php echo $rowPerson['perm_addr1']; ?>";
+	peraddress1.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['perm_addr1'])); ?>";
 	var peraddress2=document.getElementById('peraddress2');
-	peraddress2.value="<?php echo $rowPerson['perm_addr2']; ?>";	
+	peraddress2.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['perm_addr2'])); ?>";
 	var workingstatus=document.getElementById('workingstatus');
 	for (var i = 0; i < workingstatus.options.length; i++) 
 	{
@@ -612,7 +612,7 @@ function bind_all()
 	var sl_no=document.getElementById('sl_no');
 	sl_no.value="<?php echo $rowPerson['slno']; ?>";
 	var epic_no=document.getElementById('epic_no');
-	epic_no.value="<?php echo $rowPerson['epic']; ?>";
+	epic_no.value="<?php echo trim(preg_replace('/\s+/', '', $rowPerson['epic'])); ?>";
 	var ac_pre=document.getElementById('ac_pre');
 	for (var i = 0; i < ac_pre.options.length; i++) 
 	{
