@@ -543,11 +543,11 @@ function bind_all()
 		}
     }
 	var scale=document.getElementById('scale');
-	scale.value="<?php echo $rowPerson['scale']; ?>";
+	scale.value="<?php echo trim(preg_replace('/\s+/', '', $rowPerson['scale'])); ?>";
 	var basicpay=document.getElementById('basicpay');
-	basicpay.value="<?php echo $rowPerson['basic_pay']; ?>";
+	basicpay.value="<?php echo trim(preg_replace('/\s+/', '', $rowPerson['basic_pay'])); ?>";
 	var gradepay=document.getElementById('gradepay');
-	gradepay.value="<?php echo $rowPerson['grade_pay']; ?>";
+	gradepay.value="<?php echo trim(preg_replace('/\s+/', '', $rowPerson['grade_pay'])); ?>";
 	var preaddress1=document.getElementById('preaddress1');
 	preaddress1.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['present_addr1'])); ?>";
 	var preaddress2=document.getElementById('preaddress2');
