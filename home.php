@@ -50,7 +50,7 @@ $rowUser = getRows($rsUser);
         <li><a href="./office-details.php" target="_blank">Add New Office</a></li>
         <li><a href="./list-office-details.php" target="_blank">List of Offices</a></li>
         <li><a href="./add-personnel.php" target="_blank">Add New Polling Personnel</a></li>
-        <li><a href="./list-personnel.php" target="_blank">List of Polling Personnel</a></li>
+        <li><a href="./list-personnel.php" target="_blank">List of Polling Personnel(Edit)</a></li>
         <li><a href="./reports/office-list.php" target="_blank">Checklist of Offices</a></li>
         <li><a href="./personnel-report.php" target="_blank">Checklist of Polling Personnel</a></li>
         <li><a href="<?php echo $rowUser[0]; ?>" target="_blank">Data in Google Drive</a></li>

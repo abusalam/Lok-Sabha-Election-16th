@@ -47,7 +47,9 @@ function personnel_list(str)
 $(document).ready(function(){  $('.overlay').fadeOut();  });
 function edit_person(str)
 {
-	location.replace("add-personnel.php?personcd="+str);
+	var win = window.open("add-personnel.php?personcd="+str, '_blank');
+	win.focus();
+	//location.replace("add-personnel.php?personcd="+str);
 }
 </script>
 
