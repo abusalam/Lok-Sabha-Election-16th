@@ -303,13 +303,15 @@ function fatch_parliament_maxcode()
 	$rs=execSelect($sql);
 	return $rs;
 }
-function duplicate_parliament($parliament_code,$parliament,$subdivisioncd)
+function duplicate_parliament($parliament_code,$parliament,$subdivisioncd,$pc_code)
 {
 	$sql="select count(*) as c_parliament from pc Where subdivisioncd = '$subdivisioncd'";
 	if($pc_code != "" && $pc_code !="0")
-	  $sql.=" and pc.pccd = '$pc_code' and pcname = '$parliament'"; 
+	  $sql.=" and pc.pccd = '$pc_code' and pcname='$parliament'"; 
 	else
 	  $sql.=" and pc.pccd = '$parliament_code'";
+	// echo $sql;
+	// exit;
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$c_parliament=$row['c_parliament'];
@@ -421,9 +423,16 @@ function fatch_assembly_maxcode($pc)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function duplicate_assembly($assembly_code,$pc,$assemblyname)
+function duplicate_assembly($assembly_code,$pc,$assemblyname,$asm_code)
 {
-	$sql="select count(*) as c_assembly from assembly Where assemblycd <> '$assembly_code' and pccd = '$pc' and assemblyname = '$assemblyname'";
+	$sql="select count(*) as c_assembly from assembly Where pccd = '$pc'";
+	if($assembly_code != "" && $assembly_code !="0")
+	  $sql.=" and assemblycd = '$assembly_code' and assemblyname ='$assemblyname'"; 
+	else
+	  $sql.=" and assemblycd = '$asm_code'";
+	//echo $sql;
+	//exit;
+	
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$c_assembly=$row['c_assembly'];

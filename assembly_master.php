@@ -49,16 +49,30 @@ function validate()
 {
 	var subdivision=document.getElementById("Subdivision").value;
     var parliament=document.getElementById("pc").value;
+	var asmcode=document.getElementById("asmcode").value;
+	var assemblyname=document.getElementById("assemblyname").value;
 	if(subdivision=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Subdivision";
 		document.getElementById("Subdivision").focus();
 		return false;
 	}
-	if(parliament=="")
+	if(parliament=="" || parliament=="0")
 	{
-		document.getElementById("msg").innerHTML="Enter Parliament Name";
+		document.getElementById("msg").innerHTML="Select Parliament Code";
 		document.getElementById("pc").focus();
+		return false;
+	}
+	if(asmcode=="")
+	{
+		document.getElementById("msg").innerHTML="Enter Assembly Code";
+		document.getElementById("asmcode").focus();
+		return false;
+	}
+	if(assemblyname=="")
+	{
+		document.getElementById("msg").innerHTML="Enter Assembly Name";
+		document.getElementById("assemblyname").focus();
 		return false;
 	}
 }
@@ -70,12 +84,13 @@ include_once('function/master_fun.php');
 $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
-	$subdivisioncd=$_POST['Subdivision'];
-	$pc=$_POST['pc'];
-	$assemblyname=$_POST['assemblyname'];
+	$subdivisioncd=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
+	$pc=isset($_POST['pc'])?$_POST['pc']:"";
+	$asm_code=isset($_POST['asmcode'])?$_POST['asmcode']:"";
+	$assemblyname=isset($_POST['assemblyname'])?clean_spl($_POST['assemblyname']):"";
 	$assembly_code=($_POST['hid_assembly_code']);
 	//=============== Getting Training Code ==================	
-	if($assembly_code=='')
+	/*if($asm_code=='')
 	{
 		$rspmaxcode=fatch_assembly_maxcode($pc);
 		$rowpmaxcode=getRows($rspmaxcode);
@@ -83,11 +98,11 @@ if($action=='Save')
 			$assembly_code="001";
 		else
 			$assembly_code=sprintf("%03d",$rowpmaxcode['ass_cd']+1);
-	}
+	}*/
 	$usercd=$user_cd;
 	
 	$ret;
-	$c_assembly=duplicate_assembly($assembly_code,$pc,$assemblyname);
+	$c_assembly=duplicate_assembly($assembly_code,$pc,$assemblyname,$asm_code);
 	
 	if($c_assembly==0)
 	{
@@ -96,7 +111,7 @@ if($action=='Save')
 			$assembly_code=decode($_REQUEST['ass_cd']);
 			$dt = new DateTime();
 			$posted_date=$dt->format('Y-m-d H:i:s');
-			$ret=update_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date);
+			$ret=update_assembly($asm_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date);
 			if($ret==1)
 			{
 				redirect("assembly_master.php?msg=success");
@@ -104,7 +119,7 @@ if($action=='Save')
 		}
 		else
 		{
-			$ret=save_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd);
+			$ret=save_assembly($asm_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd);
 		}
 		if($ret==1)
 		{
@@ -115,7 +130,7 @@ if($action=='Save')
 	{
 		$msg="<div class='alert-error'>Assembly already exists</div>";
 	}
-	unset($ret,$posted_date,$c_assembly,$assembly_code,$assemblyname,$subdivisioncd,$pc);
+	unset($ret,$posted_date,$c_assembly,$assembly_code,$assemblyname,$subdivisioncd,$pc,$asm_code);
 }
 ?>
 
@@ -153,6 +168,8 @@ function bind_all()
 	assemblyname.value="<?php echo $rowPerDiv['assemblyname']; ?>";
 	var assembly_code=document.getElementById('hid_assembly_code');
 	assembly_code.value="<?php echo $rowPerDiv['assemblycd']; ?>";
+	var asmcode=document.getElementById("asmcode");
+	asmcode.value="<?php echo $rowPerDiv['assemblycd']; ?>";
 	<?php } ?>
 }
 </script>
@@ -166,7 +183,7 @@ function bind_all()
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">ASSEMBLY CONSTITUENCY MASTER</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
-  <table width="60%" class="form" cellpadding="0">
+  <table width="70%" class="form" cellpadding="0">
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
@@ -194,7 +211,8 @@ function bind_all()
 									}
 									unset($rsBn,$num_rows,$rowSubDiv);
 							?>
-      				</select></td></tr>
+      				</select></td>
+              <td><span class="error">*</span>Assembly Code</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="asmcode" id="asmcode" style="width:35px" maxlength="3" onkeypress="javascript:return wholenumbersonly(event);" /></td></tr>
                     <tr>
                     <td align="left"><span class="error">*</span>Parliament Constituency</td>
       <td align="left" id="pc_result"><select name="pc" id="pc" style="width:200px;">
@@ -220,10 +238,12 @@ function bind_all()
 										}
       									?>
       								  </select>
-      </td></tr>
+      </td>
+      <td colspan="2"></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Assembly Name</td>
       <td align="left"><input type="text" name="assemblyname" id="assemblyname" style="width:250px;" /></td>
+      <td align="left"></td>
       <td align="left"></td>
     </tr><input type="hidden" id="hid_assembly_code" name="hid_assembly_code" />
     

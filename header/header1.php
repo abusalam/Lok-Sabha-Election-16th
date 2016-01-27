@@ -165,8 +165,8 @@ if(rowCount($rs_env)>0)
 	$_SESSION['apt2_orderno']=$apt2_orderno;
 	$apt2_date = new DateTime($row_env['apt2_date']);
 	$_SESSION['apt2_date']=$apt2_date->format('d/m/Y');
-	$signature=$row_env['signature'];
-	$_SESSION['signature']=$signature;
+	//$signature=$row_env['signature'];
+	//$_SESSION['signature']=$signature;
 }
 else if($user_cat!="Administrator")
 {

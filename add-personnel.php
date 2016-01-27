@@ -155,13 +155,13 @@ function validate()
 		document.getElementById("offcode").focus();
 		return false;
 	}
-	if(empname=="")
+	if($.trim(empname)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Employee Name";
 		document.getElementById("empname").focus();
 		return false;
 	}
-	if(designation=="")
+	if($.trim(designation)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Designation";
 		document.getElementById("designation").focus();
@@ -197,13 +197,13 @@ function validate()
 		document.getElementById("gradepay").focus();
 		return false;
 	}
-	if(preaddress1=="")
+	if($.trim(preaddress1)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Present Address";
 		document.getElementById("preaddress1").focus();
 		return false;
 	}
-	if(peraddress1=="")
+	if($.trim(peraddress1)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Permanent Address";
 		document.getElementById("peraddress1").focus();
@@ -222,13 +222,13 @@ function validate()
 		document.getElementById("msg").innerHTML="Enter Residence Ph No";
 		document.getElementById("r_no").focus();
 		return false;
-	}*/
+	}
 	if(m_no=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Mobile No";
 		document.getElementById("m_no").focus();
 		return false;
-	}
+	}*/
 	if(qualification=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Qualification";
@@ -253,13 +253,13 @@ function validate()
 		document.getElementById("branch").focus();
 		return false;
 	}
-	if(acc_no=="")
+	if($.trim(acc_no)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter A/c No";
 		document.getElementById("acc_no").focus();
 		return false;
 	}
-	if(voterof=="")
+	/*if(voterof=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Voter of Assembly";
 		document.getElementById("voterof").focus();
@@ -277,7 +277,7 @@ function validate()
 		document.getElementById("sl_no").focus();
 		return false;
 	}*/
-	if(epic_no=="")
+	if($.trim(epic_no)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter EPIC No";
 		document.getElementById("epic_no").focus();
@@ -371,7 +371,7 @@ if($action=='Save')
 	$offcode=$_POST['offcode'];
 	$_SESSION['ofcname']=$offcode;
 	$empname=clean_spl($_POST['empname']);
-	$designation=$_POST['designation'];
+	$designation=clean_spl($_POST['designation']);
 	$dob1=$_POST['dob'];
 	$dd=substr($dob1,0,2);
 	$mm=substr($dob1,3,2);
@@ -388,13 +388,13 @@ if($action=='Save')
 	$workingstatus=$_POST['workingstatus'];
 	$email=$_POST['email'];
 	$r_no=clean_alpha($_POST['r_no']);
-	$m_no=clean_alpha($_POST['m_no']);
+	$m_no=isset($_POST['m_no'])?clean_alpha($_POST['m_no']):"0";
 	$qualification=$_POST['qualification'];
 	$language=$_POST['language'];
 	$bank=$_POST['bank'];
 	$branch=isset($_POST['branch'])?$_POST['branch']:"";
 	$acc_no=clean_alpha($_POST['acc_no']);
-	$voterof=$_POST['voterof'];
+	$voterof=isset($_POST['voterof'])?clean_alpha($_POST['voterof']):"";
 	$partno=$_POST['partno'];
 	$sl_no=$_POST['sl_no'];
 	$epic_no=$_POST['epic_no'];
@@ -464,33 +464,41 @@ if($action=='Save')
 		
 	$usercd=$user_cd;
 	include_once('function/add_fun.php');
-	$cnt=check_duplicate_personnelrecord($empname,$designation,$dob,$p_id);
-	if($cnt==0)
+	
+	if(($empname=="") || ($designation=="0") || ($designation=="") || ($bank=="") || ($acc_no=="0") || ($acc_no=="") || ($bank=="0") || ($branch=="0") || ($branch=="") || ($ac_pre=="0") || ($ac_per=="0") || ($ac_posting=="0") || ($offcode==""))
 	{
-		if(isset($_REQUEST['personcd']))
+		$msg="<div class='alert-error'>Please fill up all details.</div>";
+	}
+	else
+	{
+		$cnt=check_duplicate_personnelrecord($empname,$designation,$dob,$p_id);
+		if($cnt==0)
 		{
-			//$tr_cd=decode($_REQUEST['personcd']);
-			$dt = new DateTime();
-			$posted_date=$dt->format('Y-m-d H:i:s');
-			//$ret=update_training_type($training_code,$training_desc,$usercd,$posted_date);
-			$ret=update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
+			if(isset($_REQUEST['personcd']))
+			{
+				//$tr_cd=decode($_REQUEST['personcd']);
+				$dt = new DateTime();
+				$posted_date=$dt->format('Y-m-d H:i:s');
+				//$ret=update_training_type($training_code,$training_desc,$usercd,$posted_date);
+				$ret=update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
+				if($ret==1)
+				{
+					redirect("list-personnel.php?msg=success");
+				}
+			}
+			else
+			{
+				$ret=save_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$dist_code,$subdiv_cd,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd);
+			}
 			if($ret==1)
 			{
-				redirect("list-personnel.php?msg=success");
+				$msg="<div class='alert-success'>Record saved successfully</div>";
 			}
 		}
 		else
 		{
-			$ret=save_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$dist_code,$subdiv_cd,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd);
+			$msg="<div class='alert-error'>Duplicate entry not allowed</div>";
 		}
-		if($ret==1)
-		{
-			$msg="<div class='alert-success'>Record saved successfully</div>";
-		}
-	}
-	else
-	{
-		$msg="<div class='alert-error'>Duplicate entry not allowed</div>";
 	}
 	$rsmaxcode=null;
 	$rowmaxcode=null;
@@ -833,7 +841,7 @@ function bind_all()
       <td align="left"><input type="text" name="email" id="email" style="width:142px;" onblur="return email_valid();" maxlength="30" />
         &nbsp;&nbsp; &nbsp;&nbsp;Phone No(R)</td>
       <td align="left"><input type="text" name="r_no" id="r_no" style="width:100px;" maxlength="14" onkeypress="javascript:return wholenumbersonly(event);" />
-        &nbsp;&nbsp; <span class="error">*</span>Mobile No</td>
+        &nbsp;&nbsp; <span class="error">&nbsp;&nbsp;</span>Mobile No</td>
       <td align="left"><input type="text" name="m_no" id="m_no" style="width:142px;" maxlength="12" onkeypress="javascript:return wholenumbersonly(event);" /></td>
     </tr>
     <tr>
@@ -918,7 +926,7 @@ function bind_all()
         &nbsp;&nbsp; <span class="error">*</span>Bank A/C No</td>
       <td align="left"><input type="text" name="acc_no" id="acc_no" style="width:142px;" /></td>
     </tr>
-    <tr><td align="left"><span class="error">*</span>Voter of Assembly</td>
+    <tr><td align="left"><span class="error">&nbsp;&nbsp;</span>Voter of Assembly</td>
     	<td align="left" colspan="3"><input type="text" name="voterof" id="voterof" style="width:142px;" onkeypress="javascript:return wholenumbersonly(event);" maxlength="3" /></td>
     </tr>
     <tr>

@@ -71,7 +71,7 @@ if($action=='Save')
 	$usercd=$user_cd;
 	
 	$ret;
-	$pc_code=decode($_REQUEST['pc_cd']);
+	$pc_code=isset($_REQUEST['pc_cd'])?decode($_REQUEST['pc_cd']):"";
 	$c_parliament=duplicate_parliament($parliament_code,$parliament,$subdivisioncd,$pc_code);
 	
 	if($c_parliament==0)
@@ -174,7 +174,7 @@ function bind_all()
 									$districtcd=0;
 							?>
       				</select></td>
-       <td><span class="error">*</span>PC Code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="pccode" id="pccode" style="width:30px" /></td></tr>
+       <td><span class="error">*</span>PC Code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="pccode" id="pccode" style="width:30px" maxlength="2" onkeypress="javascript:return wholenumbersonly(event);" /></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Name</td>
       <td align="left"><input type="text" name="parliament" id="parliament" style="width:250px;" /></td>
