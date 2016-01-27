@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* CSS Document */
+#container {
+    width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+	height: 50px;
+}
+.pagination { background: #ffffff;
+    padding: 5px; border: 1px solid #cfcfcf;
+    margin-bottom: 1px;
+}
+.page1 {
+    display: inline-block;
+    padding: 0px 4px;
+    margin-right: 4px;
+    border: solid 1px #9aafe5;
+    background: #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #717171;
+}
+.page1:hover, .page1.gradient:hover {
+    background: #f4f4f4;
+}
+.page1.active {
+    border: solid 1px #2e6ab1;
+    background: #2e6ab1;
+    color: #ffffff;
+}
