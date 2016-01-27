@@ -49,7 +49,7 @@ function validate()
 		document.getElementById("envname").focus();
 		return false;
 	}*/
-	if($.trim(apt1_orderno)=="")
+	/*if($.trim(apt1_orderno)=="")
 	{
 		document.getElementById("msg").innerHTML="Enter App. Letter 1 order no";
 		document.getElementById("apt1_orderno").focus();
@@ -73,7 +73,7 @@ function validate()
 		document.getElementById("msg").innerHTML="Enter App. Letter 2 date";
 		document.getElementById("apt2_date").focus();
 		return false;
-	}
+	}*/
 }
 </script>
 </head>
@@ -84,15 +84,20 @@ $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
 	$district_cd=$_POST['district'];
-	$dist_name=mysql_real_escape_string($_POST['district']);
+	$maker=isset($_POST['selected_text'])?$_POST['selected_text']:'0';
+	$dist_name=$maker;
 	$distnm_sml=ucwords(strtolower($dist_name));
 	$distnm_cap=strtoupper($dist_name);
 	$envname="West Bengal Assembly Election , 2016";
-	$apt1_orderno=clean_spl($_POST['apt1_orderno']);
-	$apt1_date=clean_spl($_POST['apt1_date']);
-	$apt2_orderno=clean_spl($_POST['apt2_orderno']);
-	$apt2_date=clean_spl($_POST['apt2_date']);
+	$apt1_orderno=isset($_POST['apt1_orderno'])?clean_spl($_POST['apt1_orderno']):"";
+	$apt1_date=($_POST['apt1_date']!="")?clean_spl($_POST['apt1_date']):"0000-00-00"; 
+	$apt2_orderno=isset($_POST['apt2_orderno'])?clean_spl($_POST['apt2_orderno']):""; 
+	$apt2_date=($_POST['apt2_date']!="")?clean_spl($_POST['apt2_date']):"0000-00-00"; 
+	//echo $apt2_date;
+	//exit;
 	//$ps_code=($_POST['hid_ps_code']);
+	
+	$env_code="";
 	$c_env=duplicate_env($env_code,$district_cd);
 	//$c_env=0;
 	if($c_env==0)
@@ -115,7 +120,7 @@ if($action=='Save')
 		}
 		if($ret==1)
 		{
-			$msg="<div class='alert-success'>Record saved successfully</div>";
+			$msg="<div class='alert-success'>Environment has been set successfully</div>";
 		}
 	}
 	else
@@ -181,7 +186,7 @@ function bind_all()
     
     <tr>
      <td align="left"><span class="error">*</span>District</td>
-	  <td align="left"><select name="district" id="district" style="width:258px;">
+	  <td align="left"><select name="district" id="district" style="width:258px;"  onchange="document.getElementById('selected_text').value=this.options[this.selectedIndex].text">
       						<option value="0">-Select District-</option>
                             <?php 	$districtcd=$dist_cd;
 									$rsBn=fatch_district_master('');
@@ -197,26 +202,27 @@ function bind_all()
 									unset($rsBn,$num_rows,$rowDist);
 							?>
       				</select></td></tr>
+                    <input type="hidden" name="selected_text" id="selected_text" value="" />
     <!--<tr>
       <td align="left"><span class="error">*</span>Environment</td>
       <td align="left"><input type="text" name="envname" id="envname" style="width:250px;" /></td>
     </tr>-->
     
      <tr>
-      <td align="left"><span class="error">*</span>App. Letter 1 order no</td>
+      <td align="left"><span class="error">&nbsp; </span>App. Letter 1 order no</td>
       <td align="left"><input type="text" name="apt1_orderno" id="apt1_orderno" style="width:250px;" /></td>
     </tr>
       
     <tr>
-      <td align="left"><span class="error">*</span>App. Letter 1 date</td>
+      <td align="left"><span class="error">&nbsp; </span>App. Letter 1 date</td>
       <td align="left"><input type="text" name="apt1_date" id="apt1_date" style="width:258px;" /></td>
     </tr> 
     <tr>
-      <td align="left"><span class="error">*</span>App. Letter 2 order no</td>
+      <td align="left"><span class="error">&nbsp; </span>App. Letter 2 order no</td>
       <td align="left"><input type="text" name="apt2_orderno" id="apt2_orderno" style="width:250px;" /></td>
     </tr> 
     <tr>
-      <td align="left"><span class="error">*</span>App. Letter 2 date</td>
+      <td align="left"><span class="error">&nbsp; </span>App. Letter 2 date</td>
       <td align="left"><input type="text" name="apt2_date" id="apt2_date" style="width:258px;" /></td>
     </tr>              
    <input type="hidden" id="hid_ps_code" name="hid_ps_code" />

@@ -265,7 +265,7 @@ function validate()
 		document.getElementById("voterof").focus();
 		return false;
 	}
-	if(partno=="")
+	/*if(partno=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Part No";
 		document.getElementById("partno").focus();
@@ -276,7 +276,7 @@ function validate()
 		document.getElementById("msg").innerHTML="Enter Serial No";
 		document.getElementById("sl_no").focus();
 		return false;
-	}
+	}*/
 	if(epic_no=="")
 	{
 		document.getElementById("msg").innerHTML="Enter EPIC No";
@@ -922,9 +922,9 @@ function bind_all()
     	<td align="left" colspan="3"><input type="text" name="voterof" id="voterof" style="width:142px;" onkeypress="javascript:return wholenumbersonly(event);" maxlength="3" /></td>
     </tr>
     <tr>
-      <td align="left"><span class="error">*</span>Part No</td>
+      <td align="left"><span class="error">&nbsp; </span>Part No</td>
       <td align="left"><input type="text" name="partno" id="partno" style="width:142px;" maxlength="5" />
-        &nbsp;&nbsp; <span class="error">*</span>Serial No</td>
+        &nbsp;&nbsp; <span class="error">&nbsp; </span>Serial No</td>
       <td align="left"><input type="text" name="sl_no" id="sl_no" style="width:142px;" maxlength="5" />
         &nbsp;&nbsp; <span class="error">*</span>EPIC No</td>
       <td align="left"><input type="text" name="epic_no" id="epic_no" style="width:142px;" maxlength="25" /></td>
