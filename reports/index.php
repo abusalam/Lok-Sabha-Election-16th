@@ -7,13 +7,6 @@ require_once('../inc/db_trans.inc.php');
 OpenDB();
 global $DBLink;
 
-/* Select queries return a resultset */
-if ($result = mysqli_query($DBLink, "SELECT * FROM `GovtCategoryGenderCount`")) {
-    echo getHtmlTable($result);
-    /* free result set */
-    $result->close();
-}
-
 function getHtmlTable($rs)
 {
     // receive a record set and print
@@ -38,7 +31,13 @@ function getHtmlTable($rs)
 </head>
 
 <body>
+<h3>List of Offices may needs to be separated into their respective offices</h3>
 <?php
+if ($result = mysqli_query($DBLink, "SELECT * FROM `MultipleOfficesInOneCode`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
 if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoBankACC`")) {
     echo getHtmlTable($result);
     /* free result set */
@@ -52,6 +51,13 @@ if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoMobile`")) {
 }
 
 if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseNoEPIC`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+
+/* Select queries return a resultset */
+if ($result = mysqli_query($DBLink, "SELECT * FROM `GovtCategoryGenderCount`")) {
     echo getHtmlTable($result);
     /* free result set */
     $result->close();
