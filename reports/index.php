@@ -62,6 +62,16 @@ if ($result = mysqli_query($DBLink, "SELECT * FROM `GovtCategoryGenderCount`")) 
     /* free result set */
     $result->close();
 }
+if ($result = mysqli_query($DBLink, "SELECT * FROM `PostStatusWiseMaleFemalePPCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+if ($result = mysqli_query($DBLink, "SELECT * FROM `GenderWisePPCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
 ?>
 </body>
 
