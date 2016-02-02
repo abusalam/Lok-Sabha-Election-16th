@@ -526,7 +526,8 @@ function bind_all()
 	var ofc_details=document.getElementById('ofc_details');
 	<?php
 	if($rowPerson['office']!="" && $rowPerson['off_desg']!="") { ?>
-		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/><b>Desig. of O/C: </b>".$rowPerson['off_desg']."</label>"; ?>";
+		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/>"
+	."<b>Desig. of O/C: </b>".trim(preg_replace('/\s+/', '', $rowPerson['off_desg']))."</label>"; ?>";
 	<?php } ?>
 	var empname=document.getElementById('empname');
 	empname.value="<?php echo trim(preg_replace('/\s+/', ' ', $rowPerson['officer_name'])); ?>";
@@ -604,7 +605,7 @@ function bind_all()
 		}
     }
 	var acc_no=document.getElementById('acc_no');
-	acc_no.value="<?php echo $rowPerson['bank_acc_no']; ?>";
+	acc_no.value="<?php echo trim(preg_replace('/\s+/', '', $rowPerson['bank_acc_no'])); ?>";
 	var voterof=document.getElementById('voterof');
 	voterof.value="<?php echo $rowPerson['acno']; ?>";
 	var partno=document.getElementById('partno');
