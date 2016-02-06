@@ -1428,6 +1428,15 @@ CREATE TABLE IF NOT EXISTS `training_type` (
   `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `training_type`
+--
+
+INSERT INTO `training_type` (`training_code`, `training_desc`, `usercode`, `posted_date`) VALUES
+('01', 'First Training', 1, '2014-02-24 07:09:11'),
+('02', 'Second Training', 5, '2014-02-20 01:15:19'),
+('03', 'Third Training', 1, '2014-01-29 21:43:11');
+
 -- --------------------------------------------------------
 
 --
