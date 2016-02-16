@@ -94,9 +94,9 @@ function chkset_change()
 	else
 	{
 		document.getElementById('peraddress1').value="";
-		document.getElementById('peraddress1').disabled=false;
+		document.getElementById('peraddress1').readOnly=false;
 		document.getElementById('peraddress2').value="";
-		document.getElementById('peraddress2').disabled=false;
+		document.getElementById('peraddress2').readOnly=false;
 	}
 }
 function email_valid()
@@ -287,7 +287,7 @@ function validate()
 		document.getElementById("posting_status").focus();
 		return false;
 	}
-	if(remarks=="")
+	if(remarks=="0")
 	{
 		document.getElementById("msg").innerHTML="Enter Remarks";
 		document.getElementById("remarks").focus();

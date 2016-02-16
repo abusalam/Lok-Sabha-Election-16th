@@ -164,6 +164,16 @@ function bind_all()
 			subdiv.options[i].selected = true;
 		}
     }
+	//subdivision_change("<?php echo $rowtrainingvanue['subdivisioncd']; ?>");
+	//var assembly = document.getElementById('assembly');
+	$('#assembly').val("<?php echo $rowtrainingvanue['assemblycd']; ?>");
+	/*for (var i = 0; i < assembly.options.length; i++) 
+	{
+		if (assembly.options[i].value == "<?php echo $rowtrainingvanue['assemblycd']; ?>")
+		{
+			assembly.options[i].selected = true;
+		}
+    }*/
 	var venuename=document.getElementById('venuename');
 	venuename.value="<?php echo $rowtrainingvanue['venuename']; ?>";
 	var venueaddress1=document.getElementById('venueaddress1');
@@ -220,7 +230,27 @@ function bind_all()
       				</select></td>
      
       <td align="left" ><span class="error">*</span>Assembly</td>
-      <td align="left" id="assembly_result" style="padding-right:60px;"><select name="assembly" id="assembly" style="width:200px;"></select></td>
+      <td align="left" id="assembly_result" style="padding-right:60px;"><select name="assembly" id="assembly" style="width:200px;">
+      <?php
+	    if(isset($_REQUEST['venue_cd']))
+		{
+			$venue_cd=decode($_REQUEST['venue_cd']);		
+			$rstrainingvanue1=trainingvanue_details($venue_cd);
+			$rowtrainingvanue1=getRows($rstrainingvanue1);
+			$rsAss=fatch_assembly($rowtrainingvanue1['subdivisioncd']);
+			$num_rows=rowCount($rsAss);
+			if($num_rows>0)
+			{
+				echo "<option value='0'>-Select Assembly-</option>\n";
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowAss=getRows($rsAss);
+					echo "<option value='$rowAss[assemblycd]'>$rowAss[assemblyname]</option>\n";
+					unset($rowAss);
+				}
+			}
+		}
+      ?></select></td>
     </tr>
     <tr><td colspan="4" align="left">&nbsp;&nbsp;&nbsp;<b>Venue Details</b></td></tr>
      <TR><TD style="height: 1px; background-color: #0066CC; color: #FFFFFF; font-weight:bold;" align=center colSpan="4"></TD></TR>

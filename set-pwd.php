@@ -70,7 +70,8 @@ if($rand =='')
 }
 //if($action=='Submit')
 //{
-    $password=MD5(admin);
+	//$aa='admin';
+    $password=MD5('admin');
 	$user_cd=$_SESSION['user_cd'];
 	$tr_save=save_subdiv_pwd($rand,$password,$user_cd,$sub);
 

@@ -81,7 +81,7 @@ function populate_click()
 		document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","second-app-sl-no-reserve.php",true);
+	xmlhttp.open("GET","second-app-sl-no-reserve.php?subdiv_cd="+subdiv+"&dist=<?php print $dist_cd; ?>",true);
 	document.getElementById("populate_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();

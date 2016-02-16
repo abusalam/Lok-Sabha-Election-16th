@@ -6,6 +6,9 @@ session_start();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>DCRC Master List</title>
+<style>
+.scroller1 { border:1px solid #ccc; max-height: 700px; min-height:0px; overflow-y: scroll; }
+</style>
 <?php
 include('header/header.php');
 ?>
@@ -53,6 +56,7 @@ function search_click()
 	  }
 	xmlhttp.open("GET","ajaxfun.php?sub_div="+subdiv+"&ass="+assembly+"&opn=dcrc_result&dist="+dist,true);
 	xmlhttp.send();
+	 document.getElementById("dcrc_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });
 function edit_reserve(str,str1,str2)
@@ -134,10 +138,11 @@ function delete_dcrc(str)
     <tr><td colspan="2" align="left">&nbsp;</td></tr>
     <tr>
       <td align="center" colspan="4" id="dcrc_result">
-      	<div class="overlay">
+        
+      <!--	<div class="overlay">
   			<img id="loading_spinner" src="images/loading.gif" />
 		</div>
-      	<!--<table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1">
+      	<table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1">
         <tr><th>Sl.</th>
         	<th>Office ID</th>
             <th>Office Name</th>

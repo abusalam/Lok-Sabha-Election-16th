@@ -345,27 +345,28 @@ if($opn=="prev_poststat")
 						
 					
 				}
-				echo "<b>To be Transffered ::</b> ";
+				echo "<b>Required ::</b> ";
 				if($p1_stat_count !=0)
-				 echo "P1: ".$p1_stat_count.";&nbsp;&nbsp;";
+				 echo "P1: ".$p1_stat_count.";&nbsp;";
 				if($p2_stat_count !=0)
-				 echo "P2: ".$p2_stat_count.";&nbsp;&nbsp;";
+				 echo "P2: ".$p2_stat_count.";&nbsp;";
 				if($p3_stat_count !=0)
-				 echo "P3: ".$p3_stat_count.";&nbsp;&nbsp;";
+				 echo "P3: ".$p3_stat_count.";&nbsp;";
 				
 				if($pa_stat_count !=0)
-				 echo "PA: ".$pa_stat_count.";&nbsp;&nbsp;";
+				 echo "PA: ".$pa_stat_count.";&nbsp;";
 				if($pb_stat_count !=0)
-				 echo "PB: ".$pb_stat_count.";&nbsp;&nbsp;";
+				 echo "PB: ".$pb_stat_count.";&nbsp;";
 				 if($pr_stat_count !=0)
-				 echo "PR: ".$pr_stat_count.";&nbsp;&nbsp;";
+				 echo "PR: ".$pr_stat_count.";&nbsp;";
+				// echo "PB: 2232";
 			}
 			else
 			   echo ""; 
 	/******************Transffered*********************/
 	$rs=fatch_post_stat_wise_dtl_transffered($forsub_swp,$forpc_swp);
 	$num_rows=rowCount($rs);
-	echo "</br><b>Transffered ::</b> ";
+	echo "</br><b>Available ::</b> ";
 	for($i=1;$i<=$num_rows;$i++)
 	{
 		$row=getRows($rs);
@@ -658,6 +659,7 @@ if($opn=='dcrc_result')
 	$num_rows=rowCount($rsDCRC);
 	if($num_rows>0)
 	{
+		echo "<div class='scroller1'>";
 		echo "<table width='100%' cellpadding='0' cellspacing='0' border='0' id='table1'>\n";
 		echo "<tr height='30px'><th>Sl.</th>
 			<th>DCRC</th>
@@ -683,6 +685,7 @@ if($opn=='dcrc_result')
 			$rowDCRC=NULL;
 		}
 		echo "</table>\n";
+		echo "</div>";
 		$num_rows=0;			
 		unset($rsDCRC,$num_rows,$rowDCRC);
 	}

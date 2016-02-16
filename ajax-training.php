@@ -20,11 +20,32 @@ if($tr_cd!='' && $act=='del')
 		echo "<script>location.replace('training-type-master.php');</script>";
 	}
 }
+//=====================Training Venue subdiv wise=========================
 
+$opn=isset($_GET['opn'])?$_GET['opn']:"";
+$subdivcd=isset($_GET['subdivcd'])?$_GET['subdivcd']:"";
+if($opn=='trnvenue')
+{
+	      echo "<select id='training_venue' name='training_venue' style='width:220px;' onchange='javascript:return venue_capacity(this.value);'>\n";
+		  echo "<option value='0'>-Select Training Venue-</option>";
+			$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdivcd);
+			$num_rows=rowCount($rsTrainingVenue);
+			if($num_rows>0)
+			{
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowTrainingVenue=getRows($rsTrainingVenue);
+					echo "<option value='$rowTrainingVenue[0]'>$rowTrainingVenue[1]</option>\n";
+					$rowTrainingVenue=NULL;
+				}
+			}
+			unset($rowTrainingVenue,$num_rows);
+			echo "</select>\n";
+}
 //=====================Training Area of Interest=========================
 $area=isset($_GET['area'])?$_GET['area']:"";
 $subdivision=isset($_GET['subdivision'])?$_GET['subdivision']:"";
-$opn=isset($_GET['opn'])?$_GET['opn']:"";
+
 if($opn=='areadtl')
 {
 	if($area!='' && $subdivision!='')
@@ -33,7 +54,8 @@ if($opn=='areadtl')
 		{
 			echo "<td align='left'><span class='error'>*</span>Subdivision</td><td align='left'>\n";
 			//echo "<select id='area' style='width:220px;'><option value='$subdivision'>".$_SESSION['subdiv_name']."</option></select>\n";
-			echo "<select id='area' name='area' style='width:220px;'>\n";
+			echo "<select id='area' name='area' style='width:220px;' onchange='javascript:return fetch_sub_wise_venue(this.value);'>\n";
+		//	echo "<option value=''>$rowSub[1]</option>\n";
 			$rsSub=fatch_forsubdiv_from_personal_trainingpp_ag_subdiv1('');
 			$num_rows=rowCount($rsSub);
 			if($num_rows>0)
@@ -174,7 +196,7 @@ if($opn=='venuecap')
 		unset($rowCap,$rsCap);
 	}
 }
-/************training allocation1*****************/
+/************First training allocation1*****************/
 if($opn=='venuecap1')
 {	
 	if($venue!='' || $venue!=NULL)
@@ -193,7 +215,7 @@ if($opn=='venuecap1')
 		unset($rowCap,$rsCap);
 	}
 }
-/************training allocation1*****************/
+/************First training allocation1*****************/
 $training_venue=isset($_GET['training_venue'])?$_GET['training_venue']:"";
 $tr_type=isset($_GET['tr_type'])?$_GET['tr_type']:"";
 $training_dt=isset($_GET['training_dt'])?$_GET['training_dt']:"";
@@ -412,25 +434,25 @@ if($opn=='trnalloted_forsub')
 		unset($rsTr,$rowTr);
 	}
 }
-//===================== Member Available for Area & Post Status =========================
+//===================== Member Available for Area & Post Status (First training)=========================
 $post_stat=isset($_GET['post_stat'])?$_GET['post_stat']:"";
 //$subdivision=$_GET['subdivision'];
 $areapref=isset($_GET['areapref'])?$_GET['areapref']:"";
 //$area=$_GET['area'];
 if($opn=='membavl')
 {
-	if($areapref=='Subdivision of PP')
+	/*if($areapref=='S')
 		$areapref='1';
-	if($areapref=='Alloted Subdivision')
+	if($areapref=='D')
 		$areapref='2';
-	if($areapref=='Alloted PC')
-		$areapref='3';
-	if($areapref=='Assembly of Temporary Address')
+	/*if($areapref=='Alloted PC')
+		$areapref='3';*/
+	/*if($areapref=='T')
 		$areapref='4';
-	if($areapref=='Assembly of Permanent Address')
+	if($areapref=='P')
 		$areapref='5';
-	if($areapref=='Assembly of Office Address')
-		$areapref='6';
+	if($areapref=='O')
+		$areapref='6';*/
 	if($post_stat!='' && $subdivision!='' && $areapref!='' && $area!='' && $tr_type!='')
 	{
 		$rsMembAvl=member_available($post_stat,$subdivision,$areapref,$area,$tr_type);
@@ -568,7 +590,7 @@ if($opn=='membavl1')
 	}
 }
 
-//=======================Training Attendance===========================
+//=======================First Training Attendance===========================
 if($opn=='venue')
 {
 	$sub_div=$_GET['sub_div'];
@@ -638,6 +660,7 @@ if($opn=='tal')
 {
 	include_once('function/pagination.php');
 	global $subdivision; global $venuename; global $usercode;
+	$search=isset($_GET["search"])?$_GET["search"]:"";
 	$sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
 	$training_type=isset($_GET["training_type"])?$_GET["training_type"]:"";
 	$training_venue=isset($_GET["training_venue"])?$_GET["training_venue"]:"";
@@ -660,11 +683,26 @@ if($opn=='tal')
 //			echo "<span class='error'>Record already used</span><br />\n";
 //		}
 	}
-	
+	if($search=="search")
+	{
+		$_SESSION['sub_p1']=$sub_div;
+		$_SESSION['sub_venue1']=$training_venue;
+		$_SESSION['sub_trn1']=$training_type;
+		$_SESSION['sub_frm']=$frmdt;
+		$_SESSION['sub_to']=$todt;
+	}
+	else
+	{
+		$sub_div=isset($_SESSION['sub_p1'])?$_SESSION['sub_p1']:'';
+		$training_venue=isset($_SESSION['sub_venue1'])?$_SESSION['sub_venue1']:'';
+		$training_type=isset($_SESSION['sub_trn1'])?$_SESSION['sub_trn1']:'';
+		$frmdt=isset($_SESSION['sub_frm'])?$_SESSION['sub_frm']:'';
+		$todt=isset($_SESSION['sub_to'])?$_SESSION['sub_to']:'';
+	}
 	$rstraining_allocation_list_T=fatch_training_allocation_list($sub_div,$training_type,$training_venue,$frmdt,$todt,$usercode);
 	$num_rows_T = rowCount($rstraining_allocation_list_T);
 	
-	$items = 50; // number of items per page.
+	$items = 100; // number of items per page.
 	$all = $_GET['a'];
 	if($all == "all")
 	{
@@ -701,14 +739,15 @@ if($opn=='tal')
 		{
 		  $rowTraining_alloc_list=getRows($rstraining_alloc_list);
 		  $schedule_code='"'.encode($rowTraining_alloc_list['schedule_code']).'"';
-		  echo "<tr><td align='right' width='4%'>$i.</td><td align='left' width='30%'>$rowTraining_alloc_list[venuename]</td><td width='15%' align='center'>$rowTraining_alloc_list[training_dt]</td>";
+		  $count=$p_num+$i;
+		  echo "<tr><td align='left' width='4%'>$count.</td><td align='left' width='30%'>$rowTraining_alloc_list[venuename]</td><td width='15%' align='center'>$rowTraining_alloc_list[training_dt]</td>";
 		  echo "<td width='15%' align='left'>$rowTraining_alloc_list[training_time]</td><td width='15%' align='left'>$rowTraining_alloc_list[poststatus]</td>";
 		  echo "<td width='10%' align='left'>$rowTraining_alloc_list[no_pp]</td>";
 		  echo "<td align='center' width='5%'><img src='images/delete.png' alt='' height='20px'";
-		  if($rowTraining_alloc_list['usercode']==$usercode)
+		 /// if($rowTraining_alloc_list['usercode']==$usercode)
 		  	echo " onclick='javascript:delete_training_allocation($schedule_code);' ";
-		  else
-	  		echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	//	  else
+	  //		echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
 		  echo " /></td></tr>\n";
 		  $rowTraining_alloc_list=NULL;
 		}
@@ -717,4 +756,56 @@ if($opn=='tal')
 	}
 	unset($rstraining_alloc_list,$num_rows,$rowTraining_alloc_list);
 }
+/***************************Second Training mem availble**********************/
+
+if($opn=='membav_sectr')
+{
+	$party_reserve=isset($_GET['party_reserve'])?$_GET['party_reserve']:"";
+    $assm=isset($_GET['assm'])?$_GET['assm']:"";
+	$subdivision=isset($_GET['subdivision'])?$_GET['subdivision']:"";
+	if($party_reserve=='P')
+	{
+	   $party_hav=fetch_asm_party_available($subdivision,$assm,$party_reserve);
+	   $party_fill=fetch_sec_party_reserve_available($subdivision,$assm,$party_reserve);
+	   $party_ava=$party_hav-$party_fill;
+	   echo "Party Available: <span id='memb_avl'>".$party_ava."</span>";
+	}
+	if($party_reserve=='R')
+	{
+		/*$rs_reserve=fetch_asm_reserve_available($subdivision,$assm,$party_reserve);
+		$num_rows_res=rowCount($rs_reserve);
+		$res_count=0;
+		if($num_rows_res>0)
+		{
+			for($i=0;$i<$num_rows_res;$i++)
+			{
+				$row=getRows($rs_reserve);
+				$fasm=$row['fasm'];
+				$sub=$row['fsub'];
+				$fpc=$row['fpc'];
+				$membno=$row['memb'];
+				$n_o_p=$row['npc'];
+				$p_numb=$row['pnumb'];
+				$pst=$row['pst'];
+				$preqd=$row['ptyrqd'];
+				if (strcmp($n_o_p,'N')==0)
+				{
+				  $totres=$p_numb;
+				}
+				else
+				{
+				  $totres=round($p_numb*$preqd/100,0);
+				}
+				$res_count=$res_count+$totres;							
+			}*/
+			$res_count=fetch_asm_party_available($subdivision,$assm,$party_reserve);
+			$reserve_fill=fetch_sec_party_reserve_available($subdivision,$assm,$party_reserve);
+	        $reserve_ava=$res_count-$reserve_fill;
+			 echo "Available Sl. No.: <span id='memb_avl'>".$reserve_ava."</span>";
+			//echo $res_count;
+	//	}
+	}
+	
+}
+/**************************end of second Training*****************************/
 ?>

@@ -215,7 +215,7 @@ if($start=="Start")
 		{
 			//redirect("ajax/office_excel.php");
 			$count++;
-			$msg="<div class='alert-error'>Personnel Record invalid</div>";
+			$msg="<div class='alert-error'>Personnel Record(s) invalid</div>";
 			$errorfile="<a href='ajax/personnela_validation_error.php'>View File</a>";
 		}
 	}

@@ -18,7 +18,7 @@ function __construct($numb) {
 	
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT * FROM `poststatorder` where  `memberparty`=$numb   order by membno,poststat") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT membno,poststat FROM `poststatorder` where  `memberparty`=$numb   order by membno,poststat") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 	if($this->result->num_rows > 0) {
@@ -26,12 +26,16 @@ function __construct($numb) {
 		while($row = $this->result->fetch_assoc()) {
 
 			$memb= $row['membno'];
+			
 			$post=$row['poststat'];
+			
 			
 
 			$this->postorderd[$i]=new postorder($memb,$post);
 			$i=$i+1;
 		}
+		
+		
 	}
 	else {
 		echo 'NO  .RESULTS';	

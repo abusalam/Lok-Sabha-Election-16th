@@ -13,7 +13,8 @@ function __construct($subdiv) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT * FROM `personnela` where forsubdivision='$subdiv' ") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("Update `personnela` set rand_numb=RAND()*10000 where forsubdivision='$subdiv' ") or die($this->msqli->error.__LINE__);
+/*	$this->result = $this->msqli->query("SELECT * FROM `personnela` where forsubdivision='$subdiv' ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 
@@ -51,7 +52,7 @@ $this->stmt->bind_param('is',$rnd,$psd);
 	
 	else {
 		echo 'NO PP in table for this subdivision';	
-	}
+	}*/
 
 
 		

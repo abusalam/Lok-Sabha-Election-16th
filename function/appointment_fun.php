@@ -20,6 +20,7 @@ function fatch_personnel_ag_office($sub_div, $office)
 	connection_close();
 	return $rs;
 }
+//for replace personnel id///
 function add_temp_app_letter($per_cd,$usercd)
 {
 	$sql="insert into tmp_app_let (per_code,usercode) values ('$per_cd','$usercd')";
@@ -40,6 +41,73 @@ function fetch_id_temp_app_letter($usercd)
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
+}
+function first_appointment_letter_replace_new_id($per_code)
+{
+	$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,block_muni_name,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token)";
+	
+	$sql.="Select Distinct personnela.officer_name,
+	  personnela.off_desg As person_desig,
+	  personnela.personcd,
+	  office.office,
+	  concat(office.address1,',',office.address2),
+	  office.blockormuni_cd,
+	  block_muni.blockmuni,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  poststat.poststatus,
+	  personnela.mob_no,
+	  
+	  training_type.training_desc,
+	  training_venue.venuename,
+	  concat(training_venue.venueaddress1,',',training_venue.venueaddress2),
+	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
+	  training_schedule.training_time,
+	  
+	  personnela.forpc,
+	  personnela.forsubdivision,
+	  
+	  personnela.epic,
+	  personnela.acno,
+	  personnela.partno,
+	  personnela.slno,
+	   
+	  bank.bank_name,
+	  branch.branch_name,
+	  personnela.bank_acc_no,
+	  branch.ifsc_code,
+	 
+	  REPLACE(concat(SUBSTRING(subdivision1.subdivision,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
+ as r_token
+	  
+	From personnela
+	  Inner Join office On office.officecd = personnela.officecd
+	  Inner Join block_muni On office.blockormuni_cd = block_muni.blockminicd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join training_pp On personnela.personcd = training_pp.per_code
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+	  
+	  Left Join bank On personnela.bank_cd = bank.bank_cd
+	  Left Join branch On personnela.branchcd = branch.branchcd And
+		personnela.bank_cd = branch.bank_cd
+	  Inner Join training_type On training_type.training_code =
+		training_pp.training_type
+	  Left Join training_schedule On training_schedule.schedule_code =
+		training_pp.training_sch
+	  Left Join training_venue On training_venue.venue_cd =
+		training_schedule.training_venue
+	  Inner Join subdivision subdivision1 On training_pp.for_subdivision =
+		subdivision1.subdivisioncd
+	Where personnela.personcd='$per_code' And personnela.selected = 1 ";
+	execSelect($sql);
+	return 1;
 }
 function first_appointment_letter_hdr($per_code)
 {
@@ -198,7 +266,7 @@ function first_appointment_letter2_subdiv($sub_div,$office)
 	  Inner Join poststat On personnela.poststat = poststat.post_stat
 	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join pc On personnela.forpc = pc.pccd And pc.subdivisioncd =
-    personnela.forsubdivision where personnela.forsubdivision='$sub_div' and personnela.selected='1' ";
+    personnela.forsubdivision where personnela.forsubdivision='$sub_div' and personnela.selected=1 ";
 	//if($office!='0')
 	$sql.=" and office.officecd='$office'";
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
@@ -267,7 +335,7 @@ function first_appointment_letter2_hdr($sub_div,$office)
 		training_schedule.training_venue
 	  Inner Join subdivision subdivision1 On training_pp.subdivision =
 		subdivision1.subdivisioncd
-	Where personnela.forsubdivision = '$sub_div' And personnela.selected = '1' ";
+	Where personnela.forsubdivision = '$sub_div' And personnela.selected = 1 ";
 	if($office!='0')
 	$sql.=" and office.officecd='$office'";
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
@@ -317,11 +385,15 @@ function first_appointment_letter2($per_code)
 	connection_close();
 	return $rs;
 }*/
+/***************populate for pp************************/
 function delete_prev_data_app3($sub_div,$post_stat)
 {
 	//echo $post_stat;
 	//$post_stat1=mysql_real_escape_string($post_stat);
-	$sql="delete from first_rand_table where forsubdivision='$sub_div' and poststatus='$post_stat'";
+	$sql="Delete F from first_rand_table F
+	Inner Join personnela On personnela.personcd = F.personcd 
+	where personnela.selected = 1 and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy='0') and personnela.forsubdivision='$sub_div' and F.poststatus='$post_stat'";
+	//delete from first_rand_table where forsubdivision='$sub_div' and poststatus='$post_stat'";
 	$i=execDelete($sql);
 	connection_close();
 	return $i;
@@ -395,7 +467,7 @@ function delete_prev_data_app3($sub_div,$post_stat)
 }*/
 function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 {
-	$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token)";
+	$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,block_muni_name,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token)";
 	
 	$sql.="Select Distinct personnela.officer_name,
 	  personnela.off_desg As person_desig,
@@ -403,6 +475,7 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 	  office.office,
 	  concat(office.address1,',',office.address2),
 	  office.blockormuni_cd,
+	  block_muni.blockmuni,
 	  office.postoffice,
 	  subdivision.subdivision,
 	  policestation.policestation,
@@ -436,6 +509,7 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 	  
 	From personnela
 	  Inner Join office On office.officecd = personnela.officecd
+	  Inner Join block_muni On office.blockormuni_cd = block_muni.blockminicd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd
 	  Inner Join district On office.districtcd = district.districtcd
@@ -452,9 +526,9 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 		training_pp.training_sch
 	  Left Join training_venue On training_venue.venue_cd =
 		training_schedule.training_venue
-	  Inner Join subdivision subdivision1 On training_pp.subdivision =
+	  Inner Join subdivision subdivision1 On training_pp.for_subdivision =
 		subdivision1.subdivisioncd
-	Where personnela.forsubdivision = '$sub_div' And personnela.selected = '1' and personnela.poststat='$post_stat'";
+	Where personnela.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy='0') And personnela.selected = 1 and personnela.poststat='$post_stat'";
 //	if($office!='0')
 //	$sql.=" and office.officecd='$office'";
 	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
@@ -463,7 +537,99 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 	execSelect($sql);
 	
 	 $cntsql="Select count(*) as cnt from first_rand_table 
-		where forsubdivision='$sub_div' and poststatus='$post_stat1'";
+	  Inner Join personnela On personnela.personcd = first_rand_table.personcd
+		where first_rand_table.forsubdivision='$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy='0') And personnela.selected = 1 and first_rand_table.poststatus='$post_stat1' ";
+    $countrs=execSelect($cntsql);
+	$crow=getRows($countrs);
+	$cd_cnt=$crow['cnt'];
+	
+	connection_close();
+	return $cd_cnt;
+}
+/////////////populate for extra pp
+function delete_prev_data_app3_extra($phase,$subdivision)
+{
+	$sql="Delete F from first_rand_table F
+	Inner Join personnela On personnela.personcd = F.personcd 
+	where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$subdivision'";
+	$i=execDelete($sql);
+	connection_close();
+	return $i;
+}
+function first_appointment_letter3_extra($phase,$subdivision)
+{
+	$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,block_muni_name,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token)";
+	
+	$sql.="Select Distinct personnela.officer_name,
+	  personnela.off_desg As person_desig,
+	  personnela.personcd,
+	  office.office,
+	  concat(office.address1,',',office.address2),
+	  office.blockormuni_cd,
+	  block_muni.blockmuni,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  poststat.poststatus,
+	  personnela.mob_no,
+	  
+	  training_type.training_desc,
+	  training_venue.venuename,
+	  concat(training_venue.venueaddress1,',',training_venue.venueaddress2),
+	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
+	  training_schedule.training_time,
+	  
+	  personnela.forpc,
+	  personnela.forsubdivision,
+	  
+	  personnela.epic,
+	  personnela.acno,
+	  personnela.partno,
+	  personnela.slno,
+	   
+	  bank.bank_name,
+	  branch.branch_name,
+	  personnela.bank_acc_no,
+	  branch.ifsc_code,
+	 
+	  REPLACE(concat(SUBSTRING(subdivision1.subdivision,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
+ as r_token
+	  
+	From personnela
+	  Inner Join office On office.officecd = personnela.officecd
+	  Inner Join block_muni On office.blockormuni_cd = block_muni.blockminicd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join training_pp On personnela.personcd = training_pp.per_code
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+	  
+	  Left Join bank On personnela.bank_cd = bank.bank_cd
+	  Left Join branch On personnela.branchcd = branch.branchcd And
+		personnela.bank_cd = branch.bank_cd
+	  Inner Join training_type On training_type.training_code =
+		training_pp.training_type
+	  Left Join training_schedule On training_schedule.schedule_code =
+		training_pp.training_sch
+	  Left Join training_venue On training_venue.venue_cd =
+		training_schedule.training_venue
+	  Inner Join subdivision subdivision1 On training_pp.for_subdivision =
+		subdivision1.subdivisioncd
+	Where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$subdivision'";
+//	if($office!='0')
+//	$sql.=" and office.officecd='$office'";
+	$sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd, personnela.personcd,
+	  poststat.poststatus, personnela.off_desg";
+	//print $sql; exit;
+	execSelect($sql);
+	
+	 $cntsql="Select count(*) as cnt from first_rand_table 
+	 Inner Join personnela On personnela.personcd = first_rand_table.personcd
+		where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$subdivision'";
     $countrs=execSelect($cntsql);
 	$crow=getRows($countrs);
 	$cd_cnt=$crow['cnt'];
@@ -495,16 +661,49 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 	connection_close();
 	return $rs;
 }*/
+function first_app_letter3_print_extra($sub,$phase)
+{
+	
+	$sql="Update first_rand_table 
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd
+	set sl_no=NULL
+	where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$sub';";
+	$sql.="SET @ordering = 0;";
+    $sql.="UPDATE first_rand_table
+	        Inner Join personnela On personnela.personcd = first_rand_table.personcd
+             SET sl_no = (@ordering := @ordering + 1) ";
+	$sql.=" where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and and personnela.forsubdivision='$sub'";
+	//$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
 
+	execMultiQuery($sql);	
+	connection_close();	
+	
+	return 1;
+}
+function first_app_letter3_max_slno_extra($sub,$phase)
+{
+	$sql="select count(*) as slno From first_rand_table 
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd
+	where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$sub'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['slno'];
+	connection_close();
+	return $i;
+}
+///***********************///print appt letter for PP/////////********************////////
 function first_app_letter3_print($sub_div)
 {
 	
-	$sql="Update first_rand_table set sl_no=NULL where first_rand_table.forsubdivision = '$sub_div';";
+	$sql="Update first_rand_table 
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd
+	set sl_no=NULL where first_rand_table.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0);";
 	$sql.="SET @ordering = 0;";
-    $sql.="UPDATE
-            first_rand_table SET sl_no = (@ordering := @ordering + 1) ";
-	$sql.=" Where first_rand_table.forsubdivision = '$sub_div'";
-	$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
+    $sql.="UPDATE first_rand_table
+	 Inner Join personnela On personnela.personcd = first_rand_table.personcd 
+	 SET sl_no = (@ordering := @ordering + 1) ";
+	$sql.=" Where first_rand_table.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0)";
+	//$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
 
 	execMultiQuery($sql);	
 	connection_close();	
@@ -513,13 +712,16 @@ function first_app_letter3_print($sub_div)
 }
 function first_app_letter3_max_slno($subdiv)
 {
-	$sql="select count(*) as slno From first_rand_table where first_rand_table.forsubdivision = '$subdiv'";
+	$sql="select count(*) as slno From  first_rand_table
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd
+	 where first_rand_table.forsubdivision = '$subdiv' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0)";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$i=$row['slno'];
 	connection_close();
 	return $i;
 }
+//ofc wise
 function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 {
 	$sql="Select first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
@@ -528,7 +730,7 @@ function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
 	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
 	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
-	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
 	From first_rand_table 
 	
 	Where 1=1 ";
@@ -545,6 +747,7 @@ function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 	connection_close();
 	return $rs;
 }
+//sub_div wise
 function first_app_letter3_print1($sub_div,$from,$to)
 {
 	$sql="Select Distinct first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
@@ -553,9 +756,29 @@ function first_app_letter3_print1($sub_div,$from,$to)
 	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
 	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
 	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
-	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
 	From first_rand_table 
 	Where first_rand_table.forsubdivision = '$sub_div'";
+	$sql.=" group by first_rand_table.personcd";	
+	$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+//phase wise extra
+function first_app_letter3_print1_extra($subdiv,$phase,$from,$to)
+{
+	$sql="Select Distinct first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
+	  first_rand_table.office,first_rand_table.address,first_rand_table.postoffice,first_rand_table.subdivision,first_rand_table.policestation,first_rand_table.district,first_rand_table.pin,
+	  first_rand_table.officecd,first_rand_table.mob_no,first_rand_table.poststatus,first_rand_table.acno,first_rand_table.partno,first_rand_table.slno,first_rand_table.epic,first_rand_table.pc_code as forpc,first_rand_table.pc_name as pcname,
+	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
+	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
+	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
+	From first_rand_table 
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd
+	where personnela.selected = 1 and personnela.ttrgschcopy='$phase' and personnela.booked='P' and personnela.forsubdivision='$subdiv'";
 	$sql.=" group by first_rand_table.personcd";	
 	$sql.=" order by sl_no limit $from,$to";
 	//echo $sql; exit;
@@ -624,15 +847,32 @@ function second_app_hrd($forassembly,$forpc,$group_id)
 	connection_close();
 	return $rs;
 }
-function second_appointment_letter($group_id,$forassembly)
+//master roll report second appt
+function master_roll_second_app_hrd($forassembly,$forpc,$group_id)
 {
-/*	$sql="Select personnela.groupid,
+	$sql="Select Distinct personnela.groupid,
+	personnela.forassembly	  
+	From personnela
+	Where personnela.groupid Is Not Null And personnela.groupid != '0' and personnela.booked='P'";
+	if($forassembly!='' && $forassembly!=null && $forassembly!=0)
+		$sql.=" and personnela.forassembly='$forassembly'";
+	elseif($forpc!='' && $forpc!=null && $forpc!=0)
+		$sql.=" and personnela.forpc='$forpc'";
+	if($group_id!='' && $group_id!=null)
+		$sql.=" and personnela.groupid='$group_id'";
+	$sql.=" order by personnela.forassembly,personnela.groupid";
+	//echo $sql;
+//	exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+//master roll second appoint letter
+function master_roll_second_appointment_letter($group_id,$forassembly)
+{
+	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
-	  pc.pccd,
-	  pc.pcname,
-	  pollingstation.psno,
-	  pollingstation.psname,
 	  personnela.officer_name,
 	  personnela.personcd,
 	  office.office,
@@ -644,11 +884,6 @@ function second_appointment_letter($group_id,$forassembly)
 	  district.district,
 	  office.pin,
 	  office.officecd,
-	  dcrcmaster.dc_venue,
-	  dcrcmaster.dc_addr,
-	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
-	  dcrc_party.dc_time,
-	  dcrcmaster.rcvenue,
 	  personnela.poststat,
 	  personnela.off_desg
 	From personnela
@@ -657,13 +892,16 @@ function second_appointment_letter($group_id,$forassembly)
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd
 	  Inner Join district On office.districtcd = district.districtcd
-	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
-		pc.subdivisioncd
-	  Left Join assembly On personnela.forassembly = assembly.assemblycd
-	  Inner Join pollingstation On personnela.forassembly =
-		pollingstation.forassembly
-	  Inner Join dcrcmaster On pollingstation.dcrccd = dcrcmaster.dcrcgrp
-	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp"; */
+	  Left Join assembly On personnela.forassembly = assembly.assemblycd ";
+	$sql.=" where personnela.groupid='$group_id' and personnela.forassembly='$forassembly' and personnela.booked='P'";
+	$sql.=" order by personnela.groupid, personnela.poststat";
+//		print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+/*function second_appointment_letter($group_id,$forassembly)
+{
 	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
@@ -700,7 +938,7 @@ function second_appointment_letter($group_id,$forassembly)
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
-}
+}*/
 function delete_prev_data_second_rand($forassembly,$forpc,$group_id)
 {
 	$sql="delete from second_rand_table where code>0";
@@ -716,15 +954,13 @@ function delete_prev_data_second_rand($forassembly,$forpc,$group_id)
 	return $i;
 }
 //===================== Reserve ========================
-function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
+function master_roll_second_appointment_letter_reserve1($subdiv,$forassembly,$post_status)
 {
-	/*$sql="Select personnela.groupid,
+
+
+	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
-	  pc.pccd,
-	  pc.pcname,
-	  pollingstation.psno,
-	  pollingstation.psname,
 	  personnela.officer_name,
 	  personnela.personcd,
 	  office.office,
@@ -736,28 +972,107 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  district.district,
 	  office.pin,
 	  office.officecd,
-	  dcrcmaster.dc_venue,
-	  dcrcmaster.dc_addr,
-	  Date_Format(dcrc_party.dc_date, '%d/%m/%Y') As dc_date,
-	  dcrc_party.dc_time,
-	  dcrcmaster.rcvenue,
 	  personnela.poststat,
-	  personnela.off_desg
+	  personnela.off_desg,
+	  personnela.dcrccd,
+	  poststat.poststatus
 	From personnela
 	  Inner Join office On personnela.officecd = office.officecd
 	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd
-	  Inner Join district On office.districtcd = district.districtcd
-	  Left Join pc On personnela.forpc = pc.pccd And personnela.forsubdivision =
-		pc.subdivisioncd
+	  Inner Join district On office.districtcd = district.districtcd        
+	 
 	  Left Join assembly On personnela.forassembly = assembly.assemblycd
-	  Inner Join pollingstation On personnela.forassembly =
-		pollingstation.forassembly
-	  Inner Join dcrcmaster On pollingstation.dcrccd = dcrcmaster.dcrcgrp
-	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp";*/          
+	  Inner Join poststat On personnela.poststat = poststat.post_stat ";
+	$sql.=" where personnela.booked='R'";
+	if($forassembly!='' && $forassembly!=0)
+	    $sql.=" and personnela.forassembly='$forassembly'";
+	//if($forpc!='' && $forpc!=0)
+		//$sql.=" and personnela.forpc='$forpc'";
+	if($post_status!='' && $post_status!='0')
+    	$sql.=" and personnela.poststat='$post_status'";
 
-	//echo 'abc '.$group_id,$forassembly,$forpc;
+	$sql.=" order by personnela.forassembly, poststat.post_stat";
+	//print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+        
+	return $rs;
+}
+function master_roll_second_app_hrd_reserve($group_id,$forassembly,$forpc)
+{
+	$sql="Select Distinct personnela.groupid,
+	personnela.forassembly	  
+	From personnela
+	Where personnela.groupid Is Not Null And personnela.groupid != '0' and personnela.booked='R'";
+	if($forassembly!='' && $forassembly!=null && $forassembly!=0)
+		$sql.=" and personnela.forassembly='$forassembly'";
+	elseif($forpc!='' && $forpc!=null && $forpc!=0)
+		$sql.=" and personnela.forpc='$forpc'";
+	if($group_id!='' && $group_id!=null)
+		$sql.=" and personnela.groupid='$group_id'";
+	$sql.=" order by personnela.forassembly,personnela.groupid";
+	//echo $sql;
+//	exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function master_roll_second_appointment_letter_reserve($group_id,$forassembly,$forpc)
+{
+
+
+	$sql="Select personnela.groupid,
+	  assembly.assemblycd,
+	  assembly.assemblyname,
+	  personnela.officer_name,
+	  personnela.personcd,
+	  office.office,
+	  office.address1,
+	  office.address2,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  personnela.poststat,
+	  personnela.off_desg,
+	  personnela.dcrccd,
+	  poststat.poststatus
+	From personnela
+	  Inner Join office On personnela.officecd = office.officecd
+	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd        
+	 
+	  Left Join assembly On personnela.forassembly = assembly.assemblycd
+	  Inner Join poststat On personnela.poststat = poststat.post_stat ";
+	$sql.=" where personnela.booked='R'";
+	if($forassembly!='' && $forassembly!=0)
+		{ $sql.=" and personnela.forassembly='$forassembly'";
+//echo 'test '.$forpc.$forassembly.$group_id;
+}
+	if($forpc!='' && $forpc!=0)
+		{$sql.=" and personnela.forpc='$forpc'";
+		//echo $forpc.$forassembly.$group_id;
+                 }
+	if($group_id!='')
+{		$sql.=" and personnela.groupid='$group_id'";
+//echo $forpc.$forassembly.$group_id;
+}
+	$sql.=" order by personnela.forassembly,poststat.post_stat";
+	//print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+        
+	return $rs;
+}
+
+/*function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
+{
 
 
 	$sql="Select personnela.groupid,
@@ -796,15 +1111,15 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	  Inner Join dcrc_party On dcrc_party.dcrcgrp = dcrcmaster.dcrcgrp
 	  Inner Join poststat On personnela.poststat = poststat.post_stat ";
 	$sql.=" where personnela.booked='R'";
-	if($forassembly!='' || $forassembly!=null || $forassembly!=0)
+	if($forassembly!='' && $forassembly!=0)
 		{ $sql.=" and personnela.forassembly='$forassembly'";
 //echo 'test '.$forpc.$forassembly.$group_id;
 }
-	if($forpc!='' || $forpc!=null || $forpc!=0)
+	if($forpc!='' && $forpc!=0)
 		{$sql.=" and personnela.forpc='$forpc'";
 		//echo $forpc.$forassembly.$group_id;
                  }
-	if($group_id!='' || $group_id!=null)
+	if($group_id!='')
 {		$sql.=" and personnela.groupid='$group_id'";
 //echo $forpc.$forassembly.$group_id;
 }
@@ -814,7 +1129,7 @@ function second_appointment_letter_reserve($group_id,$forassembly,$forpc)
 	connection_close();
         
 	return $rs;
-}
+}*/
 function second_appointment_letter_reserve1($sub,$assembly,$group_id,$from,$to)
 {
 	$sql="SELECT `slno`,`groupid`,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
@@ -890,6 +1205,16 @@ function third_app_print($forassembly)
 //	exit;
 	$rs=execSelect($sql);
 	connection_close();
+	return $rs;
+}
+//training requirement extra PP
+function fatch_personnela_phasetype($sub)
+{
+	$sql="Select distinct personnela.ttrgschcopy From personnela ";
+		$sql.=" where personnela.ttrgschcopy>0 and personnela.ttrgschcopy is not Null and personnela.forsubdivision='$sub'";
+	//$sql.=" order by training_venue.venuename";
+
+	$rs=execSelect($sql);
 	return $rs;
 }
 ?>

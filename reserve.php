@@ -75,6 +75,8 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  $x=0;
 		  $k=0;
 		  //
+		//  echo $ppall1->countnumb();
+		//  echo "</br>";
 		  while( $k<$totres) 
 		  {
 		        if ($x< $ppall1->countnumb())
@@ -88,8 +90,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 				{
 					break;
 				
-				}
-				
+				}				
 				
 				$k=$k+1;
 					
@@ -105,7 +106,8 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		echo 'Problem in reserve Formation ';	
 	}
 
-
+$this->stmt->close();
+$this->msqli->close();
 		
 }
 }

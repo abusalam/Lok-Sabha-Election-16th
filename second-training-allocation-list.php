@@ -57,9 +57,10 @@ function subdiv_change(str)
 		xmlhttp.send();
 	
 }
-function office_list()
+function office_list(str)
 {
 	//var sub_div="<?php echo $subdiv_cd; ?>";
+	var qstr;
 	var PC="";
 	var training_venue=document.getElementById('training_venue').value;
 	var sub_div=document.getElementById("Subdivision").value;
@@ -82,14 +83,20 @@ function office_list()
 			document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","ajax-training2.php?sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&opn=tal&p="+page+"&a="+all,true);
+	if(str=="search")
+     qstr="ajax-training2.php?sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&opn=tal&search=search";
+	else
+     qstr="ajax-training2.php?sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&opn=tal&p="+page+"&a="+all;
+	xmlhttp.open("GET",qstr,true);
+	
+	//xmlhttp.open("GET","ajax-training2.php?sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&opn=tal&p="+page+"&a="+all,true);
 	document.getElementById("training_allocation_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
 }
 $(document).ready(function(){  $('.overlay').fadeOut();  });
 
-function delete_training2_allocation(str)
+function delete_training2_allocation(str,str_sub,str_asm,str_pr)
 {
 	if (confirm("Do you really want to delete the record?")==true)
 	{
@@ -115,7 +122,7 @@ function delete_training2_allocation(str)
 			document.getElementById("training_allocation_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-training2.php?delcode="+delcode+"&sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&opn=tal&p="+page+"&a="+all,true);
+	xmlhttp.open("GET","ajax-training2.php?delcode="+delcode+"&sub_div="+sub_div+"&training_venue="+training_venue+"&PC="+PC+"&assembly="+assembly+"&strsub="+str_sub+"&strasm="+str_asm+"&strpr="+str_pr+"&opn=tal&p="+page+"&a="+all,true);
 	xmlhttp.send();
 	}
 }
@@ -126,7 +133,7 @@ function delete_training2_allocation(str)
 include_once('inc/db_trans.inc.php');
 include_once('function/training2_fun.php');
 ?>
-<body oncontextmenu="return false;" onload="return office_list();">
+<body oncontextmenu="return false;" onload="return office_list('pload');">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
@@ -172,7 +179,7 @@ include_once('function/training2_fun.php');
    
     <tr><td colspan="4" align="left">&nbsp;</td></tr>
     <tr>
-      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list();" /></td>
+      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list('search');" /></td>
     </tr>
     <tr><td colspan="4" align="left">&nbsp;</td></tr>
     <tr>

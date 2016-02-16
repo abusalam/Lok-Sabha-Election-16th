@@ -10,8 +10,9 @@ session_start();
 include('header/header.php');
 ?>
 <script type="text/javascript" language="javascript">
-function office_list()
+function office_list(str)
 {
+	var qstr;
 	var sub_div="<?php echo $subdiv_cd; ?>";
 	var training_type=document.getElementById('training_type').value;
 	var training_venue=document.getElementById('training_venue').value;
@@ -35,7 +36,13 @@ function office_list()
 			document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","ajax-training.php?sub_div="+sub_div+"&training_type="+training_type+"&training_venue="+training_venue+"&opn=tal&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
+	if(str=="search")
+     qstr="ajax-training.php?sub_div="+sub_div+"&training_venue="+training_venue+"&training_type="+training_type+"&frmdt="+frmdt+"&todt="+todt+"&opn=tal&search=search";
+	else
+     qstr="ajax-training.php?sub_div="+sub_div+"&training_venue="+training_venue+"&training_type="+training_type+"&frmdt="+frmdt+"&todt="+todt+"&opn=tal&p="+page+"&a="+all;
+	 //alert(qstr);
+	xmlhttp.open("GET",qstr,true);
+	//xmlhttp.open("GET","ajax-training.php?sub_div="+sub_div+"&training_type="+training_type+"&training_venue="+training_venue+"&opn=tal&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
 	document.getElementById("training_allocation_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
@@ -80,7 +87,7 @@ function delete_training_allocation(str)
 include_once('inc/db_trans.inc.php');
 include_once('function/training_fun.php');
 ?>
-<body oncontextmenu="return false;" onload="return office_list();">
+<body oncontextmenu="return false;"  onload="return office_list('pload');">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
@@ -126,7 +133,7 @@ include_once('function/training_fun.php');
     </tr>
     <tr><td colspan="4" align="left">&nbsp;</td></tr>
     <tr>
-      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list();" /></td>
+      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return office_list('search');" /></td>
     </tr>
     <tr><td colspan="4" align="left">&nbsp;</td></tr>
     <tr>

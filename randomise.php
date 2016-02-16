@@ -21,7 +21,8 @@ else
 }
 
 new randno($subdiv);
-
+//echo $subdiv;
+//exit;
 $asmparty=new assemblydata($subdiv,'S');  // Subdivisionwise
 //echo $subdiv;
 //exit;
@@ -36,6 +37,8 @@ $sobj= new mysqliconn();
  
 $msqli->query("update personnela set booked=' ',groupid=0,forassembly='   ',selected=0 where forsubdivision='$subdiv'");
 
+//echo $subdiv;
+//exit;
 $msqli->autocommit(FALSE);
  
 $sql  = "update personnela set booked='P',selected=1,groupid=?,forassembly=? where personcd=?  ";
@@ -62,7 +65,8 @@ while ($i<=$asmparty->countnumb()-1)
 
 	$pc=$asmparty->getpcpty($i); //PC for which party is being formed
 	$sub=$asmparty->getsubpty($i);
-
+   
+   
 	$postdt=new postorderdata($membno);
 	
 	$j=0;
@@ -80,11 +84,15 @@ while ($i<=$asmparty->countnumb()-1)
 		$x=0;
 		$skippp=0;
 		$k=0;
+
 		while( $x<$ppall->countnumb()) 
 		{
 			$cond=0;
 			$ofcd=$ppall->getofcdpp($x);
 			$bk=$ppall->getbookedpp($x);
+			//$cnt1=$grpdata->countnumb();
+			//echo $cnt1;
+			//exit;
 			if ($k<$grpdata->countnumb())
 			{
 				    $asmf=$grpdata->getasmdtl($k);
@@ -114,8 +122,7 @@ while ($i<=$asmparty->countnumb()-1)
 			{	
 			   // if ((strcmp($bk,' ')==0)) {
 				//	  echo strcmp($bk,'');
-			     //   echo $ofcd.'    n '.$bk.'b '.$of1;
-					
+			     //   echo $ofcd.'    n '.$bk.'b '.$of1;					
 				//	}
 					if ((strcmp($ofcd,$of1)<>0) and (strcmp($of2,' ')==0) and (strcmp($bk,'')==0))
 					{  // echo '  2 sele    ';
@@ -126,7 +133,7 @@ while ($i<=$asmparty->countnumb()-1)
 						echo '  ----      ';
 						*/
 						$cond=1;
-					 }
+					}
 			
 			}
 			if ($memslno==3)
@@ -160,15 +167,18 @@ while ($i<=$asmparty->countnumb()-1)
 						$grpdata->setof5dtl($k,$ofcd);
 						$cond=1;
 					 }
+					
 			
 			}
 			if ($memslno==6)
 			{	
-					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($ofcd,$of5)<>0) and (strcmp($of6,' ')==0) and (strcmp($bk,' ')==0))
+					if ((strcmp($ofcd,$of1)<>0) and (strcmp($ofcd,$of2)<>0) and (strcmp($ofcd,$of3)<>0) and (strcmp($ofcd,$of4)<>0) and (strcmp($ofcd,$of5)<>0) and (strcmp($of6,' ')==0) and (strcmp($bk,'')==0))
 					{
 						$grpdata->setof6dtl($k,$ofcd);
 						$cond=1;
+						
 					 }
+					 
 			}
 			if ($memslno<1 or $memslno>6)
 			{

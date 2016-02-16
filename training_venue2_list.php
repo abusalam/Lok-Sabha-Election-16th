@@ -38,9 +38,10 @@ function termination_list(str)
 	  }
 
 	if(str=="search")
-    qstr="ajax-trainingvenue2-list.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist;
+     qstr="ajax-trainingvenue2-list.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&search=search";
 	else
-    qstr="ajax-trainingvenue2-list.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&p="+page+"&a="+all;
+     qstr="ajax-trainingvenue2-list.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&p="+page+"&a="+all;
+	 
 	xmlhttp.open("GET",qstr,true);
 	document.getElementById("trainingvenue_list_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";

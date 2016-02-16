@@ -30,6 +30,29 @@ if(isset($_SESSION['subdiv_cd']))
 		
 	}
 }*/
+function fetch_sub_wise_venue(str)
+{
+	if (window.XMLHttpRequest)
+	  {
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("venue_training").innerHTML=xmlhttp.responseText;
+		training_alloted(document.getElementById('training_type').value);
+		venue_capacity('0');
+		}
+	  }
+	xmlhttp.open("GET","ajax-training.php?subdivcd="+str+"&opn=trnvenue",true);
+	xmlhttp.send();
+	
+}
 function venue_capacity(str)
 {
 	if (window.XMLHttpRequest)
@@ -110,6 +133,10 @@ function area_detail(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("area_of_preference").innerHTML=xmlhttp.responseText;
+		if(str==0)
+		  fetch_sub_wise_venue('0');
+		 else
+		  fetch_sub_wise_venue('<?php print $subdiv_cd; ?>');
 		}
 	  }
 	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision=<?php print $subdiv_cd; ?>&opn=areadtl",true);
@@ -154,18 +181,7 @@ function validate()
 	var training_time=document.getElementById("training_time").value;
 	var post_status=document.getElementById("post_status").value;
 	var no_pp=document.getElementById("no_pp").value;
-	if(training_venue=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Training Venue";
-		document.getElementById("training_venue").focus();
-		return false;
-	}
-	if(training_type=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Training Type";
-		document.getElementById("training_type").focus();
-		return false;
-	}
+	
 	if(area_pref=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Area of Preference";
@@ -181,6 +197,18 @@ function validate()
 			document.getElementById("area").focus();
 			return false;
 		}
+	}
+	if(training_venue=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Training Venue";
+		document.getElementById("training_venue").focus();
+		return false;
+	}
+	if(training_type=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Training Type";
+		document.getElementById("training_type").focus();
+		return false;
 	}
 	if(training_dt=="")
 	{
@@ -369,13 +397,23 @@ if($action=='Submit')
     	<table width="100%" id="trng_alloted" class="table2 demo-section" cellpadding="0" cellspacing="0" border="0"></table>
     </td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>-->
-    
+    <tr>
+      <td align="left"><span class="error">*</span>Area of Preference</td>
+      <td align="left"><select name="area_pref" id="area_pref" style="width:220px;" onchange="javascript:return area_detail(this.value);">
+		<option value="0">-Select Preference-</option>
+        <option value="S">Subdivision of PP</option>
+        <option value="D">Alloted Subdivision</option>
+        <option value="T">Assembly of Temporary Address</option>
+        <option value="P">Assembly of Permanent Address</option>
+        <option value="O">Assembly of Office Address</option>
+      </select></td></tr>
+    <tr id="area_of_preference"></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Training Venue</td>
-	  <td align="left" width="60%"><select name="training_venue" id="training_venue" style="width:220px;" onchange="javascript:return venue_capacity(this.value);">
+	  <td align="left" width="60%"><span id="venue_training"><select name="training_venue" id="training_venue" style="width:220px;" onchange="javascript:return venue_capacity(this.value);">
 	    <option value="0">-Select Training Venue-</option>
 		<?php
-			$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdiv_cd);
+			/*$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdiv_cd);
 			$num_rows=rowCount($rsTrainingVenue);
 			if($num_rows>0)
 			{
@@ -386,9 +424,9 @@ if($action=='Submit')
 					$rowTrainingVenue=NULL;
 				}
 			}
-			unset($rowTrainingVenue,$num_rows);
+			unset($rowTrainingVenue,$num_rows);*/
 		?>
-	    </select>&nbsp;&nbsp;<span id="venue_capacity"></span></td></tr>
+	    </select></span>&nbsp;&nbsp;<span id="venue_capacity"></span></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Type</td>
       <td align="left"><select name="training_type" id="training_type" style="width:220px;">
@@ -408,17 +446,7 @@ if($action=='Submit')
 								unset($rsTrainingType,$num_rows,$rowTrainingType);
 							?>
       </select></td></tr>
-    <tr>
-      <td align="left"><span class="error">*</span>Area of Preference</td>
-      <td align="left"><select name="area_pref" id="area_pref" style="width:220px;" onchange="javascript:return area_detail(this.value);">
-		<option value="0">-Select Preference-</option>
-        <option value="S">Subdivision of PP</option>
-        <option value="D">Alloted Subdivision</option>
-        <option value="T">Assembly of Temporary Address</option>
-        <option value="P">Assembly of Permanent Address</option>
-        <option value="O">Assembly of Office Address</option>
-      </select></td></tr>
-    <tr id="area_of_preference"></tr>
+    
     <tr>
       <td align="left"><span class="error">*</span>Training Date</td>
       <td align="left"><input type="text" name="training_dt" id="training_dt" maxlength="10" style="width:220px;" onchange="javascript:return training_alloted();" /></td>

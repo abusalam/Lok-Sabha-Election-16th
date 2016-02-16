@@ -9,7 +9,9 @@ $pr_cd=isset($_GET['pr_cd'])?decode($_GET['pr_cd']):"";
 $act=isset($_GET['act'])?$_GET['act']:"";
 if($pr_cd!='' && $act=='del')
 {
+	
 	$total=personnela_del_check($pr_cd);
+	
 	if($total=="0")
 	{
 	    $f_cd='0';
@@ -56,7 +58,7 @@ else
 $rsPersonnel_ls14_dum=fatch_Personnel_ls14List($subdiv,$p_id,$post_status,$officeid,$frmdt,$todt,$usercode);
 $num_rows_dum = rowCount($rsPersonnel_ls14_dum);
 
-$items = 50; // number of items per page.
+$items = 100; // number of items per page.
 $all = isset($_GET['a'])?$_GET['a']:"";
 if($all == "all")
 {
@@ -93,7 +95,9 @@ else
 	{
 	  $rowPersonnel_ls14=getRows($rsPersonnel_ls14);
 	  $p_cd='"'.encode($rowPersonnel_ls14[0]).'"';
-	  echo "<tr><td align='right' width='3%'>$i.</td><td align='center' width='10%'>$rowPersonnel_ls14[0]</td><td width='24%' align='left'>$rowPersonnel_ls14[1]</td>";
+	   $count=$p_num+$i;
+	   
+	  echo "<tr><td align='right' width='3%'>$count.</td><td align='center' width='10%'>$rowPersonnel_ls14[0]</td><td width='24%' align='left'>$rowPersonnel_ls14[1]</td>";
 	  echo "<td width='44%' align='left'>$rowPersonnel_ls14[2],$rowPersonnel_ls14[3]</td><td width='15%' align='left'>$rowPersonnel_ls14[4]</td>";
 	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_personnela($p_cd);' /></td>";
 	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' ";

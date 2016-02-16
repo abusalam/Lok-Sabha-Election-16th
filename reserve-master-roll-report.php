@@ -59,12 +59,12 @@ extract($_POST);
 $submit=isset($_POST['submit'])?$_POST['submit']:"";
 if($submit=="Submit")
 {
+	$post_status=isset($_POST['post_status'])?encode($_POST['post_status']):"";
 	$assembly=encode($_POST['assembly']);
-
 	{
 	?>
     <script>
-		window.open("fpdf/master-roll-reserve.php?assembly=<?php echo $assembly; ?>");
+		window.open("fpdf/master-roll-reserve1.php?assembly=<?php echo $assembly; ?>&post_status=<?php echo $post_status;?>");
 	</script>
     <?php
 	}
@@ -94,7 +94,7 @@ if($submit=="Submit")
     <tr>
       <td align="left"><span class="error">*</span>Subdivision Name</td>
       <td align="left"><select name="sub_div" id="sub_div" style="width:200px;" onchange="return subdivision_change(this.value);">
-      							<option value='0'>Select</option>
+      							<option value='0'>-Select-</option>
       					<?php
 						$districtcd=$dist_cd;
 						$rsSubDiv=fatch_Subdivision($districtcd);
@@ -112,6 +112,25 @@ if($submit=="Submit")
     <tr>
       <td align="left"><span class="error">*</span>Assembly</td>
       <td align="left" id="assembly_result"><select name="assembly" id="assembly" style="width:200px;"></select></td>
+    </tr>
+     <tr>
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Post Status</td>
+      <td align="left"><select name="post_status" id="post_status" style="width:200px;">
+		<option value="0">-Select Posting Status-</option>
+                            <?php 	$rsP=fatch_postingstatus();
+									$num_rows=rowCount($rsP);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowP=getRows($rsP);
+											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+											$rowP=NULL;
+										}
+									}
+									unset($rsP,$num_rows,$rowP);
+							?>
+      </select></td>
     </tr>
 	<tr>
 	  <td align="left" colspan="2">&nbsp;</td></tr>

@@ -5,7 +5,7 @@ extract($_POST);
 require('fpdf.php');
 include_once('../inc/db_trans.inc.php');
 include_once('../function/ofc_fun.php');
-$subdiv=$_POST['hid_subdiv'];
+$subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 $office_cd=isset($_POST['office'])?$_POST['office']:"";
 $rsOff=office_details_ag_sub($office_cd,$subdiv);
 $num_rows_Off=rowCount($rsOff);
@@ -29,8 +29,7 @@ function Footer()
 }
 
 function FancyTable($header, $data)
-{
-    
+{ 
    
 	$fill = false;
 	$count=0;
@@ -47,18 +46,18 @@ function FancyTable($header, $data)
 			//$subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 			//$euname="ELECTION URGENT";
 			$office=$rowOff['officecd'];
-			$office_dtl="OFFICE : (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
+			$office_dtl="OFFICE: (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
 			
-			$office_dtl1="P.O.-".$rowOff['postoffice'].", Subdiv-".$rowOff['subdivision'].", P.S.-".$rowOff['policestation'].", Dist.-".$rowOff['district'].", PIN-".$rowOff['pin'];
+			$office_dtl1=" P.O.-".$rowOff['postoffice'].", Subdiv-".$rowOff['subdivision'].", Block/Muni - ".$rowOff['blockmuni'].", P.S.-".$rowOff['policestation'].", Dist.-".$rowOff['district'].", PIN-".$rowOff['pin'];
 			
 			//$this->Ln();
 			//$this->Cell(190,0,'',1,0,'L');
 			$this->Ln();
-			$this->SetFont('','B',7.7);
-			$this->Cell(190,5,$office_dtl,"LTR",0,'L');
-			$this->Ln(4);
-			$this->Cell(190,5,$office_dtl1,"LR",0,'L');
-			$this->Ln();
+			$this->SetFont('','B',7.3);
+			$this->MultiCell(190,4,$office_dtl.$office_dtl1,'LTR','J');
+			//$this->Ln(4);
+			//$this->Cell(190,5,$office_dtl1,"LR",0,'L');
+			//$this->Ln();
 			
 			$this->SetFillColor(255,255,255);
 		//	$this->SetTextColor(0,0,0);
@@ -82,10 +81,10 @@ function FancyTable($header, $data)
 				$this->SetFont('','',6);
 
 				
-					$this->Cell($w[0],6,$rowPersonnel['personcd'],'LRT',0,'L',$fill);						
-					$this->Cell($w[1],6,$rowPersonnel['officer_name'],'LRT',0,'L',$fill);
-					$this->Cell($w[2],6,$rowPersonnel['designation'],'LRT',0,'L',$fill);
-					$this->Cell($w[3],6,$rowPersonnel['poststatus'],'LRT',0,'L',$fill);
+					$this->Cell($w[0],6,$rowPersonnel['personcd'],'LR',0,'L',$fill);						
+					$this->Cell($w[1],6,$rowPersonnel['officer_name'],'LR',0,'L',$fill);
+					$this->Cell($w[2],6,$rowPersonnel['designation'],'LR',0,'L',$fill);
+					$this->Cell($w[3],6,$rowPersonnel['poststatus'],'LR',0,'L',$fill);
 					//count1++;
 					
 					$this->Ln();
@@ -95,7 +94,9 @@ function FancyTable($header, $data)
 			
 				
 			}
-			
+			 $this->Ln(10);
+			 $this->SetFont('','B',9);
+			 $this->Cell(50,5,"Head of the office signature  .................................",0,0,'L');
 			$fill = !$fill;
 		    $count++;
 		}

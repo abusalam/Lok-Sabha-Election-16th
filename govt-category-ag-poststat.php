@@ -57,7 +57,7 @@ function validate()
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
     <tr>
-	  <td align="left">District</td>
+	  <td align="left"><span class="error">*</span>District</td>
 	  <td align="left"><select name="district" id="district" style="width:240px;" onchange="javascript:return district_change(this.value);">
       						<option value="0">-Select District-</option>
                             <?php 	include_once("function/master_fun.php");
@@ -75,12 +75,21 @@ function validate()
 									$num_rows=0;
 									$rowSubDiv=null;
 							?>
-      				</select></td></tr>
+      				</select></td>
+     </tr>
 	<tr>
-	  <td align="left">Subdivision</td>
+	  <td align="left"><span class="error">&nbsp;&nbsp;</span>Subdivision</td>
 	  <td align="left" id="subdiv_result"><select name="Subdivision" id="Subdivision" style="width:240px;">
       				</select></td>
-    </tr>   
+    </tr> 
+     <tr>
+	  <td align="left"><span class="error">&nbsp;&nbsp;</span>Gender</td>
+	  <td align="left"><select name="gender" id="gender" style="width:240px;">
+      						<option value="0">-Select Gender-</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+      				</select></td>
+     </tr>  
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr>
       <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="return validate();" /></td></tr>

@@ -90,19 +90,7 @@ From training_venue_2
 	return $rs;
 }
 
-function fatch_schedule2_maxcode($training_venue)
-{
-	$sql; $rs;
-	$sql="select max(schedule_cd) as schedule_code from second_training where training_venue='$training_venue'";
-	$rs=execSelect($sql);
-	return $rs;
-}
-function save_training2_schedule($schedule_cd,$forpc,$forsub,$assembly,$party_reserve,$start_sl,$end_sl,$training_venue,$training_dt,$training_time,$usercd)
-{
-	$sql="insert into second_training (schedule_cd,for_pc,for_subdiv,assembly,party_reserve,start_sl,end_sl,training_venue,training_dt,training_time,	usercode) values ('$schedule_cd','$forpc','$forsub','$assembly','$party_reserve','$start_sl','$end_sl','$training_venue','$training_dt','$training_time','$usercd')";
-	$i=execInsert($sql);
-	return $i;
-}
+
 function delete_training2_allocation($delcode)
 {
 	$sql="update personnela set training2_sch=NULL  where training2_sch='$delcode'";
@@ -148,7 +136,10 @@ function fatch_training2_allocation_listAct($sub_div,$training_venue,$PC,$assemb
 	  second_training.end_sl,
 	  training_venue_2.venuename,
 	  Date_Format(second_training.training_dt, '%d/%m/%Y') As training_dt,
-	  second_training.training_time
+	  second_training.training_time,
+	  second_training.for_subdiv,
+	  second_training.assembly,
+	  second_training.party_reserve
 	From training_venue_2
 	  Inner Join second_training On training_venue_2.venue_cd =
 		second_training.training_venue
@@ -162,7 +153,7 @@ function fatch_training2_allocation_listAct($sub_div,$training_venue,$PC,$assemb
 		$sql.=" and second_training.for_pc = '$PC'";
 	if($assembly!='0' && $assembly!='')
 		$sql.=" and second_training.assembly = '$assembly'";
-	$sql.=" order by second_training.schedule_cd";
+	$sql.=" order by second_training.for_subdiv,second_training.assembly,second_training.party_reserve";
 	$sql.=" ASC LIMIT $p_num , $items";
 	
 	$rs=execSelect($sql);
@@ -272,19 +263,75 @@ function second_appoint_letter_ofcwise($office,$subdiv)
 	  $rs=execSelect($sql);
 	return $rs;
 }
-function fetch_second_apt()
+//update second appt serial no
+function fetch_second_apt($sub_div)
+{
+	
+	$sql="Update second_appt set slno=0 where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_appt.subdivcd = '$sub_div' ";
+	$sql.=";";
+	$sql.="SET @ordering = 0;";
+    $sql.="UPDATE
+            second_appt SET slno = (@ordering := @ordering + 1) where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_appt.subdivcd = '$sub_div' ";
+	$sql.=" order by pers_off";
+	execMultiQuery($sql);	
+	connection_close();	
+	
+	return 1;
+}
+/*function fetch_second_apt()
 {
 	$sql="select pers_off,pr_personcd from second_appt order by pers_off";
+	echo $sql;
+	exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
-}
-function fetch_second_apt_reserve()
+}*/
+//count serial no from second appt
+function fetch_second_apt_max_slno($sub_div)
 {
-	$sql="select personcd from second_rand_table_reserve order by officecd";
+	$sql="select count(*) as slno From second_appt where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_appt.subdivcd = '$sub_div' ";
 	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['slno'];
 	connection_close();
-	return $rs;
+	return $i;
+}
+//update second rand table reserve serial no
+function fetch_second_apt_reserve($sub_div)
+{
+	$sql="Update second_rand_table_reserve set slno=0 where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_rand_table_reserve.subdivisioncd = '$sub_div' ";
+	$sql.=";";
+	$sql.="SET @ordering = 0;";
+    $sql.="UPDATE
+            second_rand_table_reserve SET slno = (@ordering := @ordering + 1) where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_rand_table_reserve.subdivisioncd = '$sub_div' ";
+	$sql.=" order by officecd";
+	execMultiQuery($sql);	
+	connection_close();	
+	
+	return 1;
+}
+//count serial no from second rand table reserve
+function fetch_second_apt_reserve_max_slno($sub_div)
+{
+	$sql="select count(*) as slno From second_rand_table_reserve where 1=1 ";
+	if($sub_div!='0' && $sub_div!='')
+		$sql.=" and second_rand_table_reserve.subdivisioncd = '$sub_div' ";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['slno'];
+	connection_close();
+	return $i;
 }
 
 function second_appointment_letter_reserve2_print($from,$to)
@@ -300,4 +347,69 @@ function second_appointment_letter_reserve2_print($from,$to)
 	connection_close();
 	return $rs;
 }
+/***********************Second training allocation*************************/
+function fatch_schedule2_maxcode($training_venue)
+{
+	$sql; $rs;
+	$sql="select max(schedule_cd) as schedule_code from second_training where training_venue='$training_venue'";
+	$rs=execSelect($sql);
+	return $rs;
+}
+function save_training2_schedule($schedule_cd,$forpc,$forsub,$assembly,$party_reserve,$start_sl,$end_sl,$training_venue,$training_dt,$training_time,$usercd)
+{
+	$sql="insert into second_training (schedule_cd,for_pc,for_subdiv,assembly,party_reserve,start_sl,end_sl,training_venue,training_dt,training_time,	usercode) values ('$schedule_cd','$forpc','$forsub','$assembly','$party_reserve','$start_sl','$end_sl','$training_venue','$training_dt','$training_time','$usercd')";
+	$i=execInsert($sql);
+	return $i;
+}
+function fatch_max_end_sl($forsub,$assembly,$party_reserve)
+{
+	 $sql="Select max(end_sl) as cnt from  second_training where for_subdiv='$forsub' and assembly='$assembly'";
+	 if($party_reserve!='' && $party_reserve!='0')
+		$sql.=" and party_reserve ='$party_reserve'";
+	   $rs=execSelect($sql);
+	   $row=getRows($rs);
+	   $total=$row['cnt'];
+	   return $total;
+}
+function update_endsl_second_training($total_endsl,$schedule_cd)
+{
+	$sql="update second_training set end_sl='$total_endsl'  where schedule_cd='$schedule_cd'";
+	$i=execUpdate($sql);
+	return $i;
+}
+function fetch_Assembly_party_reserve_array($assembly,$forsub,$party_reserve)
+{
+	$sql;$rs;
+    $i=0;
+    $data_list=array();
+	
+    $sql="select  start_sl, end_sl ,for_subdiv,assembly,party_reserve,schedule_cd from second_training where for_subdiv='$forsub' and assembly='$assembly' and party_reserve ='$party_reserve'";
+   	$rs=execSelect($sql);
+	while($asm_status = getRows($rs)) {
+	$data_list[$i]['sl']=$asm_status['start_sl'];
+	$data_list[$i]['es']=$asm_status['end_sl'];
+	$data_list[$i]['sh_cd']=$asm_status['schedule_cd'];
+	//$data_list[$i]['asmcd']=$asm_status['assembly'];
+	//$data_list[$i]['p_r']=$asm_status['party_reserve'];
+	$i++;
+	}
+	return $data_list;
+}
+function update_next_party_startsl($sum_pp,$next_sdcd,$next_asmcd,$next_p_r)
+{
+	$sql="update second_training set start_sl='$sum_pp' where schedule_cd='$next_sdcd'";
+	echo $sql;
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+}
+function update_same_party_startsl($start_sl_n,$end_sl_n,$same_sdcd)
+{
+	$sql="update second_training set start_sl='$start_sl_n', end_sl='$end_sl_n' where schedule_cd='$same_sdcd'";
+	//echo $sql;
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+}
+/****************************End of Second Training Allocation***************/
 ?>

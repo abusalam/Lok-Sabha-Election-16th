@@ -70,7 +70,7 @@ if(isset($_REQUEST['msg']))
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">POLLING STATION LIST</td></tr>
-<tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
+<tr><td align="center" valign="top"><form method="post" name="form1" id="form1" autocomplete="off">
   <table width="90%" class="form" cellpadding="0">
    <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
@@ -87,7 +87,7 @@ if(isset($_REQUEST['msg']))
     </tr>
     <tr><td colspan="4">&nbsp;</td></tr>
     <tr>
-      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return search_click('search');" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>»</strong>&nbsp;<a href="polling-station-report.php" class="k-button">Print</a></td>
+      <td colspan="4" align="center"><input type="button" name="search" id="search" value="Search" class="button" onclick="javascript:return search_click('search');" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>»</strong>&nbsp;<a href="polling-station-report.php" class="k-button">Report</a></td>
     </tr>
     <tr><td colspan="2" align="left">&nbsp;</td></tr>
     <tr>

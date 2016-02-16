@@ -211,7 +211,9 @@ function bind_data()
 									}
 									unset($rsP,$num_rows,$rowP);
 							?>
-      </select></td></tr>
+      </select></td>
+    </tr>
+    
     <tr>
       <td align="left"><span class="error">*</span>Subdivision</td>
       <td align="left"><select name="subdivision" id="subdivision" style="width:200px;">

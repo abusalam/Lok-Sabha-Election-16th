@@ -148,7 +148,10 @@ function FancyTable($header, $data)
 		if($count==$per_page)
 		{
 			$per_page=$per_page+1;
-			$this->AddPage();
+			if($count!=rowCount($data))
+		    {		
+			  $this->AddPage();
+			}
 		} 
     }
     // Closing line

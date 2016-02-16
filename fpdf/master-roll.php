@@ -12,7 +12,7 @@ $group_id='';
 		exit;
 	
 	$forpc='';
-$rec_set_hdr=second_app_hrd($forassembly,$forpc,$group_id);
+$rec_set_hdr=master_roll_second_app_hrd($forassembly,$forpc,$group_id);
 
 class PDF extends FPDF
 {
@@ -64,7 +64,7 @@ function FancyTable($header, $data)
 		if($count<$per_page)
 	    {
 			
-			$this->SetFont('','B',9);	
+			$this->SetFont('','B',8.5);	
 			$grp_id=$rec_arr_hdr['groupid'];
 			$this->Cell(275,5,"Polling Party : ".$grp_id,'LTR',0,'C');
 	        $this->Ln();
@@ -75,11 +75,11 @@ function FancyTable($header, $data)
 			$this->SetFont('','B');
 			$w = array(15,200,60);
 			
-		  $rec_set=second_appointment_letter($grp_id,$rec_arr_hdr['assemblycd']);
+		  $rec_set=master_roll_second_appointment_letter($grp_id,$rec_arr_hdr['forassembly']);
 			$num_rows=rowCount($rec_set);
 			for($k=0;$k<$num_rows;$k++)
 			{
-				$this->SetFont('','',6.5);
+				$this->SetFont('','',6.4);
 				$rec_arr=getRows($rec_set);
 				$amount=amount_ag_poststat($rec_arr['poststat']);
 			    $p_dtl="NAME - ".$rec_arr['officer_name'].", DESG. - ".$rec_arr['off_desg'].", PIN - (".$rec_arr['personcd']."), OFFICE NAME - ".$rec_arr['office'];
@@ -87,17 +87,17 @@ function FancyTable($header, $data)
 				$p_dtl2=", P.O. - ".$rec_arr['postoffice'].", Subdiv.-".$rec_arr['subdivision'].", Dist.-".$rec_arr['district'].", PIN - ".$rec_arr['pin'].", OFFICE - ".$rec_arr['officecd'].")";
 								
 				$amount1="Received Rs. ".$amount;
-				$this->Cell($w[0],5,$rec_arr['poststat'],"LTR",0,'C',$fill);						
-				$this->Cell($w[1],5,$p_dtl,"LTR",0,'L',$fill);
-				$this->Cell($w[2],5,$amount1,"LTR",0,'L',$fill);
+				$this->Cell($w[0],4.8,$rec_arr['poststat'],"LTR",0,'C',$fill);						
+				$this->Cell($w[1],4.8,$p_dtl,"LTR",0,'L',$fill);
+				$this->Cell($w[2],4.8,$amount1,"LTR",0,'L',$fill);
 				$this->Ln(4);
 			/*	$this->Cell($w[0],5,"","LR",0,'L',$fill);						
 				$this->Cell($w[1],5,$p_dtl1,"LR",0,'L',$fill);
 				$this->Cell($w[2],5,"","LTR",0,'L',$fill);
 				$this->Ln();*/
-				$this->Cell($w[0],5,"","LR",0,'L',$fill);						
-				$this->Cell($w[1],5,$p_dtl1.$p_dtl2,"LR",0,'L',$fill);
-				$this->Cell($w[2],5,"","LTR",0,'L',$fill);
+				$this->Cell($w[0],4.5,"","LR",0,'L',$fill);						
+				$this->Cell($w[1],4.5,$p_dtl1.$p_dtl2,"LR",0,'L',$fill);
+				$this->Cell($w[2],4.5,"","LTR",0,'L',$fill);
 				$this->Ln();
 				$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
 				$this->Ln();
@@ -109,7 +109,10 @@ function FancyTable($header, $data)
 		if($count==$per_page)
 		{
 			$per_page=$per_page+3;
-			$this->AddPage();
+			if($count!=rowCount($data))
+		    {		
+			  $this->AddPage();
+			}
 		} 
     }
     // Closing line

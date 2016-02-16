@@ -60,6 +60,7 @@ include('header/header.php');
 */
 function for_subdiv_change(str)
 {
+	document.getElementById("for_poststat_details").innerHTML="<img src='images/loading_s.gif' alt='' height='15px' width='20px'/>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	//	xmlhttp1=new XMLHttpRequest();
@@ -280,7 +281,7 @@ if($action=='Swapping')
 	$usercd=$user_cd;
 	if($forsubdivision>0)
 	{
-	    $rsEmp=fatch_Personaldtl_antiAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision);
+	    $rsEmp=fatch_Personaldtl_antiAgSubdiv1($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision);
 		//$num_rows=rowCount($rsEmp);
 	
 		if($rsEmp<1)
@@ -312,7 +313,7 @@ if($action=='Swapping')
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">EMPLOYEE REVERSE SWAPPING DETAILS </td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
-  <table width="80%" class="form" cellpadding="0" style="padding-left:6px;">
+  <table width="85%" class="form" cellpadding="0" style="padding-left:6px;">
     <tr>
       <td align="center" colspan="6"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
@@ -349,8 +350,10 @@ if($action=='Swapping')
 									$rowBn=null;
 							?>
       				</select>
-                    <select name="forsubdivision" id="forsubdivision" style="width:170px;" disabled="disabled" onchange="return for_subdiv_change(this.value);">
-      <option value="0">-Select For Subdivision-</option>
+                    
+                    
+       <select name="forsubdivision" id="forsubdivision" style="width:170px;" disabled="disabled" onchange="return for_subdiv_change(this.value);">
+      <option value="0">-Select Subdivision-</option>
                             <?php 	$rsBn=fatch_Subdivision($districtcd);
 									$num_rows=rowCount($rsBn);
 									if($num_rows>0)
@@ -386,7 +389,7 @@ if($action=='Swapping')
     
     <tr><td class="text_small" align="right">&nbsp;&nbsp;&nbsp;&nbsp;</td>
     <td align="left" id="for_poststat_details" colspan="2" class="text_small"></td>
-    	<td  id="poststat_details" colspan="2" class="text_small"></td></tr>
+    	<td id="poststat_details" colspan="2" class="text_small"></td></tr>
     <tr style="display: none;">
     <td align="left"><input type="checkbox" id="chksetoffice" name="chksetoffice" onclick="return chksetoffice_change();" disabled="disabled" />
         <label for="chksetoffice" class="text_small">Office wise

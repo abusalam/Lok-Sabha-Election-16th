@@ -75,18 +75,15 @@ function FancyTable($header, $data)
 	    {
 			$subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 			$office=$rowOff['officecd'];
-			$office_dtl="OFFICE : (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
+			$office_dtl="OFFICE: (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
 			
-			$office_dtl1="P.O.-".$rowOff['postoffice'].", Subdiv-".$rowOff['subdivision'].", P.S.-".$rowOff['policestation'].", Dist.-".$rowOff['district'].", PIN-".$rowOff['pin'];
+			$office_dtl1=" P.O.-".$rowOff['postoffice'].", Subdiv-".$rowOff['subdivision'].", Block/Muni - ".$rowOff['blockmuni'].", P.S.-".$rowOff['policestation'].", Dist.-".$rowOff['district'].", PIN-".$rowOff['pin'];
 			
 			//$this->Ln();
 			//$this->Cell(190,0,'',1,0,'L');
 			$this->Ln();
-			$this->SetFont('','B',7.7);
-			$this->Cell(190,5,$office_dtl,"LTR",0,'L');
-			$this->Ln(4);
-			$this->Cell(190,5,$office_dtl1,"LR",0,'L');
-			$this->Ln();
+			$this->SetFont('','B',7.3);
+			$this->MultiCell(190,4,$office_dtl.$office_dtl1,'LTR','J');
 			
 			$this->SetFillColor(255,255,255);
 		//	$this->SetTextColor(0,0,0);
@@ -122,7 +119,9 @@ function FancyTable($header, $data)
 			
 				
 			}
-			
+			$this->Ln(10);
+			 $this->SetFont('','B',9);
+			 $this->Cell(50,5,"Head of the office signature  .................................",0,0,'L');
 			$fill = !$fill;
 		    $count++;
 		}

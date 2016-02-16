@@ -98,9 +98,9 @@ else
                    $display .=  "<td bgcolor = \"FA5858\">" .$result['assembly_off']  .  "</td>";
 			   else
 			       $display .=  "<td>" .$result['assembly_off']  .  "</td>";
-			   if($result['acno'] == '' or $result['acno'] == '0' or $ac_length != 3)
-                    $display .=  "<td bgcolor = \"FA5858\">" .$result['acno']  .  "</td>";
-			   else
+			 //  if($result['acno'] == '' or $result['acno'] == '0' or $ac_length != 3)
+             //       $display .=  "<td bgcolor = \"FA5858\">" .$result['acno']  .  "</td>";
+			 //  else
 				    $display .=  "<td>" .$result['acno']  .  "</td>";
 			   if($result['qualificationcd'] == '' or $result['qualificationcd'] == '0')
                     $display .=  "<td bgcolor = \"FA5858\">" .$result['qualificationcd']  .   "</td>";

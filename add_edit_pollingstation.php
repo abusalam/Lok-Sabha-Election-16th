@@ -19,7 +19,7 @@ if($action=='save')
 
 	$usercd=$user_cd;
 	
-	$cnt=duplicate_polling_stn($psno,$assembly,$psname,$postfix);	
+	$cnt=duplicate_polling_stn($psno,$assembly,$member,$psname,$postfix);	
 	/*if(isset($_GET['psno']) && isset($_GET['assembly']))
 	{
 		$cnt=0;

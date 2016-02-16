@@ -99,13 +99,10 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 				
 				$k=$k+1;
 					
-		  }
-		  
+		  }	  
 		  
 		  $this->msqli->commit();
-		  
-		  
-		  
+		  	  
 		  		
 		}
 	

@@ -39,10 +39,14 @@ function per_id_change(str)
 				if(xmlhttp1.responseText!="Not Available for Selected Operation" && xmlhttp1.responseText!=" ")
 				{
 					document.getElementById('submit').disabled=false;
+					$("#venue_sch").show();
+					
 				}
 				else
 				{
 					document.getElementById('submit').disabled=true;
+					$("#venue_sch").hide();
+					$("#difnt_sch").hide();
 				}
 			}
 		}
@@ -56,13 +60,22 @@ function per_id_change(str)
 function validate()
 {
 	var PersonalID=document.getElementById("per_id").value;
-	
+	var post_status=document.getElementById("post_status").value;
 	if(PersonalID=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Personal ID";
 		document.getElementById("per_id").focus();
 		return false;
 	}	
+	if(document.getElementById('chkpoststatus').checked==true)
+	{
+			if(post_status=="")
+			{
+				document.getElementById("msg").innerHTML="Select Post Status";
+				document.getElementById("post_status").focus();
+				return false;
+			}
+	}
 }
 </script>
 </head>
@@ -72,18 +85,32 @@ $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Submit')
 {
 	$PersonalID=isset($_REQUEST['per_id'])?$_REQUEST['per_id']:"";
+	$post_status=isset($_REQUEST['post_status'])?$_REQUEST['post_status']:"";
 	$usercd=$user_cd;
 	
 	include_once('function/add_fun.php');
-	
+	//fetch old shedule cd
 	$old_s_cd=fetch_training_schedule_code($PersonalID);
+	//fetch no _used
 	$old_noused=fetch_no_used_training_schedule($old_s_cd);
+	//update no_used
 	update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
-
-	$ret=save_pregroup_cancelletion($PersonalID,$usercd);	
-	if($ret==1)
+    
+	if($post_status =='')
 	{
-		$msg="<div class='alert-success'>Polling Personnel Cancelled Successfully</div>";
+		$ret=save_pregroup_cancelletion($PersonalID,$usercd);	
+		if($ret==1)
+		{
+			$msg="<div class='alert-success'>Polling Personnel Cancelled Successfully</div>";
+		}
+	}
+	else
+	{
+		$ret1=save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd);	
+		if($ret1==1)
+		{
+			$msg="<div class='alert-success'>Polling Personnel Cancelled and Post Status Changed Successfully</div>";
+		}
 	}
 }
 ?>
@@ -128,6 +155,33 @@ if($action=='Submit')
       </td>
       <td width="15%">&nbsp;</td>
     </tr>
+    
+    <tr><td colspan="3"><img src="images/blank.gif" alt="" height="1" /></td></tr>
+    <tr><td colspan="3" align="left" style="display:none;" id="venue_sch"><input type="checkbox" id="chkpoststatus" name="chkpoststatus" onclick="return chkSameVenueTraining_change();" />
+    <label for="chkpoststatus">Change Post Status</label></td></tr>
+    <tr><td colspan="3"><img src="images/blank.gif" alt="" height="1" /></td></tr>
+    
+     <tr style="display:none;" id="difnt_sch" >
+          <td align="left" colspan="3"><span class="error">*</span>Post Status&nbsp;&nbsp;&nbsp; <select name="post_status" id="post_status" style="width:220px;">
+	    <option value="">-Select Post Status-</option>
+         <?php 	$rsP=fatch_postingstatus();
+									$num_rows=rowCount($rsP);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowP=getRows($rsP);
+											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+										}
+									}
+									$rsP=null;
+									$num_rows=0;
+									$rowP=null;
+							?>
+	    </select></td>
+     
+     </tr>
+     
     <tr>
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
@@ -142,4 +196,19 @@ if($action=='Submit')
 </table>
 </div>
 </body>
+<script>
+function chkSameVenueTraining_change()
+{
+	if(document.getElementById('chkpoststatus').checked==true)
+	{
+			$("#difnt_sch").show();
+	}
+	else
+	{
+		$("#difnt_sch").hide();
+		document.getElementById('post_status').value='';
+	
+	}
+}
+</script>
 </html>

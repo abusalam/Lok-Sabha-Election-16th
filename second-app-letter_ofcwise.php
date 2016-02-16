@@ -25,11 +25,11 @@ function subdivision_change(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("office_result").innerHTML=xmlhttp.responseText;
-		document.getElementById("loading").style.visibility="hidden";
+		document.getElementById("loading1").style.visibility="hidden";
 		}
 	  }
 	xmlhttp.open("GET","ajax-appointment.php?sub_div="+str+"&opn=for_sub_emp_office",true);
-	document.getElementById("loading").style.visibility="visible";
+	document.getElementById("loading1").style.visibility="visible";
 	xmlhttp.send();
 }
 function validate()
@@ -44,12 +44,12 @@ function validate()
 		return false;
 	}
 	//alert(pc.options.length);
-	/*if(office.value=="" || office.value=="0")
+	if(office.value=="" || office.value=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Office";
 		document.getElementById("office").focus();
 		return false;
-	}*/
+	}
 
 }
 </script>
@@ -65,7 +65,7 @@ function validate()
 <tr><td align="center"><form method="post" name="form1" id="form1" action="fpdf/second-app-letter_ofcwise.php" target="_blank">
     <table width="70%" class="form" cellpadding="0">
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td colspan="2" style="height:100px" align="center"><img src="images/loading1.gif" alt="" height="90px" width="90px" id="loading" style="visibility:hidden" /></td></tr>
+    <tr><td colspan="2" style="height:100px" align="center"><img src="images/loading1.gif" alt="" height="90px" width="90px" id="loading1" style="visibility:hidden" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="javascript:return subdivision_change(this.value);">
@@ -87,7 +87,7 @@ function validate()
 							?>
       				</select></td></tr>
     <tr>
-      <td align="left"><span class="error">&nbsp;&nbsp;</span>Office</td>
+      <td align="left"><span class="error">*</span>Office</td>
       <td align="left" id="office_result"><select name="office" id="office" style="width:240px;"></select></td>
     </tr>   
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>

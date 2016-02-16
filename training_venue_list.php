@@ -38,7 +38,7 @@ function termination_list(str)
 	  }
 
 	if(str=="search")
-    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist;
+    qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&search="+str;
 	else
     qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&p="+page+"&a="+all;
 	xmlhttp.open("GET",qstr,true);

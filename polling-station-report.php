@@ -31,10 +31,10 @@ function subdivision_change(str)
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("dcrc_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("assembly_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-master.php?sub_div="+str+"&opn=fetchdcrc",true);
+	xmlhttp.open("GET","ajax-master.php?sub_div="+str+"&opn=fetchasm",true);
 	xmlhttp.send();
 }
 function assembly_change(str)
@@ -47,7 +47,6 @@ function assembly_change(str)
 	<?php
 	} ?>
 	var sub_div=document.getElementById('subdivision').value;
-	var dcrc=document.getElementById('dcrc').value;
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -63,19 +62,20 @@ function assembly_change(str)
 		document.getElementById("member_result").innerHTML=xmlhttp.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-master.php?assembly="+str+"&sub_div="+sub_div+"&dcrc="+dcrc+"&opn=dcrcmember",true);
+	xmlhttp.open("GET","ajax-master.php?assembly="+str+"&sub_div="+sub_div+"&opn=dcrcmember",true);
 	xmlhttp.send();
 }
-function dcrc_change(str)
+function member_change(str)
 {
 	<?php if(isset($_GET['psno']) && isset($_GET['assembly']))
 	{ ?>
-		document.getElementById("msg").innerHTML="DCRC can't be changed while modifying";
+		document.getElementById("msg").innerHTML="Member can't be changed while modifying";
 		bind_all();
 		return false;
 	<?php
 	} ?>
 	var sub_div=document.getElementById('subdivision').value;
+	var assembly=document.getElementById('assembly').value;
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -88,16 +88,15 @@ function dcrc_change(str)
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("assembly_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("dcrc_result").innerHTML=xmlhttp.responseText;
 		//alert(xmlhttp.responseText);
 		}
 	  }
-	xmlhttp.open("GET","ajax-master.php?dcrc1="+str+"&sub_div1="+sub_div+"&opn=dcrcassembly",true);
+	xmlhttp.open("GET","ajax-master.php?member="+str+"&assembly="+assembly+"&sub_div="+sub_div+"&opn=fetchdcrc",true);
 	xmlhttp.send();
 	
 
 }
-
 </script>
 </head>
 
@@ -131,7 +130,7 @@ include_once('function/master_fun.php');
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
     
-     <tr>
+      <tr>
       <td align="left"><span class="error">&nbsp;</span>Subdivision Name</td>
       <td align="left"><select name="subdivision" id="subdivision" style="width:200px;" onchange="return subdivision_change(this.value);">
       					<option value='0'>-Select Subdivision-</option>
@@ -149,31 +148,7 @@ include_once('function/master_fun.php');
 						?>
                        </select></td>
     </tr>
-    <tr>
-      <td align="left"><span class="error">&nbsp;</span>DCRC</td>
-      <td align="left" id="dcrc_result"><select name="dcrc" id="dcrc" style="width:200px;" onchange="return dcrc_change(this.value);">
-      <option value='0'>-Select DCRC-</option>
-      <?php
-	  if(isset($_GET['psno']) && isset($_GET['assembly']))
-	  {   						
-			$rsDCRC=fatch_dcrcname($sub_div);
-			$num_rows=rowCount($rsDCRC);
-			if($num_rows>0)
-			{
-				for($i=1;$i<=$num_rows;$i++)
-				{
-					$rowDCRC=getRows($rsDCRC);
-					echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[dc_venue]</option>\n";
-					unset($rowDCRC);
-				}
-			}
-			unset($rsDCRC,$num_rows);
-	  }
-	  ?>
-      </select></td>
-    </tr>
-    
-    <tr>
+     <tr>
       <td align="left"><span class="error">&nbsp;</span>Assembly</td>
       <td align="left" id="assembly_result"><select name="assembly" id="assembly" style="width:200px;" onchange="return assembly_change(this.value);">
       <option value='0'>-Select Assembly-</option>
@@ -181,7 +156,7 @@ include_once('function/master_fun.php');
 	  if(isset($_GET['psno']) && isset($_GET['assembly']))
 	  {
 		  	include_once('function/add_fun.php'); 						
-			$rsAss=fatch_dcrc_member_assembly($sub_div,$dcrccd,'');
+			$rsAss=fatch_dcrc_assembly($sub_div);
 			$num_rows=rowCount($rsAss);
 			if($num_rows>0)
 			{
@@ -206,7 +181,7 @@ include_once('function/master_fun.php');
 	  if(isset($_GET['psno']) && isset($_GET['assembly']))
 	  {
 		  	include_once('function/add_fun.php'); 						
-			$rsAss1=fatch_dcrc_member_assembly($sub_div,$dcrccd,$ass_cd);
+			$rsAss1=fatch_dcrc_member_assembly($sub_div,'',$ass_cd);
 			$num_rows1=rowCount($rsAss1);
 			if($num_rows1>0)
 			{
@@ -223,6 +198,29 @@ include_once('function/master_fun.php');
       </select>
                                   
       </td>
+    </tr>
+    
+    <tr>
+      <td align="left"><span class="error">&nbsp;</span>DCRC</td>
+      <td align="left" id="dcrc_result"><select name="dcrc" id="dcrc" style="width:200px;" onchange="return dcrc_change(this.value);">
+      <?php
+	  if(isset($_GET['psno']) && isset($_GET['assembly']))
+	  {   						
+			$rsDCRC=fatch_dcrc_member_assembly($sub_div,$member,$ass_cd);
+			$num_rows=rowCount($rsDCRC);
+			if($num_rows>0)
+			{
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowDCRC=getRows($rsDCRC);
+					echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[dc_venue]</option>\n";
+					unset($rowDCRC);
+				}
+			}
+			unset($rsDCRC,$num_rows);
+	  }
+	  ?>
+      </select></td>
     </tr>
     
 	<tr>

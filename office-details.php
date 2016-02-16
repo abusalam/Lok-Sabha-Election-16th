@@ -249,7 +249,7 @@ function validate()
 	{
 		if((+malestaff + +femalestaff)!=ExistingStaff)
 		{
-			document.getElementById("msg").innerHTML="Male, Female & Total Existing Staff No not matching";
+			document.getElementById("msg").innerHTML="Male, Female & Total Existing Staff do not matching";
 			document.getElementById("ExistingStaff").focus();
 			return false;
 		}
@@ -284,6 +284,8 @@ if($action=='Save')
 	$MaleStaff=only_num($_POST['MaleStaff']);
 	$FemaleStaff=only_num($_POST['FemaleStaff']);
 	$ExistingStaff=only_num($_POST['ExistingStaff']);
+	//echo $Street;
+	//exit;
 	//$OfficeID=$_POST['OfficeID'];
 	if($subdiv_cd == 0)
 		{
@@ -491,7 +493,7 @@ function bind_all()
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>Name of Office</td>
-      <td align="left"><input type="text" name="officename" id="officename" style="width:250px;"  /></td>
+      <td align="left"><input type="text" name="officename" id="officename" style="width:250px;" maxlength='50'/></td>
       <td align="left">DDO/IFSC/DISE Code</td>
       <td align="left"><input type="text" name="ddocode" id="ddocode" maxlength="50" style="width:142px;"/></td>
     </tr>

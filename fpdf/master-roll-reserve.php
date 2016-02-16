@@ -12,7 +12,7 @@ $group_id='';
 		exit;
 	
 	$forpc='';
-$rec_set_hdr=second_appointment_letter_reserve($forassembly,$forpc,$group_id);
+$rec_set_hdr=master_roll_second_app_hrd_reserve($group_id,$forassembly,$forpc);
 
 class PDF extends FPDF
 {
@@ -69,7 +69,7 @@ function FancyTable($header, $data)
 			$this->SetFont('','B');
 			$w = array(15,200,60);
 			
-		  $rec_set=second_appointment_letter($grp_id,$rec_arr_hdr['assemblycd']);
+		  $rec_set=master_roll_second_appointment_letter_reserve($grp_id,$rec_arr_hdr['forassembly']);
 			$num_rows=rowCount($rec_set);
 			for($k=0;$k<$num_rows;$k++)
 			{
@@ -102,8 +102,11 @@ function FancyTable($header, $data)
 		}
 		if($count==$per_page)
 		{
-			$per_page=$per_page+3;
-			$this->AddPage();
+			$per_page=$per_page+1;
+			if($count!=rowCount($data))
+		    {		
+			  $this->AddPage();
+			}
 		} 
     }
     // Closing line

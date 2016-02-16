@@ -30,7 +30,7 @@ function update_training_type($training_code,$training_desc,$usercd,$posted_date
 function fatch_training_type($training_code)
 {
 	$sql="Select training_code, training_desc From training_type";
-	if($training_code<>'')
+	if($training_code!='' && $training_code!='0')
 		$sql.=" where training_code='$training_code'";
 	$sql.=" order by training_code";
 	$rs=execSelect($sql);
@@ -108,6 +108,53 @@ function fatch_employee_for_training_req($usercd,$post_status,$subdivision,$trai
     $countrs=execSelect($cntsql);
 	$crow=getRows($countrs);
 	$cd_cnt=$crow['cnt'];
+	
+	return $cd_cnt;
+}
+//training requirement extra PP
+function duplicate_training_pp_for_extra($subdivision,$training_type,$phase)
+{
+	$sql="Select count(*) as cnt from training_pp 
+	Inner Join personnela On personnela.personcd = training_pp.per_code 
+	where personnela.selected = 1 and personnela.booked='P' and personnela.ttrgschcopy='$phase' and training_pp.training_type='$training_type' and personnela.forsubdivision='$subdivision'";
+	$countrs=execSelect($sql);
+	$crow=getRows($countrs);
+	$cd_cnt=$crow['cnt'];
+	return $cd_cnt;
+}
+function fatch_employee_for_training_req_extra($usercd,$phase,$training_type,$subdivision)
+{
+	$sql="insert into training_pp (usercode,training_type,per_code,per_name,designation,post_stat,subdivision,for_subdivision,for_pc,assembly_temp,";
+	$sql.="assembly_off, assembly_perm)";
+	
+	$sql.="Select '$usercd','$training_type',personnela.personcd,
+		  personnela.officer_name,
+		  personnela.off_desg,
+		  personnela.poststat,
+		  personnela.subdivisioncd,
+		  personnela.forsubdivision,
+		  personnela.forpc,
+		  personnela.assembly_temp,
+		  personnela.assembly_off,
+		  personnela.assembly_perm
+		From personnela 
+		Where personnela.personcd > 0 and personnela.booked='P' and personnela.selected=1";
+	$sql.=" and personnela.ttrgschcopy='$phase' and personnela.forsubdivision='$subdivision' order by personnela.personcd";
+	//echo $sql; exit;
+	execSelect($sql);
+	
+   
+   $cntsql="Select count(*) as cnt from personnela 
+		where personnela.booked='P' and personnela.selected=1 and personnela.ttrgschcopy='$phase' and personnela.forsubdivision='$subdivision'";
+    $countrs=execSelect($cntsql);
+	$crow=getRows($countrs);
+	$cd_cnt=$crow['cnt'];
+	
+	/*$sql2="Update personnela
+       set personnela.ttrgschcopy=1
+       Where personnela.booked='P' and personnela.selected=1 and personnela.ttrgschcopy=2";
+	   //echo $sql2; exit;
+    execUpdate($sql2);*/
 	
 	return $cd_cnt;
 }
@@ -254,23 +301,21 @@ function training_alloted_forsub($subdiv,$training_type)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function member_available($post_stat,$subdivision,$areapref,$area,$tr_type)
+function member_available($post_stat,$sub,$areapref,$area,$tr_type)
 {
 	$sql; $rs;
-	$sql="Select Count(training_pp.per_code) as memb_avl From training_pp where post_stat='$post_stat' and training_type='$tr_type'";
-	$sql.=" and for_subdivision='$subdivision'";
-	if($areapref=='1')
-		$sql.=" and subdivision='$area'";
-	if($areapref=='2')
+	$sql="Select Count(training_pp.per_code) as memb_avl From training_pp where post_stat='$post_stat' and training_type='$tr_type' and (training_sch='' or training_sch is null)";
+	//$sql.=" and for_subdivision='$subdivision'";
+	if($areapref=='S')
+		$sql.=" and subdivision='$area' and for_subdivision='$sub'";
+	if($areapref=='D')
 		$sql.=" and for_subdivision='$area'";
-	if($areapref=='3')
-		$sql.=" and for_pc='$area'";
-	if($areapref=='4')
-		$sql.=" and assembly_temp='$area'";
-	if($areapref=='5')
-		$sql.=" and assembly_perm='$area'";
-	if($areapref=='6')
-		$sql.=" and assembly_off='$area'";
+	if($areapref=='T')
+		$sql.=" and assembly_temp='$area' and subdivision='$sub'";
+	if($areapref=='O')
+		$sql.=" and assembly_perm='$area' and subdivision='$sub'";
+	if($areapref=='P')
+		$sql.=" and assembly_off='$area' and subdivision='$sub'";
 	$sql.=" and (training_booked='' or training_booked is null)";
 	$rs=execSelect($sql);
 	return $rs;
@@ -295,23 +340,22 @@ function save_training_schedule1($schedule_code,$training_venue,$training_type,$
 	return $i;
 }
 
-function fatch_personnel_ag_training_pp($training_type,$post_status,$subdivision,$for_subdivision,$for_pc,$assembly_temp,$assembly_off,$assembly_perm,$no_pp)
+function fatch_personnel_ag_training_pp($training_type,$post_status,$sub,$areapref,$area,$no_pp)
 {
 	$sql; $rs;
 	$sql="select per_code, per_name from training_pp where training_type='$training_type' and
-	post_stat='$post_status' and training_sch is null and training_booked is null";
-	if($subdivision!=0)
-		$sql.=" and subdivision='$subdivision'";
-	else if($for_subdivision!=0)
-		$sql.=" and for_subdivision='$for_subdivision'";
-	else if($for_pc!=0)
-		$sql.=" and for_pc='$for_pc'";
-	else if($assembly_temp!=0)
-		$sql.=" and assembly_temp='$assembly_temp'";
-	else if($assembly_off!=0)
-		$sql.=" and assembly_off='$assembly_off'";
-	else if($assembly_perm!=0)
-		$sql.=" and assembly_perm='$assembly_perm'";
+	post_stat='$post_status' and (training_sch='' or training_sch is null) ";
+	if($areapref=='S')
+		$sql.=" and subdivision='$area' and for_subdivision='$sub'";
+	if($areapref=='D')
+		$sql.=" and for_subdivision='$area'";
+	if($areapref=='T')
+		$sql.=" and assembly_temp='$area' and subdivision='$sub'";
+	if($areapref=='O')
+		$sql.=" and assembly_perm='$area' and subdivision='$sub'";
+	if($areapref=='P')
+		$sql.=" and assembly_off='$area' and subdivision='$sub'";
+	$sql.=" and (training_booked='' or training_booked is null)";
 	$sql.=" limit 0, $no_pp";
 //	echo $sql; exit;
 	$rs=execSelect($sql);
@@ -677,7 +721,7 @@ function delete_trainingvenue($venue_cd)
 function trainingvanue_details($venue_cd)
 {
 	$sql="Select training_venue.venue_cd, subdivision.subdivision,training_venue.subdivisioncd, training_venue.venuename, training_venue.venueaddress1, training_venue.venueaddress2,
-  training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date
+  training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date,training_venue.assemblycd
 From training_venue
   Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd = $venue_cd";
 	$rs=execSelect($sql);
@@ -694,7 +738,7 @@ function update_training_pp_schedule($training_type,$sub)
 	
 	execUpdate($sql1);
 	connection_close();
-	return $i;
+	return 1;
 }
 function training_pp_not_assigned($training_type,$sub)
 {
@@ -718,4 +762,38 @@ function save_subdiv_pwd($rand,$password,$user_cd,$sub)
 	$i=execInsert($sql);
 	return $i;
 }
+/*************************************Second training allocation***********************/
+function fetch_asm_party_available($subdivision,$assm,$party_reserve)
+{
+	
+	   $sql="Select count(distinct groupid) as cnt from  personnela where forsubdivision='$subdivision' and forassembly='$assm' and booked='$party_reserve'";
+	  // echo   $sql;
+	  // exit;
+	   $rs=execSelect($sql);
+	   $row=getRows($rs);
+	   $total=$row['cnt'];
+	   return $total;
+}
+function fetch_sec_party_reserve_available($subdivision,$assm,$party_reserve)
+{
+	 $sql="Select max(end_sl) as cnt from  second_training where for_subdiv='$subdivision' and assembly='$assm'";
+	 if($party_reserve!='' && $party_reserve!='0')
+		$sql.=" and party_reserve ='$party_reserve'";
+	   $rs=execSelect($sql);
+	   $row=getRows($rs);
+	   $total=$row['cnt'];
+	   return $total;
+}
+function fetch_asm_reserve_available($subdivision,$assm,$party_reserve)
+{
+	 $sql="SELECT a.forassembly AS fasm, a.forsubdivision AS fsub, a.forpc AS fpc, a.number_of_member AS memb, a.no_or_pc AS npc, a.numb AS pnumb, a.poststat AS pst, b.no_party AS ptyrqd
+FROM reserve a,  `assembly_party` b
+WHERE a.forassembly = b.assemblycd
+AND a.forsubdivision = b.subdivisioncd
+AND a.number_of_member = b.no_of_member
+AND a.forsubdivision ='$subdivision' and a.forassembly='$assm'";
+	   $rs=execSelect($sql);
+	   return $rs;
+}
+
 ?>

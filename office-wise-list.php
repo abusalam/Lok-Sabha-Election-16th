@@ -41,6 +41,47 @@ var ddlText, ddlValue, ddl, lblMesg;
         opt.value = value;
         ddl.options.add(opt);
     }
+function subdivision_change(str)
+{
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("office_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("load_result").innerHTML="";
+		}
+	  }
+	xmlhttp.open("GET","ajax-appointment.php?sub_div="+str+"&opn=for_sub_emp_office",true);
+	document.getElementById("load_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	xmlhttp.send();
+}
+function validate()
+{
+	var subdivision=document.getElementById("Subdivision");
+	var office=document.getElementById("office");
+
+	if(subdivision.value=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Subdivision";
+		document.getElementById("Subdivision").focus();
+		return false;
+	}
+	//alert(pc.options.length);
+	if(office.value=="" || office.value=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Office";
+		document.getElementById("office").focus();
+		return false;
+	}
+}
 </script>
 </head>
 <?php
@@ -53,7 +94,7 @@ include_once('function/training_fun.php');
 <tr><td align="center"><table width="1000px" class="table_blue">
 	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
+ <!--<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>-->
 <tr>
   <td align="center">OFFICE WISE POLLING PERSONNEL</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" action="fpdf/office-wise-personnel.php" target="_blank">
@@ -61,8 +102,8 @@ include_once('function/training_fun.php');
 <input type="hidden" id="hid_subdiv"  name="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
-    <tr>
+  <!--   <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+   <tr>
       <td align="center">&nbsp;</td><td align="left"><input type="text" name="ofc_ser" id="ofc_ser" onkeyup="return FilterItems(this.value);" maxlength="10" /></td>
     </tr>
 	<tr>
@@ -84,17 +125,40 @@ include_once('function/training_fun.php');
 				$num_rows=0;
 				$rowOc=null;
 		?>
-	    </select></td></tr>
+	    </select></td></tr>-->
+    <tr>
+      <td align="center" colspan="2"><div id="load_result"></div></td></tr>
+	<tr>
+	<tr>
+	  <td align="left"><span class="error">*</span>Subdivision</td>
+	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="javascript:return subdivision_change(this.value);">
+      						<option value="0">-Select Subdivision-</option>
+                            <?php 	$districtcd=$dist_cd;
+									$rsBn=fatch_Subdivision($districtcd);
+									$num_rows=rowCount($rsBn);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowSubDiv=getRows($rsBn);
+											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
+										}
+									}
+									$rsBn=null;
+									$num_rows=0;
+									$rowSubDiv=null;
+							?>
+      				</select></td></tr>
+    <tr>
+      <td align="left"><span class="error">*</span>Office</td>
+      <td align="left" id="office_result"><select name="office" id="office" style="width:240px;"></select></td>
+    </tr>   
     <tr>
       <td align="left">&nbsp;</td>
       <td align="left">&nbsp;</td>
     </tr>
     <tr>
-      <td align="left">&nbsp;</td>
-      <td align="left">&nbsp;</td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button"  /></td></tr>
+      <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button"  onclick="javascript:return validate();" /></td></tr>
       <tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 </table></form>
 </td></tr></table>

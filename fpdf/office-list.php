@@ -75,7 +75,7 @@ function Footer()
 
 function FancyTable($header, $data)
 {
-	$w = array(10,22,40,27,183);
+	$w = array(10,19,38,24,190);
 	$this->SetFillColor(255,255,255);
 	$this->SetDrawColor(0,0,0);
 	$this->SetLineWidth(.3);
@@ -85,11 +85,11 @@ function FancyTable($header, $data)
 	
     for($i=1;$i<=rowCount($data);$i++)
 	{
-		$this->SetFont('Arial','',7.2);
+		$this->SetFont('Arial','',6.8);
 		$row=getRows($data);
-		$address=$row[1].", ".$row[2]." , ".$row[3]." , PO - ".$row[4];
-		$institute=$row[9]." ,     Phone : "." "." ".$row[10].",      Mobile :  ".$row[11].",     Dist. -  ".$row[5].",    PIN - ".$row[7];
-		$block=$row[15]." ,     (".$row[16].") ,      Fax :     ".$row[12]." ,      Email :   ".$row[13]." ,       Total Staff Strength :   ".$row[14];
+		$address=$row[1].", ".$row[2]." , ".$row[3];
+		$institute=$row[9]." ,      Mobile :  ".$row[11].",     Dist. -  ".$row[5].",    PIN - ".$row[7]." ,   PO - ".$row[4];
+		$block=$row[15]." ,    (".$row[16].") ,    Phone : "." "." ".$row[10].",   Fax :   ".$row[12]." ,      Email :   ".$row[13]." ,   Total Staff :   ".$row[14];
 		if($count<$per_page)
 	    {
 			

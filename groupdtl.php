@@ -12,7 +12,7 @@ private $office5;
 private $office6;
 //private $office7;
 
-function __construct($forasm,$forpc,$groupid,$office1,$office1,$office2,$office3,$office4,$office5,$office6) {
+function __construct($forasm,$forpc,$groupid,$office1,$office2,$office3,$office4,$office5,$office6) {
 $this->forasm=$forasm;
 $this->forpc=$forpc;
 $this->groupid=$groupid;

@@ -29,7 +29,7 @@ $rsPersonnel_dum = fatch_PollingstationList($dcrc,$assemb,$noofmember,$subdivcd)
 $num_rows_dum = rowCount($rsPersonnel_dum);
 //echo $num_rows_dum;
 //exit;
-$items = 10; // number of items per page.
+$items = 5; // number of items per page.
 $all = isset($_GET['a'])?$_GET['a']:"";
 if($all == "all")
 {
@@ -78,28 +78,34 @@ else
 	  
 	   echo "<tr id='trc_$i' style='display:none;' class='tt' >";
 	
-	    echo "<td colspan='6' align='right' style='max-height: 300px; min-height:0px;overflow-y: scroll;' >";
-	
-	     echo "<table width='100%' cellpadding='0' cellspacing='0'  >";
-		 echo "<tr height='30px'>
+	    echo "<td colspan='6' align='right'>";
+		echo "<div style='max-height: 700px; min-height:0px;overflow-y: scroll;'>";
+	  //  echo "<div class='headercontainer'>";
+      //  echo "<div class='tablecontainer'>";
+	     echo "<table width='100%' cellpadding='0' cellspacing='0' id='table1'>";
+		 echo "<thead>";
+		 echo "<tr  height='25px'>
 			    <th>Sl.</th>			  
 				<th>PS No</th>
 				<th>PS Name</th>
 				<th>Edit</th>
 				<th>Delete</th>
 				</tr>";
-				
+		 echo "</thead>";
+		 
 		 $rs_fatch_fees=fatch_sd_asm_member($rowPersonnel['sd_cd'],$rowPersonnel['asm_cd'],$rowPersonnel['dcrccd'],$rowPersonnel['member']);
 		 $row_num=rowCount($rs_fatch_fees);
 							 
 		 if($row_num>0)
 		 {
+		   echo "<tbody>";
 			for($j=1; $j<=$row_num; $j++)
 			{										
 				$row_fees=getRows($rs_fatch_fees);
 				$code='"'.encode($row_fees['code']).'"';
 				$ass='"'.encode($row_fees['forassembly']).'"';
 				$psno='"'.encode($row_fees['psno']).'"';
+				
 				echo "<tr>";								
 				echo "<td align='center' width='8%'> $j</td>";
 				echo "<td align='center' width='20%'> $row_fees[psno]$row_fees[psfix] </td>";
@@ -107,9 +113,14 @@ else
 				echo "<td align='center' width='13%'> <img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_PS($psno,$ass,$code);' /></td>";	
 				echo "<td align='center' width='13%'> <img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_PS($code);' /></td>";	
 				echo "</tr>";
+				
 			}
+			echo "</tbody>";
 		 }
 		echo "</table>";
+	//   echo "</div>";
+	//  echo "</div>";
+		echo "</div>";
 	   echo "</td>";
 	  
 	  echo "</tr>";

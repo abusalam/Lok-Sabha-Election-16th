@@ -78,9 +78,16 @@ function new_per_search()
 		document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
 		
 		if(document.getElementById("new_personnel").innerHTML!='')
+		{
 			document.getElementById('replace').disabled=false;
+			$("#venue_sch").show();
+		}
 		else
+		{
 			document.getElementById('replace').disabled=true;	
+			$("#venue_sch").hide();
+			$("#difnt_sch").hide();
+		}
 		document.getElementById('print').disabled=true;
 		}
 	  }
@@ -106,14 +113,15 @@ function replacement()
 	var forpc=document.getElementById('hid_forpc').innerHTML;
 	var reason=document.getElementById('reason').value;
 	var samevenuetraining=document.getElementById('chkSameVenueTraining').checked;
+	var usercd=<?php print $user_cd; ?>;
 	if(document.getElementById('chkSameVenueTraining').checked==false)
 	{
-		if(training_sch=="")
+		/*if(training_sch=="")
 		{
 			document.getElementById("msg").innerHTML="Select Training Schedule";
 				document.getElementById("training_sch").focus();
 				return false;
-		}
+		}*/
 	}
 	else
 	{
@@ -141,7 +149,7 @@ function replacement()
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
-	xmlhttp.open("GET","ajax-replacement.php?training_sch="+training_sch+"&old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining+"&reason="+reason,true);
+	xmlhttp.open("GET","ajax-replacement.php?training_sch="+training_sch+"&old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining+"&reason="+reason+"&usercd="+usercd,true);
 	xmlhttp.send();
 }
 function print_appletter()
@@ -235,13 +243,14 @@ function schedule_change(str)
     </tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
 	<tr><td colspan="2" align="right">Reason for Replacement: &nbsp;<input type="text" name="reason" id="reason" maxlength="30" style="width:250px" /></td></tr>
+    
 	<tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
-    <tr><td colspan="2" align="left"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" checked onclick="return chkSameVenueTraining_change();" />
+    <tr><td colspan="2" align="left" style="display:none;" id="venue_sch"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" checked onclick="return chkSameVenueTraining_change();" />
     <label for="chkSameVenueTraining">Training at Same Venue</label></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
     
      <tr style="display:none;" id="difnt_sch">
-          <td align="left"><span class="error">*</span>Training Schedule Code &nbsp;&nbsp;&nbsp; <span id="drop_sch"><select name="training_sch" id="training_sch" style="width:220px;">
+          <td align="left"><span class="error">&nbsp;&nbsp;</span>Training Schedule Code &nbsp;&nbsp;&nbsp; <span id="drop_sch"><select name="training_sch" id="training_sch" style="width:220px;">
 	    <option value="0">-Select Training Schedule-</option>
 	    </select></span></td>
           <td align="left" id="venue_details" style="font-size:10.4px">&nbsp;

@@ -23,7 +23,7 @@ function govt_cat_wise_report($districtcd,$subdivisioncd,$govt)
 	connection_close();
 	return $rs;
 }
-function govt_cat_ag_post_stat_report($post_stat,$subdivisioncd)
+function govt_cat_ag_post_stat_report($post_stat,$subdivisioncd,$gender)
 {
 	$sql="Select subdivision.subdivision,
 	  Count(personnel.personcd) as total,
@@ -35,6 +35,8 @@ function govt_cat_ag_post_stat_report($post_stat,$subdivisioncd)
 	  Inner Join govtcategory On office.govt = govtcategory.govt
 	  Left Join termination On personnel.personcd = termination.personal_id where personnel.personcd>0 And termination.personal_id Is Null";
 	$sql.=" and poststat.post_stat = '$post_stat' And subdivision.subdivisioncd = '$subdivisioncd'";
+	if($gender!='' && $gender!='0')
+		$sql.=" and personnel.gender='$gender'";
 	$sql.=" Group By subdivision.subdivision, govtcategory.govt_description";
 	$rs=execSelect($sql);
 	connection_close();

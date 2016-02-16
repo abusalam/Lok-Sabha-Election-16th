@@ -107,6 +107,7 @@ function state_check()
 				lock.disabled=true;
 				randomisation.disabled=true;
 				unlock.disabled=false;
+			
 			}
 			else if(xmlhttp.responseText=="false")
 			{
@@ -126,12 +127,13 @@ function state_check()
 	  }
 	xmlhttp.open("GET","lock-unlock.php?&opn=state_thirdrand",true);
 	xmlhttp.send();
+	
 }
 function randomise_click()
 {
 	if($('.chk_asm:checked').length==0)
 	{
-			alert("Select Assembly");
+			$('#msg').html("Select Assembly");
 			return false;
 	}
 	else
@@ -164,6 +166,17 @@ function randomise_click()
 				document.getElementById("randomisation").disabled=true;
 				document.getElementById("form1").style="cursor:default";
 				document.getElementById('txt1').value="";
+				//assembly_list();
+				  data="opn=rando_asm";
+					$.ajax({
+						type:"get",
+						url: "ajax/ajax-3rd_rando_asm.php",
+						cache: false,
+						data: data,
+						success: function(data1) {
+						$("#assembly_details").html(data1);
+						}
+					});
 				}
 			  }
 			xmlhttp.open("GET","randomise3.php?selected_chk="+selected_chk+"&subdiv_cd="+subdiv+"&dist=<?php print $dist_cd; ?>",true);
@@ -179,28 +192,7 @@ function randomise_click()
 	}
 }
 </script>
-<?php
-/*$selected_chk=isset($_GET["selected_chk"])?$_GET["selected_chk"]:"";
 
-$tmp_code="";
-$recipient_code=array();
-for($i=0;$i<strlen($selected_chk);$i++)
-{
-	if($selected_chk[$i]==",")
-	{
-		array_push($recipient_code,$tmp_code);
-		$tmp_code="";
-		continue;
-	}
-	$tmp_code.=$selected_chk[$i];
-	
-}
-if($tmp_code!="")
-{
-	array_push($recipient_code,$tmp_code);
-}
-print_r($recipient_code);*/
-?>
 <body onload="return state_check();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
@@ -263,7 +255,8 @@ print_r($recipient_code);*/
 </body>
 <script type="text/javascript">
 $(function(){
-		   data="opn=rando_asm";
+ 
+	data="opn=rando_asm";
 	$.ajax({
 		type:"get",
 		url: "ajax/ajax-3rd_rando_asm.php",
@@ -273,6 +266,7 @@ $(function(){
 		$("#assembly_details").html(data1);
 		}
 	});
+
 });
 </script>
 </html>

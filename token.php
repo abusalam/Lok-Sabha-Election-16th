@@ -37,7 +37,7 @@ $this->stmt->bind_param('is',$tkn,$psd);
 		 while ($row1=$this->result1->fetch_assoc()) {
 		    $pst=$row1['poststat'];
 			$tkn=0;
-			$this->result = $this->msqli->query("SELECT * FROM `training_pp` where for_subdivision='$subdiv' and training_type='$trgtype' order by post_stat,training_sch") or die($this->msqli->error.__LINE__);
+			$this->result = $this->msqli->query("SELECT per_code FROM `training_pp` where for_subdivision='$subdiv' and training_type='$trgtype' order by post_stat,training_sch") or die($this->msqli->error.__LINE__);
      if($this->result->num_rows > 0) {
 			       
 		while($row = $this->result->fetch_assoc()) {

@@ -59,7 +59,78 @@ body{
     border-width: 1px;
 	padding: 1px;
 	border-style: solid;
-	border-color: #A3B0D3;}
+	border-color: #A3B0D3;
+}
+
+
+
+.headercontainer {
+  position: relative;
+  /*border: 1px solid #A3B0D3;*/
+  
+  padding-top: 22px;
+  background: #000;
+}
+/* this is for the data area that is scrollable */
+.tablecontainer {
+  overflow-y: auto;
+  max-height: 200px;
+  background: #fff;
+ 
+}
+
+/* remove default cell borders and ensures table width 100% of its container*/
+.tablecontainer table {
+  border-spacing: 0;
+  width:100%;
+}
+
+/* add a thin border to the left of cells, but not the first */
+.tablecontainer td + td {
+ /* border-left:1px solid #eee; */
+ 
+}
+
+/* cell padding and bottom border */
+.tablecontainer td, th {
+ /* border-bottom:1px solid #eee;*/
+  padding: 10px;
+  border-width: 1px;
+	
+	border-style: solid;
+	border-color: #A3B0D3;
+  
+}
+
+/* make the default header height 0 and make text invisible */
+.tablecontainer th {
+    height: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 0;
+    visibility: hidden;
+	 background:#E5E0EC;
+    white-space: nowrap;
+}
+
+/* reposition the divs in the header cells and place in the blank area of the headercontainer */
+.tablecontainer th div{
+  visibility: visible;
+  position: absolute;
+   background:#E5E0EC;
+  color: #000;
+  padding: 7px;
+  top: 0;
+  margin-left: -2px;
+  line-height: normal;
+   border-width: 1px;
+	
+	border-style: solid;
+	border-color: #A3B0D3;
+	
+}
+/* prevent the left border from above appearing in first div header */
+
 select{display: inline-block;
   padding: 1px 3px;
   margin-bottom: 2px;
@@ -102,16 +173,82 @@ input[type=text]:focus, input[type=password]:focus,select:focus
     font-weight:bold;
 }
 .alert-success {
-  color: #468847;
+ /* color: #468847;
   background-color: #dff0d8;
   border-color: #d6e9c6;
-  border: 1px solid;
+  border: 1px solid;*/
+     background-color:rgb(235, 248, 164);
+    background-image: url(../images/s_success.png);
+    background-position:5px 50%;
+background-repeat:no-repeat;
+border-bottom-color:rgb(162, 210, 70);
+border-bottom-left-radius:5px;
+border-bottom-right-radius:5px;
+border-bottom-style:solid;
+border-bottom-width:1px;
+border-image-outset:0px;
+border-image-repeat:stretch;
+border-image-slice:100%;
+border-image-source:none;
+border-image-width:1;
+border-left-color:rgb(162, 210, 70);
+border-left-style:solid;
+border-left-width:1px;
+border-right-color:rgb(162, 210, 70);
+border-right-style:solid;
+border-right-width:1px;
+border-top-color:rgb(162, 210, 70);
+border-top-left-radius:5px;
+border-top-right-radius:5px;
+border-top-style:solid;
+border-top-width:1px;
+box-shadow:rgb(255, 255, 255) 0px 1px 1px 0px inset;
+color:rgb(0, 0, 0);
+display:block;
+font-family:sans-serif;
+font-size:13.12px;
+height:14px;
+margin-bottom:7.056px;
+margin-left:0px;
+margin-right:0px;
+margin-top:6.56px;
+padding-bottom:7px;
+padding-left:25px;
+padding-right:10px;
+padding-top:7px;
+text-align: left;
+/*border: #a2d246 1px solid;*/
 }
+
 .alert-error {
-	color: #C00;
+	/*color: #C00;
 	background-color: #FFD75E;
 	border-color: #C69500;
-	border: 1px solid;
+	border: 1px solid;*/
+	border-color: #333;
+    background-image: url(../images/s_error.png);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+	border: 1px solid maroon !important;
+	border-bottom-left-radius:5px;
+border-bottom-right-radius:5px;
+border-top-left-radius:5px;
+border-top-right-radius:5px;
+    color: #000;
+    background-color: pink;
+	display:block;
+font-family:sans-serif;
+font-size:13.12px;
+height:14px;
+margin-bottom:7.056px;
+margin-left:0px;
+margin-right:0px;
+margin-top:6.56px;
+padding-bottom:7px;
+padding-left:25px;
+padding-right:10px;
+padding-top:7px;
+	text-align: left;
 }
 .error{
 	color:#F00;
@@ -191,7 +328,7 @@ input[type=text]:focus, input[type=password]:focus,select:focus
 	padding-bottom: 6px;  
 	background: white;
 }
-.scroller { border:1px solid #ccc; max-height: 300px; min-height:0px; overflow-y: scroll; }
+.scroller { border:1px solid #ccc; max-height: 500px; min-height:0px; overflow-y: scroll; }
 .demo-section1
 {
 	height: 300px;

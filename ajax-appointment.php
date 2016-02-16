@@ -65,6 +65,30 @@ if($opn=='personnel')
 	$rsPer=null;
 	$num_rows=0;
 }
+if($opn=='assembly_sec')
+{
+	$pc=isset($_GET['pc'])?$_GET['pc']:"";
+	$sub_div=$_GET['sub_div'];
+
+	echo "<select id='assembly' name='assembly' style='width:180px;' onchange='javascript:return member_available()'>\n";
+	include_once('function/add_fun.php');
+	//$rsAssembly=fatch_assembly_ag_pc($pc,$sub_div);
+	$rsAssembly=fatch_assembly_ag_pc($pc,$sub_div);
+	$num_rows = rowCount($rsAssembly);
+	if($num_rows>0)
+	{
+		echo "<option value='0'>-Select Assembly-</option>\n";
+		for($i=1;$i<=$num_rows;$i++)
+		{
+			$rowAssembly=getRows($rsAssembly);
+			echo "<option value='$rowAssembly[assemblycd]'>$rowAssembly[assemblyname]</option>\n";
+		}
+	}
+	$rsAssembly=null;
+	$num_rows=0;
+	$rowAssembly=null;
+	echo "</select>";
+}
 if($opn=='assembly')
 {
 	$pc=isset($_GET['pc'])?$_GET['pc']:"";
@@ -94,8 +118,9 @@ if($opn=='app_replacement')
 {
 	$per_cd=$_GET['p_id'];
 	$usercd=$_GET['usercd'];
+	$str_per_code=$_GET['old_p_id'];
 	include_once('function/appointment_fun.php');
-
+/*
 	delete_temp_app_letter($usercd);
 	$count=0;
 	include_once('inc/commit_con.php');
@@ -114,7 +139,7 @@ if($opn=='app_replacement')
 	
 	
 	
-	$str_per_code=$_GET['old_p_id'];
+	
 	//echo $str_per_code;
 	//exit;
 
@@ -131,13 +156,6 @@ if($opn=='app_replacement')
 	 // $n=0; 
 	  if($num_rows>0)
 	  {
-
-		/*mysqli_autocommit($link,FALSE);
-		$sql="insert into first_rand_table (officer_name,person_desig,personcd,office,address,block_muni,postoffice,subdivision,policestation, district,pin,officecd,poststatus,mob_no,training_desc,venuename,venueaddress,training_dt,training_time,pc_code,pc_name,forsubdivision,epic,acno,partno,slno,bank,branch,bank_accno,ifsc,token) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		$stmt = mysqli_prepare($link, $sql);
-		
-		mysqli_stmt_bind_param($stmt, 'sssssssssssssssssssssssssssssss', $officer_name,$person_desig,$personcd,$office,$office_address,$block_muni,$postoffice,$subdivision,$policestation,$district,$pin,$officecd,$poststatus,$mob_no,$training_desc,$venuename,$venue_add,$training_dt,$training_time,$forpc,$pcname,$forsubdivision,$epic,$acno,$partno,$slno,$bank_name,$branch_name,$bank_acc_no,$ifsc_code,$token);*/
-				
 		for($i=1;$i<=$num_rows;$i++)
 		{
 		
@@ -184,7 +202,7 @@ if($opn=='app_replacement')
 		
 		unset($rsApp,$num_rows,$rowApp);
 	  }
-	}
+	}*/
 //	if($count<($i-1))
 	//{
 		//$percd=encode($per_cd);

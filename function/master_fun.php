@@ -678,9 +678,9 @@ function fatch_dcrcname($sub_div)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function duplicate_polling_stn($psno,$assembly,$psname,$postfix)
+function duplicate_polling_stn($psno,$assembly,$member,$psname,$postfix)
 {
-	$sql="Select count(*) As cnt From pollingstation where psno='$psno' and forassembly='$assembly' and psfix='$postfix'";
+	$sql="Select count(*) As cnt From pollingstation where psno='$psno' and forassembly='$assembly' and psfix='$postfix' and member='$member'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$cnt=$row['cnt'];
@@ -760,6 +760,37 @@ function save_dcrc_party($assembly,$member,$party_req,$dcrc_code,$subdivision,$p
 	$i=execInsert($sql);
 	return $i;
 }
+/*function fatch_dcrc_mo_party_sup($sub_div,$assembly,$m,$p,$c)
+{
+	$sql="Select dcrcmaster.dcrcgrp,
+	  dcrcmaster.no_of_member,
+	  dcrcmaster.dc_venue,
+	  dcrcmaster.rcvenue,
+	  date_format(dcrc_party.dc_date,'%d/%m/%Y') as dc_date,
+	  dcrc_party.dc_time,
+	  dcrc_party.partyindcrc,
+	  dcrcmaster.dc_addr,
+	  dcrcmaster.rc_addr
+	  
+	From dcrcmaster
+	  Inner Join dcrc_party On dcrcmaster.dcrcgrp = dcrc_party.dcrcgrp
+
+	where dcrcmaster.dcrcgrp>0 ";
+	if($sub_div!='' && $sub_div!='0')
+		$sql.=" AND dcrcmaster.subdivisioncd='$sub_div'";
+	if($assembly!='' && $assembly!='0')
+		$sql.=" AND dcrcmaster.assemblycd='$assembly'";
+	if($m!='' && $m!='0')
+		$sql.=" and dcrcmaster.no_of_member=1";
+	if($p!='' && $p!='0')
+		$sql.=" and (dcrcmaster.no_of_member>=4 and dcrcmaster.no_of_member<=6)";
+	if($c!='' && $c!='0')
+		$sql.=" and dcrcmaster.no_of_member=3";
+	//echo $sql;
+	$rs=execSelect($sql);
+	return $rs;
+}*/
+
 function fatch_dcrc_list($sub_div,$assembly,$dist)
 {
 	$sql="Select dcrcmaster.dcrcgrp,

@@ -7,11 +7,10 @@ include_once('function/pagination.php');
 //====================================================
 
 global $subdivision; global $venuename; global $usercode;
-$subdivision=isset($_GET["subdivision"])?$_GET["subdivision"]:"";
-$venuename=isset($_GET["venuename"])?$_GET["venuename"]:"";
-$dist=isset($_GET["dist"])?$_GET["dist"]:"";
+
 $usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
 $delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
+$search=isset($_GET["search"])?$_GET["search"]:"";
 //echo $delcode;
 	//exit;
 if($delcode!="" && $delcode!=null)
@@ -29,6 +28,23 @@ if($delcode!="" && $delcode!=null)
 		echo "<span class='error'>Record already used</span><br />\n";
 	}
 }
+$subdivision=isset($_GET["subdivision"])?$_GET["subdivision"]:"";
+$venuename=isset($_GET["venuename"])?$_GET["venuename"]:"";
+$dist=isset($_GET["dist"])?$_GET["dist"]:"";
+
+if($search=="search")
+{
+	$_SESSION['sub_p']=$subdivision;
+	$_SESSION['sub_venue']=$venuename;
+	$_SESSION['dist_trn2']=$dist;
+}
+else
+{
+	$subdivision=isset($_SESSION['sub_p'])?$_SESSION['sub_p']:'';
+	$venuename=isset($_SESSION['sub_venue'])?$_SESSION['sub_venue']:'';
+	$dist=isset($_SESSION['dist_trn2'])?$_SESSION['dist_trn2']:'';
+}
+
 $rstrainingvenue_list_T=fatch_trainingvenue_list($subdivision,$venuename,$usercode,$dist);
 $num_rows_T = rowCount($rstrainingvenue_list_T);
 
@@ -68,8 +84,9 @@ else
 	{
 	  $rowtrainingvenue_list=getRows($rstrainingvenue_list);
 	  $venue_cd='"'.encode($rowtrainingvenue_list[0]).'"';
-	  echo "<tr><td align='right' width='3%'>$i.</td><td align='left' width='15%'>$rowtrainingvenue_list[subdivision]</td><td width='24%' align='left'>$rowtrainingvenue_list[venuename]</td>";
-	  echo "<td width='44%' align='left'>$rowtrainingvenue_list[venueaddress1],$rowtrainingvenue_list[venueaddress2]</td>";
+	  $count=$p_num+$i;
+	  echo "<tr><td align='left' width='4%'>$count.</td><td align='left' width='13%'>$rowtrainingvenue_list[subdivision]</td><td width='30%' align='left'>$rowtrainingvenue_list[venuename]</td>";
+	  echo "<td width='45%' align='left'>$rowtrainingvenue_list[venueaddress1],$rowtrainingvenue_list[venueaddress2]</td>";
 	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' ";
 	 // if($rowtrainingvenue_list['usercode']==$usercode)
 	  	echo "onclick='javascript:edit_trainingvenue($venue_cd);'";

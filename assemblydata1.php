@@ -1,4 +1,4 @@
-<title>cmp</title><?PHP
+<!--<title>cmp</title>--><?PHP
 include 'assemblyparty.php';
 //include 'mysqliconn.php';
 //required_once('assemblyparty.php');
@@ -18,7 +18,7 @@ function __construct($dist,$sub) {
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
 	//	if (strcmp($stat,'S'==0)) {
-	        $this->result = $this->msqli->query("SELECT * FROM `assembly_party` where substr(subdivisioncd,1,2)='$dist' and subdivisioncd='$sub'") or die($this->msqli->error.__LINE__);
+	        $this->result = $this->msqli->query("SELECT assemblycd,pccd,no_of_member,no_party,subdivisioncd FROM `assembly_party` where substr(subdivisioncd,1,2)='$dist' and subdivisioncd='$sub'") or die($this->msqli->error.__LINE__);
 	//		}
 
 // GOING THROUGH THE DATA

@@ -40,9 +40,9 @@ function define_post_status($asm_memb)
 			"0" => 'PR',
 			"1" => 'P1',
 			"2" => 'P2',
-			"3" => 'P3',
-			"4" => 'PA',
-			"5" => 'PB',
+			"3" => 'PA',
+			"4" => 'PB',
+			"5" => 'P3',
 		);
 		 break;
 		 default:
@@ -147,7 +147,6 @@ $sql.="  (personnela.officecd = '' or personnela.officecd = '0' or LENGTH(person
 	  or (personnela.assembly_temp = '' or personnela.assembly_temp = '0' or LENGTH(personnela.assembly_temp) <> 3)
 	  or (personnela.assembly_off = '' or personnela.assembly_off = '0' or LENGTH(personnela.assembly_off) <> 3)
 	  or (personnela.assembly_perm = '' or personnela.assembly_perm = '0' or LENGTH(personnela.assembly_perm) <> 3)
-	  or (personnela.acno = '' or personnela.acno = '0' or LENGTH(personnela.acno) <> 3)
 	  or (personnela.qualificationcd = '' or personnela.qualificationcd = '0') )";
 	$rs=execSelect($sql);	
 	connection_close();

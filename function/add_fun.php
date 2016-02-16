@@ -373,6 +373,7 @@ function fatch_Subdivision($districtcd)
 //	if($districtcd!='0' && $districtcd!='')
 		$sql.=" where districtcd='$districtcd'";
 	$sql.=" ORDER BY subdivision ASC";
+	//echo $sql;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -468,11 +469,11 @@ function fatch_training_venue_available_subdiv($schedule_cd,$subdiv,$post_stat)
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
 	Where (training_schedule.no_pp-training_schedule.no_used) > 0 ";
-	if($subdiv <> '')
+	if($subdiv !='')
 		$sql.=" and training_venue.subdivisioncd='$subdiv'";
-	if($post_stat <> '')
+	if($post_stat !='')
 		$sql.=" and training_schedule.post_status='$post_stat'";
-	if($schedule_cd <> '')
+	if($schedule_cd !='0')
 		$sql.=" and training_schedule.schedule_code='$schedule_cd'";
 		//echo $sql;
 		//exit;
@@ -574,6 +575,13 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 function update_personnel_PreGroupReplacement($p_id,$forassembly,$forpc,$booked,$selected)
 {
 	$sql="update personnela set booked='$booked',forpc='$forpc',selected='$selected' where personcd='$p_id'";
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+}
+function update_training_booked_denied($p_id)
+{
+	$sql="update training_pp set training_booked='',	training_attended='',training_showcause='' where per_code='$p_id'";
 	$i=execUpdate($sql);
 	connection_close();
 	return $i;
@@ -794,6 +802,22 @@ function save_pregroup_cancelletion($PersonalID,$usercd)
 	connection_close();
 	return $i;
 }
+function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd)
+{
+	$sql="delete from first_rand_table where personcd='$PersonalID'";
+	$i=execDelete($sql);
+	//if($i==1)
+	//{
+		$sql1="delete from training_pp where per_code='$PersonalID'";
+		$j=execDelete($sql1);
+		$sql2="update personnel set poststat='$post_status' where personcd='$PersonalID'";
+		$j=execUpdate($sql2);
+		$sql3="update personnela set poststat='$post_status',rand_numb='0',selected='0',booked='' where personcd='$PersonalID'";
+		$j=execUpdate($sql3);
+	//}	
+	connection_close();
+	return 1;
+}
 //============Reserve Cancellation================================
 function save_reserve_pp_cancelletion($PersonalID,$usercd)
 {
@@ -1000,7 +1024,8 @@ function fatch_post_stat_wise_dtl_unbooked($subdiv,$pc)
 //	connection_close();
 	return $rs;
 }*/
-function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision)
+//////Swapping pp////////
+function fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision,$ex_ass1,$ex_ass2,$gender)
 {
 	$sql1="insert into personnela (personcd,officecd,officer_name,off_desg,present_addr1,present_addr2,";
 $sql1.="perm_addr1,perm_addr2,dateofbirth,gender,scale,basic_pay,grade_pay,workingstatus,email,resi_no, mob_no,qualificationcd,languagecd,epic,acno,slno,partno,poststat,assembly_temp,assembly_off,assembly_perm,districtcd,subdivisioncd,bank_acc_no,bank_cd, branchcd, remarks, pgroup, upload_file,usercode)";
@@ -1021,8 +1046,14 @@ $sql1.=" Select personnel.personcd, personnel.officecd, personnel.officer_name, 
 		  $sql1.=" and assembly.pccd='$pc'";
 	if($ex_ass!='' && $ex_ass!='0')
 		  $sql1.=" and personnel.assembly_temp<>'$ex_ass'and personnel.assembly_off<>'$ex_ass'and personnel.assembly_perm<>'$ex_ass'";
+    if($ex_ass1!='' && $ex_ass1!='0')
+		  $sql1.=" and personnel.assembly_temp<>'$ex_ass1'and personnel.assembly_off<>'$ex_ass1'and personnel.assembly_perm<>'$ex_ass1'";
+	if($ex_ass2!='' && $ex_ass2!='0')
+		  $sql1.=" and personnel.assembly_temp<>'$ex_ass2'and personnel.assembly_off<>'$ex_ass2'and personnel.assembly_perm<>'$ex_ass2'";
 	if($officename!='' && $officename!='0')
 		  $sql1.=" and personnel.officecd='$officename'";
+	if($gender!='' && $gender!='0')
+		  $sql1.=" and personnel.gender='$gender'";
 	if($posting_status!='' && $posting_status!='0')
 		  $sql1.=" and personnel.poststat ='$posting_status'";
 	     $sql1.=" order by rand()";
@@ -1046,6 +1077,79 @@ $sql1.=" Select personnel.personcd, personnel.officecd, personnel.officer_name, 
 
 	$upsql="Update personnela 
         SET personnela.forsubdivision='$forsubdivision'
+		WHERE personnela.forsubdivision is null or personnela.forsubdivision =''";
+
+    execUpdate($upsql);
+	
+	return $cd_cnt;
+}
+////Extra Swapping PP/////
+function fatch_PersonaldtlAgSubdiv_extra($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision,$ex_ass1,$ex_ass2,$gender)
+{
+	$sql1="insert into personnela (personcd,officecd,officer_name,off_desg,present_addr1,present_addr2,";
+$sql1.="perm_addr1,perm_addr2,dateofbirth,gender,scale,basic_pay,grade_pay,workingstatus,email,resi_no, mob_no,qualificationcd,languagecd,epic,acno,slno,partno,poststat,assembly_temp,assembly_off,assembly_perm,districtcd,subdivisioncd,bank_acc_no,bank_cd, branchcd, remarks, pgroup, upload_file,usercode)";
+
+$sql1.=" Select personnel.personcd, personnel.officecd, personnel.officer_name, personnel.off_desg, personnel.present_addr1,
+	  personnel.present_addr2, personnel.perm_addr1, personnel.perm_addr2, Date_Format(personnel.dateofbirth, '%Y-%m-%d') As dateofbirth,
+	  personnel.gender, personnel.scale, personnel.basic_pay, personnel.grade_pay, personnel.workingstatus, personnel.email,
+	  personnel.resi_no, personnel.mob_no, personnel.qualificationcd, personnel.languagecd, personnel.epic, personnel.acno,
+	  personnel.slno, personnel.partno, personnel.poststat, personnel.assembly_temp, personnel.assembly_off, personnel.assembly_perm,
+	  personnel.districtcd, personnel.subdivisioncd, personnel.bank_acc_no, personnel.bank_cd, personnel.branchcd,
+	  personnel.remarks, personnel.pgroup, personnel.upload_file, personnel.usercode
+	From personnel	
+	Left Join termination On personnel.personcd = termination.personal_id  
+          WHERE  (personnel.f_cd IS NULL or personnel.f_cd='0') and termination.personal_id is null";
+    if($subdivision!='' && $subdivision!='0')
+		  $sql1.=" and personnel.subdivisioncd= '$subdivision'";
+	if($pc!='' && $pc!='0')
+		  $sql1.=" and assembly.pccd='$pc'";
+	if($ex_ass!='' && $ex_ass!='0')
+		  $sql1.=" and personnel.assembly_temp<>'$ex_ass'and personnel.assembly_off<>'$ex_ass'and personnel.assembly_perm<>'$ex_ass'";
+    if($ex_ass1!='' && $ex_ass1!='0')
+		  $sql1.=" and personnel.assembly_temp<>'$ex_ass1'and personnel.assembly_off<>'$ex_ass1'and personnel.assembly_perm<>'$ex_ass1'";
+	if($ex_ass2!='' && $ex_ass2!='0')
+		  $sql1.=" and personnel.assembly_temp<>'$ex_ass2'and personnel.assembly_off<>'$ex_ass2'and personnel.assembly_perm<>'$ex_ass2'";
+	if($officename!='' && $officename!='0')
+		  $sql1.=" and personnel.officecd='$officename'";
+	if($gender!='' && $gender!='0')
+		  $sql1.=" and personnel.gender='$gender'";
+	if($posting_status!='' && $posting_status!='0')
+		  $sql1.=" and personnel.poststat ='$posting_status'";
+	     $sql1.=" order by rand()";
+    if($numberofemployee!='' && $numberofemployee!='0')
+	      $sql1.=" LIMIT $numberofemployee";
+	//echo $sql1;
+	//exit;
+    execInsert($sql1);
+	
+	$sql2="Update personnel
+	   JOIN personnela ON personnel.personcd=personnela.personcd 
+       set personnel.f_cd=1 
+       WHERE personnela.forsubdivision is null or personnela.forsubdivision ='' ";
+   execUpdate($sql2);
+   
+   $cntsql="Select count(*) as cnt from personnela 
+		WHERE personnela.forsubdivision is null or personnela.forsubdivision =''";
+    $countrs=execSelect($cntsql);
+	$crow=getRows($countrs);
+	$cd_cnt=$crow['cnt'];
+	
+	//$sql21="Update personnela set ttrgschcopy=0";
+   // execUpdate($sql21);
+   
+	$cntsql1="Select max(ttrgschcopy) as cnt from personnela where personnela.forsubdivision='$forsubdivision'";
+    $countrs1=execSelect($cntsql1);
+	$crow1=getRows($countrs1);
+	if($crow1['cnt']==NULL)
+	  $cd_cnt1=1;
+	else
+	  $cd_cnt1=$crow1['cnt']+1;
+
+	$upsql="Update personnela 
+        SET personnela.forsubdivision='$forsubdivision',
+		personnela.selected=1,
+		personnela.booked='P',
+		personnela.ttrgschcopy='$cd_cnt1'
 		WHERE personnela.forsubdivision is null or personnela.forsubdivision =''";
 
     execUpdate($upsql);
@@ -1092,6 +1196,45 @@ set personnel.f_cd=NULL
 	
 	return $cd_cnt;
 }
+//////reverse swapping(not booked)/////
+function fatch_Personaldtl_antiAgSubdiv1($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision)
+{
+   $sql1="Delete from personnela ";
+   $sql1.=" where 1=1 and personnela.booked='' ";
+    if($forsubdivision!='' && $forsubdivision!='0')
+		  $sql1.=" and personnela.forsubdivision= '$forsubdivision'";
+	if($pc!='' && $pc!='0')
+		  $sql1.=" and assembly.pccd='$pc'";
+	if($ex_ass!='' && $ex_ass!='0')
+		  $sql1.=" and personnela.assembly_temp<>'$ex_ass'and personnela.assembly_off<>'$ex_ass'and personnela.assembly_perm<>'$ex_ass'";
+	if($officename!='' && $officename!='0')
+		  $sql1.=" and personnela.officecd='$officename'";
+	if($posting_status!='' && $posting_status!='0')
+		  $sql1.=" and personnela.poststat ='$posting_status'";
+	     $sql1.=" order by rand()";
+    if($numberofemployee!='' && $numberofemployee!='0')
+	      $sql1.=" LIMIT $numberofemployee";
+	//$sql1.="";
+//	echo $sql1;
+//	exit;
+    execDelete($sql1);
+	
+	$cntsql="Select count(*) as cnt from personnel 
+	Left JOIN personnela ON personnel.personcd=personnela.personcd
+		WHERE personnel.f_cd=1 and personnela.personcd is null";
+    $countrs=execSelect($cntsql);
+	$crow=getRows($countrs);
+	$cd_cnt=$crow['cnt'];
+	
+	$upsql="Update personnel 
+Left JOIN personnela ON personnel.personcd=personnela.personcd
+set personnel.f_cd=NULL 	
+		WHERE personnel.f_cd=1 and personnela.personcd is null";
+
+    execUpdate($upsql);
+	
+	return $cd_cnt;
+}
 function fatch_dup_check($personcd)
 {
 	$sql;$rt;
@@ -1102,6 +1245,7 @@ function fatch_dup_check($personcd)
 	connection_close();
 	return $cd_pers;
 }
+
 //================================================
 function save_personnel_LS14($personcd,$officecd,$officer_name,$off_desg,$present_addr1,$present_addr2,$perm_addr1,$perm_addr2,$dateofbirth,$gender,$scale,$basic_pay,$grade_pay,$workingstatus,$email,$resi_no,$mob_no,$qualificationcd,$languagecd,$epic,$acno,$slno,$partno,$poststat,$assembly_temp,$assembly_off ,$assembly_perm,$districtcd,$subdivision,$forsubdivision,$bank_acc_no,$bank_cd,$branchcd,$remarks,$pgroup,$upload_file,$usercd)
 {
@@ -1270,6 +1414,16 @@ function delete_personnela($pr_cd)
 
 //=======================================================
 //================================ Assembly Party =================================
+function fatch_max_end_asm_party($subdivision,$assembly)
+{
+	 $sql="Select max(no_party) as cnt from  assembly_party where subdivisioncd='$subdivision' and assemblycd='$assembly'";
+	 if($member!='' && $member!='0')
+		$sql.=" and no_of_member ='$member'";
+	   $rs=execSelect($sql);
+	   $row=getRows($rs);
+	   $total=$row['cnt'];
+	   return $total;
+}
 function duplicate_Assembly_party($assembly,$member)
 {
 	$sql="select count(*) as duplicate_rec from assembly_party where assemblycd='$assembly' and no_of_member='$member'";
@@ -1301,6 +1455,7 @@ function fetch_Assembly_party($assembly,$subdivision)
 function update_next_party_sl($sum_pp,$next_sdcd,$next_asmcd,$next_no_m)
 {
 	$sql="update assembly_party set start_sl='$sum_pp' where assemblycd='$next_asmcd' and subdivisioncd='$next_sdcd' and no_of_member='$next_no_m'";
+	//echo $sql;
 	$i=execUpdate($sql);
 	connection_close();
 	return $i;
@@ -1524,4 +1679,5 @@ function update_post_status_replacement_in_group($p_id,$post_stat)
 	connection_close();
 	return $i1;
 }
+
 ?>

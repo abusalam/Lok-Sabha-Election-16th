@@ -13,6 +13,7 @@ include('header/header.php');
 <script type="text/javascript" language="javascript">
 function fatch_office_agsubdiv(str)
 {
+	document.getElementById("poststat_details").innerHTML="<img src='images/loading_s.gif' alt='' height='15px' width='20px'/>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  	xmlhttp=new XMLHttpRequest();
@@ -60,15 +61,16 @@ function fatch_office_agsubdiv(str)
 
 function for_subdiv_change(str)
 {
+		document.getElementById("for_poststat_details").innerHTML="<img src='images/loading_s.gif' alt='' height='15px' width='20px'/>";
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	//	xmlhttp1=new XMLHttpRequest();
-		xmlhttp2=new XMLHttpRequest();
+		xmlhttp3=new XMLHttpRequest();
 	  }
 	else
 	  {// code for IE6, IE5
-		xmlhttp1=new ActiveXObject("Microsoft.XMLHTTP");
-		xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
+		//xmlhttp1=new ActiveXObject("Microsoft.XMLHTTP");
+		xmlhttp3=new ActiveXObject("Microsoft.XMLHTTP");
 	  }
 	
 	/*xmlhttp1.onreadystatechange=function()
@@ -81,16 +83,16 @@ function for_subdiv_change(str)
     xmlhttp1.open("GET","ajaxfun.php?subdiv_swp="+str+"&opn=forpc_swp",true);
 	xmlhttp1.send();*/
 	
-	xmlhttp2.onreadystatechange=function()
+	xmlhttp3.onreadystatechange=function()
 	  {
-	  if (xmlhttp2.readyState==4 && xmlhttp2.status==200)
+	  if (xmlhttp3.readyState==4 && xmlhttp2.status==200)
 		{
-			document.getElementById("for_poststat_details").innerHTML=xmlhttp2.responseText;
+			document.getElementById("for_poststat_details").innerHTML=xmlhttp3.responseText;
 		}
 	  }
 	 //alert("ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat");
-    xmlhttp2.open("GET","ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat",true);
-	xmlhttp2.send();
+    xmlhttp3.open("GET","ajaxfun.php?forsub_swp="+str+"&opn=prev_poststat",true);
+	xmlhttp3.send();
 }
 	
 function chksetsubdivision_change()
@@ -103,10 +105,12 @@ function chksetsubdivision_change()
 		document.getElementById('Subdivision').disabled=false;
 		document.getElementById('forsubdivision').disabled=false;
 	//	document.getElementById('pc').disabled=false;
-		//document.getElementById('forpc').disabled=false;
 		document.getElementById('ex_ass').disabled=false;
+		document.getElementById('ex_ass1').disabled=false;
+		document.getElementById('ex_ass2').disabled=false
 		
 		document.getElementById('chksetoffice').disabled=false;
+		document.getElementById('chksetgender').disabled=false;
 		document.getElementById('chksetpostingstatus').disabled=false;
 		document.getElementById('chksetnumberofemployee').disabled=false;
 		
@@ -124,6 +128,10 @@ function chksetsubdivision_change()
 	//	document.getElementById('pc').selectedIndex="-1";
 		document.getElementById('ex_ass').disabled=true;
 		document.getElementById('ex_ass').value="";
+		document.getElementById('ex_ass1').disabled=true;
+		document.getElementById('ex_ass1').value="";
+		document.getElementById('ex_ass2').disabled=true;
+		document.getElementById('ex_ass2').value="";
 		
 		document.getElementById('forsubdivision').disabled=true;
 		document.getElementById('forsubdivision').selectedIndex="0";
@@ -132,10 +140,16 @@ function chksetsubdivision_change()
 		document.getElementById('officename').disabled=true;
 		document.getElementById('officename').selectedIndex="";
 		
+		document.getElementById('chksetgender').disabled=true;
+		document.getElementById('chksetgender').checked=false;
+		document.getElementById('gender').selectedIndex="0";
+		document.getElementById('gender').disabled=true;
+		
 		document.getElementById('chksetpostingstatus').disabled=true;
 		document.getElementById('chksetpostingstatus').checked=false;
 		document.getElementById('posting_status').selectedIndex="0";
 		document.getElementById('posting_status').disabled=true;
+		
 		document.getElementById('chksetnumberofemployee').disabled=true;
 		document.getElementById('chksetnumberofemployee').checked=false;
 		document.getElementById('numberofemployee').disabled=true;
@@ -200,7 +214,18 @@ function chksetoffice_change()
 		document.getElementById('officename').selectedIndex="0";
 	}
 }
-
+function chksetgender_change()
+{
+	if(document.getElementById('chksetgender').checked==true)
+	{
+		document.getElementById('gender').disabled=false;
+	}
+	else if(document.getElementById('chksetgender').checked==false)
+	{
+		document.getElementById('gender').disabled=true;
+		document.getElementById('gender').selectedIndex="0";
+	}
+}
 function chksetpostingstatus_change()
 {
 	if(document.getElementById('chksetpostingstatus').checked==true)
@@ -273,26 +298,29 @@ if($action=='Swapping')
 	$forsubdivision=isset($_POST['forsubdivision'])?$_POST['forsubdivision']:"";
 	$pc=isset($_POST['pc'])?$_POST['pc']:"";
 	$ex_ass=isset($_POST['ex_ass'])?$_POST['ex_ass']:"";
+	$ex_ass1=isset($_POST['ex_ass1'])?$_POST['ex_ass1']:"";
+	$ex_ass2=isset($_POST['ex_ass2'])?$_POST['ex_ass2']:"";
 	$forpc=isset($_POST['forpc'])?$_POST['forpc']:"";
 	$officename=isset($_POST['officename'])?$_POST['officename']:"";
 	$posting_status=isset($_POST['posting_status'])?$_POST['posting_status']:"";
+	$gender=isset($_POST['gender'])?$_POST['gender']:"";
 	$numberofemployee=isset($_POST['numberofemployee'])?$_POST['numberofemployee']:"";
 	$usercd=$user_cd;
 	if($forsubdivision>0)
 	{
-	    $rsEmp=fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision);
+	    $rsEmp=fatch_PersonaldtlAgSubdiv($subdivision,$pc,$ex_ass,$officename,$posting_status,$numberofemployee,$forsubdivision,$ex_ass1,$ex_ass2,$gender);
 		//$num_rows=rowCount($rsEmp);
 	
 		if($rsEmp<1)
 		{
-			$msg="<div class='alert-error'>No record found for transffer</div>";
+			$msg="<div class='alert-error'>No record found for transfer</div>";
 		}
 		else
 		{
 			   //--------------------------------------------		  
 		   //----------------------------------	 
 	//---------------------------------------
-	       $msg="<div class='alert-success'>".$rsEmp." Record(s) transffered successfully</div>";
+	       $msg="<div class='alert-success'>".$rsEmp." Record(s) has been transferred successfully</div>";
 		}
 		$rsEmp=NULL;
  	} 
@@ -379,25 +407,38 @@ if($action=='Swapping')
     <tr>
     <td align="left">&nbsp;</td>
     <td align="left" valign="top"><span class="error">&nbsp;&nbsp;</span>Excluding Assembly</td>
-    <td align="left" valign="top"><input type="text" name="ex_ass" id="ex_ass" maxlength="3" onkeypress="javascript:return wholenumbersonly(event);" style="width:162px" disabled="disabled" /></td>
+    <td align="left" valign="top"><span style="width: 162px;"><input type="text" name="ex_ass" id="ex_ass" maxlength="3" onkeypress="javascript:return wholenumbersonly(event);" style="width:41px" disabled="disabled" />&nbsp;
+    <input type="text" name="ex_ass1" id="ex_ass1" maxlength="3" onkeypress="javascript:return wholenumbersonly(event);" style="width:41px" disabled="disabled" />&nbsp;
+    <input type="text" name="ex_ass2" id="ex_ass2" maxlength="3" onkeypress="javascript:return wholenumbersonly(event);" style="width:41px" disabled="disabled" /></span></td>
     <td colspan="2">&nbsp;</td>
     </tr>
     
-    <tr><td class="text_small" align="right"><b>Total Member ::</b>&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="left" id="poststat_details" colspan="2" class="text_small"></td>
+    <tr><td class="text_small" align="right" ><b>Total Member ::</b>&nbsp;&nbsp;&nbsp;&nbsp;</td><td align="left" id="poststat_details" colspan="2" class="text_small" style="height: 20px;"></td>
     	<td  id="for_poststat_details" colspan="2" class="text_small"></td></tr>
     <tr>
     <td align="left"><input type="checkbox" id="chksetoffice" name="chksetoffice" onclick="return chksetoffice_change();" disabled="disabled" />
         <label for="chksetoffice" class="text_small">Office wise
          </label></td>   
-      <td align="left" valign="top"><span class="error">&nbsp;</span>Office Name</td>
-      <td align="left" valign="top"><span id='office_details'><select name="officename" id="officename" disabled="disabled" style="width:170px;">
+      <td align="left" valign="middle"><span class="error">&nbsp;</span>Office Name</td>
+      <td align="left" valign="middle"><span id='office_details'><select name="officename" id="officename" disabled="disabled" style="width:170px;">
 </select></span></td><td colspan="2">&nbsp;</td> 
     </tr>
+     <tr>
+       <td align="left"><input type="checkbox" id="chksetgender" name="chksetgender" onclick="return chksetgender_change();" disabled="disabled" />
+        <label for="chksetgender" class="text_small">Gender wise</label></td>
+      <td align="left" valign="middle"><span class="error">&nbsp;</span>Gender</td>
+      <td align="left" valign="middle"><select name="gender" id="gender" disabled="disabled" style="width:170px;">
+      						<option value="0">-Select Gender-</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+      				</select></td>
+       <td colspan="2">&nbsp;</td>             
+    </tr>
     <tr>
-    <td align="left"><input type="checkbox" id="chksetpostingstatus" name="chksetpostingstatus" onclick="return chksetpostingstatus_change();" disabled="disabled" />
+     <td align="left"><input type="checkbox" id="chksetpostingstatus" name="chksetpostingstatus" onclick="return chksetpostingstatus_change();" disabled="disabled" />
         <label for="chksetpostingstatus" class="text_small">Post status wise</label></td>
-      <td align="left" valign="top"><span class="error">&nbsp;</span>Post Status</td>
-      <td align="left" valign="top"><select name="posting_status" id="posting_status" disabled="disabled" style="width:170px;">
+      <td align="left" valign="middle"><span class="error">&nbsp;</span>Post Status</td>
+      <td align="left" valign="middle"><select name="posting_status" id="posting_status" disabled="disabled" style="width:170px;">
       						<option value="0">-Select Post Status-</option>
                             <?php 	$rsP=fatch_postingstatus();
 									$num_rows=rowCount($rsP);
@@ -419,8 +460,8 @@ if($action=='Swapping')
     <tr>
     <td align="left"><input type="checkbox" id="chksetnumberofemployee" name="chksetnumberofemployee" onclick="return chksetnumberofemployee_change();" disabled="disabled" />
         <label for="chksetnumberofemployee" class="text_small">Number of employee wise<br /></label></td> 
-      <td align="left" valign="top"><span class="error">&nbsp;</span>Number of employee</td>
-      <td align="left" valign="top"><input type="text" name="numberofemployee" id="numberofemployee" disabled="disabled" style="width:162px;" onkeypress="javascript:return wholenumbersonly(event);" />
+      <td align="left" valign="middle"><span class="error">&nbsp;</span>Number of employee</td>
+      <td align="left" valign="middle"><input type="text" name="numberofemployee" id="numberofemployee" disabled="disabled" style="width:162px;" onkeypress="javascript:return wholenumbersonly(event);" />
       </td>
        <td colspan="2">&nbsp;</td>         
     </tr>

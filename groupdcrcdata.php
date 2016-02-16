@@ -1,4 +1,4 @@
-<title>cmp</title><?PHP
+<?PHP
 include 'groupdcrc.php';
 //include 'mysqliconn.php';
 //required_once('assemblyparty.php');
@@ -17,7 +17,7 @@ function __construct($assembly,$membno,$dccd) {
 	
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
-		$this->result = $this->msqli->query("SELECT * from grp_dcrc where forassembly='$assembly' and member='$membno' and dcrccd='$dccd' ") or die($this->msqli->error.__LINE__);
+		$this->result = $this->msqli->query("SELECT groupid,dcrccd from grp_dcrc where forassembly='$assembly' and member='$membno' and dcrccd='$dccd' ") or die($this->msqli->error.__LINE__);
 	
 			
 

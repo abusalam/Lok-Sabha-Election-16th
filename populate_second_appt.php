@@ -2,6 +2,7 @@
 date_default_timezone_set('Asia/Calcutta');
 include_once('inc/db_trans.inc.php');
 $subdiv_cd=isset($_GET['subdiv_cd'])?$_GET['subdiv_cd']:"";
+$dist_cd=isset($_GET['dist'])?$_GET['dist']:"";
 //$pc_cd='39'; 
 
 $sql0="delete from second_appt where subdivcd='$subdiv_cd'";
@@ -66,7 +67,7 @@ $i=execUpdate($sql13);
 //================================End of office join=================================//
 
 
-echo $subdiv_cd;
+//echo $subdiv_cd;
 $sql21="update second_appt a join assembly b on a.assembly=b.assemblycd set a.assembly_name=b.assemblyname where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql21);
 
@@ -93,12 +94,19 @@ second_appt.dc_date=DATE(dcrc_party.dc_date)";
 $i=execUpdate($sql18);
 //==================================END of DCRC join=============================================//
 
-//=================================Start of Training==============================================//
+//=================================Start of Second Training==============================================//
 $sql19="update second_appt join second_training on second_appt.subdivcd=second_training.for_subdiv and second_appt.assembly=second_training.assembly set second_appt.traingcode=second_training.schedule_cd, second_appt.venuecode=second_training.training_venue , second_appt.training_date=second_training.training_dt, second_appt.training_time=second_training.training_time where second_training.party_reserve='P' and second_appt.groupid>=second_training.start_sl and second_appt.groupid<=second_training.end_sl and second_training.for_subdiv='$subdiv_cd'";
 $i=execUpdate($sql19);
+
+//Update Training in Personnela
+$sql191="update personnela join second_training on personnela.forsubdivision=second_training.for_subdiv and personnela.forassembly=second_training.assembly
+set personnela.training2_sch=second_training.schedule_cd
+where second_training.party_reserve='P' and personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_subdiv='$subdiv_cd' and  personnela.booked = 'P'";
+$i=execUpdate($sql191);
+
 $sql20="UPDATE second_appt a  JOIN training_venue_2 b ON a.venuecode=b.venue_cd SET  a.`training_venue` =b.venuename,a.`venue_addr1` =b.venueaddress1,  a.`venue_addr2`=b.venueaddress2 where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql20);
-//=================================END of Training==============================================//
+//=================================END of Second Training==============================================//
 
 //$sql21="update second_appt a join  pc b on a.pccd=b.pccd set a.pcname=b.pcname where a.pccd='$pc_cd'";
 //$i=execUpdate($sql21);
@@ -113,13 +121,16 @@ $i=execUpdate($sql24);
 
 $sql25="update second_appt a join subdivision b on a.p3_subdivision=b.subdivisioncd set a.p3_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql25);
-$sql271="update second_appt a join poll_table b on a.assembly=b.assembly_cd set a.polldate=b.poll_date, a.polltime=b.poll_time  where a.assembly=b.assembly_cd";
-$i=execUpdate($sql271);
+
 $sql26="update second_appt a join subdivision b on a.pa_subdivision=b.subdivisioncd set a.pa_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql26);
 
 $sql27="update second_appt a join subdivision b on a.pb_subdivision=b.subdivisioncd set a.pb_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql27);
+
+$sql271="update second_appt a join poll_table b on a.assembly=b.assembly_cd set a.polldate=b.poll_date, a.polltime=b.poll_time  where a.assembly=b.assembly_cd";
+$i=execUpdate($sql271);
+
 
 
 $sql272="update second_appt a join district b on substr(a.dcrcgrp,1,2)=b.districtcd set a.district=b.district";
@@ -127,6 +138,6 @@ $i=execUpdate($sql272);
 
 //$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pr_officecd, second_appt.per_poststat= a.pr_status where a.subdivcd='$subdiv_cd'";
 //$i=execUpdate($sql28);
-
-echo "Completed";
+//echo "Completed";
+echo "<div class='alert-success'>Completed</div>";
 ?>

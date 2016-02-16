@@ -18,7 +18,7 @@ function __construct($sub,$stat) {
  	$this->sobj= new mysqliconn();
         $this->msqli=$this->sobj->getconn();
 		if (strcmp($stat,'S'==0)) {
-	        $this->result = $this->msqli->query("SELECT * FROM `assembly_party` where subdivisioncd='$sub'") or die($this->msqli->error.__LINE__);
+	        $this->result = $this->msqli->query("SELECT assemblycd,pccd,no_of_member,no_party,subdivisioncd FROM `assembly_party` where subdivisioncd='$sub'") or die($this->msqli->error.__LINE__);
 			}
 
 // GOING THROUGH THE DATA

@@ -829,7 +829,7 @@ function bind_all()
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>Permanent Address</td>
-      <td align="left" colspan="2"><input type="text" name="peraddress1" id="peraddress1" maxlength="50" style="width:300px;" /><br />
+      <td align="left" colspan="2"><input type="text" name="peraddress1" id="peraddress1" maxlength="80" style="width:300px;" /><br />
       								<input type="text" name="peraddress2" id="peraddress2" maxlength="50" style="width:300px;" /></td>
        <td align="left">
         <label for="chkset" class="text_small">Working 3 years out of 4 years<br />(as on 30.06.2013)</label>&nbsp;&nbsp;<select name="workingstatus" id="workingstatus">

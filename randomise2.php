@@ -5,6 +5,7 @@ include 'assemblydata1.php';
 include 'grpdtldata.php';
 include 'postorderdata.php';
 include 'ppdata.php';
+include 'ppdatar.php';
 include 'randno1.php';
 include 'reserve1.php';
 include 'reserve2.php';
@@ -238,6 +239,7 @@ while ($i<=$asmparty->countnumb()-1)
 }
 $stmt->close();
 $msqli->close();
+
 new reserve1($dist,$sub,2);
 /*new  reserve2($dist,$sub);
 new  reserve2($dist,$sub);

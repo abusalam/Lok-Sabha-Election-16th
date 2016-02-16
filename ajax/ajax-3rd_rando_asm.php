@@ -26,17 +26,17 @@ if($opn=='rando_asm')
 		{
 		  $rowasm=getRows($rsasm);
 		  echo "<tr height='25px'>";
-	      echo "<td align='center' width='17%'><input type='checkbox' name='check_$i' id='check_$i' value='$rowasm[assemblycd]'  class='chk_asm' ";
-		  if($rowasm['rand_status']=='Y')
-		    echo "checked";
-		  else
+	      echo "<td align='center' width='14%'><input type='checkbox' name='check_$i' id='check_$i' value='$rowasm[assemblycd]'  class='chk_asm' ";
+		 // if($rowasm['rand_status']=='Y')
+		 //   echo "checked";
+		//  else
 		    echo "";
 		  echo "/></td>"; 
-		  echo "<td width='83%' align='left' style='padding-left:5px;'>$rowasm[assemblyname] ";
+		  echo "<td width='86%' align='left' style='padding-left:5px;'>";
 		  if($rowasm['rand_status']=='Y')
-		    echo "<img src='images/success.png' height='15px' style='vertical-align:middle; padding-bottom: 2px;'/>";
+		    echo "<span style='color: green;'>$rowasm[assemblyname]</span> <img src='images/s_success.png' height='15px' style='vertical-align:middle; padding-bottom: 2px;'/>";
 		  else
-		    echo "";
+		    echo "<span style='color:red;'>$rowasm[assemblyname]</span> ";
 		  echo "</td>";
 		  echo "</tr>";
 		}
@@ -47,7 +47,7 @@ if($opn=='rando_asm')
 ?>
 <script type="text/javascript">  
 $(document).ready(function(){
-			
+						   //window.load();			
 	$('#chk_all').click(function() {  //on click 
         if(this.checked) { // check select status
             $('.chk_asm').each(function() { //loop through each checkbox

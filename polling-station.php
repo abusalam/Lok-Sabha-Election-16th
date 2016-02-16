@@ -9,6 +9,9 @@ session_start();
 <?php
 include('header/header.php');
 ?>
+<style>
+.scroller1 { border:1px solid #ccc; max-height: 700px; min-height:0px; overflow-y: scroll; }
+</style>
 <script type="text/javascript" language="javascript">
 function subdivision_change(str)
 {
@@ -463,6 +466,8 @@ jQuery(document).ready(function(){
 	  $('#psname').val("");
 	  $('#postfix').val("");
 	  $('#psno').val("");
+	  $("#tmsg").html("");
+	  
 		$.ajax({
 			      type:"get",
 			      url: "add_edit_pollingstation.php",

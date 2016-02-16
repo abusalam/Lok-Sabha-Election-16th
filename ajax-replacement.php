@@ -4,6 +4,7 @@ extract($_GET);
 date_default_timezone_set('Asia/Calcutta');
 include_once('inc/db_trans.inc.php');
 include_once('function/add_fun.php');
+include_once('function/appointment_fun.php');
 //=================================Replacement====================================
 //==========================Get Personnel Names===========================
 $ass; $polling_party; $post_stat;
@@ -237,7 +238,7 @@ if($opn=='new_search')
 	else
 	{
 		//echo $post_stat;
-		$schedule_cd="";
+		$schedule_cd="0";
 	    $rsTrainingVenue=fatch_training_venue_available_subdiv($schedule_cd,$subdiv_cd,$poststat);
 			$num_rows=rowCount($rsTrainingVenue);
 			echo "<select name='training_sch' id='training_sch' style='width:220px;' onchange='javascript: schedule_change(this.value);'>";
@@ -276,6 +277,7 @@ if($opn=='venue_details')
 if($opn=='pg_rplc')
 {
 	$old_p_id=''; $new_p_id=''; $forassembly=''; $forpc=''; $usercd=0;
+	$usercd=isset($_GET["usercd"])?$_GET["usercd"]:"";
 	$reason=isset($_GET["reason"])?$_GET["reason"]:"";
 	$booked=isset($_GET["booked"])?$_GET["booked"]:"";
 	$old_p_id=isset($_GET["old_p_id"])?$_GET["old_p_id"]:"";
@@ -305,6 +307,7 @@ if($opn=='pg_rplc')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
 		$selected=1;
+		//update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
 		$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
 		if($ret==1)
 		{
@@ -316,13 +319,26 @@ if($opn=='pg_rplc')
 			}
 			else
 			{
-				//delete_old_pp_trainingpp($old_p_id);
+				//fetch old schedule code
 				$old_s_cd=fetch_training_schedule_code($old_p_id);
+				//fetch old no used
 				$old_noused=fetch_no_used_training_schedule($old_s_cd);
+				//update no used
 				update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
+				//replace
 				update_personnel_PreGroupReplacement_training_pp($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id,$training_sch);
-				$new_noused=fetch_no_used_training_schedule($training_sch);
-				update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+				
+				if($training_sch !='' && $training_sch !='0')
+				{
+					//fetch new no used if shdule_code exist
+					$new_noused=fetch_no_used_training_schedule($training_sch);
+					//update new no used if shdule_code exist
+					update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+				}
+				else
+				{
+					update_training_booked_denied($new_p_id);
+				}
 				
 				
 			}
@@ -333,6 +349,45 @@ if($opn=='pg_rplc')
 				echo "Changed";
 			}
 			$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
+			
+			//record add in first rand table//
+			
+			
+			    delete_temp_app_letter($usercd);
+				
+
+				include_once('inc/commit_con.php');
+				mysqli_autocommit($link,FALSE);
+				$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
+				$stmt = mysqli_prepare($link, $sql1);
+				mysqli_stmt_bind_param($stmt, 'si', $new_p_id,$usercd);
+				mysqli_stmt_execute($stmt);
+			
+				if (!mysqli_commit($link)) {
+					print("Transaction commit failed\n");
+					exit();
+				}
+				mysqli_stmt_close($stmt);
+				mysqli_close($link);
+				
+				
+				
+				//$str_per_code=$_GET['old_p_id'];
+				//echo $str_per_code;
+				//exit;
+			
+				$del_ret=delete_prev_data_single($old_p_id);
+				
+				$del_ret1=delete_prev_data_single($new_p_id);
+				
+				$rsId=fetch_id_temp_app_letter($usercd);
+				$num_row1=rowCount($rsId);
+				if($num_row1>0)
+				{
+				  first_appointment_letter_replace_new_id($new_p_id);
+				}
+			//end//
+			
 		}
 	}
 	

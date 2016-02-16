@@ -97,7 +97,8 @@ function FancyTable($header, $data)
 			$nb6="bring it at training venue for attestation.";
 			$nb7="Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.";
 			$nb8="EPIC No. - $row[epic], Assembly - $row[acno], Part No. - $row[partno], Sl. No .- $row[slno] ";
-			$nb9="Bank - $row[bank_name], Branch - $row[branch_name], A/c No.- $row[bank_acc_no], IFS Code- $row[ifsc_code]";
+			$nb9="Bank - $row[bank_name], Branch - $row[branch_name]";
+			$nb89="A/c No.- $row[bank_acc_no], IFS Code- $row[ifsc_code]";
 			$nb10="Please bring in the filled up data sheet, as attached herewith, during the first training.";
 			
 	
@@ -164,22 +165,22 @@ function FancyTable($header, $data)
 				 
 			$this->Ln();
 						
-	        $this->SetFont('','');
-			$name=$row['0'].", ".$row['1'].", PIN - (".$row['2'].")";
+	        $this->SetFont('Arial','',8);
+			$name=$row['0'].", ".$row['1'].", PIN - (".$row['2'].") ";
 			$address=$row['3'].", ".$row['4'].", P.O. - ".$row['5'];
-			$ppo="Subdiv - ".$row['6'].", P.S. - ".$row['7'].", Dist. - ".$row['8'].", PIN - ".$row['9'];
-			$odetails="OFFICE - (".$row['10']."), Post Status - ".$row['12'].", Mobile No : ".$row['11'];
+			$ppo=" Subdiv - ".$row['6'].", P.S. - ".$row['7'].", Dist. - ".$row['8'].", PIN - ".$row['9'];
+			$odetails=" OFFICE - (".$row['10']."), Post Status - ".$row['12'].", Mobile No : ".$row['11'];
 		
-			$this->Cell($w[0],6,$name,'LTR',0,'L',$fill);
+			$this->MultiCell($w[0],6,$name.$address.$ppo.$odetails,1,'J');
 			//$this->SetFont('','');
-			$this->Ln(5);
-			$this->Cell($w[0],6,$address,'LR',0,'L',$fill);
+			/*		$this->Ln(5);
+	        $this->Cell($w[0],6,$address,'LR',0,'L',$fill);
 			$this->Ln(5);
 			$this->Cell($w[0],6,$ppo,'LR',0,'L',$fill);
 			$this->Ln(5);
-			$this->Cell($w[0],6,$odetails,'LR',0,'L',$fill);
-			$this->Ln();
-			$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
+			$this->Cell($w[0],6,$odetails,'LR',0,'L',$fill);*/
+			//$this->Ln();
+			//$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
 			$this->Ln(5);
 			
 			
@@ -189,7 +190,7 @@ function FancyTable($header, $data)
 			// Line break
 			$this->Ln();
 			
-			$this->SetFont('','B');
+			
 			$header1 = array('Training Schedule');
 			$header2 = array('Training','Venue & Address','Date & Time');
 			$w1 = array(190);
@@ -201,7 +202,7 @@ function FancyTable($header, $data)
 			for($l=0;$l<count($header2);$l++)
 				$this->Cell($w2[$l],7,$header2[$l],'LTR',0,'C',true);	 
 			$this->Ln();
-			$this->SetFont('','');
+			$this->SetFont('Arial','',7.5);
 			$data1=fetch_ppwise_training($row['2']);
 			for($m=1;$m<=rowCount($data1);$m++)
 	        {
@@ -328,6 +329,10 @@ function FancyTable($header, $data)
 			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb9,0,0,'L');
 			$this->Ln(4);
+			$this->SetFont('Arial','',9);
+			$this->Cell(10,10,"",0,0,'L');
+			$this->Cell(10,10,$nb89,0,0,'L');
+			$this->Ln(4);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"5.",0,0,'L');
@@ -355,6 +360,11 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(136);
 			$this->Cell(10,10,"Date:",0,0,'R');
+			$this->Ln();
+			
+			$bmname=$row['block_muni_name'];
+			$this->SetFont('Arial','',9);
+			$this->Cell(190,5,"Block/Municipality: ".$bmname,0,0,'C');
 			
 			$fill = !$fill;
 		    $count++;

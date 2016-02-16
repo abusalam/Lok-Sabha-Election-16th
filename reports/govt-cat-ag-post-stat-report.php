@@ -23,6 +23,7 @@ if(isset($_REQUEST['district']))
 	$dist_cd=$_REQUEST['district'];
 	if(isset($_REQUEST['Subdivision']))
 		$subdiv_cd=$_REQUEST['Subdivision'];
+	$gender=isset($_REQUEST['gender'])?$_REQUEST['gender']:"";
 }
 date_default_timezone_set('Asia/Calcutta');
 include("../inc/db_trans.inc.php");
@@ -30,7 +31,7 @@ include("../inc/db_trans.inc.php");
 <table width="100%">
 <tr>
 	<td align="center">
-		<table width='750px' cellpadding='0' cellspacing='0' border='0'>
+		<table width='800px' cellpadding='0' cellspacing='0' border='0'>
         <thead>
         	<tr>
             	<th align='center' colspan='2'>Office Category Wise Report</th>
@@ -73,13 +74,15 @@ include("../inc/db_trans.inc.php");
                             <td align="center">Local Bodies</td>
                             <td align="center">Govt. Aided Organisation</td>
                             <td align="center">Autonomous Body</td>
-                            <td align="center">Other</td></tr>
+                            <td align="center"> &nbsp;&nbsp;&nbsp;Other&nbsp; </td>
+                            <td align="center"> &nbsp;&nbsp;&nbsp;Total&nbsp; </td></tr>
                         <?php
 						include_once('../function/add_fun.php');
 						$rsPostStat=fatch_postingstatus();
 						$num_rowsPostStat=rowCount($rsPostStat);
 						if($num_rowsPostStat>0)
 						{
+							$grand_total=0;
 							for($i=1;$i<=$num_rowsPostStat;$i++)
 							{
 								$rowPostStat=getRows($rsPostStat);
@@ -89,7 +92,7 @@ include("../inc/db_trans.inc.php");
                             <?php
 							include_once('../function/report_fun.php');
 							$c_g=0; $s_g=0; $c_g_u=0; $s_g_u=0; $l_b=0; $g_a_f=0; $a_b=0; $o_g=0;
-							$rsNo=govt_cat_ag_post_stat_report($post_stat,$sub_div);
+							$rsNo=govt_cat_ag_post_stat_report($post_stat,$sub_div,$gender);
 							$num_rows=rowCount($rsNo);
 							if($num_rows>0)
 							{
@@ -137,10 +140,15 @@ include("../inc/db_trans.inc.php");
                                 <td align="right"><?php echo $c_g_u; ?></td><td align="right"><?php echo $s_g_u; ?></td>
                                 <td align="right"><?php echo $l_b; ?></td><td align="right"><?php echo $g_a_f; ?></td>
                                 <td align="right"><?php echo $a_b; ?></td><td align="right"><?php echo $o_g; ?></td>
+                                <td align="right"><?php echo $total_post=$c_g+$s_g+$c_g_u+$s_g_u+$l_b+$g_a_f+$o_g+$a_b; ?></td>
                             </tr>    
                                 <?php
+								$grand_total=$total_post+$grand_total;
 								unset($rowPostStat);
 							}
+							?>
+                           <tr><td align="center">Total</td> <td colspan="8"></td><td align="right"><?php echo $grand_total;?></td>
+                            <?php
 						}
 						unset($rsPostStat,$num_rowsPostStat);
 						?>

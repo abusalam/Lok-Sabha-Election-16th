@@ -103,7 +103,7 @@ function edit_personnela(str)
   <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center">PERSONAL DETAILS LIST FROM SWAPPING</td></tr>
+<tr><td align="center">PERSONNEL DETAILS LIST FROM SWAPPING</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
     

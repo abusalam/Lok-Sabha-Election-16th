@@ -81,7 +81,7 @@ function populate_click()
 		document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","second-app-sl-no.php",true);
+	xmlhttp.open("GET","second-app-sl-no.php?subdiv_cd="+subdiv+"&dist=<?php print $dist_cd; ?>",true);
 	document.getElementById("populate_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
@@ -117,7 +117,7 @@ function populate_click()
 		document.getElementById("form1").style="cursor:default";
 		}
 	  }
-	xmlhttp.open("GET","multiply-second-app.php",true);
+	xmlhttp.open("GET","multiply-second-app.php?subdiv_cd="+subdiv+"&dist=<?php print $dist_cd; ?>",true);
 	document.getElementById("populate_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();
@@ -134,7 +134,7 @@ function populate_click()
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
-  <td align="center">SECOND APPOINTMENT LETTER POPULATE</td></tr>
+<td align="center">SECOND APPOINTMENT LETTER POPULATE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="50%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td></tr>

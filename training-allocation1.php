@@ -1,14 +1,21 @@
 <?php
 session_start();
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Training Allocation</title>
+
 <?php
 include('header/header.php');
 ?>
 <?php
+if(isset($_SESSION['dist_cd']))
+	$dist_cd=$_SESSION['dist_cd'];
+else
+	$dist_cd="0";
 $subdiv_cd="0";
 if(isset($_SESSION['subdiv_cd']))
 	$subdiv_cd=$_SESSION['subdiv_cd'];
@@ -29,6 +36,29 @@ function chksetpollingperson_change()
 		document.getElementById('no_pp').disabled=true;
 		
 	}
+}
+function fetch_sub_wise_venue(str)
+{
+	if (window.XMLHttpRequest)
+	  {
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("venue_training").innerHTML=xmlhttp.responseText;
+		training_alloted(document.getElementById('training_type').value);
+		venue_capacity('0');
+		}
+	  }
+	xmlhttp.open("GET","ajax-training.php?subdivcd="+str+"&opn=trnvenue",true);
+	xmlhttp.send();
+	
 }
 function venue_capacity(str)
 {
@@ -110,6 +140,10 @@ function area_detail(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("area_of_preference").innerHTML=xmlhttp.responseText;
+		 if(str==0)
+		  fetch_sub_wise_venue('0');
+		 else
+		  fetch_sub_wise_venue('<?php print $subdiv_cd; ?>');
 		}
 	  }
 	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision=<?php print $subdiv_cd; ?>&opn=areadtl",true);
@@ -154,18 +188,6 @@ function validate()
 	var training_time=document.getElementById("training_time").value;
 	var post_status=document.getElementById("post_status").value;
 	var no_pp=document.getElementById("no_pp").value;
-	if(training_venue=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Training Venue";
-		document.getElementById("training_venue").focus();
-		return false;
-	}
-	if(training_type=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Training Type";
-		document.getElementById("training_type").focus();
-		return false;
-	}
 	if(area_pref=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Area of Preference";
@@ -182,6 +204,19 @@ function validate()
 			return false;
 		}
 	}
+	if(training_venue=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Training Venue";
+		document.getElementById("training_venue").focus();
+		return false;
+	}
+	if(training_type=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Training Type";
+		document.getElementById("training_type").focus();
+		return false;
+	}
+
 	if(training_dt=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Training Date";
@@ -225,6 +260,7 @@ function validate()
 		document.getElementById("no_pp").focus();
 		return false;
 	}
+	
 }
 </script>
 </head>
@@ -241,8 +277,9 @@ if($action=='Submit')
 	$training_time=$_POST['training_time'];
 	$post_status=$_POST['post_status'];
 	$no_pp1=isset($_POST['no_pp'])?$_POST['no_pp']:"";
-	$hidno_pp=$_POST['hidno_pp'];
+	$hidno_pp=isset($_POST['hidno_pp'])?$_POST['hidno_pp']:"";
 	$no_pp=($no_pp1=="")?$hidno_pp:$no_pp1;
+	
 	//echo $no_pp;
 	//exit();
 	$usercd=$user_cd;
@@ -368,12 +405,24 @@ function training_required()
     	<table width="100%" id="trng_alloted" class="table2 demo-section" cellpadding="0" cellspacing="0" border="0"></table>
     </td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+     <tr>
+      <td align="left"><span class="error">*</span>Area of Preference</td>
+      <td align="left"><select name="area_pref" id="area_pref" style="width:220px;" onchange="javascript:return area_detail(this.value);">
+		<option value="0">-Select Preference-</option>
+        <option value="S">Subdivision of PP</option>
+        <option value="D">Alloted Subdivision</option>
+        <option value="T">Assembly of Temporary Address</option>
+        <option value="P">Assembly of Permanent Address</option>
+        <option value="O">Assembly of Office Address</option>
+      </select>&nbsp; <a href="#" id="dialog-link">View Availability</a></td></tr>
+    <tr id="area_of_preference"></tr>
+   
 	<tr>
 	  <td align="left"><span class="error">*</span>Training Venue</td>
-	  <td align="left" width="60%"><select name="training_venue" id="training_venue" style="width:220px;" onchange="javascript:return venue_capacity(this.value);">
+	  <td align="left" width="60%"><span id="venue_training"><select name="training_venue" id="training_venue" style="width:220px;" onchange="javascript:return venue_capacity(this.value);">
 	    <option value="0">-Select Training Venue-</option>
 		<?php
-			$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdiv_cd);
+			/*$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdiv_cd);
 			$num_rows=rowCount($rsTrainingVenue);
 			if($num_rows>0)
 			{
@@ -384,9 +433,9 @@ function training_required()
 					$rowTrainingVenue=NULL;
 				}
 			}
-			unset($rowTrainingVenue,$num_rows);
+			unset($rowTrainingVenue,$num_rows);*/
 		?>
-	    </select>&nbsp;&nbsp;<span id="venue_capacity"></span></td></tr>
+	    </select></span>&nbsp;&nbsp;<span id="venue_capacity"></span></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Type</td>
       <td align="left"><select name="training_type" id="training_type" style="width:220px;">
@@ -406,17 +455,7 @@ function training_required()
 								unset($rsTrainingType,$num_rows,$rowTrainingType);
 							?>
       </select></td></tr>
-    <tr>
-      <td align="left"><span class="error">*</span>Area of Preference</td>
-      <td align="left"><select name="area_pref" id="area_pref" style="width:220px;" onchange="javascript:return area_detail(this.value);">
-		<option value="0">-Select Preference-</option>
-        <option value="S">Subdivision of PP</option>
-        <option value="D">Alloted Subdivision</option>
-        <option value="T">Assembly of Temporary Address</option>
-        <option value="P">Assembly of Permanent Address</option>
-        <option value="O">Assembly of Office Address</option>
-      </select></td></tr>
-    <tr id="area_of_preference"></tr>
+   
     <tr>
       <td align="left"><span class="error">*</span>Training Date</td>
       <td align="left"><input type="text" name="training_dt" id="training_dt" maxlength="10" style="width:220px;" onchange="javascript:return training_alloted();" /></td>
@@ -463,8 +502,67 @@ function training_required()
 </td></tr></table>
 </td></tr>
 </table>
+<div id="dialog" title="Districtwise Post Status Availability" >
+	<p style="font-size:12px">
+    <?php
+	$rs_dist=fatch_Subdivision($dist_cd);
+	$num_rows1=rowCount($rs_dist);
+	for($j=1;$j<=$num_rows1;$j++)
+	{
+		$row_sub=getRows($rs_dist);
+	    $rs=fatch_post_stat_wise_dtl_transffered($row_sub['0'],'');
+		$num_rows=rowCount($rs);
+		echo "</br><b>".$row_sub['2']."</b> ::</br>Available :: ";
+		for($i=1;$i<=$num_rows;$i++)
+		{
+			$row=getRows($rs);
+			echo $row['poststat'].": ".$row['total']."; \n";
+			$row=NULL;
+		}
+		$num_rows=0;			
+		$rs=NULL;
+	}
+	unset($rs,$row,$num_rows,$rs_dist,$i,$j,$num_rows1);
+		
+    ?></p>
 </div>
-<div id="calendar" style="width: 243px;display:none;"></div>  
+</div>
+ <div id="calendar" style="width: 243px;display:none;"></div> 
+ <style>
+ #dialog-link {
+		padding: .4em 1em .4em 4px;
+		text-decoration: none;
+		position: relative;
+		font-size:11px;
+	}
+	#dialog-link span.ui-icon {
+		margin: 0 3px 0 0;
+		position: absolute;
+		left: .2em;
+		top: 50%;
+		margin-top: -8px;
+		font-size:10px;
+	}
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	#icons li {
+		margin: 2px;
+		position: relative;
+		padding: 3px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	#icons span.ui-icon {
+		float: left;
+		margin: 0 4px;
+	}
+	.fakewindowcontain .ui-widget-overlay {
+		position: absolute;
+	}
+ </style>
 <script>
 	$(document).ready(function() {
 		$("#calendar").kendoCalendar();
@@ -511,6 +609,49 @@ function training_required()
 
 		$("#navigate").click(navigate);
 	});
-</script>
+	</script>
 </body>
+ 
+<link href="css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+	<script src="jq/jquery-ui-1.10.4.custom.js"></script>
+	<script>
+	$(function() {
+
+		
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			width: 700,
+			buttons: [
+				
+				{
+					text: "Cancel",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+
+		// Link to open the dialog
+		$( "#dialog-link" ).click(function( event ) {
+			$( "#dialog" ).dialog( "open" );
+			event.preventDefault();
+		});
+		
+
+	
+
+		// Hover states on the static widgets
+		$( "#dialog-link, #icons li" ).hover(
+			function() {
+				$( this ).addClass( "ui-state-hover" );
+			},
+			function() {
+				$( this ).removeClass( "ui-state-hover" );
+			}
+		);
+	});
+	</script>
+
+
 </html>

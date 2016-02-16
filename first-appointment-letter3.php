@@ -24,8 +24,8 @@ function validate()
 	//alert(pc.options.length);
 	if(posting_status.value=="" || posting_status.value=="0")
 	{
-		document.getElementById("msg").innerHTML="Select Office";
-		document.getElementById("office").focus();
+		document.getElementById("msg").innerHTML="Select Post Status";
+		document.getElementById("posting_status").focus();
 		return false;
 	}
 
@@ -146,7 +146,7 @@ if($submit=='Submit')
 	}*/
 }
 ?>
-<body>
+<body  onload="javascript:return bind_data();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr><td align="center"><table width="1000px" class="table_blue">
@@ -214,7 +214,20 @@ if($submit=='Submit')
 </body>
 
 </html>
-
+<script type="text/javascript" language="javascript">
+function bind_data()
+{
+	var subdivision=document.getElementById('Subdivision');
+	for (var i = 0; i < subdivision.options.length; i++) 
+	{
+		if (subdivision.options[i].value == "<?php echo $subdiv_cd; ?>")
+		{
+			subdivision.options[i].selected = true;
+		}
+    }
+	
+}
+</script>
 <script language="javascript" type="text/javascript">
 (function (d) {
   d.getElementById('form1').onsubmit = function () {

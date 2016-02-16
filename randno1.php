@@ -13,11 +13,12 @@ function __construct($dist,$sub) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT * FROM `personnela` where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' ") or die($this->msqli->error.__LINE__);
+	//$this->result = $this->msqli->query("SELECT * FROM `personnela` where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' ") or die($this->msqli->error.__LINE__);
+   $this->result = $this->msqli->query("update `personnela`  set rand_numb=RAND()*10000 where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub'") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 
-$this->msqli->autocommit(FALSE);
+/*$this->msqli->autocommit(FALSE);
 $sql  = "update personnela set rand_numb=? where personcd=? ";
 //$sql  = "update pers set booked=?,groupid=?,forasm=?,forpc=? where personcd=? ";
 
@@ -52,8 +53,7 @@ $this->stmt->bind_param('is',$rnd,$psd);
 	else {
 		echo 'NO RESULTS';	
 	}
-
-
+*/
 		
 }
 }

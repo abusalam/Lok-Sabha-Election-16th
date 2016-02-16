@@ -7,9 +7,7 @@ include_once('function/pagination.php');
 //====================================================
 
 global $subdivision; global $venuename; global $usercode;
-$subdivision=isset($_GET["subdivision"])?$_GET["subdivision"]:"";
-$venuename=isset($_GET["venuename"])?$_GET["venuename"]:"";
-$dist=isset($_GET["dist"])?$_GET["dist"]:"";
+
 $usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
 $delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
 if($delcode!="" && $delcode!=null)
@@ -26,10 +24,28 @@ if($delcode!="" && $delcode!=null)
 		echo "<span class='error'>Record already used</span><br />\n";
 	}
 }
+$search=isset($_GET["search"])?$_GET["search"]:"";
+$subdivision=isset($_GET["subdivision"])?$_GET["subdivision"]:"";
+$venuename=isset($_GET["venuename"])?$_GET["venuename"]:"";
+$dist=isset($_GET["dist"])?$_GET["dist"]:"";
+
+if($search=="search")
+{
+	$_SESSION['subdiv_train']=$subdivision;
+	$_SESSION['subdiv_venu']=$venuename;
+	$_SESSION['subdiv_dist']=$dist;
+}
+else
+{
+	$subdivision=isset($_SESSION['subdiv_train'])?$_SESSION['subdiv_train']:'';
+	$venuename=isset($_SESSION['subdiv_venu'])?$_SESSION['subdiv_venu']:'';
+	$dist=isset($_SESSION['subdiv_dist'])?$_SESSION['subdiv_dist']:'';
+}
+
 $rstrainingvenue_list_T=fatch_trainingvenue_list($subdivision,$venuename,$usercode,$dist);
 $num_rows_T = rowCount($rstrainingvenue_list_T);
 
-$items = 50; // number of items per page.
+$items = 100; // number of items per page.
 $all = isset($_GET['a'])?$_GET['a']:"";
 if($all == "all")
 {
@@ -66,19 +82,21 @@ else
 	{
 	  $rowtrainingvenue_list=getRows($rstrainingvenue_list);
 	  $venue_cd='"'.encode($rowtrainingvenue_list[0]).'"';
-	  echo "<tr><td align='right' width='3%'>$i.</td><td align='center' width='10%'>$rowtrainingvenue_list[1]</td><td width='24%' align='left'>$rowtrainingvenue_list[2]</td>";
+	   $count=$p_num+$i;
+	   
+	  echo "<tr><td align='left' width='3%'>$count.</td><td align='center' width='10%'>$rowtrainingvenue_list[1]</td><td width='24%' align='left'>$rowtrainingvenue_list[2]</td>";
 	  echo "<td width='44%' align='left'>$rowtrainingvenue_list[3],$rowtrainingvenue_list[4]</td><td width='15%' align='left'>$rowtrainingvenue_list[5]</td>";
 	  echo "<td align='center' width='4%'><img src='images/edit.png' alt='' height='20px' ";
-	  if($rowtrainingvenue_list['usercode']==$usercode)
+	//  if($rowtrainingvenue_list['usercode']==$usercode)
 	  	echo "onclick='javascript:edit_trainingvenue($venue_cd);'";
-	  else
-	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	 // else
+	// 	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
 	  echo " /></td>";
 	  echo "<td align='center' width='4%'><img src='images/delete.png' alt='' height='20px' ";
-	  if($rowtrainingvenue_list['usercode']==$usercode)
+	 // if($rowtrainingvenue_list['usercode']==$usercode)
 	  	echo "onclick='javascript:delete_trainingvenue($venue_cd);'";
-	  else
-	  	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
+	 // else
+	 // 	echo " onclick='alert(\"You do not have sufficient privilege to do the operation\");'";
 	  echo " /></td></tr>\n";
 	 
 	}

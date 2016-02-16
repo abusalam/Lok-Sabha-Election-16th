@@ -274,16 +274,27 @@ if($action=='Submit')
 		$dup_check=duplicate_Assembly_party($assembly,$member);
 		if($dup_check==0)
 		{
-			$ret=save_assembly_party($subdivision,$pc,$assembly,$member,$party_req,$usercd);
+				/*$max_endsl=fatch_max_end_asm_party($subdivision,$assembly);
+				if($max_endsl==null)
+				{
+				  $start_sl=0;
+				}
+				else
+				{
+				  $start_sl=$max_endsl;
+				}*/
+				$ret=save_assembly_party($subdivision,$pc,$assembly,$member,$party_req,$usercd);
 			
 			$asm_array=fetch_Assembly_party($assembly,$subdivision);
-			//print_r($asm_array);
+		//	print_r($asm_array);
 			//echo count($asm_array);
 			if(count($asm_array)>1)
 			{
 				update_Assembly_slno($assembly,$subdivision);
 					$idx = 0;
-				foreach ($asm_array as $key => $value) {
+					$u_cnt=1;
+				foreach ($asm_array as $key => $value)
+				{
 					$sum_pp=$value['sl']+$value['np'];
 					//echo $sum_pp." </br>";
 					$idx = $key;
@@ -292,8 +303,16 @@ if($action=='Submit')
 					$next_sdcd=$asm_array[$idx +1]['sdcd'];
 					$next_asmcd=$asm_array[$idx +1]['asmcd'];
 					$next_no_m=$asm_array[$idx +1]['no_m'];
-					update_next_party_sl($sum_pp,$next_sdcd,$next_asmcd,$next_no_m);
-					
+					if($to_cnt!=$u_cnt)
+					{
+					  update_next_party_sl($sum_pp,$next_sdcd,$next_asmcd,$next_no_m);
+					  $u_cnt++;
+					}
+					else
+					{
+					   break;
+					}
+									
 				}
 			}
 			//exit;
@@ -406,7 +425,8 @@ function load_data()
 <tr><td align="center"><form method="post" name="form1" id="form1">
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
+   
+    <tr><td height="18px" colspan="2" align="center"> <?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>
