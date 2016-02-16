@@ -27,56 +27,48 @@ function getHtmlTable($rs)
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Reports</title>
+    <title>Checklist Summary Report</title>
 </head>
 
 <body>
-<h3>List of Offices may needs to be separated into their respective offices</h3>
 <?php
-if ($result = mysqli_query($DBLink, "SELECT * FROM `MultipleOfficesInOneCode`")) {
-    echo getHtmlTable($result);
-    /* free result set */
-    $result->close();
-}
-if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseGenderWiseNoBankACC`")) {
-    echo getHtmlTable($result);
-    /* free result set */
-    $result->close();
-}
-
-if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseGenderWiseNoMobile`")) {
-    echo getHtmlTable($result);
-    /* free result set */
-    $result->close();
-}
-
-if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseGenderWiseNoEPIC`")) {
-    echo getHtmlTable($result);
-    /* free result set */
-    $result->close();
-}
-
 /* Select queries return a resultset */
-if ($result = mysqli_query($DBLink, "SELECT * FROM `GovtCategoryGenderCount`")) {
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockWiseGenderWiseGovtCategoryPPCount`")) {
     echo getHtmlTable($result);
     /* free result set */
     $result->close();
 }
-if ($result = mysqli_query($DBLink, "SELECT * FROM `InstituteWiseGenderWisePPCount`")) {
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockWiseGenderWisePPStatusCount`")) {
     echo getHtmlTable($result);
     /* free result set */
     $result->close();
 }
-if ($result = mysqli_query($DBLink, "SELECT * FROM `PostStatusWiseMaleFemalePPCount`")) {
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockwiseZeroEntryCount`")) {
     echo getHtmlTable($result);
     /* free result set */
     $result->close();
 }
-if ($result = mysqli_query($DBLink, "SELECT * FROM `GenderWisePPCount`")) {
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockWiseOfficeCount`")) {
     echo getHtmlTable($result);
     /* free result set */
     $result->close();
 }
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockWisePersonnelCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+if ($result = mysqli_query($DBLink, "SELECT * FROM `BlockWiseRemarksCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+if ($result = mysqli_query($DBLink, "SELECT * FROM `RemarksCount`")) {
+    echo getHtmlTable($result);
+    /* free result set */
+    $result->close();
+}
+
 ?>
 </body>
 

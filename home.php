@@ -53,6 +53,7 @@ $rowUser = getRows($rsUser);
         <li><a href="./list-personnel.php" target="_blank">List of Polling Personnel(Edit)</a></li>
         <li><a href="./reports/office-list.php" target="_blank">Checklist of Offices</a></li>
         <li><a href="./personnel-report.php" target="_blank">Checklist of Polling Personnel</a></li>
+        <li><a href="./reports/CheckList.php" target="_blank">Checklist Summary Report</a></li>
         <li><a href="<?php echo $rowUser[0]; ?>" target="_blank">Data in Google Drive</a></li>
         <li><a href="<?php echo $rowUser[1]; ?>" target="_blank">List of All Bank Branches</a></li>
         <li><a href="https://drive.google.com/open?id=0BxaF4qq9cMW9flZqR25FaFRrbWxqMmF5MFprWHFycVd5Vk0xUENrN21GNVRvT3F6MC1OVUE" target="_blank">Upload SRER 2015</a></li>
