@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 22, 2016 at 04:27 PM
+-- Generation Time: Feb 18, 2016 at 04:22 PM
 -- Server version: 5.1.73
 -- PHP Version: 5.3.29
 
@@ -31,13 +31,14 @@ CREATE TABLE IF NOT EXISTS `assembly` (
   `pccd` char(2) CHARACTER SET utf8 NOT NULL,
   `assemblyname` varchar(25) CHARACTER SET utf8 DEFAULT NULL,
   `districtcd` char(2) CHARACTER SET utf8 NOT NULL,
-  `subdivisioncd` char(4) CHARACTER SET utf8 DEFAULT NULL,
+  `subdivisioncd` char(4) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `usercode` int(5) NOT NULL,
   `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`assemblycd`),
+  PRIMARY KEY (`assemblycd`,`subdivisioncd`),
   KEY `pccd` (`pccd`),
   KEY `districtcd` (`districtcd`),
-  KEY `subdivisioncd` (`subdivisioncd`)
+  KEY `subdivisioncd` (`subdivisioncd`),
+  KEY `assemblycd` (`assemblycd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -151,7 +152,9 @@ CREATE TABLE IF NOT EXISTS `dcrc_party` (
   `dc_date` datetime NOT NULL,
   `dc_time` char(15) NOT NULL,
   `usercode` int(11) NOT NULL,
-  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  KEY `dcrc_subcd` (`subdivisioncd`,`dcrcgrp`),
+  KEY `dcrc_sub_asm_party` (`subdivisioncd`,`assemblycd`,`number_of_member`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -241,6 +244,7 @@ CREATE TABLE IF NOT EXISTS `first_rand_table` (
   `office` varchar(50) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `block_muni` char(6) DEFAULT NULL,
+  `block_muni_name` varchar(50) DEFAULT NULL,
   `postoffice` varchar(30) DEFAULT NULL,
   `subdivision` varchar(30) DEFAULT NULL,
   `policestation` varchar(30) DEFAULT NULL,
@@ -313,7 +317,8 @@ CREATE TABLE IF NOT EXISTS `grp_dcrc` (
   `forpc` char(2) DEFAULT NULL,
   `forassembly` char(3) DEFAULT NULL,
   `groupid` smallint(6) DEFAULT NULL,
-  `member` smallint(6) DEFAULT NULL
+  `member` smallint(6) DEFAULT NULL,
+  KEY `sd_asm_gd` (`forsubdivision`,`forassembly`,`groupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -402,7 +407,8 @@ INSERT INTO `menu` (`menu_cd`, `menu`, `link`, `usercode`, `posted_date`) VALUES
 (7, 'Other Data', NULL, 1, '2014-01-03 20:27:06'),
 (8, 'Randomisation', NULL, 1, '2014-01-15 05:59:56'),
 (9, 'Reports', NULL, 1, '2014-01-20 03:45:57'),
-(10, 'Data Manager', NULL, 1, '2015-12-16 09:49:57');
+(10, 'Data Manager', NULL, 1, '2015-12-16 09:49:57'),
+(11, 'Extra PP', NULL, 1, '2016-02-11 11:37:37');
 
 -- --------------------------------------------------------
 
@@ -610,22 +616,9 @@ CREATE TABLE IF NOT EXISTS `personnela` (
   KEY `fk_language_cd` (`languagecd`),
   KEY `fk_lbank_cd` (`bank_cd`),
   KEY `fk_branch_cd` (`branchcd`),
-  KEY `fk_asm_tmp_cd` (`assembly_temp`),
-  KEY `fk_asm_off_cd` (`assembly_off`),
-  KEY `fk_asm_perm_cd` (`assembly_perm`),
   KEY `forsubdivision` (`forsubdivision`,`forassembly`,`groupid`),
   KEY `rand_numb` (`rand_numb`),
   KEY `booked` (`booked`,`selected`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `per_test`
---
-
-CREATE TABLE IF NOT EXISTS `per_test` (
-  `personcd` char(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -869,15 +862,16 @@ INSERT INTO `remarks` (`remarks_cd`, `remarks`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `replacement_log_pregroup` (
-  `code` int(6) NOT NULL,
+  `code` int(6) NOT NULL AUTO_INCREMENT,
   `old_personnel` char(11) NOT NULL,
   `new_personnel` char(11) NOT NULL,
   `forassembly` char(3) NOT NULL,
   `forpc` char(2) NOT NULL,
   `reason` varchar(30) DEFAULT NULL,
   `usercode` int(5) NOT NULL,
-  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1009,7 +1003,10 @@ CREATE TABLE IF NOT EXISTS `second_appt` (
   `polldate` date DEFAULT NULL,
   `polltime` varchar(20) DEFAULT NULL,
   `dcrcgrp` char(6) DEFAULT NULL,
-  KEY `groupid` (`groupid`,`assembly`,`traingcode`,`venuecode`,`dcrcgrp`)
+  KEY `groupid` (`groupid`,`assembly`,`traingcode`,`venuecode`,`dcrcgrp`),
+  KEY `per_asm_gd` (`groupid`,`assembly`),
+  KEY `sec_post_ofc_cd` (`pr_officecd`,`p1_officecd`,`p2_officecd`,`p3_officecd`,`pa_officecd`,`pb_officecd`),
+  KEY `sec_post_sub_cd` (`pr_subdivision`,`p1_subdivision`,`p3_subdivision`,`pa_subdivision`,`pb_subdivision`,`p2_subdivision`,`subdivcd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1086,7 +1083,8 @@ CREATE TABLE IF NOT EXISTS `second_rand_table_reserve` (
   `training_schd` char(9) NOT NULL,
   `districtcd` char(2) NOT NULL,
   `subdivisioncd` char(4) NOT NULL,
-  KEY `traingcode` (`traingcode`,`venuecode`,`assemblycd`,`dcrccd`,`training_schd`)
+  KEY `traingcode` (`traingcode`,`venuecode`,`assemblycd`,`dcrccd`,`training_schd`),
+  KEY `officecd` (`officecd`,`subdivisioncd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1107,7 +1105,9 @@ CREATE TABLE IF NOT EXISTS `second_training` (
   `training_dt` datetime NOT NULL,
   `training_time` char(20) NOT NULL,
   `usercode` int(11) NOT NULL,
-  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`schedule_cd`),
+  KEY `for_subdiv` (`for_subdiv`,`assembly`,`party_reserve`,`start_sl`,`end_sl`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1133,14 +1133,14 @@ CREATE TABLE IF NOT EXISTS `subdivision` (
 --
 
 CREATE TABLE IF NOT EXISTS `submenu` (
-  `submenu_cd` int(4) NOT NULL,
+  `submenu_cd` int(4) NOT NULL AUTO_INCREMENT,
   `menu_cd` int(2) NOT NULL,
   `submenu` varchar(50) NOT NULL,
   `link` varchar(50) DEFAULT NULL,
   `usercode` int(5) NOT NULL,
   `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`submenu_cd`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=95 ;
 
 --
 -- Dumping data for table `submenu`
@@ -1206,7 +1206,6 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 (58, 6, 'Second Training Venue', 'training-venue2.php', 1, '2014-03-06 18:38:47'),
 (59, 7, 'Send SMS', 'send-sms.php', 1, '2014-03-11 01:10:43'),
 (60, 6, 'Second Training Allocation', 'second-training-allocation.php', 1, '2014-03-11 21:24:27'),
-(61, 6, 'Token From District', 'token-creation-dist.php', 1, '2014-03-11 21:26:11'),
 (62, 10, 'Unbooked Personnel Report', 'reports/subdiv-wise-unbooked-stat.php', 1, '2014-03-28 21:43:50'),
 (63, 6, 'Token', 'token-creation.php', 1, '2014-03-29 00:31:10'),
 (65, 8, '2nd App. Letter Populate', 'second-appointment-letter-populate.php', 1, '2014-03-29 00:31:10'),
@@ -1228,7 +1227,14 @@ INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `
 (83, 10, 'Validation Before Second Randomisation', 'validation-before-second-rando.php', 1, '2015-12-17 10:40:25'),
 (84, 9, 'Booth Tagging List', '3rd-app-letter.php', 1, '2015-12-19 10:26:03'),
 (86, 2, 'Polling Station List (Edit)', 'polling-station-list.php', 1, '2015-12-28 16:24:48'),
-(87, 5, 'Reserve PP Cancellation', 'reserve-cancellation.php', 1, '2016-01-13 12:05:43');
+(87, 5, 'Reserve PP Cancellation', 'reserve-cancellation.php', 1, '2016-01-13 12:05:43'),
+(88, 11, 'Swapping', 'swapping-extra.php', 1, '2016-02-11 11:42:33'),
+(89, 11, 'First Training Requirement', 'training-requirement-extra.php', 1, '2016-02-11 11:42:33'),
+(90, 11, 'Training Allocation', 'training-allocation.php', 1, '2016-02-11 11:46:06'),
+(91, 11, 'Token', 'token-creation-extra.php', 1, '2016-02-11 11:46:06'),
+(92, 11, 'First App Letter Populate', 'first-appointment-letter3-extra.php', 1, '2016-02-11 11:48:13'),
+(93, 10, 'Validation Before First Randomisation Populate', 'validation_1st_populate.php', 1, '2016-02-18 09:30:47'),
+(94, 10, 'Bank Wise PP Report', 'bank_wise_pp_report.php', 1, '2016-02-18 09:30:47');
 
 -- --------------------------------------------------------
 
@@ -1401,6 +1407,7 @@ CREATE TABLE IF NOT EXISTS `training_pp` (
 CREATE TABLE IF NOT EXISTS `training_schedule` (
   `schedule_code` char(9) NOT NULL,
   `training_venue` char(6) NOT NULL,
+  `forsubdiv` char(4) NOT NULL,
   `training_type` char(2) NOT NULL,
   `training_dt` datetime NOT NULL,
   `training_time` char(20) NOT NULL,
@@ -1433,9 +1440,9 @@ CREATE TABLE IF NOT EXISTS `training_type` (
 --
 
 INSERT INTO `training_type` (`training_code`, `training_desc`, `usercode`, `posted_date`) VALUES
-('01', 'First Training', 1, '2014-02-24 07:09:11'),
-('02', 'Second Training', 5, '2014-02-20 01:15:19'),
-('03', 'Third Training', 1, '2014-01-29 21:43:11');
+('01', 'First Training', 1, '2016-01-18 08:09:27'),
+('02', 'Second Training', 1, '2016-01-18 08:09:35'),
+('03', 'Third Training', 1, '2016-01-18 17:03:32');
 
 -- --------------------------------------------------------
 
@@ -1452,7 +1459,7 @@ CREATE TABLE IF NOT EXISTS `training_venue` (
   `maximumcapacity` int(4) NOT NULL,
   `usercode` int(5) NOT NULL,
   `posted_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `assemblycd` char(3) NOT NULL,
+  `assemblycd` char(4) DEFAULT NULL,
   PRIMARY KEY (`venue_cd`,`subdivisioncd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1490,7 +1497,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `parliamentcd` char(2) DEFAULT NULL,
   `assemblycd` char(3) NOT NULL,
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
 
 --
 -- Dumping data for table `user`
@@ -1512,72 +1519,102 @@ CREATE TABLE IF NOT EXISTS `user_permission` (
   `submenu_cd` char(4) DEFAULT NULL,
   `sub_submenu_cd` char(6) DEFAULT NULL,
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2011 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2467 ;
 
 --
 -- Dumping data for table `user_permission`
 --
 
 INSERT INTO `user_permission` (`code`, `user_cd`, `menu_cd`, `submenu_cd`, `sub_submenu_cd`) VALUES
-(1952, 1, '1', '', NULL),
-(1953, 1, '2', '1', NULL),
-(1954, 1, '2', '10', NULL),
-(1955, 1, '2', '15', NULL),
-(1956, 1, '2', '27', NULL),
-(1957, 1, '2', '28', NULL),
-(1958, 1, '2', '29', NULL),
-(1959, 1, '2', '30', NULL),
-(1960, 1, '2', '31', NULL),
-(1961, 1, '2', '34', NULL),
-(1962, 1, '2', '36', NULL),
-(1963, 1, '2', '45', NULL),
-(1964, 1, '2', '46', NULL),
-(1965, 1, '2', '52', NULL),
-(1966, 1, '2', '86', NULL),
-(1967, 1, '3', '5', NULL),
-(1968, 1, '3', '6', NULL),
-(1969, 1, '3', '8', NULL),
-(1970, 1, '3', '76', NULL),
-(1971, 1, '4', '3', NULL),
-(1972, 1, '4', '4', NULL),
-(1973, 1, '4', '7', NULL),
-(1974, 1, '4', '9', NULL),
-(1975, 1, '4', '13', NULL),
-(1976, 1, '4', '17', NULL),
-(1977, 1, '4', '26', NULL),
-(1978, 1, '4', '32', NULL),
-(1979, 1, '4', '33', NULL),
-(1980, 1, '4', '43', NULL),
-(1981, 1, '4', '56', NULL),
-(1982, 1, '4', '77', NULL),
-(1983, 1, '4', '80', NULL),
-(1984, 1, '4', '81', NULL),
-(1985, 1, '5', '18', NULL),
-(1986, 1, '5', '19', NULL),
-(1987, 1, '6', '11', NULL),
-(1988, 1, '6', '12', NULL),
-(1989, 1, '6', '14', NULL),
-(1990, 1, '6', '16', NULL),
-(1991, 1, '6', '25', NULL),
-(1992, 1, '6', '35', NULL),
-(1993, 1, '6', '37', NULL),
-(1994, 1, '6', '40', NULL),
-(1995, 1, '6', '63', NULL),
-(1996, 1, '7', '54', NULL),
-(1997, 1, '7', '59', NULL),
-(1998, 1, '7', '74', NULL),
-(1999, 1, '7', '75', NULL),
-(2000, 1, '8', '39', NULL),
-(2001, 1, '8', '57', NULL),
-(2002, 1, '9', '20', NULL),
-(2003, 1, '9', '21', NULL),
-(2004, 1, '9', '22', NULL),
-(2005, 1, '9', '23', NULL),
-(2006, 1, '9', '24', NULL),
-(2007, 1, '9', '38', NULL),
-(2008, 1, '10', '79', NULL),
-(2009, 1, '10', '82', NULL),
-(2010, 1, '10', '83', NULL);
+(2378, 1, '1', '', NULL),
+(2379, 1, '2', '1', NULL),
+(2380, 1, '2', '10', NULL),
+(2381, 1, '2', '15', NULL),
+(2382, 1, '2', '27', NULL),
+(2383, 1, '2', '28', NULL),
+(2384, 1, '2', '29', NULL),
+(2385, 1, '2', '30', NULL),
+(2386, 1, '2', '31', NULL),
+(2387, 1, '2', '34', NULL),
+(2388, 1, '2', '36', NULL),
+(2389, 1, '2', '45', NULL),
+(2390, 1, '2', '46', NULL),
+(2391, 1, '2', '52', NULL),
+(2392, 1, '2', '86', NULL),
+(2393, 1, '3', '5', NULL),
+(2394, 1, '3', '6', NULL),
+(2395, 1, '3', '8', NULL),
+(2396, 1, '3', '76', NULL),
+(2397, 1, '4', '3', NULL),
+(2398, 1, '4', '4', NULL),
+(2399, 1, '4', '7', NULL),
+(2400, 1, '4', '9', NULL),
+(2401, 1, '4', '13', NULL),
+(2402, 1, '4', '17', NULL),
+(2403, 1, '4', '26', NULL),
+(2404, 1, '4', '32', NULL),
+(2405, 1, '4', '33', NULL),
+(2406, 1, '4', '43', NULL),
+(2407, 1, '4', '56', NULL),
+(2408, 1, '4', '77', NULL),
+(2409, 1, '4', '80', NULL),
+(2410, 1, '4', '81', NULL),
+(2411, 1, '5', '18', NULL),
+(2412, 1, '5', '19', NULL),
+(2413, 1, '5', '55', NULL),
+(2414, 1, '5', '70', NULL),
+(2415, 1, '5', '71', NULL),
+(2416, 1, '5', '72', NULL),
+(2417, 1, '5', '87', NULL),
+(2418, 1, '6', '11', NULL),
+(2419, 1, '6', '12', NULL),
+(2420, 1, '6', '14', NULL),
+(2421, 1, '6', '16', NULL),
+(2422, 1, '6', '25', NULL),
+(2423, 1, '6', '35', NULL),
+(2424, 1, '6', '37', NULL),
+(2425, 1, '6', '40', NULL),
+(2426, 1, '6', '58', NULL),
+(2427, 1, '6', '60', NULL),
+(2428, 1, '6', '63', NULL),
+(2429, 1, '7', '54', NULL),
+(2430, 1, '7', '59', NULL),
+(2431, 1, '7', '74', NULL),
+(2432, 1, '7', '75', NULL),
+(2433, 1, '8', '39', NULL),
+(2434, 1, '8', '41', NULL),
+(2435, 1, '8', '42', NULL),
+(2436, 1, '8', '57', NULL),
+(2437, 1, '8', '65', NULL),
+(2438, 1, '8', '66', NULL),
+(2439, 1, '9', '20', NULL),
+(2440, 1, '9', '21', NULL),
+(2441, 1, '9', '22', NULL),
+(2442, 1, '9', '23', NULL),
+(2443, 1, '9', '24', NULL),
+(2444, 1, '9', '38', NULL),
+(2445, 1, '9', '44', NULL),
+(2446, 1, '9', '47', NULL),
+(2447, 1, '9', '48', NULL),
+(2448, 1, '9', '51', NULL),
+(2449, 1, '9', '53', NULL),
+(2450, 1, '9', '67', NULL),
+(2451, 1, '9', '68', NULL),
+(2452, 1, '9', '69', NULL),
+(2453, 1, '9', '84', NULL),
+(2454, 1, '10', '49', NULL),
+(2455, 1, '10', '50', NULL),
+(2456, 1, '10', '62', NULL),
+(2457, 1, '10', '79', NULL),
+(2458, 1, '10', '82', NULL),
+(2459, 1, '10', '83', NULL),
+(2460, 1, '10', '93', NULL),
+(2461, 1, '10', '94', NULL),
+(2462, 1, '11', '88', NULL),
+(2463, 1, '11', '89', NULL),
+(2464, 1, '11', '90', NULL),
+(2465, 1, '11', '91', NULL),
+(2466, 1, '11', '92', NULL);
 
 --
 -- Constraints for dumped tables
@@ -1636,9 +1673,6 @@ ALTER TABLE `personnel`
 -- Constraints for table `personnela`
 --
 ALTER TABLE `personnela`
-  ADD CONSTRAINT `fk_asm_off_cd` FOREIGN KEY (`assembly_off`) REFERENCES `assembly` (`assemblycd`),
-  ADD CONSTRAINT `fk_asm_perm_cd` FOREIGN KEY (`assembly_perm`) REFERENCES `assembly` (`assemblycd`),
-  ADD CONSTRAINT `fk_asm_tmp_cd` FOREIGN KEY (`assembly_temp`) REFERENCES `assembly` (`assemblycd`),
   ADD CONSTRAINT `fk_branch_cd` FOREIGN KEY (`branchcd`) REFERENCES `branch` (`branchcd`),
   ADD CONSTRAINT `fk_language_cd` FOREIGN KEY (`languagecd`) REFERENCES `language` (`languagecd`),
   ADD CONSTRAINT `fk_lbank_cd` FOREIGN KEY (`bank_cd`) REFERENCES `bank` (`bank_cd`),
