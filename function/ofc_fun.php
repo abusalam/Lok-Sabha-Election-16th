@@ -103,7 +103,7 @@ function office_details_ag_forsub($subdiv,$from,$to)
 	  Inner Join block_muni On block_muni.blockminicd = office.blockormuni_cd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd 
-		inner join personnela on personnela.officecd=office.officecd where personnela.subdivisioncd='$subdiv' and personnela.selected='1'";
+		inner join personnela on personnela.officecd=office.officecd where personnela.subdivisioncd='$subdiv' and personnela.selected=1";
 		if($from!='-1')
 		  $sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd limit $from,$to";
 		else

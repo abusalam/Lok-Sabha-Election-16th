@@ -134,6 +134,20 @@ function fatch_assembly_all()
 	connection_close();
 	return $rs;
 }
+function fatch_assembly_second_rand($dist)
+{
+	$sql;$rs;
+	$sql="Select distinct assembly_party.assemblycd,
+	  assembly.assemblyname
+	
+	From assembly_party
+	  Inner Join assembly On assembly_party.assemblycd = assembly.assemblycd
+	  Where assembly_party.assemblycd>0 and assembly.districtcd='$dist'";
+	$sql.=" order by assemblyname asc";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 function fatch_assembly($subdiv)
 {
 	$sql;$rs;
@@ -470,7 +484,7 @@ function fatch_training_venue_available_subdiv($schedule_cd,$subdiv,$post_stat)
 		training_type.training_code
 	Where (training_schedule.no_pp-training_schedule.no_used) > 0 ";
 	if($subdiv !='')
-		$sql.=" and training_venue.subdivisioncd='$subdiv'";
+		$sql.=" and training_schedule.forsubdiv='$subdiv'";
 	if($post_stat !='')
 		$sql.=" and training_schedule.post_status='$post_stat'";
 	if($schedule_cd !='0')
@@ -507,7 +521,7 @@ function fatch_employee()
 function Subdivision_ag_subdivcd($subdivcd)
 {
 	$sql;$rs;
-	$sql="SELECT * FROM subdivision where subdivisioncd='$subdivcd'";
+	$sql="SELECT subdivision FROM subdivision where subdivisioncd='$subdivcd'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$subdivision=$row['subdivision'];
@@ -812,7 +826,7 @@ function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd
 		$j=execDelete($sql1);
 		$sql2="update personnel set poststat='$post_status' where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
-		$sql3="update personnela set poststat='$post_status',rand_numb='0',selected='0',booked='' where personcd='$PersonalID'";
+		$sql3="update personnela set poststat='$post_status',rand_numb='0' where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
 	//}	
 	connection_close();
@@ -856,9 +870,9 @@ function fatch_Personaldtl($PersonalCd)
 	$sql="SELECT personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-		 (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
+		 (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
           FROM personnel
           INNER JOIN office ON personnel.officecd = office.officecd where personcd='$PersonalCd'";
 		 // echo $sql;
@@ -971,6 +985,18 @@ function fatch_post_stat_wise_dtl_transffered($subdiv,$pc)
 		$sql.=" and personnela.forpc='$pc'";
 	$sql.=" Group By personnela.poststat
 	Order By personnela.poststat";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+//training available
+function fatch_post_stat_wise_dtl_tran_pp_available($subdiv,$fsubdiv_cd)
+{
+	$sql="Select Count(training_pp.per_code) as total,poststat.poststatus,poststat.post_stat
+			From poststat
+			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
+			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and training_pp.training_sch Is Null Group By poststat.poststatus,poststat.post_stat";
 	//echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();

@@ -35,7 +35,7 @@ if($sub_cd!='' && $act=='del')
 	{
 		$ret=delete_subdivision($sub_cd);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("subdivision-master.php"); window.close();</script> <?php
 		}
 	}
@@ -55,7 +55,7 @@ if($blockminicd!='' && $act=='del')
 	{
 		$ret=delete_block_muni($blockminicd);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("block-muni-master.php"); window.close();</script> <?php
 		}
 	}
@@ -75,7 +75,7 @@ if($bank_cd!='' && $act=='del')
 	{
 		$ret=delete_bank($bank_cd);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("bank-master.php"); window.close();</script> <?php
 		}
 	}
@@ -96,7 +96,7 @@ if($branch_cd!='' && $act=='del')
 	{
 		$ret=delete_branch($branch_cd,$bank);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("branch-master.php"); window.close();</script> <?php
 		}
 	}
@@ -118,7 +118,7 @@ if($pc_cd!='' && $act=='del')
 	{
 		$ret=delete_parliament($pc_cd,$subdiv);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("pcmaster.php"); window.close();</script> <?php
 		}
 	}
@@ -133,13 +133,14 @@ if($pc_cd!='' && $act=='del')
 $ass_cd=isset($_GET['ass_cd'])?decode($_GET['ass_cd']):"";
 if($ass_cd!='' && $act=='del')
 {
+	$subcode=isset($_GET['subcode'])?decode($_GET['subcode']):"";
 	echo "<img src='images/loading.gif' alt='' />";
-	$cnt=check_assembly_delete($ass_cd);
+	$cnt=check_assembly_delete($ass_cd,$subcode);
 	if($cnt==0)
 	{
 		$ret=delete_assembly($ass_cd);
 		if($ret==1){
-			//echo "<script>location.replace('subdivision-master.php');</script>";
+			//echo "<script>location.replace('subdivision-master.php');
 		?>		<script>window.opener.location.replace("assembly_master.php"); window.close();</script> <?php
 		}
 	}
@@ -153,7 +154,7 @@ if($ass_cd!='' && $act=='del')
 if($opn=='assembly')
 {
 	include_once('function/add_fun.php');
-	$sub_div=$_GET['sub_div'];
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
 	echo "<select name='assembly' id='assembly' style='width:200px;' onchange='return assembly_change(this.value);'>\n";      						
 //	$dist=$_GET['dist'];
 	$rsAss=fatch_assembly($sub_div);
@@ -171,14 +172,16 @@ if($opn=='assembly')
 	echo "</select>\n";
 	unset($rsAss,$num_rows);
 }
+//fetch member
 if($opn=='asmember')
 {
 	include_once('function/add_fun.php');
-	$asmbly=$_GET['asm'];
-	$sub_div=$_GET['sub_div'];
+	$nomember=isset($_GET['nomember'])?$_GET['nomember']:"";
+	$asmbly=isset($_GET['asm'])?$_GET['asm']:"";
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
 	echo "<select name='member' id='member' style='width:200px;' onchange='return member_change(this.value);'>\n";   						
 //	$dist=$_GET['dist'];
-	$rsAss1=fatch_assembly_member($sub_div,$asmbly,0);
+	$rsAss1=fatch_assembly_member($sub_div,$asmbly,$nomember);
 	$num_rows1=rowCount($rsAss1);
 	if($num_rows1>0)
 	{
@@ -193,12 +196,13 @@ if($opn=='asmember')
 	echo "</select>\n";
 	unset($rsAss1,$num_rows1);
 }
+//fetch member
 if($opn=='asmnoparty')
 {
 	include_once('function/add_fun.php');
-	$nomember=$_GET['nomember'];
-	$asmbly=$_GET['asm'];
-	$sub_div=$_GET['sub_div'];      						
+	$nomember=isset($_GET['nomember'])?$_GET['nomember']:"";
+	$asmbly=isset($_GET['asm'])?$_GET['asm']:"";
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";   						
 //	$dist=$_GET['dist'];
 	$rsAss=fatch_assembly_member($sub_div,$asmbly,$nomember);
 	$num_rows=rowCount($rsAss);
@@ -207,7 +211,7 @@ if($opn=='asmnoparty')
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowAss=getRows($rsAss);
-			echo "<input type='text' name='party_req' id='party_req' value='$rowAss[no_party]' style='width:192px;' readonly='readonly'/>";
+			echo "<input type='text' name='party_req' id='party_req' value='$rowAss[no_party]' style='width:192px;'/>";
 			unset($rowAss);
 		}
 	}
@@ -314,13 +318,36 @@ if($opn=='fetchasm')
 	echo "</select>";
 	unset($rsAss1,$num_rows1);
 }
+//fetch member
+if($opn=='dcrcmember')
+{
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
+	$assembly=isset($_GET['assembly'])?$_GET['assembly']:""; 
+	$member=isset($_GET['member'])?$_GET['member']:""; 							
+	echo "<select name='member' id='member' style='width:200px;' onchange='return member_change(this.value);' >\n";   						
+    $rsAss1=fatch_dcrc_member_assembly($sub_div,$member,$assembly);
+	$num_rows1=rowCount($rsAss1);
+	if($num_rows1>0)
+	{
+		echo "<option value='0'>-Select no of member-</option>\n";
+		for($i=1;$i<=$num_rows1;$i++)
+		{
+			$rowAss=getRows($rsAss1);
+			echo "<option value='$rowAss[no_of_member]'>$rowAss[no_of_member]</option>\n";
+			unset($rowAss);
+		}
+	}
+	echo "</select>\n";
+	unset($rsAss1,$num_rows1);
+}
+//fetch dcrc venue
 if($opn=='fetchdcrc')
 {
-	$sub_div=$_GET['sub_div'];
-	$assembly=$_GET['assembly']; 
-	$member=$_GET['member'];
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
+	$assembly=isset($_GET['assembly'])?$_GET['assembly']:""; 
+	$member=isset($_GET['member'])?$_GET['member']:"";
 	echo "<select name='dcrc' id='dcrc' style='width:200px;'>\n";      						
-	$rsDCRC=fatch_dcrc_member_assembly($sub_div,$member,$assembly);
+	$rsDCRC=fatch_dcrc_member_assembly_venue($sub_div,$member,$assembly);
 	$num_rows=rowCount($rsDCRC);
 	if($num_rows>0)
 	{
@@ -328,7 +355,7 @@ if($opn=='fetchdcrc')
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$rowDCRC=getRows($rsDCRC);
-			echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[dc_venue]</option>\n";
+			echo "<option value='$rowDCRC[dcrcgrp]'>$rowDCRC[dc_venue]"." ($rowDCRC[dc_date] - "."$rowDCRC[dc_time])"."</option>\n";
 			unset($rowDCRC);
 		}
 	}
@@ -356,27 +383,6 @@ if($opn=='fetchdcrc')
 	echo "</select>";
 	unset($rsAss1,$num_rows1);
 }*/
-if($opn=='dcrcmember')
-{
-	$sub_div=$_GET['sub_div'];
-	$member="";
-	$assembly=$_GET['assembly']; 							
-	echo "<select name='member' id='member' style='width:200px;' onchange='return member_change(this.value);' >\n";   						
-    $rsAss1=fatch_dcrc_member_assembly($sub_div,$member,$assembly);
-	$num_rows1=rowCount($rsAss1);
-	if($num_rows1>0)
-	{
-		echo "<option value='0'>-Select no of member-</option>\n";
-		for($i=1;$i<=$num_rows1;$i++)
-		{
-			$rowAss=getRows($rsAss1);
-			echo "<option value='$rowAss[no_of_member]'>$rowAss[no_of_member]</option>\n";
-			unset($rowAss);
-		}
-	}
-	echo "</select>\n";
-	unset($rsAss1,$num_rows1);
-}
 
 //=======================Polling Satation===========================
 ?>

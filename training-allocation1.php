@@ -1,21 +1,14 @@
 <?php
 session_start();
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Training Allocation</title>
-
 <?php
 include('header/header.php');
 ?>
 <?php
-if(isset($_SESSION['dist_cd']))
-	$dist_cd=$_SESSION['dist_cd'];
-else
-	$dist_cd="0";
 $subdiv_cd="0";
 if(isset($_SESSION['subdiv_cd']))
 	$subdiv_cd=$_SESSION['subdiv_cd'];
@@ -95,6 +88,28 @@ function venue_capacity(str)
 	xmlhttp1.send();
 	
 }
+/*function venue_capacity(str)
+{
+	if (window.XMLHttpRequest)
+	  {
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("venue_capacity").innerHTML=xmlhttp.responseText;
+		training_alloted(document.getElementById('training_type').value);
+		}
+	  }
+	xmlhttp.open("GET","ajax-training.php?venue="+str+"&opn=venuecap",true);
+	xmlhttp.send();
+	
+}*/
 function training_alloted()
 {
 	var training_venue=document.getElementById('training_venue').value;
@@ -140,7 +155,7 @@ function area_detail(str)
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 		document.getElementById("area_of_preference").innerHTML=xmlhttp.responseText;
-		 if(str==0)
+		if(str==0)
 		  fetch_sub_wise_venue('0');
 		 else
 		  fetch_sub_wise_venue('<?php print $subdiv_cd; ?>');
@@ -174,7 +189,7 @@ function member_available(str)
 			document.getElementById("member_available").innerHTML="";
 		}
 	  }
-	xmlhttpMA.open("GET","ajax-training.php?post_stat="+str+"&tr_type="+training_type+"&subdivision=<?php print $subdiv_cd; ?>&areapref="+areapref+"&area="+area+"&opn=membavl1",true);
+	xmlhttpMA.open("GET","ajax-training.php?post_stat="+str+"&tr_type="+training_type+"&subdivision=<?php print $subdiv_cd; ?>&areapref="+areapref+"&area="+area+"&opn=membavl",true);
 	xmlhttpMA.send();
 }
 
@@ -188,6 +203,7 @@ function validate()
 	var training_time=document.getElementById("training_time").value;
 	var post_status=document.getElementById("post_status").value;
 	var no_pp=document.getElementById("no_pp").value;
+	
 	if(area_pref=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Area of Preference";
@@ -216,7 +232,6 @@ function validate()
 		document.getElementById("training_type").focus();
 		return false;
 	}
-
 	if(training_dt=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Training Date";
@@ -235,16 +250,13 @@ function validate()
 		document.getElementById("post_status").focus();
 		return false;
 	}
-	//if(document.getElementById('chksetpollingperson').checked==true)
-	//{
-		if(no_pp=="" || no_pp=="0")
-		{
-			document.getElementById("msg").innerHTML="Enter no of Polling Personnel";
-			document.getElementById("no_pp").focus();
-			return false;
-		}
-	//}
-	//alert(no_pp);
+	if(no_pp=="" || no_pp=="0")
+	{
+		document.getElementById("msg").innerHTML="Enter no of Polling Personnel";
+		document.getElementById("no_pp").focus();
+		return false;
+	}
+	
 	var v_Cap=document.getElementById("v_Cap").value;
 	var trn_alloted=document.getElementById("trn_alloted").value;
 	if(((+v_Cap)-(+trn_alloted))<no_pp)
@@ -260,7 +272,6 @@ function validate()
 		document.getElementById("no_pp").focus();
 		return false;
 	}
-	
 }
 </script>
 </head>
@@ -279,9 +290,7 @@ if($action=='Submit')
 	$no_pp1=isset($_POST['no_pp'])?$_POST['no_pp']:"";
 	$hidno_pp=isset($_POST['hidno_pp'])?$_POST['hidno_pp']:"";
 	$no_pp=($no_pp1=="")?$hidno_pp:$no_pp1;
-	
-	//echo $no_pp;
-	//exit();
+	$subdiv_cd=$_SESSION['subdiv_cd'];
 	$usercd=$user_cd;
 	
 	$subdivision=0; $for_subdivision=0; $for_pc=0; $assembly_temp=0; $assembly_perm=0; $assembly_off=0; $choice_type=0; $choice_area=0;
@@ -296,8 +305,7 @@ if($action=='Submit')
 	if($area_pref=='O')
 		$choice_area=$_POST['area'];
 		
-		
-	$choice_type=$area_pref;
+	$choice_type=$area_pref;	
 	$schedule_cd;
 	$rsmaxcode=fatch_schedule_maxcode($training_venue);
 	$rowmaxcode=getRows($rsmaxcode);
@@ -306,18 +314,18 @@ if($action=='Submit')
 	else
 		$schedule_cd=sprintf("%09d",$rowmaxcode['schedule_code']+1);
 			
-	$ret=save_training_schedule1($schedule_cd,$training_venue,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
+	$ret=save_training_schedule1($schedule_cd,$training_venue,$subdiv_cd,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
 	if($ret==1)
 	{
-		$msg="<div class='alert-success'>Record saved successfully</div>";
-		/*$rsTrainingPP=fatch_personnel_ag_training_pp($training_type,$post_status,$subdivision,$for_subdivision,$for_pc,$assembly_temp,$assembly_off,$assembly_perm,$no_pp);
+		$rsTrainingPP=fatch_personnel_ag_training_pp($training_type,$post_status,$subdiv_cd,$choice_type,$choice_area,$no_pp);
 		$num_rows=rowCount($rsTrainingPP);
 		if($num_rows>0)
 		{
+			update_training_sch_no_used($num_rows,$schedule_cd);
 			$rec=0;
 			include_once('inc/commit_con.php');
 			mysqli_autocommit($link,FALSE);
-			$sql="update training_pp set training_sch=?, training_booked='Y', training_attended='P' where training_type=? and
+			$sql="update training_pp set training_sch=?, training_booked='Y', training_attended='Y' ,training_showcause='N' where training_type=? and
 	post_stat=? and per_code=?";
 			$stmt = mysqli_prepare($link, $sql);
 			for($i=0;$i<$num_rows;$i++)
@@ -325,7 +333,6 @@ if($action=='Submit')
 				$rowTrainingPP=getRows($rsTrainingPP);
 				$person_cd=$rowTrainingPP['per_code'];
 				//$returnVal=update_training_pp_ag_training_schedule($schedule_cd,$training_type,$post_status,$rowTrainingPP['per_code']);
-
 				
 				mysqli_stmt_bind_param($stmt, 'ssss', $schedule_cd,$training_type,$post_status,$person_cd);
 				mysqli_stmt_execute($stmt);
@@ -339,11 +346,11 @@ if($action=='Submit')
 			}
 			else
 			{
-				$msg="<div class='alert-success'>$rec Record(s) saved successfully</div>";
+				$msg="<div class='alert-success'>$rec Record(s) assigned successfully</div>";
 			}
 			mysqli_stmt_close($stmt);
 			mysqli_close($link);
-		}*/
+		}
 	}
 }
 ?>
@@ -367,7 +374,7 @@ function training_required()
 		document.getElementById("trng_req").innerHTML=xmlhttp.responseText;
 		}
 	  }	   
-	xmlhttp.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnreq1",true);
+	xmlhttp.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnreq",true);
 	xmlhttp.send();
 	
 	xmlhttp1.onreadystatechange=function()
@@ -378,7 +385,7 @@ function training_required()
 		}
 	  }
 	  //alert("ajax-training.php?subdiv="<?php /*?><?php print $subdiv_cd; ?><?php */?>);
-	xmlhttp1.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnalloted_forsub1",true);
+	xmlhttp1.open("GET","ajax-training.php?subdiv=<?php print $subdiv_cd; ?>&opn=trnalloted_forsub",true);
 	xmlhttp1.send();
 }
 </script>
@@ -416,7 +423,6 @@ function training_required()
         <option value="O">Assembly of Office Address</option>
       </select>&nbsp; <a href="#" id="dialog-link">View Availability</a></td></tr>
     <tr id="area_of_preference"></tr>
-   
 	<tr>
 	  <td align="left"><span class="error">*</span>Training Venue</td>
 	  <td align="left" width="60%"><span id="venue_training"><select name="training_venue" id="training_venue" style="width:220px;" onchange="javascript:return venue_capacity(this.value);">
@@ -455,7 +461,7 @@ function training_required()
 								unset($rsTrainingType,$num_rows,$rowTrainingType);
 							?>
       </select></td></tr>
-   
+
     <tr>
       <td align="left"><span class="error">*</span>Training Date</td>
       <td align="left"><input type="text" name="training_dt" id="training_dt" maxlength="10" style="width:220px;" onchange="javascript:return training_alloted();" /></td>
@@ -487,14 +493,13 @@ function training_required()
       <td align="left"><span class="error">*</span>No of Polling Personnel</td>
       <td align="left"><input type="text" name="no_pp" id="no_pp" maxlength="10" style="width:212px;" onkeypress="javascript:return wholenumbersonly(event);" disabled='true'/>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="chksetpollingperson" name="chksetpollingperson" onclick="return chksetpollingperson_change();" />
       <input type="hidden" name="hidno_pp" id="hidno_pp" />
-        <label for="chksetpollingperson" class="text_small">Change No</label></td>
+      <label for="chksetpollingperson" class="text_small">Change No</label>
+     </td>
     </tr>
     <tr id="trSubdiv" style="visibility:hidden;"><td align="left">&nbsp;</td><td align="left">&nbsp;</td></tr>
-    <tr>
-       <td colspan="2" align="center">
+    <tr><td colspan="2" align="center">
     	<table width="70%" id="training_alloted" class="table2 demo-section" cellpadding="0" cellspacing="0"></table>
-       </td>
-    </tr>
+    </td></tr>
     <tr>
       <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" /></td></tr>
       <tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
@@ -510,13 +515,13 @@ function training_required()
 	for($j=1;$j<=$num_rows1;$j++)
 	{
 		$row_sub=getRows($rs_dist);
-	    $rs=fatch_post_stat_wise_dtl_transffered($row_sub['0'],'');
+	    $rs=fatch_post_stat_wise_dtl_tran_pp_available($row_sub['0'],$subdiv_cd);
 		$num_rows=rowCount($rs);
 		echo "</br><b>".$row_sub['2']."</b> ::</br>Available :: ";
 		for($i=1;$i<=$num_rows;$i++)
 		{
 			$row=getRows($rs);
-			echo $row['poststat'].": ".$row['total']."; \n";
+			echo $row['post_stat'].": ".$row['total']."; \n";
 			$row=NULL;
 		}
 		$num_rows=0;			
@@ -527,8 +532,8 @@ function training_required()
     ?></p>
 </div>
 </div>
- <div id="calendar" style="width: 243px;display:none;"></div> 
- <style>
+<div id="calendar" style="width: 243px;display:none;"></div>  
+<style>
  #dialog-link {
 		padding: .4em 1em .4em 4px;
 		text-decoration: none;
@@ -652,6 +657,4 @@ function training_required()
 		);
 	});
 	</script>
-
-
 </html>

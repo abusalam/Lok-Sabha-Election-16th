@@ -240,14 +240,14 @@ if($submit=="Submit")
         <td align="left"><select name="assembly" id="assembly" style="width:180px;" disabled="disabled">
           					<option value="0">-Select Assembly-</option>
                             <?php 	//$districtcd=$dist_cd;
-									$rsBn1=fatch_assembly_all();
+									$rsBn1=fatch_assembly_second_rand($dist_cd);
 									$num_rows=rowCount($rsBn1);
 									if($num_rows>0)
 									{
 										for($i=1;$i<=$num_rows;$i++)
 										{
 											$rowSubDiv=getRows($rsBn1);
-											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
+											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[1]</option>";
 										}
 									}
 									$rsBn1=null;

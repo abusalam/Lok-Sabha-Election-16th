@@ -271,6 +271,7 @@ if($action=='Submit')
 	$no_pp1=$_POST['no_pp'];
 	$hidno_pp=$_POST['hidno_pp'];
 	$no_pp=($no_pp1=="")?$hidno_pp:$no_pp1;
+	$subdiv_cd=$_SESSION['subdiv_cd'];
 	//echo $no_pp;
 	//exit();
 	$usercd=$user_cd;
@@ -297,7 +298,7 @@ if($action=='Submit')
 	else
 		$schedule_cd=sprintf("%09d",$rowmaxcode['schedule_code']+1);
 			
-	$ret=save_training_schedule1($schedule_cd,$training_venue,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
+	$ret=save_training_schedule1($schedule_cd,$training_venue,$subdiv_cd,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
 	if($ret==1)
 	{
 		$msg="<div class='alert-success'>Record saved successfully</div>";

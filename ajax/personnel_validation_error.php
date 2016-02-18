@@ -45,6 +45,7 @@ else
 		   <td>Branch</td>
 		   <td>Bank A/C No</td>
 		   <td>Mobile No</td>
+		   <td>Epic No</td>
 		   </tr></thead>";
         echo $display;
        $body .= $display;
@@ -59,6 +60,7 @@ else
 		  $perm_length = strlen((string) $result['assembly_perm']);
 		  $ac_length = strlen((string) $result['acno']);
 		  $mob_length = strlen((string) $result['mob_no']);
+		  $epc_length = strlen((string) $result['epic']);
 		       $display = "<tr>";               
                $display .= "<td>$i</td>";
 			   if($result['officecd'] == '' or $result['officecd'] == '0' or $ofc_length != 10)
@@ -134,6 +136,10 @@ else
                     $display .=  "<td bgcolor = \"FA5858\">" .$result['mob_no']  .   "</td>";
                else
 			        $display .=  "<td>" .$result['mob_no']  .   "</td>";
+			   if(strpos($result['epic'], 'XXXX') !== false or $epc_length < 6)
+                    $display .=  "<td bgcolor = \"FA5858\">" .$result['epic']  .   "</td>";
+               else
+			        $display .=  "<td>" .$result['epic']  .   "</td>";
                $display .=  "</tr>";
 	       echo $display;
                $body .= $display;

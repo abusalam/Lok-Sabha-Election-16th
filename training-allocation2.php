@@ -405,17 +405,13 @@ function training_required()
     	<table width="100%" id="trng_alloted" class="table2 demo-section" cellpadding="0" cellspacing="0" border="0"></table>
     </td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
-     <tr>
+    <!--<tr>
       <td align="left"><span class="error">*</span>Area of Preference</td>
       <td align="left"><select name="area_pref" id="area_pref" style="width:220px;" onchange="javascript:return area_detail(this.value);">
 		<option value="0">-Select Preference-</option>
         <option value="S">Subdivision of PP</option>
-        <option value="D">Alloted Subdivision</option>
-        <option value="T">Assembly of Temporary Address</option>
-        <option value="P">Assembly of Permanent Address</option>
-        <option value="O">Assembly of Office Address</option>
       </select>&nbsp; <a href="#" id="dialog-link">View Availability</a></td></tr>
-    <tr id="area_of_preference"></tr>
+    <tr id="area_of_preference"></tr>-->
    
 	<tr>
 	  <td align="left"><span class="error">*</span>Training Venue</td>

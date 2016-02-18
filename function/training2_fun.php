@@ -113,6 +113,7 @@ function fatch_training2_allocation_list($sub_div,$training_venue,$PC,$assembly)
 	  Inner Join second_training On training_venue_2.venue_cd =
 		second_training.training_venue
 	  Inner Join assembly On second_training.assembly = assembly.assemblycd 
+	  and second_training.for_subdiv = assembly.subdivisioncd
 	Where second_training.schedule_cd > 0 ";
    if($sub_div!='' && $sub_div!='0')
 		$sql.=" and second_training.for_subdiv ='$sub_div'";
@@ -144,6 +145,7 @@ function fatch_training2_allocation_listAct($sub_div,$training_venue,$PC,$assemb
 	  Inner Join second_training On training_venue_2.venue_cd =
 		second_training.training_venue
 	  Inner Join assembly On second_training.assembly = assembly.assemblycd 
+	  and second_training.for_subdiv = assembly.subdivisioncd
 	Where second_training.schedule_cd > 0 ";
    if($sub_div!='' && $sub_div!='0')
 		$sql.=" and second_training.for_subdiv ='$sub_div'";

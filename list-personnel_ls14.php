@@ -5,7 +5,7 @@ session_start();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Personal List for LS14</title>
+<title>Personnel WBSLA16 List</title>
 <?php
 include('header/header.php');
 ?>

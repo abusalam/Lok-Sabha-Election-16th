@@ -251,7 +251,7 @@ function schedule_change(str)
     
      <tr style="display:none;" id="difnt_sch">
           <td align="left"><span class="error">&nbsp;&nbsp;</span>Training Schedule Code &nbsp;&nbsp;&nbsp; <span id="drop_sch"><select name="training_sch" id="training_sch" style="width:220px;">
-	    <option value="0">-Select Training Schedule-</option>
+	    <option value="">-Select Training Schedule-</option>
 	    </select></span></td>
           <td align="left" id="venue_details" style="font-size:10.4px">&nbsp;
            
@@ -280,7 +280,8 @@ function chkSameVenueTraining_change()
 	{
 		$("#difnt_sch").hide();
 		document.getElementById('training_sch').value='';
-		schedule_change('0');
+		schedule_change('');
+		
 	}
 	else
 	{

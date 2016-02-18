@@ -37,11 +37,11 @@ if($opn=='gen_sl')
 			//echo $rsApp;
 		//	exit;
 		  $f_sl=first_app_letter3_max_slno($subdiv);
-		  
-		
-		echo "Records available: $f_sl;<input type='hidden' name='hid_rec' id='hid_rec' value='$f_sl' />&nbsp;&nbsp;&nbsp;&nbsp;";
+		 $subdiv1='"'.encode($subdiv).'"';  
+		echo "Records available: $f_sl;<input type='hidden' name='hid_rec' id='hid_rec' value='$f_sl' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "Print From: &nbsp;<input type='text' name='txtfrom' id='txtfrom' style='width:50px;' />&nbsp;&nbsp;&nbsp;
 	To: &nbsp;<input type='text' name='txtto' id='txtto' style='width:50px;' />";
+	//&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b> &nbsp;&nbsp;&nbsp; <img src='images/xl.gif' style='vertical-align:middle; padding-bottom: 3px;cursor: pointer;' title='Excel'  height='18px' onclick='javascript:excel_print($subdiv1);'/>
 		}
 	//}
 }
@@ -56,10 +56,12 @@ if($opn=='gen_sl_extra')
 		//	exit;
 		  $f_sl=first_app_letter3_max_slno_extra($subdiv,$phase);
 		  
-		
+		 $subdiv1='"'.encode($subdiv).'"';  
+		 $phase1='"'.encode($phase).'"'; 
 		echo "Records available: $f_sl;<input type='hidden' name='hid_rec' id='hid_rec' value='$f_sl' />&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "Print From: &nbsp;<input type='text' name='txtfrom' id='txtfrom' style='width:50px;' />&nbsp;&nbsp;&nbsp;
-	To: &nbsp;<input type='text' name='txtto' id='txtto' style='width:50px;' />";
+		echo "Print From: &nbsp;<input type='text' name='txtfrom' id='txtfrom' style='width:50px;' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	To: &nbsp;<input type='text' name='txtto' id='txtto' style='width:50px;' /> &nbsp;&nbsp;&nbsp;&nbsp;";
+	//<b>OR</b> &nbsp;&nbsp;&nbsp; <img src='images/xl.gif' style='vertical-align:middle; padding-bottom: 3px;cursor: pointer;' title='Excel'  height='18px' onclick='javascript:excel_print($subdiv1,$phase1);'/>
 		}
 	//}
 }

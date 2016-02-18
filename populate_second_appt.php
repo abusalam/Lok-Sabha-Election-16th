@@ -95,8 +95,16 @@ $i=execUpdate($sql18);
 //==================================END of DCRC join=============================================//
 
 //=================================Start of Second Training==============================================//
+
+$sql192="update personnela 
+set personnela.training2_sch=NULL
+where forsubdivision='$subdiv_cd' and  personnela.booked = 'P'";
+$i=execUpdate($sql192);
+
 $sql19="update second_appt join second_training on second_appt.subdivcd=second_training.for_subdiv and second_appt.assembly=second_training.assembly set second_appt.traingcode=second_training.schedule_cd, second_appt.venuecode=second_training.training_venue , second_appt.training_date=second_training.training_dt, second_appt.training_time=second_training.training_time where second_training.party_reserve='P' and second_appt.groupid>=second_training.start_sl and second_appt.groupid<=second_training.end_sl and second_training.for_subdiv='$subdiv_cd'";
 $i=execUpdate($sql19);
+
+
 
 //Update Training in Personnela
 $sql191="update personnela join second_training on personnela.forsubdivision=second_training.for_subdiv and personnela.forassembly=second_training.assembly

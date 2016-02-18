@@ -10,6 +10,7 @@ function fatch_assembly_party_details($assemb,$subdiv)
 	
 	From assembly_party
 	  Inner Join assembly On assembly_party.assemblycd = assembly.assemblycd
+	          and assembly_party.subdivisioncd = assembly.subdivisioncd
 	  inner join subdivision on subdivision.subdivisioncd=assembly_party.subdivisioncd
 		where assembly_party.assemblycd>0";
 	if($subdiv!='' && $subdiv!=NULL && $subdiv!=0)
@@ -33,6 +34,7 @@ function fatch_assembly_party_details1($assemb,$subdiv,$p_num,$items)
 	
 	From assembly_party
 	  Inner Join assembly On assembly_party.assemblycd = assembly.assemblycd
+	     and assembly_party.subdivisioncd = assembly.subdivisioncd
 	  inner join subdivision on subdivision.subdivisioncd=assembly_party.subdivisioncd
 		where assembly_party.assemblycd>0";
 	if($subdiv!='' && $subdiv!=NULL && $subdiv!=0)

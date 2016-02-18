@@ -314,13 +314,14 @@ if($action=='Submit')
 	else
 		$schedule_cd=sprintf("%09d",$rowmaxcode['schedule_code']+1);
 			
-	$ret=save_training_schedule1($schedule_cd,$training_venue,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
+	$ret=save_training_schedule1($schedule_cd,$training_venue,$subdiv_cd,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercd,$choice_type,$choice_area);
 	if($ret==1)
 	{
 		$rsTrainingPP=fatch_personnel_ag_training_pp($training_type,$post_status,$subdiv_cd,$choice_type,$choice_area,$no_pp);
 		$num_rows=rowCount($rsTrainingPP);
 		if($num_rows>0)
 		{
+			update_training_sch_no_used($num_rows,$schedule_cd);
 			$rec=0;
 			include_once('inc/commit_con.php');
 			mysqli_autocommit($link,FALSE);
@@ -420,7 +421,7 @@ if($action=='Submit')
         <option value="T">Assembly of Temporary Address</option>
         <option value="P">Assembly of Permanent Address</option>
         <option value="O">Assembly of Office Address</option>
-      </select></td></tr>
+      </select>&nbsp; <a href="#" id="dialog-link">View Availability</a></td></tr>
     <tr id="area_of_preference"></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Training Venue</td>
@@ -506,8 +507,67 @@ if($action=='Submit')
 </td></tr></table>
 </td></tr>
 </table>
+<div id="dialog" title="Districtwise Post Status Availability" >
+	<p style="font-size:12px">
+    <?php
+	$rs_dist=fatch_Subdivision($dist_cd);
+	$num_rows1=rowCount($rs_dist);
+	for($j=1;$j<=$num_rows1;$j++)
+	{
+		$row_sub=getRows($rs_dist);
+	    $rs=fatch_post_stat_wise_dtl_tran_pp_available($row_sub['0'],$subdiv_cd);
+		$num_rows=rowCount($rs);
+		echo "</br><b>".$row_sub['2']."</b> ::</br>Available :: ";
+		for($i=1;$i<=$num_rows;$i++)
+		{
+			$row=getRows($rs);
+			echo $row['post_stat'].": ".$row['total']."; \n";
+			$row=NULL;
+		}
+		$num_rows=0;			
+		$rs=NULL;
+	}
+	unset($rs,$row,$num_rows,$rs_dist,$i,$j,$num_rows1);
+		
+    ?></p>
+</div>
 </div>
 <div id="calendar" style="width: 243px;display:none;"></div>  
+<style>
+ #dialog-link {
+		padding: .4em 1em .4em 4px;
+		text-decoration: none;
+		position: relative;
+		font-size:11px;
+	}
+	#dialog-link span.ui-icon {
+		margin: 0 3px 0 0;
+		position: absolute;
+		left: .2em;
+		top: 50%;
+		margin-top: -8px;
+		font-size:10px;
+	}
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	#icons li {
+		margin: 2px;
+		position: relative;
+		padding: 3px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	#icons span.ui-icon {
+		float: left;
+		margin: 0 4px;
+	}
+	.fakewindowcontain .ui-widget-overlay {
+		position: absolute;
+	}
+ </style>
 <script>
 	$(document).ready(function() {
 		$("#calendar").kendoCalendar();
@@ -522,6 +582,7 @@ if($action=='Submit')
 					calendar.navigateUp();
 					break;
 				case "down":
+
 					calendar.navigateDown(calendar.value());
 					break;
 				case "past":
@@ -553,6 +614,47 @@ if($action=='Submit')
 
 		$("#navigate").click(navigate);
 	});
-</script>
+	</script>
 </body>
-</html>
+ 
+<link href="css/ui-lightness/jquery-ui-1.10.4.custom.css" rel="stylesheet" />
+	<script src="jq/jquery-ui-1.10.4.custom.js"></script>
+	<script>
+	$(function() {
+
+		
+		$( "#dialog" ).dialog({
+			autoOpen: false,
+			width: 700,
+			buttons: [
+				
+				{
+					text: "Cancel",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			]
+		});
+
+		// Link to open the dialog
+		$( "#dialog-link" ).click(function( event ) {
+			$( "#dialog" ).dialog( "open" );
+			event.preventDefault();
+		});
+		
+
+	
+
+		// Hover states on the static widgets
+		$( "#dialog-link, #icons li" ).hover(
+			function() {
+				$( this ).addClass( "ui-state-hover" );
+			},
+			function() {
+				$( this ).removeClass( "ui-state-hover" );
+			}
+		);
+	});
+	</script>
+ </html>

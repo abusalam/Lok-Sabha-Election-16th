@@ -123,9 +123,9 @@ function validate()
 		member.focus();
 		return false;
 	}
-	if(party_req.value=="0" || party_req.value=="")
+	if(party_req.value=="0" || $.trim(party_req.value)=="")
 	{
-		document.getElementById("msg").innerHTML="Enter no of party require";
+		document.getElementById("msg").innerHTML="Enter no of party required";
 		party_req.focus();
 		return false;
 	}
@@ -214,14 +214,14 @@ if($action=='Submit')
 	
 	// Getting DCRC code
 	//if($subdivision_code=='')
-	{
+	//{
 		$rsmaxcode=fatch_dcrc_maxcode($subdivision);
 		$rowmaxcode=getRows($rsmaxcode);
 		if($rowmaxcode['dcrc_cd']==null)
 			$dcrc_code=$subdivision."01";
 		else
 			$dcrc_code=sprintf("%06d",$rowmaxcode['dcrc_cd']+1);
-	}
+	//}
 	
 	$usercd=$user_cd;
 	
@@ -247,7 +247,7 @@ if($action=='Submit')
 //	}
 //	else
 //	{
-		$dup_check=duplicate_dcrc_master($assembly,$member,$subdivision);
+		$dup_check=duplicate_dcrc_master($party_req,$assembly,$member,$subdivision);
 		if($dup_check==0)
 		{
 			$ret=save_dcrc_master($dcrc_code,$subdivision,$assembly,$member,$dc_venue,$dc_address,$rc_venue,$dist_cd,$usercd,$rc_address);
@@ -262,7 +262,7 @@ if($action=='Submit')
 		}
 		else
 		{
-			$msg="<div class='alert-error'>Assembly party already exists</div>";
+			$msg="<div class='alert-error'>Duplicate entry is not allow</div>";
 		}
 //	}
 }
@@ -401,7 +401,7 @@ function load_data()
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>No of Party</td>
-      <td align="left" id="party_result"><input type='text' name="party_req" id="party_req" maxlength="4" style="width:192px;" onkeypress="javascript:return wholenumbersonly(event);" readonly="readonly"/></td>
+      <td align="left" id="party_result"><input type='text' name="party_req" id="party_req" maxlength="4" style="width:192px;" onkeypress="javascript:return wholenumbersonly(event);" /></td>
     </tr>
     <tr>
       <td align="left"><span class="error">*</span>DC Venue</td>

@@ -9,11 +9,15 @@ $i=execDelete($sql0);
 
 
 //Update Training in Personnela
-$sql191="update personnela join second_training on personnela.forsubdivision=second_training.for_subdiv and personnela.forassembly=second_training.assembly
-set personnela.training2_sch=second_training.schedule_cd
-where second_training.party_reserve='R' and personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_subdiv='$subdiv_cd' and  personnela.booked = 'R'";
+$sql191="update personnela 
+set personnela.training2_sch=NULL
+where forsubdivision='$subdiv_cd' and  personnela.booked = 'R'";
 $i=execUpdate($sql191);
 
+$sql192="update personnela join second_training on personnela.forsubdivision=second_training.for_subdiv and personnela.forassembly=second_training.assembly
+set personnela.training2_sch=second_training.schedule_cd
+where second_training.party_reserve='R' and personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and second_training.for_subdiv='$subdiv_cd' and  personnela.booked = 'R'";
+$i=execUpdate($sql192);
 
 
 //insert data into second_rand_table_reserve

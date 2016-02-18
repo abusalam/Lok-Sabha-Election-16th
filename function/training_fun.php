@@ -291,6 +291,20 @@ function fetch_training_post_alloted($subdiv,$tr_type)
 	return $rs;
 }
 /**************************************end of traning allocation********************/
+
+/******************************training allocation 2*********************/
+function training_required_2($subdiv)
+{
+	/*$sql; $rs;
+	$sql="Select Count(training_pp.per_code) as total,poststat.post_stat
+			From poststat
+			  Inner Join personnela On personnela.poststat = poststat.post_stat
+			where training_pp.for_subdivision='$subdiv' and training_pp.training_type='$training_type' Group By poststat.post_stat";
+	//		print $sql; exit;
+	$rs=execSelect($sql);
+	return $rs;*/
+}
+/*********************************/
 function training_alloted_forsub($subdiv,$training_type)
 {
 	$sql; $rs;
@@ -333,9 +347,9 @@ function save_training_schedule($schedule_code,$training_venue,$training_type,$t
 	$i=execInsert($sql);
 	return $i;
 }
-function save_training_schedule1($schedule_code,$training_venue,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercode,$choice_type,$choice_area)
+function save_training_schedule1($schedule_code,$training_venue,$subdiv_cd,$training_type,$training_dt,$training_time,$post_status,$no_pp,$usercode,$choice_type,$choice_area)
 {
-	$sql="insert into training_schedule (schedule_code,training_venue,training_type,training_dt,training_time,post_status, no_pp, usercode, choice_type, choice_area) values ('$schedule_code','$training_venue','$training_type','$training_dt','$training_time','$post_status', '$no_pp','$usercode','$choice_type','$choice_area')";
+	$sql="insert into training_schedule (schedule_code,training_venue,forsubdiv,training_type,training_dt,training_time,post_status, no_pp, usercode, choice_type, choice_area) values ('$schedule_code','$training_venue','$subdiv_cd','$training_type','$training_dt','$training_time','$post_status', '$no_pp','$usercode','$choice_type','$choice_area')";
 	$i=execInsert($sql);
 	return $i;
 }
@@ -360,6 +374,12 @@ function fatch_personnel_ag_training_pp($training_type,$post_status,$sub,$areapr
 //	echo $sql; exit;
 	$rs=execSelect($sql);
 	return $rs;
+}
+function update_training_sch_no_used($num_rows,$schedule_cd)
+{
+	$sql="update training_schedule set no_used='$num_rows' where schedule_code='$schedule_cd'";
+	$i=execUpdate($sql);
+	return $i;
 }
 			//Area of Pref//
 function fatch_subdiv_from_personal_trainingpp_ag_subdiv($subdiv_cd)
@@ -528,7 +548,8 @@ function fatch_training_allocation_list($sub_div,$training_type,$training_venue,
 	if($training_type!='0')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')
-		$sql.=" and training_venue.subdivisioncd ='$sub_div'";
+		//$sql.=" and training_venue.subdivisioncd ='$sub_div'";
+		$sql.=" and training_schedule.forsubdiv ='$sub_div'";
 	if($training_venue!='')
 		$sql.=" and training_venue.venuename like '$training_venue%'";
 	if($frmdt!='')
@@ -561,7 +582,8 @@ function fatch_training_allocation_listAct($sub_div,$training_type,$training_ven
 	if($training_type!='0')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')
-		$sql.=" and training_venue.subdivisioncd ='$sub_div'";
+		//$sql.=" and training_venue.subdivisioncd ='$sub_div'";
+	    $sql.=" and training_schedule.forsubdiv ='$sub_div'";
 	if($training_venue!='')
 		$sql.=" and training_venue.venuename like '$training_venue%'";
 	if($frmdt!='')
@@ -734,7 +756,7 @@ function update_training_pp_schedule($training_type,$sub)
 	$sql="Update training_pp set training_sch=NULL,	training_booked=NULL,training_attended=NULL,training_showcause=NULL where `training_type`='$training_type' and for_subdivision='$sub'";
 	execUpdate($sql);
 	
-	$sql1="Update training_schedule set no_used=0 where `training_type`='$training_type' and substr(schedule_code,1,4)='$sub'";
+	$sql1="Update training_schedule set no_used=0 where `training_type`='$training_type' and forsubdiv='$sub'";
 	
 	execUpdate($sql1);
 	connection_close();

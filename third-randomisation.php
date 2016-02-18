@@ -10,6 +10,7 @@ session_start();
 .lock{ background-attachment:fixed; background: #999 url(images/Lock-icon.png) left no-repeat; background-size: 45%; padding-left:50px; border: outset;}
 .unlock{ background-attachment:fixed; background: #999 url(images/Unlock-icon.png) left no-repeat; background-size: 45%; padding-left:50px; border: outset;}
 .button1{ background:#999; border:outset;}
+.scroller1 { border:1px solid #ccc; max-height: 300px; min-height:0px; overflow-y: scroll; }
 </style>
 <?php
 include('header/header.php');
@@ -241,7 +242,7 @@ function randomise_click()
 
   </td>
   <td align="left" width="30%" style="padding-right:20px;">
-  <div class="scroller" id="assembly_details">
+  <div class="scroller1" id="assembly_details">
 </div>
   </td>
 </tr>

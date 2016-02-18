@@ -19,7 +19,7 @@ class PDF extends FPDF
 
 function Header()
 {
-	$this->SetFont('','B',11);
+	$this->SetFont('','B',10);
 	$this->Cell(275,5,'MASTER ROLL (RESERVE)',0,0,'C');
 	$this->Ln(6);
 	if(isset($_GET['assembly']) && $_GET['assembly']!=null)
@@ -29,7 +29,7 @@ function Header()
 	$rsAssembly=assembly_name_ag_code($forassembly);
 	$rowAssembly=getRows($rsAssembly);
 	$assem="ASSEMBLY : ".$rowAssembly['assemblycd']." - ".$rowAssembly['assemblyname'];
-	$this->SetFont('','B',9);
+	$this->SetFont('','B',8.5);
 	$this->Cell(275,5,$assem,0,0,'C');
 	$this->Ln(6);
 	//$this->Cell(275,0,'',1,0,'C');
@@ -53,12 +53,12 @@ function FancyTable($header, $data)
 	
     for($i=1;$i<=rowCount($data);$i++)
 	{
-		$this->SetFont('Arial','',9);
+		//$this->SetFont('Arial','',9);
 		$rec_arr_hdr=getRows($data);
 				
 		if($count<$per_page)
 	    {
-			$this->SetFont('','B',9);	
+			$this->SetFont('','B',8);	
 			$grp_id=$rec_arr_hdr['groupid'];
 			$this->Cell(275,5,"Polling Party : ".$grp_id,'LTR',0,'C');
 	        $this->Ln();
@@ -73,7 +73,7 @@ function FancyTable($header, $data)
 			$num_rows=rowCount($rec_set);
 			for($k=0;$k<$num_rows;$k++)
 			{
-				$this->SetFont('','',6.5);
+				$this->SetFont('','',6);
 				$rec_arr=getRows($rec_set);
 				$amount=amount_ag_poststat($rec_arr['poststat']);
 			    $p_dtl="NAME - ".$rec_arr['officer_name'].", DESG. - ".$rec_arr['off_desg'].", PIN - (".$rec_arr['personcd']."), OFFICE NAME - ".$rec_arr['office'];

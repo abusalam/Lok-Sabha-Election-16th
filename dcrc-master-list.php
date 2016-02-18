@@ -102,7 +102,7 @@ function delete_dcrc(str)
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">DCRC LIST</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
-  <table width="95%" class="form" cellpadding="0">
+  <table width="98%" class="form" cellpadding="0">
     <tr><td colspan="4" align="center"><?php //print $subdiv_name." Subdivision"; ?></td></tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>

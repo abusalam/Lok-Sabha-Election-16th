@@ -101,7 +101,7 @@ function fatch_personnelvalidation($sub_div)
 {
 	$sql;$rs;
 	$sql="Select personnel.officecd,
-	      personnel.personcd,officer_name,off_desg,dateofbirth,gender,subdivisioncd,poststat,assembly_temp,assembly_off,assembly_perm,acno,qualificationcd,bank_cd,branchcd,mob_no,bank_acc_no
+	      personnel.personcd,officer_name,off_desg,dateofbirth,gender,subdivisioncd,poststat,assembly_temp,assembly_off,assembly_perm,acno,qualificationcd,bank_cd,branchcd,mob_no,bank_acc_no,epic
 From personnel
  Left Join termination On personnel.personcd = termination.personal_id
  where  termination.personal_id is null and ( ";  
@@ -121,10 +121,45 @@ $sql.="  (personnel.officecd = '' or personnel.officecd = '0' or LENGTH(personne
 	  or (personnel.bank_cd = '' or personnel.bank_cd = '0')
 	  or (personnel.branchcd = '' or personnel.branchcd = '0')
 	  or (personnel.bank_acc_no = '' or personnel.bank_acc_no = '0')
-	  or (LENGTH(personnel.mob_no) <> 10))";
+	  or (LENGTH(personnel.mob_no) <> 10)
+	  or (LENGTH( personnel.epic ) <6 or personnel.epic LIKE  'x%x'))";
  if($sub_div!='' && $sub_div!="0")
 	  $sql.="and personnel.subdivisioncd='$sub_div'";
 	$rs=execSelect($sql);	
+	connection_close();
+	return $rs;
+}
+/////pp wise bank details////
+function pp_wise_bank_excel($subdiv,$dist_cd)
+{
+	$sql;$rs;
+	$sql="
+	SELECT bank.bank_name, (
+
+SELECT branch.branch_name
+FROM branch
+WHERE branch.branchcd = personnel.branchcd
+AND branch.bank_cd = personnel.bank_cd
+) AS branch_name, (
+
+SELECT branch.ifsc_code
+FROM branch
+WHERE branch.branchcd = personnel.branchcd
+AND branch.bank_cd = personnel.bank_cd
+) AS ifsc_code, personnel.`bank_acc_no` , personnel.`officer_name` , personnel.`mob_no` 
+FROM personnel
+INNER JOIN bank ON bank.bank_cd = personnel.bank_cd
+LEFT JOIN termination ON personnel.personcd = termination.personal_id
+WHERE personnel.personcd >0
+AND termination.personal_id IS NULL  
+ ";  
+if($subdiv!='' && $subdiv!="0")
+	$sql.="AND personnel.`subdivisioncd` = '$subdiv'";
+$sql.="AND personnel.districtcd= '$dist_cd'";
+$sql.="ORDER BY personnel.bank_cd ";
+//echo $sql;
+//exit();
+    $rs=execSelect($sql);	
 	connection_close();
 	return $rs;
 }

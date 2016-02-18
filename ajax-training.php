@@ -284,6 +284,42 @@ if($opn=='trnreq')
 		unset($rsTr,$rowTr);
 	}
 }
+//training allocation2
+if($opn=='trnreq2')
+{
+	if($subdiv!='' && $subdiv!=NULL)
+	{
+		$rsTr=fatch_training_type('');
+		for($k=0;$k<=rowCount($rsTr);$k++)
+		{
+			$rowTr=getRows($rsTr);
+			echo "<tr>";
+			echo "<td align='left' width='30%'>".$rowTr['training_desc']."</td>\n";
+			echo "<td align='left'>";
+			$rsTrReq=training_required_2($subdiv);
+			$num_rows_TrReq=rowCount($rsTrReq);
+			if($num_rows_TrReq>0)
+			{
+				
+				for($i=0;$i<$num_rows_TrReq;$i++)
+				{
+					$rowTrReq=getRows($rsTrReq);
+					echo $rowTrReq['post_stat'].": ".$rowTrReq['total'].";&nbsp;&nbsp;";
+					$rowTrReq=NULL;
+				}
+			}
+			else
+				echo "";
+			
+			echo "</td>";
+			echo "</tr>";
+			unset($rsSelectedPP,$num_rows_TrReq);
+			$rowTr=NULL;
+		}
+		unset($rsTr,$rowTr);
+	}
+}
+//training allocation
 if($opn=='trnreq1')
 {
 	if($subdiv!='' && $subdiv!=NULL)
@@ -659,7 +695,7 @@ if($opn=='personnel')
 if($opn=='tal')
 {
 	include_once('function/pagination.php');
-	global $subdivision; global $venuename; global $usercode;
+	//global $subdivision; global $venuename; global $usercode;
 	$search=isset($_GET["search"])?$_GET["search"]:"";
 	$sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
 	$training_type=isset($_GET["training_type"])?$_GET["training_type"]:"";
@@ -703,7 +739,7 @@ if($opn=='tal')
 	$num_rows_T = rowCount($rstraining_allocation_list_T);
 	
 	$items = 100; // number of items per page.
-	$all = $_GET['a'];
+	$all = isset($_GET["a"])?$_GET["a"]:"";
 	if($all == "all")
 	{
 		$items = $num_rows_T;
@@ -711,7 +747,7 @@ if($opn=='tal')
 	$nrpage_amount = $num_rows_T/$items;
 	$page_amount = ceil($num_rows_T/$items);
 	$page_amount = $page_amount-1;
-	$page = $_GET['p'];
+	$page = isset($_GET["p"])?$_GET["p"]:"";
 	$section='training-allocation-list';
 	if($page < "1")
 	{
@@ -801,7 +837,7 @@ if($opn=='membav_sectr')
 			$res_count=fetch_asm_party_available($subdivision,$assm,$party_reserve);
 			$reserve_fill=fetch_sec_party_reserve_available($subdivision,$assm,$party_reserve);
 	        $reserve_ava=$res_count-$reserve_fill;
-			 echo "Available Sl. No.: <span id='memb_avl'>".$reserve_ava."</span>";
+			echo "Available Sl. No.: <span id='memb_avl'>".$reserve_ava."</span>";
 			//echo $res_count;
 	//	}
 	}

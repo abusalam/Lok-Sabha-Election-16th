@@ -403,11 +403,11 @@ function fatch_assembly_member($subdiv,$asmbly,$nomember)
 {
 	//$sql;$rs;
 	$sql="select * from assembly_party where 1=1";
-	if($subdiv!='0' || $subdiv!='')
+	if($subdiv!='0' && $subdiv!='')
 		$sql.=" and subdivisioncd='$subdiv'";
-	if($asmbly!='0' || $asmbly!='')
+	if($asmbly!='0' && $asmbly!='')
 		$sql.=" and assemblycd='$asmbly'";
-    if($nomember!='0' || $nomember!='')
+    if($nomember!='0' && $nomember!='')
 		$sql.=" and no_of_member='$nomember'";
 	$sql.=" order by assemblycd asc";
 	//echo $sql;
@@ -423,9 +423,9 @@ function fatch_assembly_maxcode($pc)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function duplicate_assembly($assembly_code,$pc,$assemblyname,$asm_code)
+function duplicate_assembly($subdivisioncd,$assembly_code,$pc,$assemblyname,$asm_code)
 {
-	$sql="select count(*) as c_assembly from assembly Where pccd = '$pc'";
+	$sql="select count(*) as c_assembly from assembly Where pccd = '$pc' and subdivisioncd = '$subdivisioncd' ";
 	if($assembly_code != "" && $assembly_code !="0")
 	  $sql.=" and assemblycd = '$assembly_code' and assemblyname ='$assemblyname'"; 
 	else
@@ -450,13 +450,13 @@ function save_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,
 function update_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date)
 {
 	$sql="update assembly set pccd='$pc',assemblyname='$assemblyname',districtcd='$dist_cd',
-	subdivisioncd='$subdivisioncd',usercode='$usercd',posted_date='$posted_date' where assemblycd='$assembly_code'";
+	usercode='$usercd',posted_date='$posted_date' where assemblycd='$assembly_code' and subdivisioncd='$subdivisioncd'";
 	//echo $sql; exit;
 	$i=execUpdate($sql);
 	return $i;
 }
 
-function fatch_assembly_master($assembly_code)
+function fatch_assembly_master($assembly_code,$subdiv_code)
 {
   $sql="Select Distinct assembly.assemblycd,
 	  assembly.pccd,
@@ -465,7 +465,7 @@ function fatch_assembly_master($assembly_code)
 	  assembly.subdivisioncd
 	From assembly ";
 	if($assembly_code!='')
-		$sql.=" where assembly.assemblycd='$assembly_code'";
+		$sql.=" where assembly.assemblycd='$assembly_code' and assembly.subdivisioncd='$subdiv_code'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -474,13 +474,17 @@ function fatch_assembly_masterlist($dist_cd)
   $sql="Select assembly.assemblycd,
 	  assembly.pccd,
 	  pc.pcname,
-	  assembly.assemblyname
+	  assembly.assemblyname,
+	  subdivision.subdivisioncd,
+	  subdivision.subdivision
 	From assembly
 	  Inner Join pc On assembly.pccd = pc.pccd And assembly.subdivisioncd =
-		pc.subdivisioncd  where assembly.assemblycd>0";
+		pc.subdivisioncd
+	Inner Join subdivision On assembly.subdivisioncd = subdivision.subdivisioncd
+	where assembly.assemblycd>0";
 	if($dist_cd!='')
 		$sql.=" and assembly.districtcd='$dist_cd'";
-	$sql.=" order by pc.pcname";
+	$sql.=" order by subdivision.subdivisioncd,assembly.assemblycd,assembly.assemblyname";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -533,9 +537,9 @@ function check_assembly_delete($ass_cd)
 	unset($sql,$rs,$row);
 	return ($cnt1>0?$cnt1:($cnt2>0?$cnt2:($cnt3>0?$cnt3:($cnt4>0?$cnt4:($cnt5>0?$cnt5:($cnt6>0?$cnt6:($cnt7>0?$cnt7:($cnt8>0?$cnt8:($cnt9>0?$cnt9:0)))))))));
 }
-function delete_assembly($ass_cd)
+function delete_assembly($ass_cd,$subcode)
 {
-	$sql="delete from assembly where assemblycd='$ass_cd'";
+	$sql="delete from assembly where assemblycd='$ass_cd' and subdivisioncd='$subcode'";
 	$i=execDelete($sql);
 	return $i;
 }
@@ -648,16 +652,42 @@ function fatch_dcrc_assembly($subdiv)
 	$rs=execSelect($sql);
 	return $rs;
 }
+//fetch member
 function fatch_dcrc_member_assembly($subdiv,$member,$assembly)
 {
-	$sql="Select 
+	$sql="Select distinct
 	  dcrcmaster.assemblycd,
 	  dcrcmaster.no_of_member,
-	  assembly.assemblyname,
-	  dcrcmaster.dcrcgrp,
-	  dcrcmaster.dc_venue
+	  assembly.assemblyname
+
 	From dcrcmaster
-	  Inner Join assembly On assembly.assemblycd = dcrcmaster.assemblycd   where 1=1";
+	  Inner Join assembly On assembly.assemblycd = dcrcmaster.assemblycd 
+	   and dcrcmaster.subdivisioncd = assembly.subdivisioncd
+	  where 1=1";
+	if($subdiv!='0' && $subdiv!='')
+		$sql.=" and dcrcmaster.subdivisioncd='$subdiv'";
+	if($assembly!='0' && $assembly!='')
+		$sql.=" and dcrcmaster.assemblycd='$assembly'";
+    if($member!='0' && $member!='')
+		$sql.=" and dcrcmaster.no_of_member='$member'";
+	$sql.=" order by dcrcmaster.assemblycd asc";
+
+	$rs=execSelect($sql);
+	return $rs;
+}
+//fetch dcrc venue
+function fatch_dcrc_member_assembly_venue($subdiv,$member,$assembly)
+{
+	$sql="Select 
+	  dcrcmaster.dcrcgrp,
+	  dcrcmaster.dc_venue,
+          DATE_FORMAT(dcrc_party.dc_date,'%d/%m/%Y') as dc_date,
+          dcrc_party.dc_time
+	From dcrcmaster
+	  Inner Join assembly On assembly.assemblycd = dcrcmaster.assemblycd 
+	   and dcrcmaster.subdivisioncd = assembly.subdivisioncd
+         Inner Join dcrc_party On dcrc_party.dcrcgrp= dcrcmaster.dcrcgrp
+	  where 1=1";
 	if($subdiv!='0' && $subdiv!='')
 		$sql.=" and dcrcmaster.subdivisioncd='$subdiv'";
 	if($assembly!='0' && $assembly!='')
@@ -740,9 +770,9 @@ function fatch_dcrc_maxcode($subdivision)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function duplicate_dcrc_master($assembly,$member,$subdivision)
+function duplicate_dcrc_master($party_req,$assembly,$member,$subdivision)
 {
-	$sql="select count(*) as cnt from dcrcmaster where subdivisioncd='$subdivision' and dcrcmaster.assemblycd='$assembly' and 	no_of_member='$member'";
+	$sql="select count(*) as cnt from dcrc_party where subdivisioncd='$subdivision' and dcrc_party.assemblycd='$assembly' and number_of_member='$member' and partyindcrc='$party_req'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$i=$row['cnt'];
@@ -801,7 +831,8 @@ function fatch_dcrc_list($sub_div,$assembly,$dist)
 	  dcrc_party.dc_time,
 	  dcrc_party.partyindcrc,
 	  dcrcmaster.dc_addr,
-	  dcrcmaster.rc_addr
+	  dcrcmaster.rc_addr,
+	  dcrcmaster.assemblycd
 	  
 	From dcrcmaster
 	  Inner Join dcrc_party On dcrcmaster.dcrcgrp = dcrc_party.dcrcgrp

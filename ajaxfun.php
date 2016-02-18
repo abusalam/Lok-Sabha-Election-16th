@@ -651,8 +651,8 @@ if($opn=='assembly_ag_sub')
 if($opn=='dcrc_result')
 {
 	include_once('function/master_fun.php');
-	$sub_div=$_GET["sub_div"];
-	$assembly=$_GET["ass"];
+	$sub_div=isset($_GET["sub_div"])?$_GET["sub_div"]:"";
+	$assembly=isset($_GET["ass"])?$_GET["ass"]:"";
 	$dist=isset($_GET["dist"])?$_GET["dist"]:"";
 	
 	$rsDCRC=fatch_dcrc_list($sub_div,$assembly,$dist);
@@ -662,7 +662,9 @@ if($opn=='dcrc_result')
 		echo "<div class='scroller1'>";
 		echo "<table width='100%' cellpadding='0' cellspacing='0' border='0' id='table1'>\n";
 		echo "<tr height='30px'><th>Sl.</th>
+		
 			<th>DCRC</th>
+			<th>Assembly</th>
             <th>Member</th>
             <th>Party</th>
 			<th>DC Venue & Address</th>
@@ -675,13 +677,13 @@ if($opn=='dcrc_result')
 		{
 			$rowDCRC=getRows($rsDCRC);
 			$dcrc_cd='"'.encode($rowDCRC['dcrcgrp']).'"';
-			echo "<tr><td align='right' width='3%'>$i.</td><td align='left' width='8%'>$rowDCRC[dcrcgrp]</td>\n";
+			echo "<tr><td align='center' width='3%'>$i.</td><td align='center' width='6%'>$rowDCRC[dcrcgrp]</td><td align='center' width='5%'>$rowDCRC[assemblycd]</td>\n";
 			echo "<td width='7%' align='center'>$rowDCRC[no_of_member]</td>\n";
-			echo "<td width='7%' align='center'>$rowDCRC[partyindcrc]</td>\n";
+			echo "<td width='5%' align='center'>$rowDCRC[partyindcrc]</td>\n";
 			echo "<td width='29%' align='center'>".$rowDCRC['dc_venue'].", ".$rowDCRC['dc_addr']."</td>\n";
 			echo "<td width='15%' align='center'>$rowDCRC[dc_date] - $rowDCRC[dc_time]</td>\n";
 			echo "<td width='25%' align='center'>".$rowDCRC['rcvenue'].", ".$rowDCRC['rc_addr']."</td>\n";
-			echo "<td align='center' width=6%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_dcrc($dcrc_cd);' title='Click to delete' /></td>\n";
+			echo "<td align='center' width=5%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_dcrc($dcrc_cd);' title='Click to delete' /></td>\n";
 			$rowDCRC=NULL;
 		}
 		echo "</table>\n";

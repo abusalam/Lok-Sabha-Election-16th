@@ -12,6 +12,13 @@ include('header/header.php');
 <script type="text/javascript" language="javascript">
 function subdivision_change(str)
 {
+	<?php if(isset($_GET['ass_cd']) && isset($_GET['subdiv_code']))
+	{ ?>
+		document.getElementById("msg").innerHTML="Subdivision can't be changed while modifying";
+		bind_all();
+		return false;
+	<?php
+	} ?>
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -32,16 +39,16 @@ function subdivision_change(str)
 	xmlhttp.send();
 }
 
-function edit_assembly(assembly_code)
+function edit_assembly(assembly_code,subcode)
 {
-	location.replace("assembly_master.php?ass_cd="+assembly_code);
+	location.replace("assembly_master.php?ass_cd="+assembly_code+"&subdiv_code="+subcode);
 	
 }
-function delete_assembly(str)
+function delete_assembly(str,str1)
 {
 	if (confirm("Do you really want to delete the record?")==true)
 	{
-		window.open("ajax-master.php?ass_cd="+str+"&act=del","_blank","height=200,width=250,left=400,top=250, status=yes,toolbar=no,menubar=no,location=no,fullscreen=no");
+		window.open("ajax-master.php?ass_cd="+str+"&subcode="+str1+"&act=del","_blank","height=200,width=250,left=400,top=250, status=yes,toolbar=no,menubar=no,location=no,fullscreen=no");
 		//location.replace("ajax-master.php?sub_cd="+str+"&act=del");
 	}
 }
@@ -102,16 +109,17 @@ if($action=='Save')
 	$usercd=$user_cd;
 	
 	$ret;
-	$c_assembly=duplicate_assembly($assembly_code,$pc,$assemblyname,$asm_code);
+	$c_assembly=duplicate_assembly($subdivisioncd,$assembly_code,$pc,$assemblyname,$asm_code);
 	
 	if($c_assembly==0)
 	{
 		if(isset($_REQUEST['ass_cd']))
 		{
 			$assembly_code=decode($_REQUEST['ass_cd']);
+			$subdivisioncd=decode($_REQUEST['subdiv_code']);
 			$dt = new DateTime();
 			$posted_date=$dt->format('Y-m-d H:i:s');
-			$ret=update_assembly($asm_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date);
+			$ret=update_assembly($assembly_code,$assemblyname,$dist_cd,$subdivisioncd,$pc,$usercd,$posted_date);
 			if($ret==1)
 			{
 				redirect("assembly_master.php?msg=success");
@@ -138,8 +146,9 @@ if($action=='Save')
 if(isset($_REQUEST['ass_cd']))
 {
 	$assembly_code=decode($_REQUEST['ass_cd']);
+	$subdiv_code=decode($_REQUEST['subdiv_code']);
 	//$sub_code=decode($_REQUEST['sub_code']);
-	$rsPerDiv=fatch_assembly_master($assembly_code);
+	$rsPerDiv=fatch_assembly_master($assembly_code,$subdiv_code);
 	$rowPerDiv=getRows($rsPerDiv);
 	$subdiv_cd=$rowPerDiv['subdivisioncd'];
 }
@@ -170,6 +179,7 @@ function bind_all()
 	assembly_code.value="<?php echo $rowPerDiv['assemblycd']; ?>";
 	var asmcode=document.getElementById("asmcode");
 	asmcode.value="<?php echo $rowPerDiv['assemblycd']; ?>";
+	asmcode.readOnly=true;
 	<?php } ?>
 }
 </script>
@@ -183,7 +193,7 @@ function bind_all()
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center">ASSEMBLY CONSTITUENCY MASTER</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
-  <table width="70%" class="form" cellpadding="0">
+  <table width="90%" class="form" cellpadding="0">
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
@@ -250,7 +260,7 @@ function bind_all()
 	<tr>
 	  <td align="left" colspan="4">&nbsp;</td></tr>
     <tr>
-      <td colspan="4" align="center"><input type="submit" name="submit" id="submit" value="Save" class="button" onclick="javascript:return validate();" /></td>
+      <td colspan="4" align="center"><input type="submit" name="submit" id="submit" value="Save" class="button" onclick="javascript:return validate();" />&nbsp;&nbsp; <a href="assembly_master.php" class="button" style="text-decoration: none; padding: 4px;">Refresh</a></td>
     </tr>
     <tr><td colspan="4" align="left"><div id="form1_errorloc" class="error"></div></td></tr>
     <tr><td colspan="4" align="center"><div class="scroller">
@@ -261,16 +271,17 @@ function bind_all()
 			if($num_rows>0)
 			{
 				echo "<table width='100%' cellpadding='0' cellspacing='0' border='0' id='table1'>\n";
-				echo "<tr height='30px'><th>Sl. No.</th><th align='center'>Assembly Code</th><th align='left'>Assembly Name</th><th align='left'>Parliament Name</th><th>Edit</th><th>Delete</th></tr>\n";
+				echo "<tr height='30px'><th>Sl.</th><th align='center'>Subdivision</th><th align='center'>Assembly Code</th><th align='left'>Assembly Name</th><th align='left'>Parliament Name</th><th>Edit</th><th>Delete</th></tr>\n";
 				for($i=1;$i<=$num_rows;$i++)
 				{
 				  $rowAssDiv=getRows($rsAssDiv);
 				  $assembly_code='"'.encode($rowAssDiv['assemblycd']).'"';
-				  //$sub_code='"'.encode($rowAssDiv['subdivisioncd']).'"';
-				  echo "<tr><td align='right' width='10%'>$i.</td><td align='center' width='20%'>$rowAssDiv[assemblycd]</td><td width='35%' align='left'>$rowAssDiv[assemblyname]</td>";
-				  echo "<td width='35%' align='left'>$rowAssDiv[pcname]</td>";
-				  echo "<td align='center' width='10%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_assembly($assembly_code);' /></td>\n";
-				  echo "<td align='center' width='10%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_assembly($assembly_code);' /></td></tr>\n";
+				  $sub_code='"'.encode($rowAssDiv['subdivisioncd']).'"';
+				  
+				  echo "<tr><td align='center' width='5%'>$i.</td><td align='center' width='10%'>$rowAssDiv[subdivision]</td><td align='center' width='12%'>$rowAssDiv[assemblycd]</td><td width='30%' align='left'>$rowAssDiv[assemblyname]</td>";
+				  echo "<td width='27%' align='left'>$rowAssDiv[pcname]</td>";
+				  echo "<td align='center' width='8%'><img src='images/edit.png' alt='' height='20px' onclick='javascript:edit_assembly($assembly_code,$sub_code);' /></td>\n";
+				  echo "<td align='center' width='8%'><img src='images/delete.png' alt='' height='20px' onclick='javascript:delete_assembly($assembly_code,$sub_code);' /></td></tr>\n";
 				}
 				echo "</table>\n";
 			}

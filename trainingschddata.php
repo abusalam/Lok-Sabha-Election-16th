@@ -19,7 +19,7 @@ function __construct($typ,$sub,$chtyp) {
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
 	
-	$this->result = $this->msqli->query("SELECT schedule_code as sh,training_type as tp,training_venue,post_status,no_pp,no_used,choice_type,choice_area  as cha FROM `training_schedule` where  `training_type`='$typ' and substr(schedule_code,1,4)='$sub' and choice_type='$chtyp' and (no_pp-no_used)>0") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT schedule_code as sh,training_type as tp,training_venue,post_status,no_pp,no_used,choice_type,choice_area  as cha FROM `training_schedule` where  `training_type`='$typ' and forsubdiv='$sub' and choice_type='$chtyp' and (no_pp-no_used)>0") or die($this->msqli->error.__LINE__);
 //echo 'here';
 //echo $typ;
 //echo 'yes    bbbb    nn  ';
