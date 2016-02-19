@@ -122,6 +122,12 @@ if($action=='Select PP')
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];
 
+	if(isset($_POST['subdivision'])){
+		$subdiv_cd=$_POST['subdivision'];
+		$_SESSION['subdiv_cd']=$_POST['subdivision'];
+	}
+
+
 	$rsSelectedPP=fatch_no_of_PP_selected($subdiv_cd);
 	$num_rows_SelectedPP=rowCount($rsSelectedPP);
 	if($num_rows_SelectedPP>0)
