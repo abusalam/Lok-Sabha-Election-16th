@@ -186,7 +186,7 @@ function randomise_click()
 	<tr>
       <td align="center" colspan="2"><div id="rand_result"></div></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
-	<input type="hidden" id="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
+	<input type="text" id="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
     <input type="hidden" name="hid_rando" value="<?php echo rand(0,500); ?>" />
 	<tr><td align="center" colspan="2">Password: &nbsp;&nbsp;&nbsp;<input type="password" id="txt1" name="txt1" /></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
