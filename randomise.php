@@ -33,9 +33,9 @@ $i=0;
 $sobj= new mysqliconn();
  $msqli=$sobj->getconn();
  //Initialise PP data
- $msqli->query("delete from training_pp where for_subdivision='$subdiv'");
+ $msqli->query("delete from training_pp where for_subdivision like '$subdiv'");
  
-$msqli->query("update personnela set booked=' ',groupid=0,forassembly='   ',selected=0 where forsubdivision='$subdiv'");
+$msqli->query("update personnela set booked=' ',groupid=0,forassembly='   ',selected=0 where forsubdivision like '$subdiv'");
 
 //echo $subdiv;
 //exit;

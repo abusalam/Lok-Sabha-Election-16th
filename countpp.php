@@ -13,7 +13,7 @@ function __construct($subdiv) {
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT no_of_member,no_party   FROM `assembly_party` where subdivisioncd='$subdiv' ") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT no_of_member,no_party   FROM `assembly_party` where subdivisioncd like '$subdiv' ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
   $totreq=0;
@@ -29,7 +29,7 @@ function __construct($subdiv) {
 		print 'Assembly requirement not filled  ';
 	}
 
-$this->result = $this->msqli->query("SELECT poststat,booked  FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
+$this->result = $this->msqli->query("SELECT poststat,booked  FROM `personnela` where forsubdivision like '$subdiv' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 $prp=0;
