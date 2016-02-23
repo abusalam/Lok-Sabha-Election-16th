@@ -47,6 +47,7 @@ if(isset($_SESSION['hid_rand3']))
         <li>1360 x 768</li>
         <li>1366 x 768</li>
     </ul></div>
+  <a href="reports/CheckList.php" target="_blank">Checklist Summary Reports</a>
 </div>
 </body>
 </html>

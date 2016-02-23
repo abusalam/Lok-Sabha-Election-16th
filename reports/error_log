@@ -1,4 +1,0 @@
-[05-Oct-2015 11:49:44 Asia/Calcutta] PHP Warning:  mysqli_query(): MySQL server has gone away in /home/bardhqhg/public_html/inc/db_trans.inc.php on line 24
-[05-Oct-2015 11:49:44 Asia/Calcutta] PHP Warning:  mysqli_query(): Error reading result set's header in /home/bardhqhg/public_html/inc/db_trans.inc.php on line 24
-[05-Oct-2015 11:50:34 Asia/Calcutta] PHP Warning:  mysqli_query(): MySQL server has gone away in /home/bardhqhg/public_html/inc/db_trans.inc.php on line 24
-[05-Oct-2015 11:50:34 Asia/Calcutta] PHP Warning:  mysqli_query(): Error reading result set's header in /home/bardhqhg/public_html/inc/db_trans.inc.php on line 24
