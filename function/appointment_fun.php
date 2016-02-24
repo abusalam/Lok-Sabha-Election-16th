@@ -1262,4 +1262,32 @@ function fatch_personnela_phasetype($sub)
 	$rs=execSelect($sql);
 	return $rs;
 }
+///save sms (first)////
+/*function fatch_post_status_for_first_rand($post_stat)
+{
+	$sql="select poststatus from poststat where post_stat='$post_stat' order by poststatus asc";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$amount=$row['poststatus'];
+	connection_close();
+	return $amount;
+}
+function first_rand_member_available($post_stat,$subdiv,$phase,$chkextrapp,$poststatus)
+{
+	if($chkextrapp=='true')
+	{
+		
+	}
+	else
+	{
+		$sql="SELECT count(personcd) from first_rand_table where forsubdivision='$subdiv'";
+		if($group_id!="")
+		 $sql.=" and groupid = '$group_id'";
+		$rs=execSelect($sql);
+		$row=getRows($rs);
+		$amount=$row['amount'];
+		connection_close();
+		return $amount;
+	}
+}*/
 ?>

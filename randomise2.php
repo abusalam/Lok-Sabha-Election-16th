@@ -33,7 +33,8 @@ else
 	echo "You are not a valid District user";
 	exit;
 }
-
+//echo $sub;
+//exit;
 //$fpc='41';
 //$dist='18';
 new randno1($dist,$sub);
@@ -45,6 +46,8 @@ $i=0;
 $sobj= new mysqliconn();
  $msqli=$sobj->getconn();
  $msqli->query("update personnela set booked=' ',groupid=0,forassembly=' ' where forsubdivision='$sub'");
+ //echo $sub;
+//exit;
  $msqli->autocommit(FALSE);
 $sql  = "update personnela set booked='P',groupid=?,forassembly=? where personcd=? ";
 

@@ -59,8 +59,7 @@ function new_per_search()
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var gender=document.getElementById('hid_gender').innerHTML;
 	var post_stat=document.getElementById('hid_post_stat').innerHTML;
-	var subdiv_cd=<?php print $subdiv_cd; ?>;
-	
+	var subdiv_cd='<?php print $subdiv_cd; ?>';
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -207,6 +206,7 @@ function schedule_change(str)
   <td align="center"><table width="1000px" class="table_blue">
   <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
   </tr>
+  
 <tr><td align="center"><?php print $district." DISTRICT"; ?></td></tr>
 <tr><td align="center"><?php print $subdiv_name." SUBDIVISION"; ?></td></tr>
 <tr><td align="center">PRE GROUPING REPLACEMENT</td></tr>

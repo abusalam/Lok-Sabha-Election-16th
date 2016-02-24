@@ -23,12 +23,14 @@ if($tr_cd!='' && $act=='del')
 //=====================Training Venue subdiv wise=========================
 
 $opn=isset($_GET['opn'])?$_GET['opn']:"";
+$area=isset($_GET['area'])?$_GET['area']:"";
 $subdivcd=isset($_GET['subdivcd'])?$_GET['subdivcd']:"";
+
 if($opn=='trnvenue')
 {
 	      echo "<select id='training_venue' name='training_venue' style='width:220px;' onchange='javascript:return venue_capacity(this.value);'>\n";
 		  echo "<option value='0'>-Select Training Venue-</option>";
-			$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdivcd);
+			$rsTrainingVenue=fatch_training_venue_ag_subdiv($area,$subdivcd);
 			$num_rows=rowCount($rsTrainingVenue);
 			if($num_rows>0)
 			{
@@ -74,8 +76,8 @@ if($opn=='areadtl')
 		}
 		if($area=='D')
 		{
-			echo "<td align='left'><span class='error'>*</span>Alloted Subdivision</td><td align='left'>\n";
-			echo "<select id='area' name='area' style='width:220px;'>\n";
+			echo "<td align='left'><span class='error'>*</span>Alloted Subdivision</td><td align='left' >\n";
+			echo "<select id='area' name='area' style='width:220px;' onchange='javascript:return fetch_sub_wise_venue(this.value);'>\n";
 			$rsForSub=fatch_forsubdiv_from_personal_trainingpp_ag_subdiv1($subdivision);
 			$num_rows=rowCount($rsForSub);
 			if($num_rows>0)
@@ -115,7 +117,7 @@ if($opn=='areadtl')
 		if($area=='T')
 		{
 			echo "<td align='left'><span class='error'>*</span>Temporary Assembly</td><td align='left'>\n";
-			echo "<select id='area' name='area' style='width:220px;'>\n";
+			echo "<select id='area' name='area' style='width:220px;'  onchange='javascript:return fetch_sub_wise_venue(this.value);'>\n";
 			$rs_tempAss=fatch_tempass_from_personal_trainingpp_ag_subdiv1($subdivision);
 			$num_rows=rowCount($rs_tempAss);
 			if($num_rows>0)
@@ -135,7 +137,7 @@ if($opn=='areadtl')
 		if($area=='P')
 		{
 			echo "<td align='left'><span class='error'>*</span>Permanent Assembly</td><td align='left'>\n";
-			echo "<select id='area' name='area' style='width:220px;'>\n";
+			echo "<select id='area' name='area' style='width:220px;'  onchange='javascript:return fetch_sub_wise_venue(this.value);'>\n";
 			$rs_permAss=fatch_tempass_from_personal_trainingpp_ag_subdiv1($subdivision);
 			$num_rows=rowCount($rs_permAss);
 			if($num_rows>0)
@@ -155,7 +157,7 @@ if($opn=='areadtl')
 		if($area=='O')
 		{
 			echo "<td align='left'><span class='error'>*</span>Office Assembly</td><td align='left'>\n";
-			echo "<select id='area' name='area' style='width:220px;'>\n";
+			echo "<select id='area' name='area' style='width:220px;' onchange='javascript:return fetch_sub_wise_venue(this.value);'>\n";
 			$rs_permAss=fatch_tempass_from_personal_trainingpp_ag_subdiv1($subdivision);
 			$num_rows=rowCount($rs_permAss);
 			if($num_rows>0)
@@ -633,7 +635,7 @@ if($opn=='venue')
 		echo "<select name='training_venue' id='training_venue' style='width:200px;' onchange='return training_type_change();'>\n
 	    <option value='0'>-Select Training Venue-</option>\n";
 
-			$rsTrainingVenue=fatch_training_venue_ag_subdiv($sub_div);
+			$rsTrainingVenue=fatch_training_venue_ag_subdiv('0',$sub_div);
 			$num_rows=rowCount($rsTrainingVenue);
 			if($num_rows>0)
 			{
@@ -677,7 +679,7 @@ if($opn=='personnel')
 {
 	$schedule_cd=$_GET['sch'];
 
-	$rsPer=fatch_personnel_ag_sch($schedule_cd);
+	$rsPer=fatch_personnel_ag_sch1($schedule_cd);
 	$num_rows=rowCount($rsPer);
 	if($num_rows>0)
 	{
@@ -776,7 +778,7 @@ if($opn=='tal')
 		  $rowTraining_alloc_list=getRows($rstraining_alloc_list);
 		  $schedule_code='"'.encode($rowTraining_alloc_list['schedule_code']).'"';
 		  $count=$p_num+$i;
-		  echo "<tr><td align='left' width='4%'>$count.</td><td align='left' width='30%'>$rowTraining_alloc_list[venuename]</td><td width='15%' align='center'>$rowTraining_alloc_list[training_dt]</td>";
+		  echo "<tr><td align='center' width='4%'>$count.</td><td align='left' width='30%'>$rowTraining_alloc_list[venuename]</td><td width='15%' align='center'>$rowTraining_alloc_list[training_dt]</td>";
 		  echo "<td width='15%' align='left'>$rowTraining_alloc_list[training_time]</td><td width='15%' align='left'>$rowTraining_alloc_list[poststatus]</td>";
 		  echo "<td width='10%' align='left'>$rowTraining_alloc_list[no_pp]</td>";
 		  echo "<td align='center' width='5%'><img src='images/delete.png' alt='' height='20px'";

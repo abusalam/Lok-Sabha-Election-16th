@@ -5,7 +5,7 @@ session_start();
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Pre Group Cancellation</title>
+<title>Personnel Id Wise Attendance</title>
 <?php
 include('header/header.php');
 ?>
@@ -39,14 +39,10 @@ function per_id_change(str)
 				if(xmlhttp1.responseText!="Not Available for Selected Operation" && xmlhttp1.responseText!=" ")
 				{
 					document.getElementById('submit').disabled=false;
-					$("#venue_sch").show();
-					
 				}
 				else
 				{
 					document.getElementById('submit').disabled=true;
-					$("#venue_sch").hide();
-					$("#difnt_sch").hide();
 				}
 			}
 		}
@@ -60,57 +56,40 @@ function per_id_change(str)
 function validate()
 {
 	var PersonalID=document.getElementById("per_id").value;
-	var post_status=document.getElementById("post_status").value;
+	
 	if(PersonalID=="")
 	{
 		document.getElementById("msg").innerHTML="Enter Personal ID";
 		document.getElementById("per_id").focus();
 		return false;
-	}	
-	if(document.getElementById('chkpoststatus').checked==true)
+	}
+	var training_type=document.getElementById("training_type").value;
+	if(training_type=="0")
 	{
-			if(post_status=="")
-			{
-				document.getElementById("msg").innerHTML="Select Post Status";
-				document.getElementById("post_status").focus();
-				return false;
-			}
+		document.getElementById("msg").innerHTML="Select Training Type";
+		document.getElementById("training_type").focus();
+		return false;
 	}
 }
 </script>
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
+include_once('function/training_fun.php');
 $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Submit')
 {
-	$PersonalID=isset($_REQUEST['per_id'])?$_REQUEST['per_id']:"";
-	$post_status=isset($_REQUEST['post_status'])?$_REQUEST['post_status']:"";
+	$PersonalID=$_POST['per_id'];
+	$training_type=$_POST['training_type'];
 	$usercd=$user_cd;
 	
 	include_once('function/add_fun.php');
-	//fetch old shedule cd
-	$old_s_cd=fetch_training_schedule_code($PersonalID);
-	//fetch no _used
-	$old_noused=fetch_no_used_training_schedule($old_s_cd);
-	//update no_used
-	update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
-    
-	if($post_status =='')
+    $res=update_training_pp_attendance_per_id($PersonalID,'','A');
+	/*$ret=save_reserve_pp_cancelletion($PersonalID,$usercd);*/
+	
+	if($res==1)
 	{
-		$ret=save_pregroup_cancelletion($PersonalID,$usercd);	
-		if($ret==1)
-		{
-			$msg="<div class='alert-success'>Polling Personnel Cancelled Successfully</div>";
-		}
-	}
-	else
-	{
-		$ret1=save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd);	
-		if($ret1==1)
-		{
-			$msg="<div class='alert-success'>Polling Personnel Cancelled and Post Status Changed Successfully</div>";
-		}
+		$msg="<div class='alert-success'>Record saved successfully</div>";
 	}
 }
 ?>
@@ -123,7 +102,7 @@ if($action=='Submit')
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr>
-  <td align="center">PRE GROUP CANCELLATION</td></tr>
+  <td align="center">PERSONNEL ID WISE TRAINING ATTENDANCE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
   <table width="95%" class="form" cellpadding="0">
     <tr>
@@ -151,39 +130,36 @@ if($action=='Submit')
                 <tr>
                 	<td colspan="4"><span id="op_dtl"></span></td>
                 </tr>
+               
             </table>
       </td>
       <td width="15%">&nbsp;</td>
     </tr>
-    
-    <tr><td colspan="3"><img src="images/blank.gif" alt="" height="1" /></td></tr>
-   
-    <tr> <td width="15%">&nbsp;</td><td colspan="2" align="left" style="display:none;" id="venue_sch"><input type="checkbox" id="chkpoststatus" name="chkpoststatus" onclick="return chkSameVenueTraining_change();" />
-    <label for="chkpoststatus">Change Post Status</label></td></tr>
-    <tr><td colspan="3"><img src="images/blank.gif" alt="" height="1" /></td></tr>
-    
-     <tr style="display:none;" id="difnt_sch" >
-         <td width="15%">&nbsp;</td> 
-          <td align="left" colspan="2"><span class="error">*</span>Post Status&nbsp;&nbsp;&nbsp; <select name="post_status" id="post_status" style="width:220px;">
-	    <option value="">-Select Post Status-</option>
-         <?php 	$rsP=fatch_postingstatus();
-									$num_rows=rowCount($rsP);
-									if($num_rows>0)
-									{
-										for($i=1;$i<=$num_rows;$i++)
-										{
-											$rowP=getRows($rsP);
-											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
-										}
-									}
-									$rsP=null;
-									$num_rows=0;
-									$rowP=null;
-							?>
+     <tr>
+      <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
+    </tr>
+     <tr>
+     <td width="15%">&nbsp;</td>
+	  <td align="left"><span class="error">*</span>Training Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select name="training_type" id="training_type" style="width:200px;">
+	    <option value="0">-Select Training Type-</option>
+		<?php
+			$rsTrainingType=fatch_training_type('');
+			$num_rows=rowCount($rsTrainingType);
+			if($num_rows>0)
+			{
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowTrainingType=getRows($rsTrainingType);
+					echo "<option value='$rowTrainingType[0]' >$rowTrainingType[1]</option>\n";
+					$rowTrainingType=NULL;
+				}
+			}
+			unset($rsTrainingType,$num_rows,$rowTrainingType);
+		?>
 	    </select></td>
-     
-     </tr>
-     
+        <td width="15%">&nbsp;</td></tr>
+  
     <tr>
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
@@ -198,19 +174,4 @@ if($action=='Submit')
 </table>
 </div>
 </body>
-<script>
-function chkSameVenueTraining_change()
-{
-	if(document.getElementById('chkpoststatus').checked==true)
-	{
-			$("#difnt_sch").show();
-	}
-	else
-	{
-		$("#difnt_sch").hide();
-		document.getElementById('post_status').value='';
-	
-	}
-}
-</script>
 </html>

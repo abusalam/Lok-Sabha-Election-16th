@@ -95,11 +95,11 @@ $pbr=0;
 			 
 			  if ((strcmp($pst,'PB')==0) and (strcmp($bk,'P')==0) ){
 			 
-			 	$pbp=$pap+1;
+			 	$pbp=$pbp+1;
 			 }
 			 if ((strcmp($pst,'PB')==0) and (strcmp($bk,'R')==0) ){
 			 
-			 	$pbr=$par+1;
+			 	$pbr=$pbr+1;
 			 }
 			 
 			 

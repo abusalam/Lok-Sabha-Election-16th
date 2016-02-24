@@ -111,4 +111,26 @@ if($opn=='tr_phase_print')
 	}
 unset($rsP,$num_rows,$rowP);
 }
+/*if($opn=='membavl')
+{
+	$subdiv=isset($_GET['subdivision'])?$_GET['subdivision']:'0';
+	$post_stat=isset($_GET['post_stat'])?$_GET['post_stat']:'0';
+	$phase=isset($_GET['phase'])?$_GET['phase']:'0';
+	$chkextrapp=isset($_GET['chkextrapp'])?$_GET['chkextrapp']:'0';
+	$poststatus=fatch_post_status_for_first_rand($post_stat);
+	
+	$rsMembAvl=first_rand_member_available($post_stat,$subdiv,$phase,$chkextrapp,$poststatus);
+		$num_rows_MembAvl=rowCount($rsMembAvl);
+		$rowMembAvl=getRows($rsMembAvl);
+		if($num_rows_MembAvl>0)
+		{		
+			echo "PP Available: <span id='memb_avl'>".$rowMembAvl['memb_avl']."</span>";
+		}
+		else
+			echo "";
+		
+		$rowMembAvl=NULL;
+		$rsMembAvl=NULL;
+		unset($rsMembAvl,$rowMembAvl,$num_rows_MembAvl);
+}*/
 ?>

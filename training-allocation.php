@@ -30,8 +30,11 @@ function chksetpollingperson_change()
 		
 	}
 }
-function fetch_sub_wise_venue(str)
+function fetch_sub_wise_venue(strsd)
 {
+	var str=document.getElementById('area_pref').value;
+	//alert(str);
+	//alert(strsd);
 	if (window.XMLHttpRequest)
 	  {
 	  xmlhttp=new XMLHttpRequest();
@@ -49,7 +52,7 @@ function fetch_sub_wise_venue(str)
 		venue_capacity('0');
 		}
 	  }
-	xmlhttp.open("GET","ajax-training.php?subdivcd="+str+"&opn=trnvenue",true);
+	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivcd="+strsd+"&opn=trnvenue",true);
 	xmlhttp.send();
 	
 }
@@ -158,7 +161,11 @@ function area_detail(str)
 		if(str==0)
 		  fetch_sub_wise_venue('0');
 		 else
-		  fetch_sub_wise_venue('<?php print $subdiv_cd; ?>');
+		 {
+		  var sd=document.getElementById('area').value;
+		  //alert(sd);
+		  fetch_sub_wise_venue(sd);
+		 }
 		}
 	  }
 	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision=<?php print $subdiv_cd; ?>&opn=areadtl",true);

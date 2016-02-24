@@ -208,12 +208,25 @@ function fatch_training_venue($venue_cd)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function fatch_training_venue_ag_subdiv($subdiv)
+function fatch_training_venue_ag_subdiv($areapref,$subdiv)
 {
-	$sql="Select training_venue.venue_cd, training_venue.venuename From training_venue ";
-	if($subdiv<>'')
-		$sql.=" where training_venue.subdivisioncd='$subdiv'";
+	$sql="Select training_venue.venue_cd, training_venue.venuename From training_venue where 1=1";
+	if($areapref=='S')
+		$sql.=" and training_venue.subdivisioncd='$subdiv'";
+	if($areapref=='D')
+		$sql.=" and training_venue.subdivisioncd='$subdiv'";
+	if($areapref=='T')
+		$sql.=" and training_venue.assemblycd='$subdiv'";
+	if($areapref=='O')
+		$sql.=" and training_venue.assemblycd='$subdiv'";
+	if($areapref=='P')
+		$sql.=" and training_venue.assemblycd='$subdiv'";
+	if($areapref=='0')
+		$sql.=" and training_venue.subdivisioncd='$subdiv'";	
+	//if($subdiv !='' && $subdiv!="0")
+		//$sql.="  training_venue.subdivisioncd='$subdiv'";
 	$sql.=" order by training_venue.venuename";
+	
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -464,7 +477,7 @@ function fatch_tempass_from_personal_trainingpp_ag_subdiv1($subdiv_cd)
 	$sql; $rs;
 	$sql="Select distinct assemblycd, assembly.assemblyname
 			From assembly";
-    //$sql="where assembly.subdivisioncd	='$subdiv_cd'"
+   // $sql="where assembly.subdivisioncd	='$subdiv_cd'";
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -545,7 +558,7 @@ function fatch_training_allocation_list($sub_div,$training_type,$training_venue,
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
 	Where training_schedule.schedule_code > 0 ";
-	if($training_type!='0')
+	if($training_type!='0' && $training_type!='')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')
 		//$sql.=" and training_venue.subdivisioncd ='$sub_div'";
@@ -579,7 +592,7 @@ function fatch_training_allocation_listAct($sub_div,$training_type,$training_ven
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
 	Where training_schedule.schedule_code > 0 ";
-	if($training_type!='0')
+	if($training_type!='0' && $training_type!='')
 		$sql.=" and training_schedule.training_type = '$training_type'";
     if($sub_div!='' && $sub_div!='0')
 		//$sql.=" and training_venue.subdivisioncd ='$sub_div'";
@@ -592,7 +605,8 @@ function fatch_training_allocation_listAct($sub_div,$training_type,$training_ven
 		$sql.=" and training_schedule.training_dt <= '$todt%'";
 	$sql.=" order by training_schedule.schedule_code";
 	$sql.=" ASC LIMIT $p_num , $items";
-
+    // echo $sql;
+	// exit;
 	$rs=execSelect($sql);
 	return $rs;
 }
@@ -621,9 +635,28 @@ function fatch_personnel_ag_sch($schedule_cd)
 	$rs=execSelect($sql);
 	return $rs;
 }
+function fatch_personnel_ag_sch1($schedule_cd)
+{
+	$sql; $rs;
+	$sql="Select training_pp.per_code, training_pp.per_name From training_pp ";
+	$sql.=" where training_pp.training_sch='$schedule_cd' and training_pp.training_attended='Y'";
+	$rs=execSelect($sql);
+	return $rs;
+}
 function update_training_pp_attendance($per_cd,$trn_dt_time,$attend)
 {
-	$sql="update training_pp set training_attended='$attend' where training_sch='$trn_dt_time' and per_code='$per_cd'";
+	$sql="update training_pp set training_attended='$attend' where per_code='$per_cd'";
+	if($trn_dt_time!="")
+		$sql.=" and training_sch='$trn_dt_time'";
+	$i=execUpdate($sql);
+	return $i;
+}
+//personnel id wise
+function update_training_pp_attendance_per_id($per_cd,$trn_type,$attend)
+{
+	$sql="update training_pp set training_attended='$attend' where per_code='$per_cd'";
+	if($trn_type!="")
+		$sql.=" and training_type='$trn_type'";
 	$i=execUpdate($sql);
 	return $i;
 }

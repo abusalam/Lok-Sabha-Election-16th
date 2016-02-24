@@ -40,7 +40,7 @@ function office_list(str)
      qstr="ajax-training.php?sub_div="+sub_div+"&training_venue="+training_venue+"&training_type="+training_type+"&frmdt="+frmdt+"&todt="+todt+"&opn=tal&search=search";
 	else
      qstr="ajax-training.php?sub_div="+sub_div+"&training_venue="+training_venue+"&training_type="+training_type+"&frmdt="+frmdt+"&todt="+todt+"&opn=tal&p="+page+"&a="+all;
-	 //alert(qstr);
+	//alert(qstr);
 	xmlhttp.open("GET",qstr,true);
 	//xmlhttp.open("GET","ajax-training.php?sub_div="+sub_div+"&training_type="+training_type+"&training_venue="+training_venue+"&opn=tal&frmdt="+frmdt+"&todt="+todt+"&p="+page+"&a="+all,true);
 	document.getElementById("training_allocation_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";

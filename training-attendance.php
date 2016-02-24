@@ -206,6 +206,7 @@ if(isset($_REQUEST['msg']))
     <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
+     <tr><td align="center"><img src="images/blank.gif" alt="" height="5px" /></td><td align="right"><strong>»</strong>&nbsp;<a href="per_id_wise_absent.php" class="k-button">Personnel Id Wise</a></td></tr>
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
 	<tr>
 	  <td align="left"><span class="error">*</span>Subdivision</td>

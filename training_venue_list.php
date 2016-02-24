@@ -41,6 +41,7 @@ function termination_list(str)
     qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&search="+str;
 	else
     qstr="ajax-trainingvenuelist.php?subdivision="+subdivision+"&venuename="+venuename+"&dist="+dist+"&p="+page+"&a="+all;
+	//alert(qstr);
 	xmlhttp.open("GET",qstr,true);
 	document.getElementById("trainingvenue_list_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";

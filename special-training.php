@@ -30,8 +30,11 @@ if(isset($_SESSION['subdiv_cd']))
 		
 	}
 }*/
-function fetch_sub_wise_venue(str)
+function fetch_sub_wise_venue(strsd)
 {
+	var str=document.getElementById('area_pref').value;
+	//alert(str);
+	//alert(strsd);
 	if (window.XMLHttpRequest)
 	  {
 	  xmlhttp=new XMLHttpRequest();
@@ -49,7 +52,7 @@ function fetch_sub_wise_venue(str)
 		venue_capacity('0');
 		}
 	  }
-	xmlhttp.open("GET","ajax-training.php?subdivcd="+str+"&opn=trnvenue",true);
+	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivcd="+strsd+"&opn=trnvenue",true);
 	xmlhttp.send();
 	
 }

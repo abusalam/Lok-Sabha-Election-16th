@@ -56,6 +56,7 @@ if(isset($_SESSION['subdiv_cd']))
 	$subdiv_cd=$_SESSION['subdiv_cd'];
 else
 	$subdiv_cd="0";
+
 if(isset($_SESSION['pc_cd']))
 	$pc_cd=sprintf("%02d",$_SESSION['pc_cd']);
 else

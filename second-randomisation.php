@@ -16,7 +16,7 @@ include('header/header.php');
 <?php
 $subdiv_cd="0";
 if(isset($_SESSION['subdiv_cd']) && $_SESSION['subdiv_cd']!=null)
-	$subdiv_cd=sprintf("%02d",$_SESSION['subdiv_cd']);
+	$subdiv_cd=sprintf("%04d",$_SESSION['subdiv_cd']);
 ?>
 <script type="text/javascript">
 function lock_all()
@@ -137,7 +137,7 @@ function randomise_click()
 	message.innerHTML="";
 	if(document.getElementById('txt1').value=='admin')
 	{
-	var sub=document.getElementById('hid_subdiv').value;
+	var sub1=document.getElementById('hid_subdiv').value;
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -156,7 +156,7 @@ function randomise_click()
 		document.getElementById('txt1').value="";
 		}
 	  }
-	xmlhttp.open("GET","randomise2.php?subdiv_cd="+sub+"&dist=<?php print $dist_cd; ?>",true);
+	xmlhttp.open("GET","randomise2.php?subdiv_cd="+sub1+"&dist=<?php print $dist_cd; ?>",true);
 	document.getElementById("rand_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
 	document.getElementById("form1").style="cursor:wait";
 	xmlhttp.send();

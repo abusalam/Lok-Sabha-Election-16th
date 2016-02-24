@@ -8,7 +8,38 @@ session_start();
 <?php
 include('header/header.php');
 ?>
-
+<script>
+function validate()
+{
+	
+	var from=document.getElementById("from").value;
+	var to=document.getElementById("to").value;
+	if($.trim(from)=="")
+	{
+		document.getElementById("msg").innerHTML="Enter From";
+		document.getElementById("from").focus();
+		return false;
+	}
+	if($.trim(to)=="")
+	{
+		document.getElementById("msg").innerHTML="Enter To";
+		document.getElementById("to").focus();
+		return false;
+	}
+	if(from>to)
+	{
+		document.getElementById("msg").innerHTML="Please check record no";
+		document.getElementById("from").focus();
+		return false;
+	}
+	if(((to)-($from))>100)
+	{
+		document.getElementById("msg").innerHTML="Record should not be greater than 100";
+		document.getElementById("from").focus();
+		return false;
+	}
+}
+</script>
 </head>
 <?php
 include_once('function/sms_fun.php');
@@ -20,7 +51,7 @@ if($sub=="Send SMS")
 {
 		$from=isset($_REQUEST['from'])?$_REQUEST['from']:0;
 		$to=isset($_REQUEST['to'])?$_REQUEST['to']:0;
-		$limit=$to-$from;
+		$limit=$to-$from+1;
 		$rs_data=fatch_SMS_from_sms_table(($from-1),$limit);
 		if(rowCount($rs_data)>0)
 		{
@@ -29,7 +60,7 @@ if($sub=="Send SMS")
 				$row_data=getRows($rs_data);
 				$name=$row_data['name'];
 				$mob_no=$row_data['phone_no'];
-				$Message=$row_data['message'];
+				$Message="To ".$name.", ".$row_data['message'];
 				
 				$DestinationAddress = $mob_no;
 				//include('sms/Index.php');			
@@ -67,11 +98,11 @@ if(isset($_REQUEST['msg']))
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
-	<tr><td align="center" width="50%">From : <input type="text" name="from" id="from" style="width:50px;" onkeypress="javascript:return wholenumbersonly(event);" /></td>
-	<td align="center" width="50%">To : <input type="text" name="to" id="to" style="width:50px;" onkeypress="javascript:return wholenumbersonly(event);" /></td></tr>
+	<tr><td align="center" width="50%"><span class="error">*</span>From : <input type="text" name="from" id="from" style="width:50px;" onkeypress="javascript:return wholenumbersonly(event);" /></td>
+	<td align="center" width="50%"><span class="error">*</span>To : <input type="text" name="to" id="to" style="width:50px;" onkeypress="javascript:return wholenumbersonly(event);" /></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<tr>
-	  <td align="center" colspan="2"><input type="submit" name="send" id="send" value="Send SMS" class="button" /></td></tr>
+	  <td align="center" colspan="2"><input type="submit" name="send" id="send" value="Send SMS" class="button" onclick="javascript:return validate();" /></td></tr>
     <tr>
       <td align="left">&nbsp;</td>
       <td align="left">&nbsp;</td>

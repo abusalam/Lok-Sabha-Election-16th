@@ -45,7 +45,8 @@ second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela
 WHERE personnela.forsubdivision = '$subdiv_cd' and  personnela.booked = 'P'  and personnela.poststat = 'PB'";
 $i=execUpdate($sql7);
 //================================end of personnel join=======================//
-
+//echo $subdiv_cd;
+//exit;
 //================================office join=================================//
 $sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pr_status = 'PR'";
 $i=execUpdate($sql8);
