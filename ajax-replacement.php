@@ -60,7 +60,7 @@ if($p_id != '')
 	}
 	if($p_dtl=='y')
 	{
-		if($row_person['booked']=='C' || $row_person['booked']=='')
+		if($row_person['booked']=='')
 		{
 			echo "Not Available for Selected Operation";
 		}

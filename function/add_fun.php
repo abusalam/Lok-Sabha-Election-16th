@@ -826,7 +826,7 @@ function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd
 		$j=execDelete($sql1);
 		$sql2="update personnel set poststat='$post_status' where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
-		$sql3="update personnela set poststat='$post_status',rand_numb='0' where personcd='$PersonalID'";
+		$sql3="update personnela set poststat='$post_status',rand_numb='0',booked='',selected=0 where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
 	//}	
 	connection_close();
