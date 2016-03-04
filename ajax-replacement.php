@@ -78,7 +78,7 @@ if($p_id != '')
 		echo "<tr><td align='left' colspan='2'>Present Address: </td><td align='left' colspan='2'>".$row_person['pre_ass']."<hidden id='hid_pre_ass' name='hid_pre_ass' style='display:none;'>".$row_person['pre_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_person['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_person['per_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_person['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_person['post_ass_cd']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
+		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_sub_div' name='hid_sub_div' style='display:none;'>".$row_person['subdivisioncd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
 		echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='o_booked'>Yes</td></tr>\n";
 		echo "</table>";
 		}
@@ -99,13 +99,14 @@ $assembly=isset($_GET["assembly"])?$_GET["assembly"]:"";
 $posting_status=isset($_GET["posting_status"])?$_GET["posting_status"]:"";
 $groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
 $gender=isset($_GET["gender"])?$_GET["gender"]:"";
+$draft_subdiv=isset($_GET["draft_subdiv"])?$_GET["draft_subdiv"]:"";
 if($opn=='g_new_per')
 {
 	$forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
 	if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 	{
 		$rs_new_per; $row_new_per;
-		$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender);
+		$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv);
 		//$random_rs_person=array_rand($rs_new_per);
 		$num_rows_new_per=rowCount($rs_new_per);
 		if($num_rows_new_per>0)
@@ -137,7 +138,7 @@ if($opn=='g_new_per_res')
 	if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 	{
 		$rs_new_per; $row_new_per;
-		$rs_new_per=fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender);
+		$rs_new_per=fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv);
 		//$random_rs_person=array_rand($rs_new_per);
 		$num_rows_new_per=rowCount($rs_new_per);
 		if($num_rows_new_per>0)
@@ -176,6 +177,7 @@ if($opn=='g_rplc')
 	$booked=isset($_GET["booked"])?$_GET["booked"]:"";
 	$dcrccd=isset($_GET["dcrccd"])?$_GET["dcrccd"]:"";
 	$training2_sch=isset($_GET["training2_sch"])?$_GET["training2_sch"]:"";
+	$poststat=isset($_GET["poststat"])?$_GET["poststat"]:"";
 	//if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 	if($old_p_id!='' && $new_p_id!='' && $ass!='' && $groupid!='')
 	{
@@ -192,6 +194,8 @@ if($opn=='g_rplc')
 			$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
 			delete_second_rand_table_reserve($new_p_id);
 		}
+		save_data_in_second_appt_after_rplc($ass,$groupid,$poststat);
+		
 	}
 }
 //================================ Single Replacement Personnel =======================================
@@ -284,6 +288,8 @@ if($opn=='pg_rplc')
 	$new_p_id=isset($_GET["new_p_id"])?$_GET["new_p_id"]:"";
 	$forassembly=isset($_GET["forassembly"])?$_GET["forassembly"]:"";
 	$forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
+	$chngepoststatus=isset($_GET["chngepoststatus"])?$_GET["chngepoststatus"]:"";
+	$post_status=isset($_GET["post_status"])?$_GET["post_status"]:"";
 	$samevenuetraining=isset($_GET["samevenuetraining"])?$_GET["samevenuetraining"]:"";
 	$usercd=$_SESSION['user_cd'];
 	$training_sch=isset($_GET["training_sch"])?$_GET["training_sch"]:"";
@@ -294,7 +300,8 @@ if($opn=='pg_rplc')
 	$desig=$rowNew['off_desg'];
 	$post_stat=$rowNew['poststat'];
 	$subdiv=$rowNew['subdivisioncd'];
-	$for_subdiv=$rowNew['forsubdivision'];$for_pc=$rowNew['forpc'];
+	$for_subdiv=$rowNew['forsubdivision'];
+	$for_pc=$rowNew['forpc'];
 	$ass_temp=$rowNew['assembly_temp'];
 	$ass_off=$rowNew['assembly_off'];
 	$ass_perm=$rowNew['assembly_perm'];
@@ -343,7 +350,14 @@ if($opn=='pg_rplc')
 				
 			}
 			$selected=0;
-			$res1=update_personnel_PreGroupReplacement($old_p_id,$forassembly,'','C',$selected);
+			if($chngepoststatus=='true')
+			{
+			    $res1=update_personnel_PreGroupReplacement_change_post_status($old_p_id,'',$post_status,'',$selected);
+			}
+			else
+			{
+				$res1=update_personnel_PreGroupReplacement($old_p_id,'','','C',$selected);
+			}
 			if($res1==1)
 			{
 				echo "Changed";

@@ -69,7 +69,8 @@ $i=execUpdate($sql13);
 
 
 //echo $subdiv_cd;
-$sql21="update second_appt a join assembly b on a.assembly=b.assemblycd set a.assembly_name=b.assemblyname where a.subdivcd='$subdiv_cd'";
+$sql21="update second_appt a join assembly b on a.assembly=b.assemblycd 
+and a.subdivcd=b.subdivisioncd  set a.assembly_name=b.assemblyname where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql21);
 
 //================================Start DCRC join====================================//

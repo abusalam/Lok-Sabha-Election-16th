@@ -96,7 +96,7 @@ function populate_click()
 <tr><td align="center"><table width="1000px" class="table_blue">
 	<tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td></tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center"><?php echo $subdiv_name; ?> PARLIAMENT CONSTITUENCY</td></tr>
+<tr><td align="center"><?php echo $subdiv_name; ?> SUBDIVISION</td></tr>
 <tr>
   <td align="center">SECOND APPOINTMENT LETTER POPULATE FOR RESERVE PERSONNEL</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">

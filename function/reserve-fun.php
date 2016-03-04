@@ -6,7 +6,7 @@ function fatch_PersonDetails($p_id)
 	$sql="SELECT personnela.officer_name, personnela.officecd, personnela.off_desg, office.address1, office.address2, office.postoffice,
 	policestation.policestation, office.pin, subdivision.subdivision, DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,
 	personnela.gender,personnela.epic,personnela.forpc,personnela.forassembly,personnela.groupid, personnela.booked, poststat.poststatus, personnela.present_addr1, personnela.present_addr2,
-	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision, personnela.dcrccd, personnela.training2_sch
+	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision, personnela.dcrccd, personnela.training2_sch,personnela.subdivisioncd
 	 FROM personnela INNER JOIN
     office ON personnela.officecd = office.officecd INNER JOIN 
     assembly AS ass_pre ON personnela.assembly_temp = ass_pre.assemblycd INNER JOIN 
@@ -30,13 +30,10 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd 
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$for_subdiv'";
 
 	$rsc=execSelect($sqlc);
 	$rowc=getRows($rsc);
@@ -46,19 +43,21 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
 	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
   	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
-  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,ass_pre.assemblyname As pre_ass,
-  	ass_per.assemblyname As per_ass,ass_ofc.assemblyname As post_ass
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
+	
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	
 	From personnela Inner Join office On personnela.officecd = office.officecd
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd 
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
+
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null)  and personnela.forsubdivision='$for_subdiv'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null)  and personnela.subdivisioncd='$for_subdiv'";
 	$sql.=" limit 1 offset $random_no";
 	$rs=execSelect($sql);
 	connection_close();

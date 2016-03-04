@@ -264,9 +264,12 @@ function replacement()
 		document.getElementById('print').disabled=false;
 		fatch_new_personnel_dtl_after_replace(new_p_id);
 		document.getElementById('replace').disabled=true;
+		document.getElementById('fakecontainer').style.display= 'none';
 		}
 	  }
 	xmlhttp.open("GET","ajax-post-status-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&post_stat="+post_stat+"&groupid="+groupid+"&post_stat_new="+post_stat_new+"&opn=g_rplc",true);
+	
+	document.getElementById('fakecontainer').style.display = 'block';
 	xmlhttp.send();
 }
 function print_appletter()
@@ -499,5 +502,6 @@ function print_appletter()
 </td></tr></table>
 </td></tr></table>
 </div>
+<div id="fakecontainer" style="display:none;"><div id="loading">Please wait...</div></div>
 </body>
 </html>

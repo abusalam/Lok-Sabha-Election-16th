@@ -277,7 +277,7 @@ function validate()
 	}
 	if(forsubdivision=="0")
 	{
-		document.getElementById("msg").innerHTML="Select For Subdivision Name";
+		document.getElementById("msg").innerHTML="Select For Area";
 		document.getElementById("forsubdivision").focus();
 		//fadeout();
 		return false;
@@ -377,9 +377,9 @@ if($action=='Swapping')
 									$rowBn=null;
 							?>
       				</select></td>
-                <td align="left" valign="top" width="20%"><span class="error">*</span>For Sub Division</td>
+                <td align="left" valign="top" width="20%"><span class="error">*</span>For Area</td>
       <td align="left" valign="top" width="22%"><select name="forsubdivision" id="forsubdivision" style="width:170px;" disabled="disabled" onchange="return for_subdiv_change(this.value);">
-      <option value="0">-Select For Subdivision-</option>
+      <option value="0">-Select For Area-</option>
                             <?php 	$rsBn=fatch_Subdivision($districtcd);
 									$num_rows=rowCount($rsBn);
 									if($num_rows>0)

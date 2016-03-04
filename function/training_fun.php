@@ -643,11 +643,55 @@ function fatch_personnel_ag_sch1($schedule_cd)
 	$rs=execSelect($sql);
 	return $rs;
 }
+function fatch_personnel_ag_sch_absent_print($schedule_cd,$p_id)
+{
+	$sql; $rs;
+	$sql="Select Distinct personnela.officer_name,
+	  personnela.off_desg As person_desig,
+	  personnela.personcd,
+	  office.office,
+	  concat(office.address1,',',office.address2) as ofc_address,
+	    office.officecd,
+	  poststat.poststatus,
+	    subdivision.subdivision,
+	  district.district,
+	  office.pin,
+	  personnela.mob_no,
+	   
+	    training_type.training_desc,
+	  training_venue.venuename,
+	  concat(training_venue.venueaddress1,',',training_venue.venueaddress2) as venue_address,
+	  Date_Format(training_schedule.training_dt, '%d/%m/%Y') As training_dt,
+	  training_schedule.training_time
+	
+	  From personnela
+	  Inner Join office On office.officecd = personnela.officecd
+	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join training_pp On personnela.personcd = training_pp.per_code
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	  Inner Join training_type On training_type.training_code =
+		training_pp.training_type
+	  Left Join training_schedule On training_schedule.schedule_code =
+		training_pp.training_sch
+	  Left Join training_venue On training_venue.venue_cd =
+		training_schedule.training_venue";
+	$sql.=" where training_pp.training_attended='A'";
+	if($schedule_cd!="" && $schedule_cd!="0")
+		$sql.=" and training_pp.training_sch='$schedule_cd'";
+	if($p_id!="" && $p_id!="0")
+		$sql.=" and training_pp.per_code='$p_id'";
+	$rs=execSelect($sql);
+	return $rs;
+}
+
 function update_training_pp_attendance($per_cd,$trn_dt_time,$attend)
 {
 	$sql="update training_pp set training_attended='$attend' where per_code='$per_cd'";
 	if($trn_dt_time!="")
 		$sql.=" and training_sch='$trn_dt_time'";
+	//echo $sql;
+	//exit;
 	$i=execUpdate($sql);
 	return $i;
 }

@@ -139,7 +139,10 @@ function area_detail(str)
 		if(str==0)
 		  fetch_sub_wise_venue('0');
 		 else
-		  fetch_sub_wise_venue('<?php print $subdiv_cd; ?>');
+		 {
+		  var sd=document.getElementById('area').value;
+		  fetch_sub_wise_venue(sd);
+		 }
 		}
 	  }
 	xmlhttp.open("GET","ajax-training.php?area="+str+"&subdivision=<?php print $subdiv_cd; ?>&opn=areadtl",true);

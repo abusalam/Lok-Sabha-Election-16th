@@ -3,7 +3,7 @@ include_once("MICS_SMS.php");
 
 // Declare variables.
 $Username = "ceowb";
-$Password = "@ceowbelection14";
+$Password = "#ceo_election15";
 $MsgSender = "WBELEC";
 $DestinationAddress = $mob_no;
 //$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." at ".$training_time." at ".$venuename;
@@ -15,6 +15,9 @@ try
 	// Send SMS through the HTTP API
 	$Result = $MICS_SMS->SendSMS($MsgSender, $DestinationAddress, $Message);
 	// Check result object returned and give response to end user according to success or not.
+	//echo $Result->ErrorCode;
+	//echo $Result->ErrorMessage;
+	//echo $Result->Success;
 	if ($Result->Success == true)
 		$Message = "Message successfully sent!";
 	else

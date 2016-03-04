@@ -221,7 +221,7 @@ if($opn=='gp_replacement')
 	$groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
 	include_once('function/appointment_fun.php');
 
-	$sql0="delete from second_appt where assembly='$forassembly' and groupid='$groupid'";
+	/*$sql0="delete from second_appt where assembly='$forassembly' and groupid='$groupid'";
 $a=execDelete($sql0);
 
 $sql1="INSERT INTO second_appt( assembly, subdivcd, groupid ,mem_no)  SELECT  forassembly, forsubdivision, groupid,count(*)  FROM personnela WHERE booked = 'P' and forassembly='$forassembly' and groupid='$groupid' GROUP BY forassembly, groupid ";
@@ -364,7 +364,7 @@ if($poststat=='PB')
 {
 	$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pb_officecd, second_appt.per_poststat= a.pb_status where  a.assembly='$forassembly' and a.groupid='$groupid'";
 	$d1=execUpdate($sql28);
-}
+}*/
 
 /*	if($count<($i-1))
 	{

@@ -32,7 +32,7 @@ if($sub=="Send SMS")
 				$Message="To ".$name.", ".$row_data['message'];
 				
 				$DestinationAddress = $mob_no;
-				//include('sms/Index.php');			
+				include('sms/Index.php');			
 			}
 				
 		}
@@ -86,5 +86,14 @@ if(isset($_REQUEST['msg']))
 </td></tr>
 </table>
 </div>
+<div id="fakecontainer" style="display:none;"><div id="loading">Please wait...</div></div> 
 </body>
+<script language="javascript" type="text/javascript">
+(function (d) {
+  d.getElementById('form1').onsubmit = function () {
+	  d.getElementById('form1').style.display= 'none';
+      d.getElementById('fakecontainer').style.display = 'block';
+  };
+}(document));
+</script>
 </html>

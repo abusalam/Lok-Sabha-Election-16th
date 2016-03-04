@@ -773,6 +773,8 @@ function fatch_dcrc_maxcode($subdivision)
 function duplicate_dcrc_master($party_req,$assembly,$member,$subdivision)
 {
 	$sql="select count(*) as cnt from dcrc_party where subdivisioncd='$subdivision' and dcrc_party.assemblycd='$assembly' and number_of_member='$member' and partyindcrc='$party_req'";
+	//echo $sql;
+	//exit;
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$i=$row['cnt'];

@@ -15,11 +15,11 @@ body{font: 13px Verdana, Geneva, sans-serif;}
 date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	include_once('../function/appointment_fun.php');
-	$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
-	$from=(isset($_POST['txtfrom'])?$_POST['txtfrom']:'0');
-	$to=(isset($_POST['txtto'])?$_POST['txtto']:'0');
-	$hid_rec=(isset($_POST['hid_rec'])?$_POST['hid_rec']:'0');
-	$office=(isset($_POST['office'])?$_POST['office']:'0');
+	$subdiv=(isset($_REQUEST['Subdivision'])?decode($_REQUEST['Subdivision']):'0');
+	$from=(isset($_REQUEST['txtfrom'])?decode($_REQUEST['txtfrom']):'0');
+	$to=(isset($_REQUEST['txtto'])?decode($_REQUEST['txtto']):'0');
+	$hid_rec=(isset($_REQUEST['hid_rec'])?decode($_REQUEST['hid_rec']):'0');
+	$office=(isset($_REQUEST['office'])?$_REQUEST['office']:'0');
 	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
 	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
 	if($from>$hid_rec || $to>$hid_rec)
@@ -32,9 +32,9 @@ date_default_timezone_set('Asia/Calcutta');
 		echo "Please check record no";
 		exit;
 	}
-	if($from>$hid_rec || $to>$hid_rec)
+	if((($to)-($from))>500)
 	{
-		echo "Please check record no";
+		echo "Records should not be greater than 500";
 		exit;
 	}
 	$rsApp=first_app_letter3_print1($subdiv,$from-1,$to-$from+1);

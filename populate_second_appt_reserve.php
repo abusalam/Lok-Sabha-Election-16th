@@ -56,7 +56,7 @@ $i=execUpdate($sql86);
 
 //update assembly
 
-$sql21="update second_rand_table_reserve a join assembly b on a.assemblycd=b.assemblycd set a.assembly=b.assemblyname where a.subdivisioncd='$subdiv_cd'";
+$sql21="update second_rand_table_reserve a join assembly b on a.assemblycd=b.assemblycd and a.subdivisioncd=b.subdivisioncd  set a.assembly=b.assemblyname where a.subdivisioncd='$subdiv_cd'";
 $i=execUpdate($sql21);
 
 //update DCRC details

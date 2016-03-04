@@ -34,6 +34,7 @@ else
 	exit;
 }
 //echo $sub;
+//echo $dist;
 //exit;
 //$fpc='41';
 //$dist='18';

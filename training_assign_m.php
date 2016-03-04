@@ -80,7 +80,7 @@ if($action=='Submit')
 	if(count($tr_array)>0)
 	{
 		$Count=0;
-		$msg="<b>Training assigned not fulfilled</b>";
+		$msg="<b>Training assign not fulfilled</b>";
 		$msg.="</br>";
 		foreach($tr_array as $key => $value)
 		{

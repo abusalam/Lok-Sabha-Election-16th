@@ -286,14 +286,14 @@ if($action=='Swapping')
 	
 		if($rsEmp<1)
 		{
-			$msg="<div class='alert-error'>No record found for transffer</div>";
+			$msg="<div class='alert-error'>No record found for transfer</div>";
 		}
 		else
 		{
 			   //--------------------------------------------		  
 		   //----------------------------------	 
 	//---------------------------------------
-	       $msg="<div class='alert-success'>".$rsEmp." Record(s) transffered successfully</div>";
+	       $msg="<div class='alert-success'>".$rsEmp." Record(s) transferred successfully</div>";
 		}
 		$rsEmp=NULL;
  	} 
@@ -311,7 +311,7 @@ if($action=='Swapping')
   <tr><td align="center"><div width="50%" class="h2"><?php print isset($environment)?$environment:""; ?></div></td>
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
-<tr><td align="center">EMPLOYEE REVERSE SWAPPING DETAILS </td></tr>
+<tr><td align="center">EMPLOYEE REVERSE SWAPPING DETAILS (EXTRA)</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
   <table width="85%" class="form" cellpadding="0" style="padding-left:6px;">
     <tr>

@@ -21,7 +21,7 @@ if($num_rows<1)
 }
 else
 {
-	 $body = "Bank Name"."\t"."Branch Name"."\t"."IFSC Code"."\t"."Bank Acc No"."\t"."Officer Name"."\t"."Mobile No"."\t \n ";
+	 $body = "Bank Name"."\t"."Branch Name"."\t"."IFSC Code"."\t"."Bank A/c No"."\t"."Officer Name"."\t"."PIN"."\t"."Office Cd"."\t"."Mobile No"."\t \n ";
 	 echo $body;
 	 for($i=1;$i<=$num_rows;$i++)
 	{
@@ -30,8 +30,10 @@ else
 			   echo $row['bank_name']."\t";
 			   echo $row['branch_name']."\t";
 			   echo $row['ifsc_code']."\t";
-			   echo $row['bank_acc_no']."\t";
+			   echo $row['bank_ac']."\t";
 			   echo $row['officer_name']."\t";
+			   echo $row['personcd']."\t";
+			   echo $row['officecd']."\t";
 			   echo $row['mob_no']."\t \n";
 	}
 	 

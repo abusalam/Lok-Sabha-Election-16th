@@ -677,16 +677,26 @@ if($opn=='date_time')
 }
 if($opn=='personnel')
 {
-	$schedule_cd=$_GET['sch'];
+	$schedule_cd=isset($_GET['sch'])?$_GET['sch']:"";
 
 	$rsPer=fatch_personnel_ag_sch1($schedule_cd);
 	$num_rows=rowCount($rsPer);
 	if($num_rows>0)
 	{
-		for($i=1;$i<=$num_rows;$i++)
+		echo "\n<input type='hidden' name='hidRow' id='hidRow' value='$num_rows' />\n";
+		for($j=1;$j<=$num_rows;$j++)
 		{
 			$rowPer=getRows($rsPer);
-			echo "<tr><td align='center' width='25%'>$rowPer[0]<input type='hidden' name='hidId$i' value='$rowPer[0]' /></td><td align='left' width='65%'>$rowPer[1]</td><td align='center' width='10%'><input type='checkbox' name='chkbox$i' /></td></tr>";
+			//echo "<tr><td align='center' width='25%'>$rowPer[0]<input type='hidden' name='hidId$i' value='$rowPer[0]' /></td><td align='left' width='65%'>$rowPer[1]</td><td align='center' width='10%'><input type='checkbox' name='chkbox$i' /></td></tr>";
+			$pid=$rowPer['0'];
+			
+			echo "<tr>";
+			echo "<td align='center' width='25%'>$rowPer[0]</td>";
+			
+			echo "<input type='text' id='hidId$j' name='hidId$j' value='$pid' >";
+			
+			echo "<td align='left' width='65%'>$rowPer[1]</td>";
+			echo "<td><input type='checkbox' name='chkbox$j' id='chkbox$j' /></td></tr>";
 			$rowPer=NULL;
 		}
 	}

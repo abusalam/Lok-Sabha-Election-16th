@@ -9,33 +9,51 @@ session_start();
 <?php
 include('header/header.php');
 ?>
-<script type="text/javascript" language="javascript">
-function validate()
+<?php
+if(isset($_REQUEST['populate']) && $_REQUEST['populate']!=null)
+	$sub=$_REQUEST['populate'];
+else
+	$sub="";
+if($sub=="Populate")
 {
-	var subdivision=document.getElementById("Subdivision");
-	var posting_status=document.getElementById("posting_status");
-
-	if(subdivision.value=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Subdivision";
-		document.getElementById("Subdivision").focus();
-		return false;
-	}
-	//alert(pc.options.length);
-	if(posting_status.value=="" || posting_status.value=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Post Status";
-		document.getElementById("posting_status").focus();
-		return false;
-	}
-
+ ?>
+<script type="text/javascript" language="javascript">
+function populate_click()
+{
+	var subdiv=document.getElementById('hid_subdiv').value;
+	//window.history.back();
+	//document.getElementById("rand_result").innerHTML="";
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("populate_result").innerHTML=xmlhttp.responseText;
+		document.getElementById("populate").disabled=true;
+		document.getElementById("form1").style="cursor:default";
+		}
+	  }
+	xmlhttp.open("GET","first_app_letter_populate.php?subdiv_cd="+subdiv+"&dist=<?php print $dist_cd; ?>",true);
+	document.getElementById("populate_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	document.getElementById("form1").style="cursor:wait";
+	xmlhttp.send();
 }
 </script>
+<?php
+}
+?>
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/appointment_fun.php');
-$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
+/*$subdiv=(isset($_POST['Subdivision'])?$_POST['Subdivision']:'0');
 $posting_status=isset($_POST['posting_status'])?$_POST['posting_status']:'0';
 $submit=(isset($_POST['submit'])?$_POST['submit']:'');
 $n=0;
@@ -61,7 +79,7 @@ if($submit=='Submit')
 	//$str_post_stat=mysql_real_escape_string($_REQUEST['posting_status']);
 	//echo $str_post_stat;
 	//exit;
-	$maker = isset($_POST['selected_text'])?$_POST['selected_text']:'0';
+	/*$maker = isset($_POST['selected_text'])?$_POST['selected_text']:'0';
 	delete_prev_data_app3($subdiv,$maker);
 	$rsApp=first_appointment_letter3($subdiv,$posting_status,$maker);
 	if($rsApp<1)
@@ -144,9 +162,9 @@ if($submit=='Submit')
 	{
 		$msg="<div class='alert-error'>Selected persons are not available for training</div>";
 	}*/
-}
+/*}*/
 ?>
-<body  onload="javascript:return bind_data();">
+<body onload="return populate_click();">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr><td align="center"><table width="1000px" class="table_blue">
@@ -155,55 +173,22 @@ if($submit=='Submit')
 <tr>
   <td align="center">FIRST APPOINTMENT LETTER ISSUE</td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" >
-    <table width="70%" class="form" cellpadding="0">
+    <table width="50%" class="form" cellpadding="0">
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
     <tr><td colspan="2" style="height:10px" align="center">&nbsp;</td></tr>
+    <tr>
+      <td align="center" colspan="2"><div id="populate_result">&nbsp;</div></td></tr>
+      
     <tr><td align="center"><img src="images/blank.gif" alt="" height="5px" /></td><td align="right"><strong>»</strong>&nbsp;<a href="first-appointment-letter3-print.php" class="k-button">Print Letter</a></td></tr>
+    <input type="hidden" id="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
+    <tr><td colspan="2" style="height:10px" align="center">&nbsp;</td></tr>
 	<tr>
-	  <td align="left"><span class="error">*</span>Subdivision</td>
-	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;">
-      						<option value="0">-Select Subdivision-</option>
-                            <?php 	$districtcd=$dist_cd;
-									$rsBn=fatch_Subdivision($districtcd);
-									$num_rows=rowCount($rsBn);
-									if($num_rows>0)
-									{
-										for($i=1;$i<=$num_rows;$i++)
-										{
-											$rowSubDiv=getRows($rsBn);
-											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
-										}
-									}
-									$rsBn=null;
-									$num_rows=0;
-									$rowSubDiv=null;
-							?>
-      				</select></td></tr>
-    <tr>
-    <input type="hidden" name="selected_text" id="selected_text" value="" />
-      <td align="left"><span class="error">*</span>Post Status </td>
-      <td align="left"><select name="posting_status" id="posting_status" style="width:170px;"  onchange="document.getElementById('selected_text').value=this.options[this.selectedIndex].text">
-      						<option value="0">-Select Post Status-</option>
-                            <?php 	$rsP=fatch_postingstatus();
-									$num_rows=rowCount($rsP);
-									if($num_rows>0)
-									{
-										for($i=1;$i<=$num_rows;$i++)
-										{
-											$rowP=getRows($rsP);
-											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
-										}
-									}
-									$rsP=null;
-									$num_rows=0;
-									$rowP=null;
-							?>
-      				</select></td>
-    </tr>   
-    <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
-    <tr>
-      <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" /></td></tr>
+	  <td align="center" colspan="2"><input type="submit" name="populate" id="populate" value="Populate" class="button"  style="height:50px; width:100px;" /></td>
+  
+    </tr>
       <tr><td colspan="2" align="center"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+      <tr><td colspan="2" style="height:10px" align="center">&nbsp;</td></tr>
+      <tr><td colspan="2" style="height:10px" align="center">&nbsp;</td></tr>
 </table>
 </form>
 </td></tr></table>
@@ -229,10 +214,10 @@ function bind_data()
 }
 </script>
 <script language="javascript" type="text/javascript">
-(function (d) {
+/*(function (d) {
   d.getElementById('form1').onsubmit = function () {
 	  d.getElementById('form1').style.display= 'none';
       d.getElementById('fakecontainer').style.display = 'block';
   };
-}(document));
+}(document));*/
 </script>

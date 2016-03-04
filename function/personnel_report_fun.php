@@ -101,7 +101,10 @@ function fatch_personnelvalidation($sub_div)
 {
 	$sql;$rs;
 	$sql="Select personnel.officecd,
-	      personnel.personcd,officer_name,off_desg,dateofbirth,gender,subdivisioncd,poststat,assembly_temp,assembly_off,assembly_perm,acno,qualificationcd,bank_cd,branchcd,mob_no,bank_acc_no,epic
+	      personnel.personcd,officer_name,off_desg,dateofbirth,gender,subdivisioncd,poststat,assembly_temp,assembly_off,assembly_perm,acno,qualificationcd,bank_cd,branchcd,mob_no,bank_acc_no,epic,
+		  (Select branch.branch_name from branch where branch.branchcd = personnel.branchcd and branch.bank_cd = personnel.bank_cd) As branch_name,
+		  (Select bank.bank_name from bank where bank.bank_cd = personnel.bank_cd) As bank_name
+		  
 From personnel
  Left Join termination On personnel.personcd = termination.personal_id
  where  termination.personal_id is null and ( ";  
@@ -134,7 +137,7 @@ function pp_wise_bank_excel($subdiv,$dist_cd)
 {
 	$sql;$rs;
 	$sql="
-	SELECT bank.bank_name, (
+	SELECT personnel.personcd,personnel.officecd,bank.bank_name, (
 
 SELECT branch.branch_name
 FROM branch
@@ -146,7 +149,7 @@ SELECT branch.ifsc_code
 FROM branch
 WHERE branch.branchcd = personnel.branchcd
 AND branch.bank_cd = personnel.bank_cd
-) AS ifsc_code, personnel.`bank_acc_no` , personnel.`officer_name` , personnel.`mob_no` 
+) AS ifsc_code, CONCAT( personnel.`bank_acc_no`,  '       .' ) as bank_ac, personnel.`officer_name` , personnel.`mob_no` 
 FROM personnel
 INNER JOIN bank ON bank.bank_cd = personnel.bank_cd
 LEFT JOIN termination ON personnel.personcd = termination.personal_id

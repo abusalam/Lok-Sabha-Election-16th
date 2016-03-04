@@ -41,6 +41,7 @@ function per_id_change(str)
 				document.getElementById("op_dtl").innerHTML=xmlhttp1.responseText;
 				document.getElementById('search').disabled=false;
 			}
+		
 		}
 	  }
 	
@@ -80,12 +81,17 @@ function new_per_search()
 		{
 			document.getElementById('replace').disabled=false;
 			$("#venue_sch").show();
+			$("#post_sch").show();
+			
 		}
 		else
 		{
 			document.getElementById('replace').disabled=true;	
 			$("#venue_sch").hide();
 			$("#difnt_sch").hide();
+			$("#post_sch").hide();
+			$("#difnt_post").hide();
+			
 		}
 		document.getElementById('print').disabled=true;
 		}
@@ -112,7 +118,27 @@ function replacement()
 	var forpc=document.getElementById('hid_forpc').innerHTML;
 	var reason=document.getElementById('reason').value;
 	var samevenuetraining=document.getElementById('chkSameVenueTraining').checked;
+	var chngepoststatus=document.getElementById('chkpoststatus').checked;
+	//var per_id1=document.getElementById('per_id').value;
+	var post_status=document.getElementById("post_status").value;
 	var usercd=<?php print $user_cd; ?>;
+	//alert(per_id1);
+	/*if(per_id1=="")
+	{
+		document.getElementById("msg").innerHTML="Select Personnel ID";
+		document.getElementById("per_id").focus();
+		return false;
+	}*/
+	
+	if(document.getElementById('chkpoststatus').checked==true)
+	{
+			if(post_status=="")
+			{
+				document.getElementById("msg").innerHTML="Select Post Status";
+				document.getElementById("post_status").focus();
+				return false;
+			}
+	}
 	if(document.getElementById('chkSameVenueTraining').checked==false)
 	{
 		/*if(training_sch=="")
@@ -148,7 +174,7 @@ function replacement()
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
-	xmlhttp.open("GET","ajax-replacement.php?training_sch="+training_sch+"&old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining+"&reason="+reason+"&usercd="+usercd,true);
+	xmlhttp.open("GET","ajax-replacement.php?training_sch="+training_sch+"&old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining+"&reason="+reason+"&usercd="+usercd+"&chngepoststatus="+chngepoststatus+"&post_status="+post_status,true);
 	xmlhttp.send();
 }
 function print_appletter()
@@ -222,7 +248,7 @@ function schedule_change(str)
       <td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
     <tr>
-    	<td width="50%" class="table2 demo-section" valign="top">
+    	<td width="50%" class="table2" valign="top">
         	<table cellpadding="0" cellspacing="0" width="100%">
             	<tr>
                 	<td align="center" colspan="4"><b>OLD PERSONNEL</b></td>
@@ -244,13 +270,39 @@ function schedule_change(str)
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
 	<tr><td colspan="2" align="right">Reason for Replacement: &nbsp;<input type="text" name="reason" id="reason" maxlength="30" style="width:250px" /></td></tr>
     
-	<tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
-    <tr><td colspan="2" align="left" style="display:none;" id="venue_sch"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" checked onclick="return chkSameVenueTraining_change();" />
-    <label for="chkSameVenueTraining">Training at Same Venue</label></td></tr>
-    <tr><td colspan="2"><img src="images/blank.gif" alt="" height="1" /></td></tr>
+    <tr><td colspan="2" align="left" style="display:none;" id="post_sch"><input type="checkbox" id="chkpoststatus" name="chkpoststatus" onclick="return chkpoststatus_change();" />
+    <label for="chkpoststatus">Change Post Status for Old Personnel</label></td></tr>  
+	  <tr><td colspan="2" style="height: 1px; background-color: #0066CC; color: #FFFFFF; font-weight:bold;"></td></tr>
     
-     <tr style="display:none;" id="difnt_sch">
-          <td align="left"><span class="error">&nbsp;&nbsp;</span>Training Schedule Code &nbsp;&nbsp;&nbsp; <span id="drop_sch"><select name="training_sch" id="training_sch" style="width:220px;">
+    <tr style="display:none;" id="difnt_post" >
+      
+          <td align="left" colspan="2" style="padding-top:2px;"><span class="error">*</span>Post Status&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<select name="post_status" id="post_status" style="width:220px;">
+	    <option value="">-Select Post Status-</option>
+         <?php 	$rsP=fatch_postingstatus();
+									$num_rows=rowCount($rsP);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowP=getRows($rsP);
+											echo "<option value='$rowP[0]'>$rowP[1]</option>\n";
+										}
+									}
+									$rsP=null;
+									$num_rows=0;
+									$rowP=null;
+							?>
+	    </select></td>
+     
+     </tr>
+    
+     
+    <tr><td colspan="2" align="left" style="display:none;" id="venue_sch"><input type="checkbox" id="chkSameVenueTraining" name="chkSameVenueTraining" checked onclick="return chkSameVenueTraining_change();" />
+    <label for="chkSameVenueTraining">Training at Same Venue for New Personnel</label></td></tr>
+      <tr><td colspan="2" style="height: 1px; background-color: #0066CC; color: #FFFFFF; font-weight:bold;"></td></tr>
+    
+     <tr style="display:none;" id="difnt_sch" >
+          <td align="left" style="padding-top:2px;"><span class="error">&nbsp;&nbsp;</span>Training Schedule Code &nbsp;&nbsp;&nbsp; <span id="drop_sch"><select name="training_sch" id="training_sch" style="width:220px;">
 	    <option value="">-Select Training Schedule-</option>
 	    </select></span></td>
           <td align="left" id="venue_details" style="font-size:10.4px">&nbsp;
@@ -286,6 +338,19 @@ function chkSameVenueTraining_change()
 	else
 	{
 		$("#difnt_sch").show();
+	}
+}
+function chkpoststatus_change()
+{
+	if(document.getElementById('chkpoststatus').checked==true)
+	{
+			$("#difnt_post").show();
+	}
+	else
+	{
+		$("#difnt_post").hide();
+		document.getElementById('post_status').value='';
+	
 	}
 }
 </script>

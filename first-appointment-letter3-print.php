@@ -113,7 +113,7 @@ if($submit=="EXCEL")
 	<tr>
       <td align="center" colspan="2"><div id="load_result"></div></td></tr>
 	<tr>
-	  <td align="left"><span class="error">*</span>Subdivision</td>
+	  <td align="left"><span class="error">*</span>For Subdivision</td>
 	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="Subdivision_change(this.value)">
       						<option value="0">-Select Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;

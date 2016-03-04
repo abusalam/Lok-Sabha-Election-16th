@@ -140,8 +140,8 @@ function FancyTable($header, $data)
 			$this->SetFont('','B');
 			
 			$head = array('PIN','Name','Designation','Posting Status','Enrollment Details','Token No');
-			$header1 = array('','','','','AC / Part No. /Sl No.','');
-			$w = array(20,45,40,25,35,25);
+			$header1 = array('','','','','AC / Part /Sl No.','');
+			$w = array(17,45,55,25,28,20);
 				$this->SetFont('Arial','',9);
 			for($j=0;$j<count($head);$j++)
 				$this->Cell($w[$j],7,$head[$j],'LTR',0,'C',true);

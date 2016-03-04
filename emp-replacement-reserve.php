@@ -73,6 +73,7 @@ function new_per_search()
 {
 	document.getElementById('replace').disabled=true;
 	var for_subdiv=document.getElementById('hid_for_subdiv').innerHTML;
+	var draft_subdiv=document.getElementById('hid_sub_div').innerHTML;
 	var assembly=document.getElementById('assembly').value;
 	var posting_status=document.getElementById('posting_status').value;
 	var pre_ass=document.getElementById('hid_pre_ass').innerHTML;
@@ -105,7 +106,7 @@ function new_per_search()
 		document.getElementById('print').disabled=true;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&opn=g_new_per_res",true);
+	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&draft_subdiv="+draft_subdiv+"&opn=g_new_per_res",true);
 	xmlhttp.send();
 }
 function replacement()
@@ -138,9 +139,11 @@ function replacement()
 		document.getElementById('search').disabled=true;
 		document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
+		document.getElementById('fakecontainer').style.display= 'none';
 		}
 	  }
 	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);
+	document.getElementById('fakecontainer').style.display = 'block';
 	xmlhttp.send();
 	document.getElementById('replace').disabled=true;
 }
@@ -276,5 +279,6 @@ function print_appletter()
 </td></tr></table>
 </td></tr></table>
 </div>
+<div id="fakecontainer" style="display:none;"><div id="loading">Please wait...</div></div>
 </body>
 </html>

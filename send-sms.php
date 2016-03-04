@@ -55,6 +55,19 @@ if($sub=="Send SMS")
 		$rs_data=fatch_SMS_from_sms_table(($from-1),$limit);
 		if(rowCount($rs_data)>0)
 		{
+	
+			/*$smsarray=array('8946088417');
+			foreach($smsarray as $send_no)
+			{
+				$Message="Hi";
+				$mob_no = $send_no;
+				include('sms/Index.php');
+			}*/
+			//$mob_no='9233314052';
+			//$mob_no='8946088417';
+			//$DestinationAddress = "8946088417";
+			//$Message="Hi";
+			//include('sms/Index.php');	
 			for($i=1;$i<=rowCount($rs_data);$i++)
 			{
 				$row_data=getRows($rs_data);
@@ -63,7 +76,7 @@ if($sub=="Send SMS")
 				$Message="To ".$name.", ".$row_data['message'];
 				
 				$DestinationAddress = $mob_no;
-				//include('sms/Index.php');			
+				include('sms/Index.php');			
 			}
 				
 		}
@@ -117,5 +130,14 @@ if(isset($_REQUEST['msg']))
 </td></tr>
 </table>
 </div>
+<div id="fakecontainer" style="display:none;"><div id="loading">Please wait...</div></div> 
 </body>
+<script language="javascript" type="text/javascript">
+(function (d) {
+  d.getElementById('form1').onsubmit = function () {
+	  d.getElementById('form1').style.display= 'none';
+      d.getElementById('fakecontainer').style.display = 'block';
+  };
+}(document));
+</script>
 </html>

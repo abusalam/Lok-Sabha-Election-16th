@@ -75,7 +75,7 @@ function FancyTable($header, $data)
 			$w = array(25,250);
 			
 			
-		  $rec_set=master_roll_second_appointment_letter($grp_id,$rec_arr_hdr['forassembly']);
+		    $rec_set=master_roll_second_appointment_letter($grp_id,$rec_arr_hdr['forassembly']);
 			$num_rows=rowCount($rec_set);
 			for($k=0;$k<$num_rows;$k++)
 			{

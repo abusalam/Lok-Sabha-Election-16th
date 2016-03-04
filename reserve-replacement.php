@@ -54,7 +54,7 @@ function new_per_search()
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var gender=document.getElementById('hid_gender').innerHTML;
 	var post_stat=document.getElementById('hid_post_stat').innerHTML;
-    var for_subdiv=document.getElementById('hid_for_subdiv').innerHTML;
+    var for_subdiv=document.getElementById('hid_sub_div').innerHTML;
 
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -75,11 +75,14 @@ function new_per_search()
 		else
 			document.getElementById('replace').disabled=true;	
 		document.getElementById('print').disabled=true;
+		
 		}
 	  }
 	  
 	xmlhttp.open("GET","ajax-reserve-replacement.php?for_subdiv="+for_subdiv+"&forassembly="+forassembly+"&post_stat="+post_stat+"&gender="+gender+"&opn=new_search",true);
+
 	xmlhttp.send();
+	
 }
 function replacement()
 {
@@ -110,10 +113,12 @@ function replacement()
 		document.getElementById('search').disabled=true;
 		//document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
+		document.getElementById('fakecontainer').style.display= 'none';
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);
 	xmlhttp.open("GET","ajax-reserve-replacement.php?old_p_id="+old_p_id+"&booked="+booked+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=g_rplc&groupid="+groupid+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch,true);
+	document.getElementById('fakecontainer').style.display = 'block';
 	xmlhttp.send();
 }
 function print_appletter()
@@ -202,5 +207,6 @@ function print_appletter()
 </td></tr></table>
 </td></tr></table>
 </div>
+<div id="fakecontainer" style="display:none;"><div id="loading">Please wait...</div></div>
 </body>
 </html>

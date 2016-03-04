@@ -197,9 +197,9 @@ function fatch_remarks()
 	connection_close();
 	return $rs;
 }
-function check_duplicate_personnelrecord($empname,$designation,$dob,$p_id)
+function check_duplicate_personnelrecord($empname,$designation,$dob,$p_id,$epic_no)
 {
-	$sql="Select count(*) as cnt From personnel where officer_name='$empname' and off_desg='$designation' and dateofbirth='$dob' and personcd<>'$p_id'";
+	$sql="Select count(*) as cnt From personnel where officer_name='$empname' and off_desg='$designation' and dateofbirth='$dob' and personcd<>'$p_id' and epic='$epic_no'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$cnt=$row['cnt'];
@@ -280,7 +280,8 @@ function fatch_PersonDetails($p_id)
 	policestation.policestation, office.pin, subdivision.subdivision, DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,
 	personnela.gender,personnela.epic,personnela.forpc,personnela.forassembly,personnela.groupid, personnela.booked, poststat.poststatus, personnela.present_addr1, personnela.present_addr2,
 	personnela.assembly_temp as pre_ass_cd,ass_pre.assemblyname AS pre_ass, personnela.assembly_perm as per_ass_cd,ass_per.assemblyname AS per_ass, personnela.assembly_off as post_ass_cd,ass_ofc.assemblyname AS post_ass,personnela.personcd, personnela.email, personnela.mob_no, personnela.poststat, personnela.forsubdivision,
-	personnela.dcrccd,personnela.training2_sch
+	personnela.dcrccd,personnela.training2_sch,
+	personnela.subdivisioncd
 	 FROM personnela INNER JOIN
     office ON personnela.officecd = office.officecd INNER JOIN 
     assembly AS ass_pre ON personnela.assembly_temp = ass_pre.assemblycd INNER JOIN 
@@ -290,7 +291,7 @@ function fatch_PersonDetails($p_id)
     poststat ON personnela.poststat = poststat.post_stat INNER JOIN 
 	policestation ON office.policestn_cd = policestation.policestationcd
 	Left Join termination On personnela.personcd = termination.personal_id";
-	$sql.=" WHERE personnela.personcd='$p_id' and termination.personal_id is null";
+	$sql.=" WHERE personnela.personcd='$p_id' and termination.personal_id is null limit 1";
    // echo $sql;
 	//exit;
 	
@@ -536,16 +537,13 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sqlc.="WHERE termination.personal_id is null and personnela.gender='$gender' ";
 	if($forpc !="" && $forpc !="0")
 	   $sqlc.="and personnela.forpc='$forpc' ";
 	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat'";
-	$fsql=$sqlc."and personnela.forsubdivision=substr('$ofc_id',1,4)";
+	$fsql=$sqlc."and personnela.subdivisioncd=substr('$ofc_id',1,4)";
 	
 	$rsc=execSelect($fsql);
 	$rowc=getRows($rsc);
@@ -562,15 +560,17 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
   	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
   	office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
-  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,ass_pre.assemblyname As pre_ass,
-  	ass_per.assemblyname As per_ass,ass_ofc.assemblyname As post_ass 
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
+	
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	
 	From personnela Inner Join office On personnela.officecd = office.officecd 
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd 
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd 
+	
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.="WHERE termination.personal_id is null and personnela.gender='$gender' ";
@@ -578,13 +578,27 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	   $sql.="and personnela.forpc='$forpc' ";
 	$sql.="and (personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat' ";
 	if($mode=="own-sub")
-		$sql.=" and personnela.forsubdivision=substr('$ofc_id',1,4)";
-	$sql.=" limit 1 offset $random_no";
+		$sql.=" and personnela.subdivisioncd=substr('$ofc_id',1,4)";
+	$sql.=" order by rand_numb asc";
+	
+	//$sql.=" limit 1 ";
+	$sql.=" limit 1";
+	
 	//echo $sql;
 	//exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
+}
+function update_personnel_PreGroupReplacement_change_post_status($old_p_id,$forassembly,$post_status,$booked,$selected)
+{
+	$sql2="update personnel set poststat='$post_status' where personcd='$old_p_id'";
+	execUpdate($sql2);
+	$sql="update personnela set booked='$booked',poststat='$post_status',rand_numb=0,selected='$selected' where personcd='$old_p_id'";
+	$i=execUpdate($sql);
+	connection_close();
+	return $i;
+	
 }
 function update_personnel_PreGroupReplacement($p_id,$forassembly,$forpc,$booked,$selected)
 {
@@ -668,8 +682,8 @@ function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$
 	connection_close();
 	return $i;
 }
-
-function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender)
+/************************* Second apppt replace *******************************/
+function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv)
 {
 	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P'";
 
@@ -688,13 +702,10 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd 
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$draft_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -707,19 +718,22 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
 	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
   	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
-  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,ass_pre.assemblyname As pre_ass,
-  	ass_per.assemblyname As per_ass,ass_ofc.assemblyname As post_ass
-	From personnela Inner Join office On personnela.officecd = office.officecd
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
+	
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+		 
+	From personnela 
+	Inner Join office On personnela.officecd = office.officecd
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd 
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
+  
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$draft_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
@@ -729,21 +743,259 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
 	connection_close();
 	return $rs;
 }
-function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender)
+/***************** Save in second appt after replace *************************/
+function save_data_in_second_appt_after_rplc($forassembly,$groupid,$poststat)
 {
+	/*$sql0="delete from second_appt where assembly='$forassembly' and groupid='$groupid'";
+	$a=execDelete($sql0);
 	
+	$sql1="INSERT INTO second_appt( assembly, subdivcd, groupid ,mem_no)  SELECT  forassembly, forsubdivision, groupid,count(*)  FROM personnela WHERE booked = 'P' and forassembly='$forassembly' and groupid='$groupid' GROUP BY forassembly, groupid ";
+	$b=execInsert($sql1);*/
+	
+	//================================Personnel join=================================//
+	
+	switch($poststat)
+	{
+		 case ($poststat=='PR'):
+            $sql2="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly and second_appt.groupid=personnela.groupid
+	  SET second_appt.pr_personcd = personnela.personcd,second_appt.pr_name = personnela.officer_name,second_appt.`pr_designation` =personnela.off_desg,second_appt.`pr_officecd`= personnela.officecd,second_appt.pr_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PR' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	        $c=execUpdate($sql2);
+	       $sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd WHERE second_appt.pr_status = 'PR' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	        $i=execUpdate($sql8);
+			$sql28="update second_appt set second_appt.pers_off= second_appt.pr_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and second_appt.per_poststat='PR'";
+		   $d1=execUpdate($sql28);
+			break;
+		case ($poststat=='P1'):
+         $sql3="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.p1_personcd = personnela.personcd,second_appt.p1_name = personnela.officer_name,second_appt.`p1_designation`=personnela.off_desg,second_appt.`p1_officecd`=personnela.officecd,second_appt.p1_mobno =personnela.mob_no 
+	WHERE  personnela.booked = 'P' and personnela.poststat = 'P1' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	       $i=execUpdate($sql3);
+			$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd WHERE second_appt.p1_status = 'P1' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	        $j=execUpdate($sql9);
+	        $sql28="update second_appt set second_appt.pers_off= second_appt.p1_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and  second_appt.per_poststat='P1'";
+		$d1=execUpdate($sql28); 
+		break;	
+		
+		case ($poststat=='P2'):
+           $sql4="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.p2_personcd = personnela.personcd,second_appt.p2_name = personnela.officer_name,second_appt.`p2_designation` 
+	=personnela.off_desg,second_appt.`p2_officecd`= personnela.officecd,second_appt.p2_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'P2' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	      $e=execUpdate($sql4);
+		  $sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd  WHERE second_appt.p2_status = 'P2' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	      $k=execUpdate($sql10);
+		  $sql28="update second_appt set second_appt.pers_off= second_appt.p2_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P2'";
+		$d1=execUpdate($sql28);
+		break;	
+	   case ($poststat=='P3'):
+           $sql5="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.p3_personcd = personnela.personcd,second_appt.p3_name = personnela.officer_name,second_appt.`p3_designation` 
+	=personnela.off_desg,second_appt.`p3_officecd`= personnela.officecd,second_appt.p3_mobno =personnela.mob_no
+	WHERE  personnela.booked = 'P'  and personnela.poststat = 'P3' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	     $f=execUpdate($sql5);
+		 $sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd WHERE second_appt.p3_status = 'P3' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	     $l=execUpdate($sql11);
+		 $sql28="update second_appt set second_appt.pers_off= second_appt.p3_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P3'";
+		$d1=execUpdate($sql28);
+		break;	
+	    case ($poststat=='PA'):
+           $sql6="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.pa_personcd = personnela.personcd,second_appt.pa_name = personnela.officer_name,second_appt.`pa_designation`=personnela.off_desg, second_appt.`pa_officecd`= personnela.officecd,second_appt.`pa_status`='PA', second_appt.pa_post_stat='Addl. 2nd Polling Officer-1' ,second_appt.pa_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PA' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	    $g=execUpdate($sql6);
+		$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd WHERE second_appt.pa_status = 'PA' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	     $m=execUpdate($sql12);
+		 $sql28="update second_appt set second_appt.pers_off= second_appt.pa_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PA'";
+		$d1=execUpdate($sql28);
+		break;
+	   case ($poststat=='PB'):
+	      $sql7="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.pb_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PB' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	      $h=execUpdate($sql7);
+		  $sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd WHERE second_appt.pb_status = 'PB' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	      $n=execUpdate($sql13);
+		  $sql28="update second_appt set second_appt.pers_off= second_appt.pb_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PB'";
+		$d1=execUpdate($sql28);
+	   break;
+	   default:
+		break;
+	}
+	/*$sql2="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly and second_appt.groupid=personnela.groupid
+	  SET second_appt.pr_personcd = personnela.personcd,second_appt.pr_name = personnela.officer_name,second_appt.`pr_designation` =personnela.off_desg,second_appt.`pr_officecd`= personnela.officecd,second_appt.`pr_status`='PR',second_appt.pr_post_stat='Presiding Officer',second_appt.pr_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PR' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	$c=execUpdate($sql2);
+	
+	
+	
+	$sql4="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.p2_personcd = personnela.personcd,second_appt.p2_name = personnela.officer_name,second_appt.`p2_designation` 
+	=personnela.off_desg,second_appt.`p2_officecd`= personnela.officecd,second_appt.`p2_status`='P2',second_appt.p2_post_stat='2nd Polling Officer',second_appt.p2_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'P2' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	$e=execUpdate($sql4);
+	
+	$sql5="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.p3_personcd = personnela.personcd,second_appt.p3_name = personnela.officer_name,second_appt.`p3_designation` 
+	=personnela.off_desg,second_appt.`p3_officecd`= personnela.officecd,second_appt.`p3_status`='P3',second_appt.p3_post_stat='3rd Polling Officer',second_appt.p3_mobno =personnela.mob_no
+	WHERE  personnela.booked = 'P'  and personnela.poststat = 'P3' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	$f=execUpdate($sql5);
+	
+	$sql6="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.pa_personcd = personnela.personcd,second_appt.pa_name = personnela.officer_name,second_appt.`pa_designation`=personnela.off_desg, second_appt.`pa_officecd`= personnela.officecd,second_appt.`pa_status`='PA', second_appt.pa_post_stat='Addl. 2nd Polling Officer-1' ,second_appt.pa_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PA' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	$g=execUpdate($sql6);
+	
+	$sql7="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+	second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.`pb_status`='PB',second_appt.pa_post_stat='Addl. 2nd Polling Officer-2' ,second_appt.pb_mobno =personnela.mob_no
+	WHERE personnela.booked = 'P'  and personnela.poststat = 'PB' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
+	$h=execUpdate($sql7);
+	//================================end of personnel join=======================//
+	
+	//================================office join=================================//
+	$sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd WHERE second_appt.pr_status = 'PR' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$i=execUpdate($sql8);
+	
+	$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd WHERE second_appt.p1_status = 'P1' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$j=execUpdate($sql9);
+	
+	$sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd  WHERE second_appt.p2_status = 'P2' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$k=execUpdate($sql10);
+	
+	$sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd WHERE second_appt.p3_status = 'P3' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$l=execUpdate($sql11);
+	
+	$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd WHERE second_appt.pa_status = 'PA' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$m=execUpdate($sql12);
+	
+	$sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd WHERE second_appt.pb_status = 'PB' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$n=execUpdate($sql13);
+	//================================End of office join=================================//
+	
+	//================================Start DCRC join====================================//
+	
+	$sql14="UPDATE second_appt JOIN grp_dcrc ON second_appt.assembly=grp_dcrc.forassembly  and 
+	second_appt.groupid=grp_dcrc.groupid  SET second_appt.dcrcgrp = grp_dcrc.dcrccd
+	WHERE  grp_dcrc.forassembly='$forassembly' and grp_dcrc.groupid='$groupid'";
+	$o=execUpdate($sql14);
+	
+	$sql16="UPDATE second_appt JOIN dcrcmaster  ON second_appt.dcrcgrp=dcrcmaster.dcrcgrp and  dcrcmaster.assemblycd=second_appt.assembly   SET second_appt.dc_venue = dcrcmaster.dc_venue, second_appt.dc_address = dcrcmaster.dc_addr,second_appt.rc_venue = dcrcmaster.rcvenue where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$p=execUpdate($sql16);
+	
+	$sql18="update  second_appt JOIN dcrc_party on  second_appt.dcrcgrp=dcrc_party.dcrcgrp and  
+	second_appt.subdivcd=dcrc_party.subdivisioncd set  second_appt.dc_time=dcrc_party.dc_time, 
+	second_appt.dc_date=DATE(dcrc_party.dc_date) where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$q=execUpdate($sql18);
+	//==================================END of DCRC join=============================================//
+	
+	//=================================Start of Training==============================================//
+	$sql192="update personnela 
+set personnela.training2_sch=NULL
+where personnela.forassembly='$forassembly' and personnela.groupid='$groupid' and  personnela.booked = 'P'";
+$i=execUpdate($sql192);
+	
+	$sql19="update second_appt join second_training on second_appt.subdivcd=second_training.for_subdiv and second_appt.assembly=second_training.assembly set second_appt.traingcode=second_training.schedule_cd, second_appt.venuecode=second_training.training_venue , second_appt.training_date=second_training.training_dt, second_appt.training_time=second_training.training_time where second_training.party_reserve='P' and second_appt.groupid>=second_training.start_sl and second_appt.groupid<=second_training.end_sl and second_training.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	$r=execUpdate($sql19);
+	
+	//Update Training in Personnela
+	$sql191="update personnela join second_training on personnela.forsubdivision=second_training.for_subdiv and personnela.forassembly=second_training.assembly
+	set personnela.training2_sch=second_training.schedule_cd
+	where second_training.party_reserve='P' and personnela.groupid>=second_training.start_sl and personnela.groupid<=second_training.end_sl and personnela.forassembly='$forassembly' and personnela.groupid='$groupid' and  personnela.booked = 'P'";
+	$i=execUpdate($sql191);
+
+	$sql20="UPDATE second_appt a  JOIN training_venue_2 b ON a.venuecode=b.venue_cd SET  a.`training_venue` =b.venuename,a.`venue_addr1` =b.venueaddress1,  a.`venue_addr2`=b.venueaddress2 where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$s=execUpdate($sql20);
+	//=================================END of Training==============================================//
+	
+	$sql21="update second_appt a join assembly b on a.assembly=b.assemblycd 
+	        and a.subdivcd=b.subdivisioncd set a.assembly_name=b.assemblyname where   a.assembly='$forassembly' and a.groupid='$groupid'";
+	$t=execUpdate($sql21);
+	
+	//$sql21="update second_appt a join  pc b on a.pccd=b.pccd set a.pcname=b.pcname where a.pccd='$pc_cd' and a.assembly='$forassembly' and a.groupid='$groupid'";
+	//$u=execUpdate($sql21);
+	
+	$sql22="update second_appt a join subdivision b on a.pr_subdivision=b.subdivisioncd set a.pr_subdivision=b.subdivision where  a.assembly='$forassembly' and a.groupid='$groupid'";
+	$v=execUpdate($sql22);
+	
+	$sql23="update second_appt a join subdivision b on a.p1_subdivision=b.subdivisioncd set a.p1_subdivision=b.subdivision where  a.assembly='$forassembly' and a.groupid='$groupid'";
+	$w=execUpdate($sql23);
+	$sql24="update second_appt a join subdivision b on a.p2_subdivision=b.subdivisioncd set a.p2_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$x=execUpdate($sql24);
+	
+	$sql25="update second_appt a join subdivision b on a.p3_subdivision=b.subdivisioncd set a.p3_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$y=execUpdate($sql25);
+	
+	$sql26="update second_appt a join subdivision b on a.pa_subdivision=b.subdivisioncd set a.pa_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$z=execUpdate($sql26);
+	
+	$sql27="update second_appt a join subdivision b on a.pb_subdivision=b.subdivisioncd set a.pb_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$a1=execUpdate($sql27);
+	
+	$sql271="update second_appt a join poll_table b on a.assembly=b.assembly_cd set a.polldate=b.poll_date, a.polltime=b.poll_time where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$b1=execUpdate($sql271);
+	
+	$sql272="update second_appt a join district b on substr(a.dcrcgrp,1,2)=b.districtcd set a.district=b.district  where a.assembly='$forassembly' and a.groupid='$groupid'";
+	$c1=execUpdate($sql272);
+	
+	if($poststat=='PR')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pr_officecd, second_appt.per_poststat= a.pr_status where a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}
+	if($poststat=='P1')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.p1_officecd, second_appt.per_poststat= a.p1_status where  a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}
+	if($poststat=='P2')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.p2_officecd, second_appt.per_poststat= a.p2_status where  a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}
+	if($poststat=='P3')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.p3_officecd, second_appt.per_poststat= a.p3_status where a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}
+	if($poststat=='PA')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pa_officecd, second_appt.per_poststat= a.pa_status where a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}
+	if($poststat=='PB')
+	{
+		$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pb_officecd, second_appt.per_poststat= a.pb_status where  a.assembly='$forassembly' and a.groupid='$groupid'";
+		$d1=execUpdate($sql28);
+	}*/
+	return 1;
+}
+function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv)
+{
+	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.subdivisioncd<>'$draft_subdiv' and personnela.forassembly='$assembly' and booked='P'";
+
+	$rs_tmp=execSelect($sqltmp);
+	$num_rows_tmp=rowCount($rs_tmp);
+	//echo $sqltmp;
+//	exit;
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$row_tmp=getRows($rs_tmp);
+		$office[$i]=$row_tmp['officecd'];
+	}
+	$row_tmp=NULL; $rs_tmp=NULL;
 	$sqlc="select count(*) as cnt
 	From personnela Inner Join office On personnela.officecd = office.officecd 
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd 
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='R'";
+	$sqlc.=" and personnela.booked='R' and personnela.subdivisioncd='$draft_subdiv'";
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$sqlc.=" and personnela.officecd<>'$office[$i]'";
+	}
 	$rsc=execSelect($sqlc);
 	$rowc=getRows($rsc);
 	$limit=$rowc['cnt'];
@@ -752,24 +1004,72 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
 	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
   	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
-  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,ass_pre.assemblyname As pre_ass,
-  	ass_per.assemblyname As per_ass,ass_ofc.assemblyname As post_ass
-	From personnela Inner Join office On personnela.officecd = office.officecd
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
+	
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+		 
+	From personnela 
+	Inner Join office On personnela.officecd = office.officecd
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
   	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
   	Inner Join poststat On personnela.poststat = poststat.post_stat
-  	Inner Join assembly As ass_pre On personnela.assembly_temp = ass_pre.assemblycd 
-  	Inner Join assembly ass_per On personnela.assembly_perm = ass_per.assemblycd
-  	Inner Join assembly ass_ofc On personnela.assembly_off = ass_ofc.assemblycd
+  
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and  personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='R'";
+	$sql.=" and personnela.booked='R' and personnela.subdivisioncd='$draft_subdiv'";
+	for($i=0;$i<$num_rows_tmp;$i++)
+	{
+		$sql.=" and personnela.officecd<>'$office[$i]'";
+	}
 	$sql.=" limit 1 offset $random_no";
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
+
 }
+/*function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv)
+{
+	
+	$sqlc="select count(*) as cnt
+	From personnela Inner Join office On personnela.officecd = office.officecd 
+  	Inner Join policestation On office.policestn_cd = policestation.policestationcd
+  	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+  	Inner Join poststat On personnela.poststat = poststat.post_stat
+  	Inner Join district On district.districtcd = subdivision.districtcd 
+	Left Join termination On personnela.personcd = termination.personal_id";
+	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
+	$sqlc.=" and personnela.subdivisioncd='$draft_subdiv' and personnela.forassembly='$assembly' and booked='R'";
+	$rsc=execSelect($sqlc);
+	$rowc=getRows($rsc);
+	$limit=$rowc['cnt'];
+	//echo $limit; exit;
+	$random_no=rand(0,$limit-1);
+	$sql="Select personnela.personcd,personnela.officecd,personnela.officer_name,personnela.off_desg,office.address1,
+  	office.address2,office.postoffice,policestation.policestation,subdivision.subdivision,district.district,
+  office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
+  	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
+	
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+		
+	From personnela Inner Join office On personnela.officecd = office.officecd
+  	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
+  	Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
+  	Inner Join poststat On personnela.poststat = poststat.post_stat
+
+  	Inner Join district On district.districtcd = subdivision.districtcd
+	Left Join termination On personnela.personcd = termination.personal_id ";
+	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
+	$sql.=" and  personnela.subdivisioncd='$draft_subdiv' and personnela.forassembly='$assembly' and booked='R'";
+	$sql.=" limit 1 offset $random_no";
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}*/
 /*function update_personnel_replacement($p_id,$groupid,$ass,$forpc,$booked,$selected)
 {
 	$sql="update personnela set booked='$booked',groupid='$groupid',forpc='$forpc',forassembly='$ass',selected='$selected' where personcd='$p_id'";
@@ -826,7 +1126,7 @@ function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd
 		$j=execDelete($sql1);
 		$sql2="update personnel set poststat='$post_status' where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
-		$sql3="update personnela set poststat='$post_status',rand_numb='0' where personcd='$PersonalID'";
+		$sql3="update personnela set booked=' ', groupid=0, forassembly='', poststat='$post_status',rand_numb=0,selected=0 where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
 	//}	
 	connection_close();
@@ -853,9 +1153,9 @@ function fatch_Personaldtl_mobile($mobile)
 	$sql="SELECT personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-		 (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
+		 (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
           FROM personnel
           INNER JOIN office ON personnel.officecd = office.officecd where mob_no='$mobile'";
 		 // echo $sql;
@@ -997,7 +1297,7 @@ function fatch_post_stat_wise_dtl_tran_pp_available($subdiv,$fsubdiv_cd)
 			From poststat
 			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
 			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and training_pp.training_sch Is Null Group By poststat.poststatus,poststat.post_stat";
-	//echo $sql; exit;
+	//echo $sql; //exit;
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
@@ -1213,13 +1513,22 @@ function fatch_Personaldtl_antiAgSubdiv($subdivision,$pc,$ex_ass,$officename,$po
 	$crow=getRows($countrs);
 	$cd_cnt=$crow['cnt'];
 	
+	$sql2="Delete F from first_rand_table F
+	Left Join personnela On personnela.personcd = F.personcd 
+	 where personnela.personcd is null";
+	 execDelete($sql2);
+	 
+	$sql3="Delete F from training_pp F
+	Left Join personnela On personnela.personcd = F.per_code 
+	 where personnela.personcd is null";
+	 execDelete($sql3);
+	 
 	$upsql="Update personnel 
 Left JOIN personnela ON personnel.personcd=personnela.personcd
 set personnel.f_cd=NULL 	
 		WHERE personnel.f_cd=1 and personnela.personcd is null";
 
-    execUpdate($upsql);
-	
+    execUpdate($upsql);	
 	return $cd_cnt;
 }
 //////reverse swapping(not booked)/////
@@ -1257,8 +1566,7 @@ Left JOIN personnela ON personnel.personcd=personnela.personcd
 set personnel.f_cd=NULL 	
 		WHERE personnel.f_cd=1 and personnela.personcd is null";
 
-    execUpdate($upsql);
-	
+    execUpdate($upsql);	
 	return $cd_cnt;
 }
 function fatch_dup_check($personcd)
@@ -1697,11 +2005,11 @@ function update_post_status_replacement_in_group($p_id,$post_stat)
 {
 	$sql="update personnela set poststat='$post_stat' where personcd='$p_id'";
 	$i=execUpdate($sql);
-	if($i==1)
-	{
+	//if($i==1)
+//	{
 		$sql1="update personnel set poststat='$post_stat' where personcd='$p_id'";
 	    $i1=execUpdate($sql1);
-	}
+	//}
 	connection_close();
 	return $i1;
 }

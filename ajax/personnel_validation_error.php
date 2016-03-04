@@ -119,13 +119,13 @@ else
                else
 			        $display .=  "<td>" .$result['qualificationcd']  .   "</td>";
 			   if($result['bank_cd'] == '' or $result['bank_cd'] == '0')
-                    $display .=  "<td bgcolor = \"FA5858\">" .$result['bank_cd']  .   "</td>";
+                    $display .=  "<td bgcolor = \"FA5858\">" .$result['bank_name']  .   "</td>";
                else
-			        $display .=  "<td>" .$result['bank_cd']  .   "</td>";
+			        $display .=  "<td>" .$result['bank_name']  .   "</td>";
 			   if($result['branchcd'] == '' or $result['branchcd'] == '0')
-                    $display .=  "<td bgcolor = \"FA5858\">" .$result['branchcd']  .   "</td>";
+                    $display .=  "<td bgcolor = \"FA5858\">" .$result['branch_name']  .   "</td>";
                else
-			        $display .=  "<td>" .$result['branchcd']  .   "</td>";
+			        $display .=  "<td>" .$result['branch_name']  .   "</td>";
 					
 			   if($result['bank_acc_no'] == '' or $result['bank_acc_no'] == '0')
                     $display .=  "<td bgcolor = \"FA5858\">" .$result['bank_acc_no']  .   "</td>";

@@ -504,7 +504,7 @@ function first_appointment_letter3($sub_div,$post_stat,$post_stat1)
 	  personnela.bank_acc_no,
 	  branch.ifsc_code,
 	 
-	  REPLACE(concat(SUBSTRING(subdivision1.subdivision,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
+	  REPLACE(concat(SUBSTRING(subdivision1.subdivisioncd,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
  as r_token
 	  
 	From personnela
@@ -595,7 +595,7 @@ function first_appointment_letter3_extra($phase,$subdivision)
 	  personnela.bank_acc_no,
 	  branch.ifsc_code,
 	 
-	  REPLACE(concat(SUBSTRING(subdivision1.subdivision,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
+	  REPLACE(concat(SUBSTRING(subdivision1.subdivisioncd,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
  as r_token
 	  
 	From personnela
@@ -696,25 +696,40 @@ function first_app_letter3_print($sub_div)
 {
 	
 	$sql="Update first_rand_table 
-	Inner Join personnela On personnela.personcd = first_rand_table.personcd
-	set sl_no=NULL where first_rand_table.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0);";
+	set sl_no=NULL where first_rand_table.forsubdivision = '$sub_div';";
 	$sql.="SET @ordering = 0;";
     $sql.="UPDATE first_rand_table
-	 Inner Join personnela On personnela.personcd = first_rand_table.personcd 
 	 SET sl_no = (@ordering := @ordering + 1) ";
-	$sql.=" Where first_rand_table.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0)";
-	//$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
-
+	$sql.=" Where first_rand_table.forsubdivision = '$sub_div'";
+	
 	execMultiQuery($sql);	
 	connection_close();	
 	
 	return 1;
 }
+/*function first_app_letter3_print($sub_div)
+{
+	
+	//$sql.="SET @ordering = 0;";
+   /* $sql.="UPDATE first_rand_table
+	 Inner Join personnela On personnela.personcd = first_rand_table.personcd 
+	 SET sl_no = (@ordering := @ordering + 1) ";
+	$sql.=" Select @ordering := @ordering + 1 sl_no from first_rand_table,
+	(Select @ordering:= 0) as o
+	Inner Join personnela On personnela.personcd = first_rand_table.personcd 
+	Where first_rand_table.forsubdivision = '$sub_div' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0)";
+	$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
+   echo $sql;
+   exit;
+	execMultiQuery($sql);	
+	connection_close();	
+	
+	return 1;
+}*/
 function first_app_letter3_max_slno($subdiv)
 {
 	$sql="select count(*) as slno From  first_rand_table
-	Inner Join personnela On personnela.personcd = first_rand_table.personcd
-	 where first_rand_table.forsubdivision = '$subdiv' and (personnela.ttrgschcopy is Null or personnela.ttrgschcopy=0)";
+	 where first_rand_table.forsubdivision = '$subdiv'";
 	$rs=execSelect($sql);
 	$row=getRows($rs);
 	$i=$row['slno'];

@@ -62,7 +62,7 @@ function FancyTable($header, $data)
   //  $this->SetTextColor(0);
     //$this->SetDisplayMode('fullwidth','default');
     // Data
-    $fill = false;
+   $fill = false;
 	$count=0;
 	$per_page=1;
 	$signature="../images/deo/img.jpg";
@@ -75,30 +75,31 @@ function FancyTable($header, $data)
 			
 			$euname="ELECTION URGENT";
 			$euname1="ORDER OF APPOINTMENT FOR TRAINING";
-			$euname2="ASSEMBLY ELECTION , 2016";
+			$euname2="ASSEMBLY GENERAL ELECTION , 2016";
 			$euname3="Token No. ".$row['token'];
 			$euname4="Order No: ".$_SESSION['apt1_orderno'];
 			$euname5="Date: ".$_SESSION['apt1_date'];
-			$euname6="In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified";
-			$euname7="below as ".$row['poststatus']." for undergoing training in connection with the conduct of General Election to House of People, 2014 from";
-			$euname8="$row[forpc]-$row[pcname] PC";			
+			$euname6="In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below";
+			$euname7="as ".$row['poststatus']." for undergoing training in connection with the conduct of Assembly General Election, 2016.";
+			//$euname8="$row[forpc]-$row[pcname] PC";			
 			$euname9="The Officer should report for Training as per following Schedule.";
 			$euname10="This is a compulsory duty on your part to attend the said programme, as per the provisions of The Representation of the People Act, 1951.";
 			$euname11="You are directed to bring your Elector's Photo Identity Card (EPIC) or any proof of Identity affixed with your Photograph.";
 			$euname12="Place: ".uppercase($_SESSION['distnm_cap']);
 			$euname13="Date: ".date("d/m/Y");
 			$euname14="District ".wordcase($_SESSION['distnm_cap']);
-			$nb1="Please fillup form 12A (for Election Duty Certificate) if you have been deployed for poll duty within your home Parliamentary";
-			$nb2="Constituency. In other cases fill up form form 12 (for Postal Ballot).";
-			$nb3="Please submit duly filled in form 12/12A allong with duplicate copy of appointment letter at training venue on the first day of";
-			$nb4="training.";
-			$nb5="Please write particulars on the supplied blank Identity Card and also affix your colour passport size photograph on it. Please";
-			$nb6="bring it at training venue for attestation.";
-			$nb7="Please check your electoral data and bank details given below. For any inconsistancy please inform the authority.";
-			$nb8="EPIC No. - $row[epic], Assembly - $row[acno], Part No. - $row[partno], Sl. No .- $row[slno] ";
-			$nb9="Bank - $row[bank_name], Branch - $row[branch_name]";
-			$nb89="A/c No.- $row[bank_acc_no], IFS Code- $row[ifsc_code]";
-			$nb10="Please bring in the filled up data sheet, as attached herewith, during the first training.";
+			$nb1="Please fillup Form 12 (for postal ballot) annexed herewith and submit at the Training Venue on the 1st day of training along with";
+			$nb2="the duplicate copy of your appointment letter and a copy of EPIC or any other ID including service ID.";
+			$nb3="Please indicate your PIN Number as given in your appointment letter on the body of Form 12 to help us locate you for delivery of";
+			$nb4="postal ballot.Also indicate your EPIC Number on the body of Form 12 for verification of your Electoral roll entry.";
+			$nb5="Please fill up the blank identity card sent herewith and paste your recent colour photograph and bring it at training venue for";
+			$nb6="attestation.";
+			$nb7="If the mobile no. is not submitted or incorrect, please inform PP cell.";
+			$nb8="Please check your electoral data and bank details given below. For any inconsistancy please inform PP Cell.";
+			$nb9="EPIC No. - $row[epic], Assembly - $row[acno], Part No. - $row[partno], Sl. No .- $row[slno] ";
+			$nb89="Bank - $row[bank_name], Branch - $row[branch_name]";
+			$nb10="A/c No.- $row[bank_acc_no], IFS Code- $row[ifsc_code]";
+			
 			
 	
 			$this->SetFont('Arial','B',8);
@@ -140,14 +141,14 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname7,0,0,'L');
 		
 			// Line break
-			$this->Ln(4);
+			$this->Ln();
 			
 			$this->SetFont('Arial','',8.7);
 			//$this->Cell(80);
-			$this->Cell(50,10,$euname8,0,0,'L');
+			//$this->Cell(50,10,$euname8,0,0,'L');
 		
 			// Line break
-			$this->Ln(12);
+			$this->Ln(10);
 						
 			//$this->SetFillColor(253,236,236);
 			$this->SetFillColor(255,255,255);
@@ -164,15 +165,21 @@ function FancyTable($header, $data)
 				 
 			$this->Ln();
 						
-	        $this->SetFont('','');
-			$name=$row['0'].", ".$row['1'].", PIN - (".$row['2'].") ";
-			$address=$row['3'].", ".$row['4'].", P.O. - ".$row['5'];
+	        $name="              ".$row['0'].", ".$row['1']."                    PIN - ".$row['2']." ";
+			//$name1=$row['0'].", ".$row['1'].", PIN - (".$row['2'].") ";
+			$address="  ".$row['3'].", ".$row['4'].", P.O. - ".$row['5'];
 			$ppo=" Subdiv - ".$row['6'].", P.S. - ".$row['7'].", Dist. - ".$row['8'].", PIN - ".$row['9'];
-			$odetails=" OFFICE - (".$row['10']."), Post Status - ".$row['12'].", Mobile No : ".$row['11'];
-		
-			$this->MultiCell($w[0],6,$name.$address.$ppo.$odetails,1,'J');
+			$odetails="  OFFICE - (".$row['10'].")                                  Post Status - ".$row['12']."                                      Mobile No : ".$row['11'];
+		    $this->SetFont('Arial','B',10);
+			$this->Cell($w[0],5,$name,'LR',0,'L',$fill);
+			$this->Ln();
+			$this->SetFont('Arial','',8);
+			$this->Cell($w[0],3,'','LR','L');
+			$this->Ln();
+			$this->MultiCell($w[0],4,$address.$ppo,'LR','J');
+
+			$this->Cell($w[0],6,$odetails,'LRB',0,'L',$fill);
 			$this->Ln(5);
-			
 			
 			$this->SetFont('Arial','',8.7);
 			$this->Cell(50,10,$euname9,0,0,'L');
@@ -210,7 +217,7 @@ function FancyTable($header, $data)
 				$this->Cell(array_sum($w2),0,'',1,0,'L',$fill);
 				$this->Ln();
 			}
-		/*	$this->Cell($w2[0],6,$row['training_desc'],'LTR',0,'L',$fill);						
+			/*$this->Cell($w2[0],6,$row['training_desc'],'LTR',0,'L',$fill);						
 			$this->Cell($w2[1],6,$row['venuename'],'LTR',0,'L',$fill);
 			$this->Cell($w2[2],6,$row['training_dt'],'LTR',0,'L',$fill);
 			$this->Ln(4);
@@ -225,7 +232,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname10,0,0,'L');
 		
 			// Line break
-			$this->Ln(4);
+			$this->Ln(6);
 			
 			$this->SetFont('Arial','',8.7);
 			$this->Cell(50,10,$euname11,0,0,'L');
@@ -258,7 +265,7 @@ function FancyTable($header, $data)
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(160);
+			$this->Cell(153);
 			$this->Cell(10,10,$euname14,0,0,'R');
 		
 			// Line break
@@ -278,7 +285,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb2,0,0,'L');
-			$this->Ln(4);
+			$this->Ln(5);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"2.",0,0,'L');
@@ -287,7 +294,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb4,0,0,'L');
-			$this->Ln(4);
+			$this->Ln(5);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"3.",0,0,'L');
@@ -296,14 +303,14 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb6,0,0,'L');
-			$this->Ln(4);
+			$this->Ln(5);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"4.",0,0,'L');
 			$this->Cell(10,10,$nb7,0,0,'L');
-			$this->Ln(4);
+			$this->Ln(5);
 			$this->SetFont('Arial','',9);
-			$this->Cell(10,10,"",0,0,'L');
+			$this->Cell(10,10,"5.",0,0,'L');
 			$this->Cell(10,10,$nb8,0,0,'L');
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
@@ -316,19 +323,19 @@ function FancyTable($header, $data)
 			$this->Ln(4);
 			
 			$this->SetFont('Arial','',9);
-			$this->Cell(10,10,"5.",0,0,'L');
+			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb10,0,0,'L');
 			$this->Ln();			
-			$this->Cell(190,0,'',1,0,'L',$fill);
-			$this->Ln(2);
-			$this->Cell(50,0,'- - - - - - - - - - - - - -',0,0,'L',$fill);
+			//$this->Cell(190,0,'',1,0,'L',$fill);
+			//$this->Ln(2);
+			$this->Cell(190,0,'- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -',0,0,'L',$fill);
 			$this->Ln();
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"Copy to DDO / Head of Office to serve the Letter and submit the service return.",0,0,'L');
 			$this->Ln();
-			$this->Cell(190,0,'',1,0,'L',$fill);
-			$this->Ln(2);
-			$this->Cell(50,0,'- - - - - - - - - - - - - -',0,0,'L',$fill);
+		//	$this->Cell(190,0,'',1,0,'L',$fill);
+		//	$this->Ln(2);
+			$this->Cell(190,0,'- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -',0,0,'L',$fill);
 			$this->Ln(12);
 			
 			$this->SetFont('Arial','',9);

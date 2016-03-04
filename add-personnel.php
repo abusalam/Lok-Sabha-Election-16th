@@ -471,7 +471,7 @@ if($action=='Save')
 	}
 	else
 	{
-		$cnt=check_duplicate_personnelrecord($empname,$designation,$dob,$p_id);
+		$cnt=check_duplicate_personnelrecord($empname,$designation,$dob,$p_id,$epic_no);
 		if($cnt==0)
 		{
 			if(isset($_REQUEST['personcd']))

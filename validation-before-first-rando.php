@@ -12,7 +12,7 @@ include('function/validation_first.php');
 <?php
 $pc_cd="0";
 if(isset($_SESSION['subdiv_cd']) && $_SESSION['subdiv_cd']!=null)
-	$subdiv_cd=sprintf("%02d",$_SESSION['subdiv_cd']);
+	$subdiv_cd=sprintf("%04d",$_SESSION['subdiv_cd']);
 ?>
 </head>
 <?php

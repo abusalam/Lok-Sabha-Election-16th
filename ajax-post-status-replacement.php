@@ -111,6 +111,8 @@ if($opn=='g_rplc')
 			  echo "1";
 		  }
 	   }
+	   save_data_in_second_appt_after_rplc($ass,$groupid,$post_stat);
+	   save_data_in_second_appt_after_rplc($ass,$groupid,$post_stat_new);
 		//echo "Changed";
 	}
 }

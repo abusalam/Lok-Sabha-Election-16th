@@ -286,14 +286,14 @@ if($action=='Swapping')
 	
 		if($rsEmp<1)
 		{
-			$msg="<div class='alert-error'>No record found for transffer</div>";
+			$msg="<div class='alert-error'>No record found for transfer</div>";
 		}
 		else
 		{
 			   //--------------------------------------------		  
 		   //----------------------------------	 
 	//---------------------------------------
-	       $msg="<div class='alert-success'>".$rsEmp." Record(s) transffered successfully</div>";
+	       $msg="<div class='alert-success'>".$rsEmp." Record(s) transferred successfully</div>";
 		}
 		$rsEmp=NULL;
  	} 

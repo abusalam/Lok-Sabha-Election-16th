@@ -182,7 +182,7 @@ if($mobile != '')
 		$rowPersonal=getRows($rsPersonal);
 
 		{
-			echo "<label class='text_small'><b>Employee Name: </b>".$rowPersonal['officer_name']."<br/> <b>Name of Office: </b>".$rowPersonal[       'office']." <b>Desig. of O/C: </b>".$rowPersonal['off_desg']."<br/> <b>Present Address: </b>".$rowPersonal['present_addr1']." <b>; </b>".$rowPersonal['present_addr1']."<br/><b>Present Assembly: </b>".$rowPersonal['assembly_temp']." <b>Permanent Assembly: </b>".$rowPersonal['assembly_perm']." <b>Place of Posting: </b>".$rowPersonal['assembly_off']."</label>";
+			echo "<label class='text_small'><b>Employee Name: </b>".$rowPersonal['officer_name']." <b>PIN: </b>".$rowPersonal['personcd']."<br/> <b>Name of Office: </b>".$rowPersonal[       'office']." <b>Desig. of O/C: </b>".$rowPersonal['off_desg']."<br/> <b>Present Address: </b>".$rowPersonal['present_addr1']." <b>; </b>".$rowPersonal['present_addr1']."<br/><b>Present Assembly: </b>".$rowPersonal['assembly_temp']." <b>Permanent Assembly: </b>".$rowPersonal['assembly_perm']." <b>Place of Posting: </b>".$rowPersonal['assembly_off']."</label>";
 		}	
 	}
 	$rsPersonal=NULL;

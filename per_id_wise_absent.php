@@ -71,12 +71,39 @@ function validate()
 		return false;
 	}
 }
+function validate1()
+{
+	var PersonalID=document.getElementById("per_id").value;
+	
+	if(PersonalID=="")
+	{
+		document.getElementById("msg").innerHTML="Enter Personal ID";
+		document.getElementById("per_id").focus();
+		return false;
+	}
+
+}
 </script>
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
 include_once('function/training_fun.php');
 $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
+$action1=isset($_REQUEST['submit1'])?$_REQUEST['submit1']:"";
+if($action1=='Show Cause Letter Print')
+{
+	$sub="";
+	$t_venue="";
+	$t_type="";
+	$trn_sch="";
+	$p_id=isset($_POST['per_id'])?encode($_POST['per_id']):"";
+	$memo_no=isset($_POST['memo_no'])?encode($_POST['memo_no']):"";
+	$date=isset($_POST['date'])?encode($_POST['date']):"";
+	?>
+     <script>window.open("fpdf/show_cause_letter.php?sub=<?php echo $sub; ?>&t_venue=<?php echo $t_venue; ?>&t_type=<?php echo $t_type;?>&trn_sch=<?php echo $trn_sch;?>&p_id=<?php echo $p_id;?>&memo_no=<?php echo $memo_no;?>&date=<?php echo $date;?>");</script>
+    <?php
+}
+
 if($action=='Submit')
 {
 	$PersonalID=$_POST['per_id'];
@@ -139,8 +166,12 @@ if($action=='Submit')
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
      <tr>
-     <td width="15%">&nbsp;</td>
-	  <td align="left"><span class="error">*</span>Training Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     <td></td>
+     <td align="center">
+      <table width="100%">
+       <tr>
+	    <td align="left" width="40%"><span class="error">*</span>Training Type </td>
+         <td align="left" >
         <select name="training_type" id="training_type" style="width:200px;">
 	    <option value="0">-Select Training Type-</option>
 		<?php
@@ -158,13 +189,28 @@ if($action=='Submit')
 			unset($rsTrainingType,$num_rows,$rowTrainingType);
 		?>
 	    </select></td>
-        <td width="15%">&nbsp;</td></tr>
+       </tr>
   
+   
+         <tr>
+      <td align="left">&nbsp;&nbsp;&nbsp;Memo No (For Show Cause Letter)</td>
+      <td align="left"><input type="text" name="memo_no" style="width:192px;" /></td>
+      
+    </tr>
     <tr>
+      <td align="left">&nbsp;&nbsp;&nbsp;Date (For Show Cause Letter)</td>
+      <td align="left"><input type="text" name="date" id="date" style="width:200px;" /></td>
+      
+    </tr>
+      </table>
+      </td>
+      <td></td>
+     </tr>
+     <tr>
       <td align="center" colspan="3"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
     <tr>
-      <td align="center" colspan="3"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" disabled="true" /></td>
+      <td align="center" colspan="3"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" disabled="true" />&nbsp;&nbsp;<input type="submit" name="submit1" id="submit1" value="Show Cause Letter Print" class="button" onclick="javascript:return validate1();" /></td>
     </tr>
     <tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" width="5px" /></td></tr>
   </table>
@@ -172,6 +218,54 @@ if($action=='Submit')
 </td></tr></table>
 </td></tr>
 </table>
+<div id="calendar" style="width: 243px;display:none;"></div>  
 </div>
 </body>
+<script>
+	$(document).ready(function() {
+		$("#calendar").kendoCalendar();
+
+		var calendar = $("#calendar").data("kendoCalendar");
+		calendar.value(new Date());
+
+		var navigate = function () {
+			var value = $("#direction").val();
+			switch(value) {
+				case "up":
+					calendar.navigateUp();
+					break;
+				case "down":
+
+					calendar.navigateDown(calendar.value());
+					break;
+				case "past":
+					calendar.navigateToPast();
+					break;
+				default:
+					calendar.navigateToFuture();
+					break;
+			}
+		},
+		setValue = function () {
+			calendar.value($("#date").val());
+		};
+
+		$("#get").click(function() {
+			alert(calendar.value());
+		});
+
+		$("#date").kendoDatePicker({
+			change: setValue
+		});
+
+
+		$("#set").click(setValue);
+
+		$("#direction").kendoDropDownList({
+			change: navigate
+		});
+
+		$("#navigate").click(navigate);
+	});
+	</script>
 </html>
