@@ -48,13 +48,27 @@ function getHtmlTable($Query) {
 $Query = 'SELECT `booked`,`forsubdivision`,`forassembly`,count(*) FROM `personnela` group by `booked`,`forsubdivision`,`forassembly`';
 echo getHtmlTable($Query);
 
-$Query = 'SELECT `training_booked`,`training_type`,`post_stat`,count(*) FROM `training_pp` group by `training_booked`,`training_type`,`post_stat`';
-echo getHtmlTable($Query);
-
 $Query = 'SELECT `subdivisioncd`,`poststat`,`booked`,count(*) FROM `personnela` WHERE selected=1 group by `subdivisioncd`,`poststat`,`booked`';
 echo getHtmlTable($Query);
 
 $Query = 'SELECT `poststat`,`booked`,count(*) FROM `personnela` group by `poststat`,`booked`';
+echo getHtmlTable($Query);
+
+$Query = 'SELECT `subdivisioncd`,count(*) FROM `personnela` WHERE selected=1 group by `subdivisioncd`';
+echo getHtmlTable($Query);
+
+$Query = 'SELECT `training_booked`,`training_type`,`post_stat`,count(*) FROM `training_pp` group by `training_booked`,`training_type`,`post_stat`';
+echo getHtmlTable($Query);
+
+$Query = 'SELECT first_rand_table.forsubdivision,`block_muni_name`,count( distinct first_rand_table.personcd) as `Count` FROM `first_rand_table` join poststat on(poststat.poststatus=first_rand_table.poststatus) join poststatorder on(poststatorder.poststat=poststat.post_stat) group by first_rand_table.forsubdivision,`block_muni_name` order by first_rand_table.forsubdivision,block_muni';
+echo getHtmlTable($Query);
+
+//echo '<br style="clear:both;"/>';
+
+$Query = 'select training_venue.venuename,training_schedule.training_dt,training_schedule.training_time,count(*) from training_pp join training_schedule on (training_pp.training_sch=training_schedule.schedule_code) join training_venue on(training_venue.venue_cd=training_schedule.training_venue) group by training_venue.venuename,training_schedule.training_dt,training_schedule.training_time';
+echo getHtmlTable($Query);
+
+$Query = 'select first_rand_table.venuename,first_rand_table.training_dt,first_rand_table.training_time,count(*) from first_rand_table GROUP by first_rand_table.venuename,first_rand_table.training_dt,first_rand_table.training_time';
 echo getHtmlTable($Query);
 
 ?>
