@@ -743,7 +743,9 @@ function venue_wise_list($venue,$training_dt,$training_time)
 	  personnela.acno,
 	  personnela.partno,
 	  personnela.slno,
-	  training_pp.token
+	  training_pp.token,
+	  personnela.forsubdivision,
+	  personnela.poststat
 	From training_venue
 	  Inner Join training_schedule On training_venue.venue_cd =
 		training_schedule.training_venue
@@ -774,10 +776,12 @@ function fatch_trainingvenue_list($subdivision,$venuename,$usercode,$dist)
 	$sql="Select training_venue.venue_cd, subdivision.subdivision, training_venue.venuename, training_venue.venueaddress1, training_venue.venueaddress2,
   training_venue.maximumcapacity, training_venue.usercode, training_venue.posted_date,training_venue.subdivisioncd
 From training_venue
-  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0 and subdivision.districtcd = '$dist'";
+  Inner Join subdivision On training_venue.subdivisioncd = subdivision.subdivisioncd where training_venue.venue_cd >0";
     if($subdivision!='' && $subdivision!='0')
 		$sql.=" and training_venue.subdivisioncd ='$subdivision'";
-	if($venuename!='')
+	if($dist!='' && $dist!='0')
+		$sql.=" and subdivision.districtcd = '$dist'";
+	if($venuename!='' && $venuename!='0' )
 		$sql.=" and training_venue.venuename like '$venuename%'";
 	$sql.=" order by subdivision.subdivision";
 	$rs=execSelect($sql);
@@ -794,7 +798,7 @@ From training_venue
 		$sql.=" and training_venue.subdivisioncd ='$subdivision'";
 	if($dist!='' && $dist!='0')
 		$sql.=" and subdivision.districtcd = '$dist'";
-	if($venuename!='')
+	if($venuename!='' && $venuename!='0' )
 		$sql.=" and training_venue.venuename like '$venuename%'";
 	$sql.=" order by subdivision.subdivision";
 	$sql.=" ASC LIMIT $p_num , $items";

@@ -66,12 +66,11 @@ function FancyTable($header, $data)
 			
 			$euname="ELECTION URGENT";
 			$euname1="ORDER OF APPOINTMENT FOR TRAINING";
-			$euname2="ASSEMBLY GENERAL ELECTION , 2016";
+			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016";
 			$euname3="Token No. ".$row['token'];
 			$euname4="Order No: ".$_SESSION['apt1_orderno'];
 			$euname5="Date: ".$_SESSION['apt1_date'];
-			$euname6="In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below";
-			$euname7="as ".$row['poststatus']." for undergoing training in connection with the conduct of Assembly General Election, 2016.";
+			$euname6="          In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as ".$row['poststatus']." for undergoing training in connection with the conduct of General Election to West Bengal Legistlative Assembly Election, 2016.";
 			//$euname8="$row[forpc]-$row[pcname] PC";			
 			$euname9="The Officer should report for Training as per following Schedule.";
 			$euname10="This is a compulsory duty on your part to attend the said programme, as per the provisions of The Representation of the People Act, 1951.";
@@ -97,7 +96,7 @@ function FancyTable($header, $data)
 			$this->Cell(30,5,$euname,1,0,'L');
 			$this->SetFont('Arial','B',10);
 			$this->Cell(50);
-			$this->Cell(40,10,$euname1,0,0,'C');
+			$this->Cell(40,6,$euname1,0,0,'C');
 			$this->SetFont('Arial','B',8);
 			$this->Cell(58);
 			$this->Cell(10,7,$euname3,0,0,'R');
@@ -108,11 +107,11 @@ function FancyTable($header, $data)
 			//$this->Cell(90);
 			$this->SetFont('Arial','B',8);
 			$this->Cell(15,10,$euname4,0,0,'L');
-			$this->SetFont('Arial','B',7);
-			$this->Cell(70);
-			$this->Cell(40,8,$euname2,0,0,'C');
+			$this->SetFont('Arial','B',6.5);
+			$this->Cell(38);
+			$this->Cell(92,4,$euname2,'B',0,'C');
 			$this->SetFont('Arial','B',8);
-			$this->Cell(50);
+			$this->Cell(36);
 			$this->Cell(10,10,$euname5,0,0,'R');
 			   
 			// Line break
@@ -121,25 +120,24 @@ function FancyTable($header, $data)
 			//$this->Ln();
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Cell(88);
-			$this->Cell(20,10,$euname6,0,0,'C');
+			$this->MultiCell(190,4,$euname6,'','J');
 			
 			 // Line break
-			$this->Ln(4);
+			//$this->Ln(4);
 			
-			$this->SetFont('Arial','',8.7);
-			//$this->Cell(80);
-			$this->Cell(50,10,$euname7,0,0,'L');
+			//$this->SetFont('Arial','',8.7);
+			///$this->Cell(80);
+			//$this->Cell(50,10,$euname7,0,0,'L');
 		
 			// Line break
 			$this->Ln();
 			
-			$this->SetFont('Arial','',8.7);
+			//$this->SetFont('Arial','',8.7);
 			//$this->Cell(80);
 			//$this->Cell(50,10,$euname8,0,0,'L');
 		
 			// Line break
-			$this->Ln(10);
+			$this->Ln(7);
 						
 			//$this->SetFillColor(253,236,236);
 			$this->SetFillColor(255,255,255);
@@ -249,15 +247,15 @@ function FancyTable($header, $data)
 			// Line break
 			$this->Ln(5);
 			
-			$this->SetFont('Arial','',9);
+			$this->SetFont('Arial','',9.6);
 			$this->Cell(160);
-			$this->Cell(10,10,"District Election Officer",0,0,'R');
+			$this->Cell(10,12,"District Election Officer",0,0,'R');
 		
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(153);
-			$this->Cell(10,10,$euname14,0,0,'R');
+			$this->Cell(129);
+			$this->Cell(40,12,$euname14,0,0,'R');
 		
 			// Line break
 			$this->Ln();			

@@ -18,9 +18,9 @@ function Header()
 {
 	//$this->SetXY(10,10);
 	$this->SetFont('','B',9);
-	$this->Cell(190,5,'ASSEMBLY ELECTION 2016',0,0,'C');
+	$this->Cell(195,5,'GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016',0,0,'C');
 	$this->Ln(8);
-	$this->Cell(190,0,'',1,0,'C');
+	$this->Cell(195,0,'',1,0,'C');
 }
 
 // Page footer
@@ -127,9 +127,9 @@ function FancyTable($header, $data)
 		
 			$this->Ln();
 			$this->SetFont('','B',8);
-			$this->Cell(190,5,$venue,"LTR",0,'L');
+			$this->Cell(195,5,$venue,"LTR",0,'L');
 			$this->Ln(4);
-			$this->Cell(190,5,$venue1,"LR",0,'L');
+			$this->Cell(195,5,$venue1,"LR",0,'L');
 			$this->Ln();
 			
 			
@@ -139,10 +139,10 @@ function FancyTable($header, $data)
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
 			
-			$head = array('PIN','Name','Designation','Posting Status','Enrollment Details','Token No');
-			$header1 = array('','','','','AC / Part /Sl No.','');
-			$w = array(17,45,55,25,28,20);
-				$this->SetFont('Arial','',9);
+			$head = array('PIN','Name','Designation','Posting Status','Enrollment Details','Token No','Signature');
+			$header1 = array('','','','','AC / Part /Sl No.','','');
+			$w = array(15,40,50,22,25,18,25);
+				$this->SetFont('Arial','',8);
 			for($j=0;$j<count($head);$j++)
 				$this->Cell($w[$j],7,$head[$j],'LTR',0,'C',true);
 			$this->Ln();
@@ -159,15 +159,18 @@ function FancyTable($header, $data)
 	        {
 				$rowPersonnel=getRows($rsPersonnel);
 			//	$sql="";
-				$this->SetFont('','',6);
+				$this->SetFont('','',5.2);
                    
 				  $totaljoin=$rowPersonnel['acno']." / ".$rowPersonnel['partno']." / ".$rowPersonnel['slno'];
+				  $token_join=$rowPersonnel['forsubdivision']." / ".$rowPersonnel['poststat']." / ".$rowPersonnel['token'];
+				  
 					$this->Cell($w[0],6,$rowPersonnel['personcd'],'LTR',0,'L',$fill);						
 					$this->Cell($w[1],6,$rowPersonnel['officer_name'],'LTR',0,'L',$fill);
 					$this->Cell($w[2],6,$rowPersonnel['designation'],'LTR',0,'L',$fill);
 					$this->Cell($w[3],6,$rowPersonnel['poststatus'],'LTR',0,'L',$fill);
 					$this->Cell($w[4],6,$totaljoin,'LTR',0,'L',$fill);
-					$this->Cell($w[5],6,$rowPersonnel['token'],'LTR',0,'L',$fill);
+					$this->Cell($w[5],6,$token_join,'LTR',0,'L',$fill);
+					$this->Cell($w[6],6,'','LTR',0,'L',$fill);
 					//count1++;
 					
 					$this->Ln();

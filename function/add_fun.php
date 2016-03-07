@@ -562,9 +562,9 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
   	office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
 	
 	From personnela Inner Join office On personnela.officecd = office.officecd 
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
@@ -720,9 +720,9 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
 		 
 	From personnela 
 	Inner Join office On personnela.officecd = office.officecd
@@ -1006,9 +1006,9 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
 		 
 	From personnela 
 	Inner Join office On personnela.officecd = office.officecd
@@ -1153,7 +1153,7 @@ function fatch_Personaldtl_mobile($mobile)
 	$sql="SELECT personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-		 (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
+		 (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp ) As assembly_temp,
          (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
          (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
           FROM personnel

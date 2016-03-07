@@ -33,7 +33,7 @@ $subdiv=(isset($_REQUEST['Subdivision'])?decode($_REQUEST['Subdivision']):'0');
 		echo "Please check record no";
 		exit;
 	}*/
-$rsApp=first_app_letter3_print1($subdiv,$from-1,$to-$from+1);
+$rsApp=first_app_letter3_print1_draft($subdiv,$from-1,$to-$from+1);
 
 //echo $subdiv;
 class PDF extends FPDF

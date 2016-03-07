@@ -71,7 +71,7 @@ function FancyTable($header, $data)
 			
 			$euname="ELECTION URGENT";
 			$euname1="APPOINTMENT FOR MICRO OBSERVER";
-			$euname2="ASSEMBLY GENERAL ELECTION , 2016";
+			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016";
 			$euname3="Token No. ".$row['token'];
 			$euname4="Order No: ".$_SESSION['apt1_orderno'];
 			$euname5="Date: ".$_SESSION['apt1_date'];
@@ -275,15 +275,15 @@ function FancyTable($header, $data)
 			// Line break
 			$this->Ln(5);
 			
-			$this->SetFont('Arial','',9);
+			$this->SetFont('Arial','',9.6);
 			$this->Cell(160);
-			$this->Cell(10,10,"District Election Officer",0,0,'R');
+			$this->Cell(10,12,"District Election Officer",0,0,'R');
 		
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(154);
-			$this->Cell(10,10,$euname14,0,0,'R');
+			$this->Cell(129);
+			$this->Cell(40,12,$euname14,0,0,'R');
 		
 			// Line break
 			$this->Ln();			

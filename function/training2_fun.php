@@ -63,9 +63,11 @@ function fatch_trainingvenue_list($subdivision,$venuename,$usercode,$dist)
 {
 	$sql="Select training_venue_2.venue_cd, subdivision.subdivision, training_venue_2.venuename, training_venue_2.venueaddress1, training_venue_2.venueaddress2, training_venue_2.usercode, training_venue_2.posted_date,training_venue_2.subdivisioncd
 From training_venue_2
-  Inner Join subdivision On training_venue_2.subdivisioncd = subdivision.subdivisioncd where training_venue_2.venue_cd >0 and subdivision.districtcd = '$dist'";
+  Inner Join subdivision On training_venue_2.subdivisioncd = subdivision.subdivisioncd where training_venue_2.venue_cd >0";
     if($subdivision!='' && $subdivision!='0')
 		$sql.=" and training_venue_2.subdivisioncd ='$subdivision'";
+	if($dist!='' && $dist!='0')
+		$sql.=" and subdivision.districtcd = '$dist'";
 	if($venuename!='')
 		$sql.=" and training_venue_2.venuename like '$venuename%'";
 	$sql.=" order by subdivision.subdivision";

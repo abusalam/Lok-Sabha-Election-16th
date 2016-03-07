@@ -44,7 +44,7 @@ class PDF extends FPDF
 function Header()
 {
 	  $this->SetFont('','B',9);
-	$this->Cell(190,5,'ASSEMBLY ELECTION 2016',0,0,'C');
+	$this->Cell(190,5,'GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016',0,0,'C');
 	$this->Ln(8);
 	$this->Cell(190,0,'',1,0,'C');
 }

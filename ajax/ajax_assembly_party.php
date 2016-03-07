@@ -133,7 +133,7 @@ else
 			    <th>Number</th>
 				</tr>";
 				
-		$rs_fatch_fees=fatch_reserve_ag_assembly_no($rowAP['assemblycd'],$rowAP['no_of_member']);
+		$rs_fatch_fees=fatch_reserve_ag_assembly_no($rowAP['subdivisioncd'],$rowAP['assemblycd'],$rowAP['no_of_member']);
 		 $row_num=rowCount($rs_fatch_fees);
 							 
 		 if($row_num>0)

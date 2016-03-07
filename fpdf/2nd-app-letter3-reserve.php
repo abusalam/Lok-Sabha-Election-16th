@@ -73,7 +73,7 @@ function FancyTable($header, $data)
 			
 			$euname="ELECTION URGENT";
 			$euname1="ORDER OF APPOINTMENT FOR POLLING DUTIES";
-			$euname2="ASSEMBLY ELECTION , 2016";
+			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016";
 			$euname3="* Reserve Serial No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
@@ -100,7 +100,7 @@ function FancyTable($header, $data)
 			$this->Cell(30,5,$euname,1,0,'L');
 			$this->SetFont('Arial','B',10);
 			$this->Cell(50);
-			$this->Cell(40,5,$euname1,0,0,'C');
+			$this->Cell(40,6,$euname1,0,0,'C');
 			$this->SetFont('Arial','B',8);
 			$this->Cell(58);
 			$this->Cell(10,7,$euname3,0,0,'R');
@@ -111,11 +111,11 @@ function FancyTable($header, $data)
 			//$this->Cell(90);
 			$this->SetFont('Arial','B',8);
 			$this->Cell(15,10,$euname4,0,0,'L');
-			$this->SetFont('Arial','B',7);
-			$this->Cell(70);
-			$this->Cell(40,4,$euname2,'B',0,'C');
+			$this->SetFont('Arial','B',6.5);
+			$this->Cell(38);
+			$this->Cell(92,4,$euname2,'B',0,'C');
 			$this->SetFont('Arial','B',8);
-			$this->Cell(50);
+			$this->Cell(36);
 			$this->Cell(10,10,$euname5,0,0,'R');
 			   
 			// Line break

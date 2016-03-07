@@ -48,7 +48,7 @@ function fatch_assembly_party_details1($assemb,$subdiv,$p_num,$items)
 	connection_close();
 	return $rs;
 }
-function fatch_reserve_ag_assembly_no($assembly,$noofmember)
+function fatch_reserve_ag_assembly_no($sub_cd,$assembly,$noofmember)
 {
 	$sql="Select reserve.forassembly,
 	  reserve.number_of_member,
@@ -59,6 +59,7 @@ function fatch_reserve_ag_assembly_no($assembly,$noofmember)
 	
 	From reserve
 	  Inner Join assembly On reserve.forassembly = assembly.assemblycd
+	   and reserve.forsubdivision = assembly.subdivisioncd
  where 1 ";
 	if($assembly!='')
 		$sql.=" and reserve.forassembly='$assembly'";

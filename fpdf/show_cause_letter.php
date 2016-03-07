@@ -74,7 +74,7 @@ function FancyTable($header, $data)
 			$euname7=$row['ofc_address'].",".$row['district'].",".$row['pin'].", Mobile :- ".$row['mob_no'];	
 			$euname8=$row['office'].",(Office Code :- ".$row['officecd'].")";	
 			$euname9="Sub : Show Cause for not attending Election Duty";
-			$euname10="       WHEREAS, it has been found that in spite of service of appointment letter for performing duty of ".$row['poststatus']." Assembly General Election, 2016 under this office order no. ".$_SESSION['apt1_orderno']." dated ".$_SESSION['apt1_date'].", you have intentionally and deliberately kept yourself absent from attending the scheduled Training Programme leading to serious dislocation of the entire election process.";
+			$euname10="       WHEREAS, it has been found that in spite of service of appointment letter for performing duty of ".$row['poststatus']." General Election to West Bengal Legistlative Assembly Election, 2016 under this office order no. ".$_SESSION['apt1_orderno']." dated ".$_SESSION['apt1_date'].", you have intentionally and deliberately kept yourself absent from attending the scheduled Training Programme leading to serious dislocation of the entire election process.";
 			$euname11="       NOW, THEREFORE, you are directed to Show Cause as to why action as per provisions under Section 28A / 134 of the Representation of People Act, 1951 will not be taken against you.";
 			$euname12="        Your written reply shall have to reach to this end within two days from the date of receipt of this letter.";
 			$euname13="      You are further directed to attend the mop up training programme positively as per schedule attached, failing which appropriate penal measures will be taken against you without any further correspondence from this end.";

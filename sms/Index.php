@@ -6,6 +6,9 @@ $Username = "ceowb";
 $Password = "#ceo_election15";
 $MsgSender = "WBELEC";
 $DestinationAddress = $mob_no;
+//echo $DestinationAddress;
+//echo $Message;
+//exit;
 //$Message = "Welcome ".$name.", Your ".$training_desc." will be held on ".$training_dt." at ".$training_time." at ".$venuename;
 
 // Create ViaNettSMS object with params $Username and $Password

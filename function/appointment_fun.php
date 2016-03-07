@@ -707,6 +707,42 @@ function first_app_letter3_print($sub_div)
 	
 	return 1;
 }
+function first_app_letter3_max_slno($subdiv)
+{
+	$sql="select count(*) as slno From  first_rand_table
+	 where first_rand_table.forsubdivision = '$subdiv'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['slno'];
+	connection_close();
+	return $i;
+}
+//===============draft subdivision wise=======================//
+function first_app_letter3_print_draft($sub_div)
+{
+	
+	$sql="Update first_rand_table 
+	set sl_no=NULL where substr(first_rand_table.officecd,1,4) = '$sub_div';";
+	$sql.="SET @ordering = 0;";
+    $sql.="UPDATE first_rand_table
+	 SET sl_no = (@ordering := @ordering + 1) ";
+	$sql.=" Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
+	
+	execMultiQuery($sql);	
+	connection_close();	
+	
+	return 1;
+}
+function first_app_letter3_max_slno_draft($subdiv)
+{
+	$sql="select count(*) as slno From  first_rand_table
+	 where substr(first_rand_table.officecd,1,4) = '$subdiv'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['slno'];
+	connection_close();
+	return $i;
+}
 /*function first_app_letter3_print($sub_div)
 {
 	
@@ -726,16 +762,7 @@ function first_app_letter3_print($sub_div)
 	
 	return 1;
 }*/
-function first_app_letter3_max_slno($subdiv)
-{
-	$sql="select count(*) as slno From  first_rand_table
-	 where first_rand_table.forsubdivision = '$subdiv'";
-	$rs=execSelect($sql);
-	$row=getRows($rs);
-	$i=$row['slno'];
-	connection_close();
-	return $i;
-}
+
 //ofc wise
 function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 {
@@ -750,13 +777,15 @@ function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 	
 	Where 1=1 ";
 	if($subdiv!='' && $subdiv!='0')
-		$sql.=" and  first_rand_table.forsubdivision = '$subdiv'";
+		$sql.=" and  substr(first_rand_table.officecd,1,4) = '$subdiv'";
 	if($office!='' && $office!='0')
 		$sql.=" and first_rand_table.officecd = '$office'";
 	if($percd!='' && $percd!='0')
 		$sql.=" and first_rand_table.personcd = '$percd'";
 	$sql.=" group by first_rand_table.personcd";	
 	$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd, first_rand_table.personcd, first_rand_table.poststatus, first_rand_table.person_desig";
+	//echo $sql;
+	//exit;
 	$rs=execSelect($sql);
 	
 	connection_close();
@@ -784,6 +813,28 @@ function first_appointment_letter_excel($subdiv,$from,$to)
 	connection_close();
 	return $rs;
 }
+/***************************draft subdiv wsie (excel)****************************/
+function first_appointment_letter_excel_draft($subdiv,$from,$to)
+{
+	$sql="Select first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
+	  first_rand_table.office,first_rand_table.address,first_rand_table.postoffice,first_rand_table.subdivision,first_rand_table.policestation,first_rand_table.district,first_rand_table.pin,
+	  first_rand_table.officecd,first_rand_table.mob_no,first_rand_table.poststatus,first_rand_table.acno,first_rand_table.partno,first_rand_table.slno,first_rand_table.epic,first_rand_table.pc_code as forpc,first_rand_table.pc_name as pcname,
+	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
+	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
+	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
+	From first_rand_table 
+	
+	Where 1=1 ";
+	if($subdiv!='' && $subdiv!='0')
+		$sql.=" and  substr(first_rand_table.officecd,1,4) = '$subdiv'";
+	$sql.=" group by first_rand_table.personcd";	
+	$sql.=" order by sl_no limit $from,$to";
+	$rs=execSelect($sql);
+	
+	connection_close();
+	return $rs;
+}
 //sub_div wise pdf
 function first_app_letter3_print1($sub_div,$from,$to)
 {
@@ -796,6 +847,25 @@ function first_app_letter3_print1($sub_div,$from,$to)
 	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
 	From first_rand_table 
 	Where first_rand_table.forsubdivision = '$sub_div'";
+	$sql.=" group by first_rand_table.personcd";	
+	$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+/***********************************draft subdivision wise*****************/
+function first_app_letter3_print1_draft($sub_div,$from,$to)
+{
+	$sql="Select Distinct first_rand_table.officer_name,first_rand_table.person_desig,first_rand_table.personcd,
+	  first_rand_table.office,first_rand_table.address,first_rand_table.postoffice,first_rand_table.subdivision,first_rand_table.policestation,first_rand_table.district,first_rand_table.pin,
+	  first_rand_table.officecd,first_rand_table.mob_no,first_rand_table.poststatus,first_rand_table.acno,first_rand_table.partno,first_rand_table.slno,first_rand_table.epic,first_rand_table.pc_code as forpc,first_rand_table.pc_name as pcname,
+	  first_rand_table.bank as bank_name,first_rand_table.branch as branch_name,first_rand_table.bank_accno as bank_acc_no,
+	  first_rand_table.ifsc as ifsc_code,first_rand_table.training_desc,
+	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
+	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
+	From first_rand_table 
+	Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
 	$sql.=" group by first_rand_table.personcd";	
 	$sql.=" order by sl_no limit $from,$to";
 	//echo $sql; exit;

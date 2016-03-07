@@ -6,7 +6,7 @@ include_once('function/training_fun.php');
 include_once('function/pagination.php');
 //====================================================
 
-global $subdivision; global $venuename; global $usercode;
+//global $subdivision; global $venuename; global $usercode;
 
 $usercode=isset($_SESSION)?$_SESSION['user_cd']:"";
 $delcode=isset($_GET["delcode"])?$_GET["delcode"]:"";
