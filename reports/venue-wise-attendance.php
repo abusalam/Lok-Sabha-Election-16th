@@ -42,6 +42,7 @@ for($i=1;$i<=$num_rows_TV;$i++)
 	$venue_cd=$rowTV['venue_cd'];
 	$training_dt=$rowTV['training_dt'];
 	$training_time=$rowTV['training_time'];
+	
 ?>
 	<table width="800px" cellpadding="0" cellspacing="0" border="0">
     <thead>
@@ -56,12 +57,13 @@ for($i=1;$i<=$num_rows_TV;$i++)
     	<?php
 		$rsPersonnel=venue_wise_list($venue_cd,$training_dt,$training_time);
 		$num_rows_Personnel=rowCount($rsPersonnel);
+		$count=0;
 		if($num_rows_Personnel>0)
 		{
 			for($j=1;$j<=$num_rows_Personnel;$j++)
 			{
 				$rowPersonnel=getRows($rsPersonnel);
-				echo "<tr><td align='center'>$rowPersonnel[personcd]</td><td align='left'>$rowPersonnel[officer_name]</td>
+				echo "<tr><td align='center'>++$count</td><td align='center'>$rowPersonnel[personcd]</td><td align='left'>$rowPersonnel[officer_name]</td>
 				<td align='left'>$rowPersonnel[designation]</td><td align='left'>$rowPersonnel[poststatus]</td>
 				<td align='left'>$rowPersonnel[acno]/$rowPersonnel[partno]/$rowPersonnel[slno]</td>
 				<td align='left'>$rowPersonnel[token]</td></tr>\n";
