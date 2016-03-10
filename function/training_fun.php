@@ -744,23 +744,27 @@ function venue_wise_list($venue,$training_dt,$training_time)
 	  personnela.acno,
 	  personnela.partno,
 	  personnela.slno,
+	  personnela.bank_acc_no,
+	 branch.ifsc_code,
 	  training_pp.token,
 	  personnela.forsubdivision,
 	  personnela.poststat
-	From training_venue
+	  From training_venue
 	  Inner Join training_schedule On training_venue.venue_cd =
 		training_schedule.training_venue
 	  Inner Join training_pp On training_schedule.schedule_code =
 		training_pp.training_sch
 	  Inner Join personnela On training_pp.per_code = personnela.personcd
-	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	  Inner Join poststat On personnela.poststat = poststat.post_stat 
+	  Inner Join branch On personnela.bank_cd = branch.bank_cd and personnela.branchcd = branch.branchcd
+	  
 	  Where personnela.personcd<>''";
 	$sql.=" and training_venue.venue_cd='$venue' and training_schedule.training_dt='$training_dt' and training_schedule.training_time='$training_time'";
 	$sql.=" Order By training_venue.venuename,
 	  training_schedule.training_dt,
 	  training_schedule.training_time,
 	  poststat.poststatus,
-	  personnela.personcd";
+	  training_pp.token";
 	$rs=execSelect($sql);
 	return $rs;
 }

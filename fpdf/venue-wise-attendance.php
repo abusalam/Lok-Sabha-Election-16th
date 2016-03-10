@@ -18,9 +18,9 @@ function Header()
 {
 	//$this->SetXY(10,10);
 	$this->SetFont('','B',9);
-	$this->Cell(195,5,'GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016',0,0,'C');
+	$this->Cell(265,5,' GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016',0,0,'C');
 	$this->Ln(8);
-	$this->Cell(195,0,'',1,0,'C');
+	$this->Cell(265,0,'',1,0,'C');
 }
 
 // Page footer
@@ -128,9 +128,9 @@ function FancyTable($header, $data)
 		
 			$this->Ln();
 			$this->SetFont('','B',8);
-			$this->Cell(195,5,$venue,"LTR",0,'L');
+			$this->Cell(265,5,$venue,"LTR",0,'L');
 			$this->Ln(4);
-			$this->Cell(195,5,$venue1,"LR",0,'L');
+			$this->Cell(265,5,$venue1,"LR",0,'L');
 			$this->Ln();
 			
 			
@@ -140,15 +140,19 @@ function FancyTable($header, $data)
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
 			
-			$head = array('SlNo','PIN','Name','Designation','Posting Status','Enrollment Details','Token No','Signature');
-			$header1 = array('','','','','','AC / Part /Sl No.','','');
-			$w = array(10,15,40,40,22,25,18,25);
+			$head = array('SlNo','Token No','PIN','Name','Designation','Posting Status','Bank IFSC Code','Bank A/c No.','Signature');
+			$header1 = array('','','','','','','','','');
+			
+			//$h= array('','','','','','','','','');
+			$w = array(10,20,20,40,40,25,29,30,51);
 				$this->SetFont('Arial','',8);
 			for($j=0;$j<count($head);$j++)
-				$this->Cell($w[$j],7,$head[$j],'LTR',0,'C',true);
+				$this->Cell($w[$j],8,$head[$j],'LTR',0,'C',true);
 			$this->Ln();
 			for($l=0;$l<count($header1);$l++)
 				$this->Cell($w[$l],4,$header1[$l],'LR',0,'C',true);
+				
+				
 			$counter=0;
 			$this->Ln();
 		//	$this->Cell(10,5,$subdiv,0,0,'L');
@@ -161,6 +165,7 @@ function FancyTable($header, $data)
 			$counter=$counter+1;
 			
 			
+			
 				
 				$rowPersonnel=getRows($rsPersonnel);
 			//	$sql="";
@@ -168,14 +173,17 @@ function FancyTable($header, $data)
                    
 				  $totaljoin=$rowPersonnel['acno']." / ".$rowPersonnel['partno']." / ".$rowPersonnel['slno'];
 				  $token_join=$rowPersonnel['forsubdivision']." / ".$rowPersonnel['poststat']." / ".$rowPersonnel['token'];
-				    $this->Cell($w[0],6,$counter,'LTR',0,'L',$fill);
-					$this->Cell($w[1],6,$rowPersonnel['personcd'],'LTR',0,'L',$fill);						
-					$this->Cell($w[2],6,$rowPersonnel['officer_name'],'LTR',0,'L',$fill);
-					$this->Cell($w[3],6,$rowPersonnel['designation'],'LTR',0,'L',$fill);
-					$this->Cell($w[4],6,$rowPersonnel['poststatus'],'LTR',0,'L',$fill);
-					$this->Cell($w[5],6,$totaljoin,'LTR',0,'L',$fill);
-					$this->Cell($w[6],6,$token_join,'LTR',0,'L',$fill);
-					$this->Cell($w[7],6,'','LTR',0,'L',$fill);
+				    $this->Cell($w[0],7,$counter,'LTR',0,'L',$fill);
+					$this->Cell($w[1],7,$token_join,'LTR',0,'L',$fill);
+					$this->Cell($w[2],7,$rowPersonnel['personcd'],'LTR',0,'L',$fill);						
+					$this->Cell($w[3],7,$rowPersonnel['officer_name'],'LTR',0,'L',$fill);
+					$this->Cell($w[4],7,$rowPersonnel['designation'],'LTR',0,'L',$fill);
+					$this->Cell($w[5],7,$rowPersonnel['poststatus'],'LTR',0,'L',$fill);
+					$this->Cell($w[6],7,$rowPersonnel['ifsc_code'],'LTR',0,'L',$fill);
+					$this->Cell($w[7],7,$rowPersonnel['bank_acc_no'],'LTR',0,'R',$fill);
+					
+					$this->Cell($w[8],7,'','LTR',0,'L',$fill);
+					
 					//count1++;
 					$this->Ln();
 					$r=fmod($counter,50);
@@ -183,6 +191,18 @@ function FancyTable($header, $data)
 					{   
 						$this->AddPage();
 						$this->Ln();
+						$head = array('SlNo','Token No','PIN','Name','Designation','Posting Status','Bank IFSC Code','Bank A/c No.','Signature');
+			$header1 = array('','','','','','','','','');
+			
+			//$h= array('','','','','','','','','');
+			$w = array(10,20,20,40,40,25,29,30,51);
+				$this->SetFont('Arial','',8);
+			for($j=0;$j<count($head);$j++)
+				$this->Cell($w[$j],8,$head[$j],'LTR',0,'U',true);
+			$this->Ln();
+			for($l=0;$l<count($header1);$l++)
+				$this->Cell($w[$l],4,$header1[$l],'LR',0,'U',true);
+			    $this->Ln();
 					}
 					
 					$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
@@ -203,7 +223,6 @@ function FancyTable($header, $data)
 		    {		
 			  $this->AddPage();
 			}
-
 		} 
     }
     // Closing line
@@ -211,11 +230,11 @@ function FancyTable($header, $data)
  }
 }
 
-     $pdf = new PDF('P','mm','A4');
+     $pdf = new PDF('L','mm','A4');
       // Column headings
    //   $header = array('Name of Polling Officer');
    // Data loading
-  $header="";
+    $header="";
 	$data=$rsTV;
     $pdf->SetFont('Arial','',4);
     $pdf->AddPage();
