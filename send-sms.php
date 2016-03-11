@@ -55,7 +55,7 @@ if($sub=="Send SMS")
 		$rs_data=fatch_SMS_from_sms_table(($from-1),$limit);
 		if(rowCount($rs_data)>0)
 		{
-	
+	     //echo rowCount($rs_data);
 			/*$smsarray=array('8946088417');
 			foreach($smsarray as $send_no)
 			{
@@ -66,7 +66,7 @@ if($sub=="Send SMS")
 			//$mob_no='9233314052';
 			//$mob_no='8946088417';
 			//$DestinationAddress = "8946088417";
-			//$Message="Hi";
+			//$Message="Welcome";
 			//include('sms/Index.php');	
 			for($i=1;$i<=rowCount($rs_data);$i++)
 			{

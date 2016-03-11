@@ -1,5 +1,4 @@
 <?php
-
 class MICS_SMS
 {
 	private $Username;

@@ -1296,7 +1296,7 @@ function fatch_post_stat_wise_dtl_tran_pp_available($subdiv,$fsubdiv_cd)
 	$sql="Select Count(training_pp.per_code) as total,poststat.poststatus,poststat.post_stat
 			From poststat
 			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
-			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and training_pp.training_sch Is Null Group By poststat.poststatus,poststat.post_stat";
+			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and (training_pp.training_sch Is Null or training_pp.training_sch='' or training_pp.training_sch='0') Group By poststat.poststatus,poststat.post_stat";
 	//echo $sql; //exit;
 	$rs=execSelect($sql);
 	connection_close();
