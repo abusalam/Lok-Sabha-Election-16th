@@ -26,15 +26,15 @@ function validate()
 		document.getElementById("to").focus();
 		return false;
 	}
-	if(from>to)
+	if((+from)>(+to))
 	{
 		document.getElementById("msg").innerHTML="Please check record no";
 		document.getElementById("from").focus();
 		return false;
 	}
-	if(((to)-($from))>100)
+	if(((+to)-(+from))>500)
 	{
-		document.getElementById("msg").innerHTML="Record should not be greater than 100";
+		document.getElementById("msg").innerHTML="Record should not be greater than 500";
 		document.getElementById("from").focus();
 		return false;
 	}
@@ -55,7 +55,7 @@ if($sub=="Send SMS")
 		$rs_data=fatch_SMS_from_sms_table(($from-1),$limit);
 		if(rowCount($rs_data)>0)
 		{
-	
+	     //echo rowCount($rs_data);
 			/*$smsarray=array('8946088417');
 			foreach($smsarray as $send_no)
 			{
@@ -66,7 +66,7 @@ if($sub=="Send SMS")
 			//$mob_no='9233314052';
 			//$mob_no='8946088417';
 			//$DestinationAddress = "8946088417";
-			//$Message="Hi";
+			//$Message="Welcome";
 			//include('sms/Index.php');	
 			for($i=1;$i<=rowCount($rs_data);$i++)
 			{

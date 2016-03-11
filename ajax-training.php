@@ -693,7 +693,7 @@ if($opn=='personnel')
 			echo "<tr>";
 			echo "<td align='center' width='25%'>$rowPer[0]</td>";
 			
-			echo "<input type='text' id='hidId$j' name='hidId$j' value='$pid' >";
+			echo "<input type='hidden' id='hidId$j' name='hidId$j' value='$pid' >";
 			
 			echo "<td align='left' width='65%'>$rowPer[1]</td>";
 			echo "<td><input type='checkbox' name='chkbox$j' id='chkbox$j' /></td></tr>";

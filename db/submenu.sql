@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2016 at 03:49 PM
+-- Generation Time: Mar 05, 2016 at 06:44 PM
 -- Server version: 5.1.73
 -- PHP Version: 5.3.29
 
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `submenu` (
 
 INSERT INTO `submenu` (`submenu_cd`, `menu_cd`, `submenu`, `link`, `usercode`, `posted_date`) VALUES
 (1, 2, 'Subdivision', 'subdivision-master.php', 1, '2013-12-23 04:28:24'),
+(2, 9, 'First App. Letter (PP Subdivision Wise)', 'first-appointment-letter3-print-draft.php', 1, '2016-03-05 12:52:59'),
 (3, 4, 'Add Personnel', 'add-personnel.php', 1, '2013-12-23 04:28:24'),
 (4, 4, 'List Personnel (Edit)', 'list-personnel.php', 1, '2013-12-23 04:28:24'),
 (5, 3, 'Add Details', 'office-details.php', 1, '2013-12-25 23:38:03'),

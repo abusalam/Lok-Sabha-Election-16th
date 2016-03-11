@@ -1,5 +1,4 @@
 <?php
-
 class MICS_SMS
 {
 	private $Username;
@@ -14,7 +13,7 @@ class MICS_SMS
 	public function SendSMS($MsgSender, $DestinationAddress, $Message)
 	{
 		// Build URL request for sending SMS.
-		$url = "https://services.mgov.gov.in/esms/sendsmsrequest?username=%s&password=%s&smsservicetype=singlemsg&content=%s&mobileno=%s&senderid=%s";
+		$url = "http://msdgweb.mgov.gov.in/esms/sendsmsrequest?username=%s&password=%s&smsservicetype=singlemsg&content=%s&mobileno=%s&senderid=%s";
 		$url = sprintf($url, urlencode($this->Username), urlencode($this->Password), urlencode($Message), urlencode($DestinationAddress), urlencode($MsgSender));
 		
 		// Check if MsgSender is numeric or alphanumeric.
@@ -54,6 +53,7 @@ class MICS_SMS
 	{		
 		try {
 			//var_dump(libxml_use_internal_errors(true));
+			libxml_use_internal_errors(true);
 			libxml_clear_errors();
 			// Download webpage and return response as xml.
 			return simplexml_load_file($url);

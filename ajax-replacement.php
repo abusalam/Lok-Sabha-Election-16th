@@ -50,6 +50,7 @@ if($p_id != '')
 	
 	$rs_person; $row_person;
 	$rs_person=fatch_PersonDetails($p_id);
+	
 	$num_row=rowCount($rs_person);
 	$row_person=getRows($rs_person);
 	if(rowCount($rs_person)<1)
@@ -79,6 +80,7 @@ if($p_id != '')
 		echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_person['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_person['per_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_person['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_person['post_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_sub_div' name='hid_sub_div' style='display:none;'>".$row_person['subdivisioncd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
+		
 		echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='o_booked'>Yes</td></tr>\n";
 		echo "</table>";
 		}
@@ -206,14 +208,14 @@ if($opn=='new_search')
 	
 	$ofc_id=isset($_GET["ofc_id"])?$_GET["ofc_id"]:"";
 	$post_stat=isset($_GET["post_stat"])?$_GET["post_stat"]:"";
-    
+    $for_subdiv=isset($_GET["for_subdiv"])?$_GET["for_subdiv"]:"";
     $subdiv_cd=isset($_GET["subdiv_cd"])?$_GET["subdiv_cd"]:"";
 	$poststat=isset($_GET["poststat"])?$_GET["poststat"]:"";
 	//if($forpc!='' && $ofc_id!='' && $gender!='')
 	if($ofc_id!='' && $gender!='')
 	{
 		$rsNew_Per; $rowNew_Per;
-		$rsNew_Per=fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$post_stat);
+		$rsNew_Per=fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$post_stat,$for_subdiv);
 		$num_rowsNew_Per=rowCount($rsNew_Per);
 		
 		if($num_rowsNew_Per>0)
@@ -367,10 +369,10 @@ if($opn=='pg_rplc')
 			//record add in first rand table//
 			
 			
-			    delete_temp_app_letter($usercd);
+			   // delete_temp_app_letter($usercd);
 				
 
-				include_once('inc/commit_con.php');
+				/*include_once('inc/commit_con.php');
 				mysqli_autocommit($link,FALSE);
 				$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
 				$stmt = mysqli_prepare($link, $sql1);
@@ -382,7 +384,7 @@ if($opn=='pg_rplc')
 					exit();
 				}
 				mysqli_stmt_close($stmt);
-				mysqli_close($link);
+				mysqli_close($link);*/
 				
 				
 				
@@ -394,14 +396,14 @@ if($opn=='pg_rplc')
 				
 				$del_ret1=delete_prev_data_single($new_p_id);
 				
-				$rsId=fetch_id_temp_app_letter($usercd);
-				$num_row1=rowCount($rsId);
-				if($num_row1>0)
-				{
+				//$rsId=fetch_id_temp_app_letter($usercd);
+				//$num_row1=rowCount($rsId);
+				//if($num_row1>0)
+				//{
 				  first_appointment_letter_replace_new_id($new_p_id);
-				}
+				//}
 			//end//
-			
+		
 		}
 	}
 	

@@ -55,6 +55,7 @@ function new_per_search()
 {
 	document.getElementById('replace').disabled=true;
 	var forpc=document.getElementById('hid_forpc').innerHTML;
+	var for_subdiv=document.getElementById('hid_for_subdiv').innerHTML;
 	var forassembly=document.getElementById('hid_forassembly').innerHTML;
 	var ofc_id=document.getElementById('ofc_id').innerHTML;
 	var booked=document.getElementById('hid_booked').innerHTML;
@@ -103,7 +104,7 @@ function new_per_search()
 		document.getElementById("drop_sch").innerHTML=xmlhttp2.responseText;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?forpc="+forpc+"&post_stat="+post_stat+"&gender="+gender+"&ofc_id="+ofc_id+"&opn=new_search",true);
+	xmlhttp.open("GET","ajax-replacement.php?forpc="+forpc+"&post_stat="+post_stat+"&gender="+gender+"&ofc_id="+ofc_id+"&for_subdiv="+for_subdiv+"&opn=new_search",true);
 	xmlhttp2.open("GET","ajax-replacement.php?subdiv_cd="+subdiv_cd+"&poststat="+post_stat+"&opn=new_search",true);
 	xmlhttp.send();
 	xmlhttp2.send();

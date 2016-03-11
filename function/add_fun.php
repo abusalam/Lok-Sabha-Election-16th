@@ -529,7 +529,7 @@ function Subdivision_ag_subdivcd($subdivcd)
 	connection_close();
 	return $subdivision;
 }
-function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$post_stat)
+function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$post_stat,$for_subdiv)
 {
 	$sqlc="select count(*) as cnt
 	From personnela 
@@ -543,8 +543,8 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	if($forpc !="" && $forpc !="0")
 	   $sqlc.="and personnela.forpc='$forpc' ";
 	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat'";
-	$fsql=$sqlc."and personnela.subdivisioncd=substr('$ofc_id',1,4)";
-	
+	$fsql=$sqlc."and personnela.subdivisioncd=substr('$ofc_id',1,4) and personnela.forsubdivision='$for_subdiv'";
+
 	$rsc=execSelect($fsql);
 	$rowc=getRows($rsc);
 	$mode="own-sub";
@@ -562,9 +562,9 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
   	office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp limit 1) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off limit 1) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm limit 1) As per_ass
 	
 	From personnela Inner Join office On personnela.officecd = office.officecd 
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
@@ -579,6 +579,7 @@ function fatch_Random_personnel_for_PreGroupReplacement($forpc,$ofc_id,$gender,$
 	$sql.="and (personnela.booked='' or personnela.booked is null) and personnela.poststat='$post_stat' ";
 	if($mode=="own-sub")
 		$sql.=" and personnela.subdivisioncd=substr('$ofc_id',1,4)";
+	 $sql.=" and personnela.forsubdivision='$for_subdiv'";
 	$sql.=" order by rand_numb asc";
 	
 	//$sql.=" limit 1 ";
@@ -720,9 +721,9 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp limit 1) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off limit 1) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm limit 1) As per_ass
 		 
 	From personnela 
 	Inner Join office On personnela.officecd = office.officecd
@@ -1006,9 +1007,9 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp and personnela.subdivisioncd=asmb.subdivisioncd) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off and personnela.subdivisioncd=asmb.subdivisioncd) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm and personnela.subdivisioncd=asmb.subdivisioncd) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp limit 1) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off limit 1) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm limit 1) As per_ass
 		 
 	From personnela 
 	Inner Join office On personnela.officecd = office.officecd
@@ -1108,7 +1109,7 @@ function save_pregroup_cancelletion($PersonalID,$usercd)
 	{
 		$sql1="delete from training_pp where per_code='$PersonalID'";
 		$j=execDelete($sql1);
-		$sql2="update personnel set f_cd=NULL where personcd='$PersonalID'";
+		$sql2="update personnel set f_cd=9 where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
 		$sql3="delete from first_rand_table where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
@@ -1153,9 +1154,9 @@ function fatch_Personaldtl_mobile($mobile)
 	$sql="SELECT personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-		 (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp ) As assembly_temp,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
+		 (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp limit 1) As assembly_temp,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off limit 1) As assembly_off,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm limit 1) As assembly_perm
           FROM personnel
           INNER JOIN office ON personnel.officecd = office.officecd where mob_no='$mobile'";
 		 // echo $sql;
@@ -1170,9 +1171,9 @@ function fatch_Personaldtl($PersonalCd)
 	$sql="SELECT personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-		 (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
+		 (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp limit 1) As assembly_temp,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off limit 1) As assembly_off,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm limit 1) As assembly_perm
           FROM personnel
           INNER JOIN office ON personnel.officecd = office.officecd where personcd='$PersonalCd'";
 		 // echo $sql;
@@ -1296,7 +1297,7 @@ function fatch_post_stat_wise_dtl_tran_pp_available($subdiv,$fsubdiv_cd)
 	$sql="Select Count(training_pp.per_code) as total,poststat.poststatus,poststat.post_stat
 			From poststat
 			  Inner Join training_pp On training_pp.post_stat = poststat.post_stat
-			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and training_pp.training_sch Is Null Group By poststat.poststatus,poststat.post_stat";
+			where training_pp.for_subdivision='$fsubdiv_cd' and training_pp.subdivision='$subdiv' and (training_pp.training_sch Is Null or training_pp.training_sch='' or training_pp.training_sch='0') Group By poststat.poststatus,poststat.post_stat";
 	//echo $sql; //exit;
 	$rs=execSelect($sql);
 	connection_close();
@@ -1955,9 +1956,9 @@ function Termination_details($termination_id)
   termination.posted_date,personnel.personcd, personnel.usercode, personnel.officer_name, office.office, personnel.off_desg, personnel.scale,
           personnel.basic_pay, personnel.grade_pay, 
           personnel.mob_no,personnel.present_addr1,personnel.present_addr2,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp) As assembly_temp,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off) As assembly_off,
-         (Select assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm) As assembly_perm
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_temp limit 1) As assembly_temp,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_off limit 1) As assembly_off,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnel.assembly_perm limit 1) As assembly_perm
 From personnel                                                                       
   Inner Join termination On personnel.personcd = termination.personal_id 
   INNER JOIN office ON personnel.officecd = office.officecd ";

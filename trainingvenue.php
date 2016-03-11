@@ -256,7 +256,7 @@ function bind_all()
      <TR><TD style="height: 1px; background-color: #0066CC; color: #FFFFFF; font-weight:bold;" align=center colSpan="4"></TD></TR>
     <tr>
       <td align="left"><span class="error">*</span>Venue Name</td>
-      <td align="left"><input type="text" name="venuename" id="venuename" maxlength="50" style="width:250px;" /><br />
+      <td align="left"><input type="text" name="venuename" id="venuename" maxlength="70" style="width:250px;" /><br />
       								</td>
     </tr>
     <tr>
