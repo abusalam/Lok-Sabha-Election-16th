@@ -22,9 +22,9 @@ $subdiv=(isset($_REQUEST['Subdivision'])?decode($_REQUEST['Subdivision']):'0');
 		echo "Please check record no";
 		exit;
 	}
-	if((($to)-($from))>500)
+	if((($to)-($from))>1000)
 	{
-		echo "Records should not be greater than 500";
+		echo "Records should not be greater than 1000";
 		exit;
 	}
 	

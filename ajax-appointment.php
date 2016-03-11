@@ -207,7 +207,7 @@ if($opn=='app_replacement')
 	//{
 		//$percd=encode($per_cd);
 		//echo "fpdf/first-appointment-letter-peridwise.php?percd=$percd";
-		echo "fpdf/training-app-letter.php";
+		echo "fpdf/training-app-letter.php?percd=$per_cd";
 	//}
 }
 

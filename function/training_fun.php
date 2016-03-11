@@ -344,6 +344,7 @@ function member_available($post_stat,$sub,$areapref,$area,$tr_type)
 	if($areapref=='P')
 		$sql.=" and assembly_off='$area' and subdivision='$sub'";
 	$sql.=" and (training_booked='' or training_booked is null)";
+	//echo $sql;
 	$rs=execSelect($sql);
 	return $rs;
 }

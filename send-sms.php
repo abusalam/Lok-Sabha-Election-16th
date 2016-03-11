@@ -26,15 +26,15 @@ function validate()
 		document.getElementById("to").focus();
 		return false;
 	}
-	if(from>to)
+	if((+from)>(+to))
 	{
 		document.getElementById("msg").innerHTML="Please check record no";
 		document.getElementById("from").focus();
 		return false;
 	}
-	if(((to)-($from))>100)
+	if(((+to)-(+from))>500)
 	{
-		document.getElementById("msg").innerHTML="Record should not be greater than 100";
+		document.getElementById("msg").innerHTML="Record should not be greater than 500";
 		document.getElementById("from").focus();
 		return false;
 	}
