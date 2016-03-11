@@ -1108,7 +1108,7 @@ function save_pregroup_cancelletion($PersonalID,$usercd)
 	{
 		$sql1="delete from training_pp where per_code='$PersonalID'";
 		$j=execDelete($sql1);
-		$sql2="update personnel set f_cd=NULL where personcd='$PersonalID'";
+		$sql2="update personnel set f_cd=9 where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
 		$sql3="delete from first_rand_table where personcd='$PersonalID'";
 		$j=execUpdate($sql3);

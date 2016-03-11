@@ -108,13 +108,14 @@ $sql1.=" where personnel.personcd>0 And termination.personal_id Is Null ";
 if($subdivision!='' && $subdivision!='0')
 	$sql1.="and personnel.subdivisioncd='$subdivision' ";	
 if($frmdate!='' && $frmdate!=null)
-	$sql1.="and personnel.posted_date>='$frmdate' ";
+	$sql1.="and date(personnel.posted_date)>='$frmdate' ";
 if($todate!='' && $todate!=null)
-	$sql1.="and personnel.posted_date<='$todate' ";
+	$sql1.="and date(personnel.posted_date)<='$todate' ";
 if($officename!='' && $officename!='0')
 	$sql1.="and personnel.officecd='$officename' ";
 	$sql1.="group by personnel.officecd ";
 	$sql1.="order by personnel.officecd limit $lmt_frm,$lmt_to";
+
 $rs=execSelect($sql1);
 
 class PDF extends FPDF
@@ -273,9 +274,9 @@ $todate=isset($_REQUEST["todate"])?$_REQUEST["todate"]:"";
 			if($subdivision!='' && $subdivision!='0')
 				$sql.="and personnel.subdivisioncd='$subdivision' ";	
 			if($frmdate!='' && $frmdate!=null)
-				$sql.="and personnel.posted_date>='$frmdate' ";
+				$sql.="and date(personnel.posted_date)>='$frmdate' ";
 			if($todate!='' && $todate!=null)
-				$sql.="and personnel.posted_date<='$todate' ";
+				$sql.="and date(personnel.posted_date)<='$todate' ";
 			//if($officename!='' && $officename!='0')
 				$sql.="and personnel.officecd='$row_header[0]' ";	
 				

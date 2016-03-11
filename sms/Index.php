@@ -6,6 +6,7 @@ $Username = "ceowb";
 $Password = "#ceo_election15";
 $MsgSender = "WBELEC";
 $DestinationAddress = $mob_no;
+
 //echo $DestinationAddress;
 //echo $Message;
 //exit;

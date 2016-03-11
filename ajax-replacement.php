@@ -50,6 +50,7 @@ if($p_id != '')
 	
 	$rs_person; $row_person;
 	$rs_person=fatch_PersonDetails($p_id);
+	
 	$num_row=rowCount($rs_person);
 	$row_person=getRows($rs_person);
 	if(rowCount($rs_person)<1)
