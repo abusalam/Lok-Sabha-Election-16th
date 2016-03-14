@@ -321,6 +321,7 @@ function validateFileExtension(Source, args)
 </head>
 <?php
 include_once('inc/db_trans.inc.php');
+include_once('function/add_fun.php');
 $action=isset($_REQUEST['submit'])?$_REQUEST['submit']:"";
 if($action=='Save')
 {
@@ -382,6 +383,7 @@ if($action=='Save')
 		}
 	}
 	$dist_code=$dist_cd;
+	
 	$subdiv_cd="0";
 	if(isset($_SESSION['subdiv_cd']))
 		$subdiv_cd=$_SESSION['subdiv_cd'];
@@ -389,19 +391,21 @@ if($action=='Save')
 	//=============== Getting Person ID ==================
 		
 	$usercd=$user_cd;
-	include_once('function/add_fun.php');
+	
 	if(isset($_REQUEST['personcd']))
 	{
+		//echo $dist_code;
+	   // exit;
 		//$tr_cd=decode($_REQUEST['personcd']);
 		$dt = new DateTime();
 		$posted_date=$dt->format('Y-m-d H:i:s');
 		//$ret=update_training_type($training_code,$training_desc,$usercd,$posted_date);
 		$ret=update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
 		$ret=update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$pgroup,$upload_file,$usercd,$posted_date);
-		if($ret==1)
-		{
-			redirect("modify-personnela.php?msg=success");
-		}
+		//if($ret==1)
+		//{
+			redirect("list-personnel_ls14.php?msg=success");
+		//}
 	}
 	else
 	{
@@ -454,170 +458,13 @@ function bind_all4()
 <?php } ?>
 }
 
-function bind_all()
-{
-<?php if(isset($_REQUEST['personcd'])) { ?>		
-	var hid_personnel_code=document.getElementById('hid_personnel_code');
-	hid_personnel_code.value="<?php echo $rowPerson['personcd']; ?>";
-	var offcode=document.getElementById('offcode');
-	for (var i = 0; i < offcode.options.length; i++) 
-	{
-		if (offcode.options[i].value == "<?php echo $rowPerson['officecd']; ?>")
-		{
-			offcode.options[i].selected = true;
-		}
-    }
-	offcode.readOnly=true;
-	var ofc_details=document.getElementById('ofc_details');
-	<?php
-	if($rowPerson['office']!="" && $rowPerson['off_desg']!="") { ?>
-		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/><b>Desig. of O/C: </b>".$rowPerson['off_desg']."</label>"; ?>";
-	<?php } ?>
-	var empname=document.getElementById('empname');
-	empname.value="<?php echo $rowPerson['officer_name']; ?>";
-	var designation=document.getElementById('designation');
-	designation.value="<?php echo $rowPerson['off_desg']; ?>";
-	var dob = document.getElementById('dob');
-	dob.value="<?php echo $rowPerson['dateofbirth']; ?>";
-	var sex = document.getElementById('sex');
-	for (var i = 0; i < sex.options.length; i++) 
-	{
-		if (sex.options[i].value == "<?php echo $rowPerson['gender']; ?>")
-		{
-			sex.options[i].selected = true;
-		}
-    }
-	var scale=document.getElementById('scale');
-	scale.value="<?php echo $rowPerson['scale']; ?>";
-	var basicpay=document.getElementById('basicpay');
-	basicpay.value="<?php echo $rowPerson['basic_pay']; ?>";
-	var gradepay=document.getElementById('gradepay');
-	gradepay.value="<?php echo $rowPerson['grade_pay']; ?>";
-	var preaddress1=document.getElementById('preaddress1');
-	preaddress1.value="<?php echo $rowPerson['present_addr1']; ?>";
-	var preaddress2=document.getElementById('preaddress2');
-	preaddress2.value="<?php echo $rowPerson['present_addr2']; ?>";
-	var peraddress1=document.getElementById('peraddress1');
-	peraddress1.value="<?php echo $rowPerson['perm_addr1']; ?>";
-	var peraddress2=document.getElementById('peraddress2');
-	peraddress2.value="<?php echo $rowPerson['perm_addr2']; ?>";	
-	var workingstatus=document.getElementById('workingstatus');
-	for (var i = 0; i < workingstatus.options.length; i++) 
-	{
-		if (workingstatus.options[i].value == "<?php echo $rowPerson['workingstatus']; ?>")
-		{
-			workingstatus.options[i].selected = true;
-		}
-    }
-	
-	var email=document.getElementById('email');
-	email.value="<?php echo $rowPerson['email']; ?>";
-	var r_no=document.getElementById('r_no');
-	r_no.value="<?php echo $rowPerson['resi_no']; ?>";
-	var m_no=document.getElementById('m_no');
-	m_no.value="<?php echo $rowPerson['mob_no']; ?>";
-	var qualification=document.getElementById('qualification');
-	for (var i = 0; i < qualification.options.length; i++) 
-	{
-		if (qualification.options[i].value == "<?php echo $rowPerson['qualificationcd']; ?>")
-		{
-			qualification.options[i].selected = true;
-		}
-    }
-	var language=document.getElementById('language');
-	for (var i = 0; i < language.options.length; i++) 
-	{
-		if (language.options[i].value == "<?php echo $rowPerson['languagecd']; ?>")
-		{
-			language.options[i].selected = true;
-		}
-    }
-	var bank=document.getElementById('bank');
-	for (var i = 0; i < bank.options.length; i++) 
-	{
-		if (bank.options[i].value == "<?php echo $rowPerson['bank_cd']; ?>")
-		{
-			bank.options[i].selected = true;
-		}
-    }
-	var branch=document.getElementById('branch');
-	for (var i = 0; i < branch.options.length; i++) 
-	{
-		if (branch.options[i].value == "<?php echo $rowPerson['branchcd']; ?>")
-		{
-			branch.options[i].selected = true;
-		}
-    }
-	var acc_no=document.getElementById('acc_no');
-	acc_no.value="<?php echo $rowPerson['bank_acc_no']; ?>";
-	var voterof=document.getElementById('voterof');
-	voterof.value="<?php echo $rowPerson['acno']; ?>";
-	var partno=document.getElementById('partno');
-	partno.value="<?php echo $rowPerson['partno']; ?>";
-	var sl_no=document.getElementById('sl_no');
-	sl_no.value="<?php echo $rowPerson['slno']; ?>";
-	var epic_no=document.getElementById('epic_no');
-	epic_no.value="<?php echo $rowPerson['epic']; ?>";
-	var ac_pre=document.getElementById('ac_pre');
-	for (var i = 0; i < ac_pre.options.length; i++) 
-	{
-		if (ac_pre.options[i].value == "<?php echo $rowPerson['assembly_temp']; ?>")
-		{
-			ac_pre.options[i].selected = true;
-		}
-    }
-	var ac_per=document.getElementById('ac_per');
-	for (var i = 0; i < ac_per.options.length; i++) 
-	{
-		if (ac_per.options[i].value == "<?php echo $rowPerson['assembly_perm']; ?>")
-		{
-			ac_per.options[i].selected = true;
-		}
-    }
-	var ac_posting=document.getElementById('ac_posting');
-	for (var i = 0; i < ac_posting.options.length; i++) 
-	{
-		if (ac_posting.options[i].value == "<?php echo $rowPerson['assembly_off']; ?>")
-		{
-			ac_posting.options[i].selected = true;
-		}
-    }
-	var posting_status=document.getElementById('posting_status');
-	for (var i = 0; i < posting_status.options.length; i++) 
-	{
-		if (posting_status.options[i].value == "<?php echo $rowPerson['poststat']; ?>")
-		{
-			posting_status.options[i].selected = true;
-		}
-    }
-	var remarks=document.getElementById('remarks');
-	for (var i = 0; i < remarks.options.length; i++) 
-	{
-		if (remarks.options[i].value == "<?php echo $rowPerson['remarks']; ?>")
-		{
-			remarks.options[i].selected = true;
-		}
-    }
-	var pgroup=document.getElementById('pgroup');
 
-	for (var i = 0; i < pgroup.options.length; i++) 
-	{
-		if (pgroup.options[i].value == "<?php echo $rowPerson['pgroup']; ?>")
-		{
-			pgroup.options[i].selected = true;
-		}
-    }
-	var hid_file=document.getElementById('hid_file');
-	hid_file.value="<?php echo $rowPerson['upload_file']; ?>";
-	var link_file=document.getElementById('link_file');
-	if(hid_file.value!='')
-		link_file.innerHTML="<a href='employee_photo/<?php echo $rowPerson['upload_file']; ?>' target='_blank' class='hp_link'>View Employee Photo</a>";
-<?php } ?>
+
 	//OfficeID.readOnly=true;
-}
+
 </script>
     
-<body oncontextmenu="return false;" onload="javascript: bind_all();">
+<body oncontextmenu="return false;">
 <div width="100%" align="center">
 <table cellpadding="2" cellspacing="0" border="0" width="100%">
 <tr>
@@ -640,24 +487,8 @@ function bind_all()
     </tr>
     <tr height="40px">
       <td align="left" valign="top"><span class="error">*</span>Office Code</td>
-      <td align="left" valign="top"><select name="offcode" id="offcode" style="width:150px;" onchange="fatch_offcdtl(this.value)">
-      						<option value="0">-Select Office Code-</option>
-                            <?php 	$sub_div=$subdiv_cd;
-									$rsOc=fatch_officecode('');
-									$num_rows=rowCount($rsOc);
-									if($num_rows>0)
-									{
-										for($i=1;$i<=$num_rows;$i++)
-										{
-											$rowOc=getRows($rsOc);
-											echo "<option value='$rowOc[0]'>$rowOc[0]</option>\n";
-										}
-									}
-									$rsOc=null;
-									$num_rows=0;
-									$rowOc=null;
-							?>
-      				</select></td>
+      <td align="left" valign="top"><input type="text" readonly="readonly" name="offcode" id="offcode" style="width:150px;">
+      						</td>
       <td align="left" colspan="2" valign="top"><span id="ofc_details"></span></td>
     </tr>
     <tr>
@@ -980,4 +811,165 @@ function bind_all()
                 });
            </script>
 </body>
+
+<script>
+<?php if(isset($_REQUEST['personcd'])) { ?>		
+	var hid_personnel_code=document.getElementById('hid_personnel_code');
+	hid_personnel_code.value="<?php echo $rowPerson['personcd']; ?>";
+	var offcode=document.getElementById('offcode');
+	offcode.value="<?php echo $rowPerson['officecd']; ?>";
+	/*for (var i = 0; i < offcode.options.length; i++) 
+	{
+		if (offcode.options[i].value == "<?php echo $rowPerson['officecd']; ?>")
+		{
+			offcode.options[i].selected = true;
+		}
+    }
+	offcode.readOnly=true;*/
+	var ofc_details=document.getElementById('ofc_details');
+	<?php
+	if($rowPerson['office']!="" && $rowPerson['off_desg']!="") { ?>
+		ofc_details.innerHTML="<?php echo "<label class='text_small'><b>Office Name: </b>".$rowPerson['office']."<br/><b>Desig. of O/C: </b>".$rowPerson['off_desg']."</label>"; ?>";
+	<?php } ?>
+	var empname=document.getElementById('empname');
+	empname.value="<?php echo $rowPerson['officer_name']; ?>";
+	var designation=document.getElementById('designation');
+	designation.value="<?php echo $rowPerson['off_desg']; ?>";
+	var dob = document.getElementById('dob');
+	dob.value="<?php echo $rowPerson['dateofbirth']; ?>";
+	var sex = document.getElementById('sex');
+	for (var i = 0; i < sex.options.length; i++) 
+	{
+		if (sex.options[i].value == "<?php echo $rowPerson['gender']; ?>")
+		{
+			sex.options[i].selected = true;
+		}
+    }
+	var scale=document.getElementById('scale');
+	scale.value="<?php echo $rowPerson['scale']; ?>";
+	var basicpay=document.getElementById('basicpay');
+	basicpay.value="<?php echo $rowPerson['basic_pay']; ?>";
+	var gradepay=document.getElementById('gradepay');
+	gradepay.value="<?php echo $rowPerson['grade_pay']; ?>";
+	var preaddress1=document.getElementById('preaddress1');
+	preaddress1.value="<?php echo $rowPerson['present_addr1']; ?>";
+	var preaddress2=document.getElementById('preaddress2');
+	preaddress2.value="<?php echo $rowPerson['present_addr2']; ?>";
+	var peraddress1=document.getElementById('peraddress1');
+	peraddress1.value="<?php echo $rowPerson['perm_addr1']; ?>";
+	var peraddress2=document.getElementById('peraddress2');
+	peraddress2.value="<?php echo $rowPerson['perm_addr2']; ?>";	
+	var workingstatus=document.getElementById('workingstatus');
+	for (var i = 0; i < workingstatus.options.length; i++) 
+	{
+		if (workingstatus.options[i].value == "<?php echo $rowPerson['workingstatus']; ?>")
+		{
+			workingstatus.options[i].selected = true;
+		}
+    }
+	
+	var email=document.getElementById('email');
+	email.value="<?php echo $rowPerson['email']; ?>";
+	var r_no=document.getElementById('r_no');
+	r_no.value="<?php echo $rowPerson['resi_no']; ?>";
+	var m_no=document.getElementById('m_no');
+	m_no.value="<?php echo $rowPerson['mob_no']; ?>";
+	var qualification=document.getElementById('qualification');
+	for (var i = 0; i < qualification.options.length; i++) 
+	{
+		if (qualification.options[i].value == "<?php echo $rowPerson['qualificationcd']; ?>")
+		{
+			qualification.options[i].selected = true;
+		}
+    }
+	var language=document.getElementById('language');
+	for (var i = 0; i < language.options.length; i++) 
+	{
+		if (language.options[i].value == "<?php echo $rowPerson['languagecd']; ?>")
+		{
+			language.options[i].selected = true;
+		}
+    }
+	var bank=document.getElementById('bank');
+	for (var i = 0; i < bank.options.length; i++) 
+	{
+		if (bank.options[i].value == "<?php echo $rowPerson['bank_cd']; ?>")
+		{
+			bank.options[i].selected = true;
+		}
+    }
+	var branch=document.getElementById('branch');
+	for (var i = 0; i < branch.options.length; i++) 
+	{
+		if (branch.options[i].value == "<?php echo $rowPerson['branchcd']; ?>")
+		{
+			branch.options[i].selected = true;
+		}
+    }
+	var acc_no=document.getElementById('acc_no');
+	acc_no.value="<?php echo $rowPerson['bank_acc_no']; ?>";
+	var voterof=document.getElementById('voterof');
+	voterof.value="<?php echo $rowPerson['acno']; ?>";
+	var partno=document.getElementById('partno');
+	partno.value="<?php echo $rowPerson['partno']; ?>";
+	var sl_no=document.getElementById('sl_no');
+	sl_no.value="<?php echo $rowPerson['slno']; ?>";
+	var epic_no=document.getElementById('epic_no');
+	epic_no.value="<?php echo $rowPerson['epic']; ?>";
+	var ac_pre=document.getElementById('ac_pre');
+	for (var i = 0; i < ac_pre.options.length; i++) 
+	{
+		if (ac_pre.options[i].value == "<?php echo $rowPerson['assembly_temp']; ?>")
+		{
+			ac_pre.options[i].selected = true;
+		}
+    }
+	var ac_per=document.getElementById('ac_per');
+	for (var i = 0; i < ac_per.options.length; i++) 
+	{
+		if (ac_per.options[i].value == "<?php echo $rowPerson['assembly_perm']; ?>")
+		{
+			ac_per.options[i].selected = true;
+		}
+    }
+	var ac_posting=document.getElementById('ac_posting');
+	for (var i = 0; i < ac_posting.options.length; i++) 
+	{
+		if (ac_posting.options[i].value == "<?php echo $rowPerson['assembly_off']; ?>")
+		{
+			ac_posting.options[i].selected = true;
+		}
+    }
+	var posting_status=document.getElementById('posting_status');
+	for (var i = 0; i < posting_status.options.length; i++) 
+	{
+		if (posting_status.options[i].value == "<?php echo $rowPerson['poststat']; ?>")
+		{
+			posting_status.options[i].selected = true;
+		}
+    }
+	var remarks=document.getElementById('remarks');
+	for (var i = 0; i < remarks.options.length; i++) 
+	{
+		if (remarks.options[i].value == "<?php echo $rowPerson['remarks']; ?>")
+		{
+			remarks.options[i].selected = true;
+		}
+    }
+	var pgroup=document.getElementById('pgroup');
+
+	for (var i = 0; i < pgroup.options.length; i++) 
+	{
+		if (pgroup.options[i].value == "<?php echo $rowPerson['pgroup']; ?>")
+		{
+			pgroup.options[i].selected = true;
+		}
+    }
+	var hid_file=document.getElementById('hid_file');
+	hid_file.value="<?php echo $rowPerson['upload_file']; ?>";
+	var link_file=document.getElementById('link_file');
+	if(hid_file.value!='')
+		link_file.innerHTML="<a href='employee_photo/<?php echo $rowPerson['upload_file']; ?>' target='_blank' class='hp_link'>View Employee Photo</a>";
+<?php } ?>
+</script>
 </html>

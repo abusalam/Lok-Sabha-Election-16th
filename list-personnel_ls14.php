@@ -92,7 +92,16 @@ function edit_personnela(str)
 }
 //==========================================================
 </script>
-
+<?php
+if(isset($_REQUEST['msg']))
+{
+	if($_REQUEST['msg']=='success')
+	{
+		$msg="<div class='alert-success'>Record updated successfully</div>";
+	}
+}
+//onload="javascript:return personnel_list('pload');"
+?>
 <link type="text/css" rel="stylesheet" href="css/paging.css" />
 </head>
 <body oncontextmenu="return false;" onload="javascript:return personnel_ls14_list('pload');">
@@ -106,7 +115,12 @@ function edit_personnela(str)
 <tr><td align="center">PERSONNEL DETAILS LIST FROM SWAPPING</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="95%" class="form" cellpadding="0">
-    
+   <tr>
+      <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
+    </tr>
+    <tr>
+      <td height="16px" colspan="4" align="center"><?php print isset($msg)?$msg:""; ?></td>
+    </tr>
     <tr>
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
