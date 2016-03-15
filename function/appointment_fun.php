@@ -878,10 +878,7 @@ function first_app_letter3_print1_draft($sub_div,$from,$to)
 	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
 	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
 	From first_rand_table 
-	Inner Join replacement_log_pregroup on replacement_log_pregroup.new_personnel=first_rand_table.personcd
-	Where substr(first_rand_table.officecd,1,4) = '$sub_div'
-	and date(replacement_log_pregroup.posted_date)='2016-03-12'
-	";
+	Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
 	$sql.=" group by first_rand_table.personcd";	
 	$sql.=" order by sl_no limit $from,$to";
 	//echo $sql; exit;
