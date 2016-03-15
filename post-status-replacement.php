@@ -236,9 +236,10 @@ function replacement()
 	{
 		document.getElementById('msg').innerHTML="Post Status should be different";
 		document.getElementById('replace').disabled=true;
+		 return false;
 	}
 	
-	 
+	
 	//alert(old_p_id+","+new_p_id+","+assembly+","+groupid);
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -259,9 +260,10 @@ function replacement()
 		
 	//	document.getElementById('n_booked').innerHTML='Yes';
 		
-	//	document.getElementById('newp_id').disabled=true;
-	//	document.getElementById('p_id').disabled=true;
+		document.getElementById('newp_id').disabled=true;
+		document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
+		document.getElementById('print1').disabled=false;
 		fatch_new_personnel_dtl_after_replace(new_p_id);
 		document.getElementById('replace').disabled=true;
 		document.getElementById('fakecontainer').style.display= 'none';
@@ -301,7 +303,37 @@ function print_appletter()
 	xmlhttp.open("GET","ajax-appointment.php?poststat="+poststat+"&p_id="+new_p_id+"&booked="+booked+"&forpc="+forpc+"&forassembly="+forassembly+"&groupid="+groupid+"&opn=gp_replacement",true);
 	xmlhttp.send();
 }
+function print_appletter1()
+{
+	var poststat=document.getElementById('posting_status').value;
+	var new_p_id=document.getElementById('newp_id').value;
+	var booked='';
+	var forpc='';
+	var forassembly=document.getElementById('assembly').value;
+	var groupid=document.getElementById('polling_party_no').value;
+	var usercd=<?php print $user_cd; ?>;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		window.open(xmlhttp.responseText);
+		//document.getElementById('msg').innerHTML=xmlhttp.responseText;
+		}
+	  }
+
+	xmlhttp.open("GET","ajax-appointment.php?poststat="+poststat+"&p_id="+new_p_id+"&booked="+booked+"&forpc="+forpc+"&forassembly="+forassembly+"&groupid="+groupid+"&opn=gp_replacement6",true);
+	xmlhttp.send();
+}
 </script>
+
 </head>
 
 <body>
@@ -313,7 +345,7 @@ function print_appletter()
   </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center"><?php echo $subdiv_name." SUBDIVISION"; ?></td></tr>
-<tr><td align="center">POST STATUS REPLACEMENT IN POLLING PERSONNEL GROUP</td></tr>
+<tr><td align="center"><b>POST STATUS SWAPPING IN POLLING PERSONNEL GROUP</b></td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1" enctype="multipart/form-data">
 <table width="95%" class="form" cellpadding="0">
 	<tr>
@@ -329,7 +361,7 @@ function print_appletter()
     	<td width="50%" class="table2" valign="top">
         	<table cellpadding="0" cellspacing="0" width="100%">
             	<tr>
-                	<td align="center" colspan="4"><b>OLD PERSONNEL</b></td>
+                	<td align="center" colspan="4"><b>POLLING PERSONNEL</b></td>
                 </tr>
                 <tr><td align="center"><img src='images/blank.gif' alt='' height='5px' /></td></tr>
                 <tr>
@@ -409,7 +441,7 @@ function print_appletter()
     	<td width="50%" class="table2" valign="top">
               <table cellpadding="0" cellspacing="0" width="100%">
             	<tr>
-                	<td align="center" colspan="4"><b>OLD PERSONNEL</b></td>
+                	<td align="center" colspan="4"><b>POLLING PERSONNEL</b></td>
                 </tr>
                 <tr><td align="center"><img src='images/blank.gif' alt='' height='5px' /></td></tr>
                 <tr>
@@ -493,8 +525,9 @@ function print_appletter()
     <tr>
     	<td align="center" colspan="2">
         	
-            <input id="replace" name="replace" value="Replace" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="print" name="print" value="Print Appointment Letter" type="button" onclick="return print_appletter();" disabled="true" />
+            <input id="replace" name="replace" value="Swapping" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="print" name="print" value="Print Appt Letter (4 or 5)" type="button" onclick="return print_appletter();" disabled="true" />
+            <input id="print1" name="print1" value="Print Appt Letter (6)" type="button" onclick="return print_appletter1();" disabled="true" />
         </td>
     </tr>
 </table>

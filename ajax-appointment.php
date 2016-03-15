@@ -377,7 +377,22 @@ if($poststat=='PB')
 	
 	echo "fpdf/2nd-app-letter.php?sub=".$subd."&txtfrom=0&txtto=0&group_id=".$g_id."&assembly=".$f_asm;
 }
+if($opn=='gp_replacement6')
+{
+	$poststat=isset($_GET["poststat"])?$_GET["poststat"]:"";
+	$per_cd=isset($_GET["p_id"])?$_GET["p_id"]:"";
+	$booked=isset($_GET["booked"])?$_GET["booked"]:"";
+	$pc_cd=isset($_GET["forpc"])?$_GET["forpc"]:"";
+	$forassembly=isset($_GET["forassembly"])?$_GET["forassembly"]:"";
+	$groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
+	include_once('function/appointment_fun.php');
 
+    $g_id=encode($groupid);
+	$f_asm=encode($forassembly);
+	$subd='';
+	
+	echo "fpdf/2nd-app-letter-6.php?sub=".$subd."&txtfrom=0&txtto=0&group_id=".$g_id."&assembly=".$f_asm;
+}
 if($opn=='gp_replacement1')
 {
 	$poststat=isset($_GET["poststat"])?$_GET["poststat"]:"";

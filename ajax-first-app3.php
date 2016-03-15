@@ -50,6 +50,7 @@ if($opn=='gen_sl_draft')
 	$subdiv=(isset($_GET['Subdivision'])?$_GET['Subdivision']:'0');
 	//first_app_update_sl_print($subdiv);
 	$rsApp=first_app_letter3_print_draft($subdiv);
+	//$rsApp=1;
 		if($rsApp==1)
 		{
 			//echo $rsApp;

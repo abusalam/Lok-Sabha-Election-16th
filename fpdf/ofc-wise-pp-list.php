@@ -27,9 +27,9 @@ if($subdiv !='')
 			echo "Please check record no";
 			exit;
 		}
-		if((($to)-($from))>100)
+		if((($to)-($from))>900)
 		{
-			echo "Office records should not be greater than 100";
+			echo "Office records should not be greater than 900";
 			exit;
 		}
 	}
@@ -77,7 +77,7 @@ function FancyTable($header, $data)
 			$office=$rowOff['officecd'];
 			$office_dtl="OFFICE: (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
 			
-			$office_dtl1=" P.O.-".$rowOff['postoffice'].", Subdiv-".$rowOff['subdivision'].", Block/Muni - ".$rowOff['blockmuni'].", P.S.-".$rowOff['policestation'].", Dist.-".$rowOff['district'].", PIN-".$rowOff['pin'];
+			$office_dtl1=" P.O. - ".$rowOff['postoffice'].", Subdiv - ".$rowOff['subdivision'].", Block/Muni - ".$rowOff['blockmuni'].", P.S. - ".$rowOff['policestation'].", Dist. - ".$rowOff['district'].", PIN - ".$rowOff['pin'];
 			
 			//$this->Ln();
 			//$this->Cell(190,0,'',1,0,'L');

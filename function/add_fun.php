@@ -683,10 +683,18 @@ function add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$
 	connection_close();
 	return $i;
 }
-/************************* Second apppt replace *******************************/
-function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv)
+function fetch_newid_replacement_log_pregroup($new_p_id)
 {
-	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P'";
+	$sql="Select count(*) as cnt from replacement_log_pregroup where new_personnel='$new_p_id'";
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
+}
+/************************* Second apppt replace *******************************/
+function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$ofc_code)
+{
+	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.forassembly='$assembly' and booked='P' and personnela.officecd<>'$ofc_code'";
 
 	$rs_tmp=execSelect($sqltmp);
 	$num_rows_tmp=rowCount($rs_tmp);
@@ -706,7 +714,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$draft_subdiv'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -734,7 +742,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$po
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$draft_subdiv'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
@@ -970,10 +978,18 @@ $i=execUpdate($sql192);
 	}*/
 	return 1;
 }
-function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv)
+function fetch_newid_replacement_log_post_group($new_p_id)
 {
-	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.subdivisioncd<>'$draft_subdiv' and personnela.forassembly='$assembly' and booked='P'";
-
+	$sql="Select count(*) as cnt from relpacement_log where new_personnel='$new_p_id'";
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
+}
+function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$ofc_code)
+{
+	$sqltmp="select officecd from personnela where groupid='$groupid' and personnela.forsubdivision='$for_subdiv' and personnela.officecd<>'$ofc_code' and personnela.forassembly='$assembly' and booked='P'";
+   
 	$rs_tmp=execSelect($sqltmp);
 	$num_rows_tmp=rowCount($rs_tmp);
 	//echo $sqltmp;
@@ -992,7 +1008,7 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and personnela.booked='R' and personnela.subdivisioncd='$draft_subdiv'";
+	$sqlc.=" and personnela.booked='R' and personnela.forsubdivision='$for_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sqlc.=" and personnela.officecd<>'$office[$i]'";
@@ -1020,7 +1036,7 @@ function fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and personnela.booked='R' and personnela.subdivisioncd='$draft_subdiv'";
+	$sql.=" and personnela.booked='R' and personnela.forsubdivision='$for_subdiv'";
 	for($i=0;$i<$num_rows_tmp;$i++)
 	{
 		$sql.=" and personnela.officecd<>'$office[$i]'";
@@ -1101,7 +1117,7 @@ function add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd)
 	return $i;
 }
 //============ Pre group Cancelletion =========================
-function save_pregroup_cancelletion($PersonalID,$usercd)
+function save_pregroup_cancelletion($PersonalID,$usercd,$posted_date)
 {
 	$sql="delete from personnela where personcd='$PersonalID'";
 	$i=execDelete($sql);
@@ -1109,7 +1125,8 @@ function save_pregroup_cancelletion($PersonalID,$usercd)
 	{
 		$sql1="delete from training_pp where per_code='$PersonalID'";
 		$j=execDelete($sql1);
-		$sql2="update personnel set f_cd=9 where personcd='$PersonalID'";
+		$sql2="update personnel set f_cd=9,usercode='$usercd',
+			posted_date='$posted_date' where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
 		$sql3="delete from first_rand_table where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
@@ -1117,7 +1134,7 @@ function save_pregroup_cancelletion($PersonalID,$usercd)
 	connection_close();
 	return $i;
 }
-function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd)
+function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd,$posted_date)
 {
 	$sql="delete from first_rand_table where personcd='$PersonalID'";
 	$i=execDelete($sql);
@@ -1125,7 +1142,8 @@ function save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd
 	//{
 		$sql1="delete from training_pp where per_code='$PersonalID'";
 		$j=execDelete($sql1);
-		$sql2="update personnel set poststat='$post_status' where personcd='$PersonalID'";
+		$sql2="update personnel set poststat='$post_status',usercode='$usercd',
+			posted_date='$posted_date' where personcd='$PersonalID'";
 		$j=execUpdate($sql2);
 		$sql3="update personnela set booked=' ', groupid=0, forassembly='', poststat='$post_status',rand_numb=0,selected=0 where personcd='$PersonalID'";
 		$j=execUpdate($sql3);
@@ -1718,7 +1736,8 @@ function update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$pr
 			usercode='$usercd',
 			posted_date='$posted_date'";
 	$sql.=" where personcd='$p_id'";
-
+    //echo $sql;
+	//exit;
 	$i=execUpdate($sql);
 	connection_close();
 	return $i;

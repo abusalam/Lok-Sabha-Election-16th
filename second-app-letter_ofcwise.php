@@ -34,23 +34,28 @@ function subdivision_change(str)
 }
 function validate()
 {
-	var subdivision=document.getElementById("Subdivision");
-	var office=document.getElementById("office");
+	var subdivision=document.getElementById("Subdivision").value;
 
-	if(subdivision.value=="0")
+	if(subdivision=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Subdivision";
 		document.getElementById("Subdivision").focus();
 		return false;
 	}
-	//alert(pc.options.length);
-	if(office.value=="" || office.value=="0")
-	{
-		document.getElementById("msg").innerHTML="Select Office";
-		document.getElementById("office").focus();
-		return false;
-	}
-
+	var txtfrom=document.getElementById('txtfrom');
+		if(txtfrom.value=='')
+		{
+			document.getElementById('msg').innerHTML="Enter From";
+			txtfrom.focus();
+			return false;
+		}
+		var txtto=document.getElementById('txtto');
+		if(txtto.value=='')
+		{
+			document.getElementById('msg').innerHTML="Enter To";
+			txtto.focus();
+			return false;
+		}
 }
 </script>
 </head>
@@ -62,13 +67,19 @@ function validate()
 <tr><td align="center"><?php print uppercase($district); ?> DISTRICT</td></tr>
 <tr>
   <td align="center">SECOND APPOINTMENT LETTER ISSUE</td></tr>
-<tr><td align="center"><form method="post" name="form1" id="form1" action="fpdf/second-app-letter_ofcwise.php" target="_blank">
-    <table width="70%" class="form" cellpadding="0">
+<tr><td align="center"><form method="post" name="form1" id="form1" action="fpdf/second-app-letter_ofcwise2.php" target="_blank">
+    <table width="60%" class="form" cellpadding="0">
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td colspan="2" style="height:100px" align="center"><img src="images/loading1.gif" alt="" height="90px" width="90px" id="loading1" style="visibility:hidden" /></td></tr>
-	<tr>
-	  <td align="left"><span class="error">*</span>Subdivision</td>
-	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="javascript:return subdivision_change(this.value);">
+  
+    <tr>
+      <td height="16px" colspan="2" align="center"><span id="msg" class="error"></span></td>
+    </tr>
+      <tr>
+      <td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td>
+    </tr>
+    <tr>
+     <td align="left"><span class="error">*</span>Subdivision</td>
+	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:200px;" onchange="javascript:return subdivision_change(this.value);">
       						<option value="0">-Select Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;
 									$rsBn=fatch_Subdivision($districtcd);
@@ -81,15 +92,19 @@ function validate()
 											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
 										}
 									}
-									$rsBn=null;
-									$num_rows=0;
-									$rowSubDiv=null;
+									unset($rsBn,$num_rows,$rowSubDiv);
 							?>
       				</select></td></tr>
+    
+	<tr>
     <tr>
-      <td align="left"><span class="error">*</span>Office</td>
-      <td align="left" id="office_result"><select name="office" id="office" style="width:240px;"></select></td>
-    </tr>   
+
+       <td><span class="error">*</span>Office Print</td>
+       <td>From: &nbsp;<input type='text' name='txtfrom' id='txtfrom' style='width:40px;'/>&nbsp;&nbsp;
+	To: &nbsp;<input type='text' name='txtto' id='txtto' style='width:40px;' /></td>
+      </tr> 
+	  <td align="left" colspan="2">&nbsp;</td></tr>
+       
     <tr><td colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr>
       <td colspan="2" align="center"><input type="submit" name="submit" id="submit" value="Submit" class="button" onclick="javascript:return validate();" /></td></tr>

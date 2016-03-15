@@ -1,12 +1,12 @@
 <?php
 //include 'mysqliconn.php';
 //include 'ppdata.php';
-class reserve2 {
+class reserve1a {
 
 private $result;
 private $msqli; 
 private $sobj;
-function __construct($dist,$sub) {
+function __construct($dist,$sub,$phase) {
 
 // select QUERY ON A assembly TABLE
     
@@ -69,15 +69,11 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  echo ' ';
 		  */
 		  
-		 // $totres=$totres-round(.9*$totres);
-		  $ppall1=new ppdata($fpc,$pst,$dist,$fasm,'S',2); // pp for subdivision 
+	      $totres=round(.1*$totres);
+		  $ppall1=new ppdata($sub,$pst,$dist,$fasm,'S',2); // pp for subdivision 
 		  $bk='R';
 		  $x=0;
-		  //echo $fasm."-".$fpc."-".$pst."<br>";
-		  $this->result_tmp = $this->msqli->query("SELECT max(groupid) maxgpid from personnela where forassembly='$fasm' and forpc='$fpc' and poststat='$pst' and booked='R'") or die($this->msqli->error.__LINE__);
-		  while($row = $this->result_tmp->fetch_assoc()) {
-		  	$gpnew=$row['maxgpid'];
-		  }
+		  
 		  $k=0;
 		  //
 		  while( $k<$totres) 
@@ -85,10 +81,9 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		        if ($x< $ppall1->countnumb())
 				{
 		  			$psd=$ppall1->getperscdpp($x);
-					$gpd=$gpnew+1;
+					$gpd=$x+1;
 					$this->stmt->execute();
 					$x=$x+1;
-					$gpnew=$gpnew+1;
 				}
 				else
 				{
@@ -99,18 +94,21 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 				
 				$k=$k+1;
 					
-		  }	  
+		  }
+		  
 		  
 		  $this->msqli->commit();
-		  	  
+		  
+		  
+		  
 		  		
 		}
 	
 	}
 	
 	else {
-		echo 'NO RESULTS';	
-	}
+		echo 'NO  RESULTS';	
+	} 
 $this->stmt->close();
 $this->msqli->close();
 		

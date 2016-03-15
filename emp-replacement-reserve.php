@@ -62,6 +62,7 @@ function fatch_personnel_dtl(str)
 				document.getElementById("op_dtl").innerHTML=xmlhttp1.responseText;
 				document.getElementById('search').disabled=false;
 			}
+			document.getElementById('replace').disabled=true;
 		}
 	  }
 	xmlhttp.open("GET","ajax-replacement.php?p_id="+str,true);
@@ -84,6 +85,7 @@ function new_per_search()
 	var groupid=document.getElementById('hid_groupid').innerHTML;
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var gender=document.getElementById('hid_gender').innerHTML;
+	var ofc_cd=document.getElementById('hid_ofc_cd').innerHTML;
 	
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -104,9 +106,10 @@ function new_per_search()
 		else
 			document.getElementById('replace').disabled=true;	
 		document.getElementById('print').disabled=true;
+		document.getElementById('print1').disabled=true;
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&draft_subdiv="+draft_subdiv+"&opn=g_new_per_res",true);
+	xmlhttp.open("GET","ajax-replacement.php?for_subdiv="+for_subdiv+"&forpc="+forpc+"&assembly="+forassembly+"&posting_status="+posting_status+"&groupid="+groupid+"&gender="+gender+"&draft_subdiv="+draft_subdiv+"&hid_ofccd="+ofc_cd+"&opn=g_new_per_res",true);
 	xmlhttp.send();
 }
 function replacement()
@@ -120,6 +123,7 @@ function replacement()
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var dcrccd=document.getElementById('hid_dcrccd').innerHTML;
 	var training2_sch=document.getElementById('hid_training2_sch').innerHTML;
+	var poststat=document.getElementById('posting_status').value;
 	//alert(old_p_id+","+new_p_id+","+assembly+","+groupid);
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -133,16 +137,37 @@ function replacement()
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
+		/*document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
 		document.getElementById('n_booked').innerHTML='Yes';
 		document.getElementById('replace').disabled=true;
 		document.getElementById('search').disabled=true;
 		document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
-		document.getElementById('fakecontainer').style.display= 'none';
+		document.getElementById('fakecontainer').style.display= 'none';*/
+		  if(xmlhttp.responseText.length==8)
+			{
+				document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
+				document.getElementById('n_booked').innerHTML='Yes';
+				document.getElementById('replace').disabled=true;
+				document.getElementById('search').disabled=true;
+				document.getElementById('p_id').disabled=true;
+				document.getElementById('print').disabled=false;
+				document.getElementById('print1').disabled=false;
+				document.getElementById('fakecontainer').style.display= 'none';
+			}
+			else
+			{
+				document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
+					document.getElementById('replace').disabled=false;
+					document.getElementById('search').disabled=false;
+					//document.getElementById('p_id').disabled=true;
+					document.getElementById('print').disabled=true;
+					document.getElementById('print1').disabled=true;
+					document.getElementById('fakecontainer').style.display= 'none';
+			}
 		}
 	  }
-	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);
+	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&poststat="+poststat+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);
 	document.getElementById('fakecontainer').style.display = 'block';
 	xmlhttp.send();
 	document.getElementById('replace').disabled=true;
@@ -174,6 +199,35 @@ function print_appletter()
 	  }
 
 	xmlhttp.open("GET","ajax-appointment.php?poststat="+poststat+"&p_id="+new_p_id+"&booked="+booked+"&forpc="+forpc+"&forassembly="+forassembly+"&groupid="+groupid+"&opn=gp_replacement",true);
+	xmlhttp.send();
+}
+function print_appletter1()
+{
+	var poststat=document.getElementById('posting_status').value;
+	var new_p_id=document.getElementById('new_per_id').innerHTML;
+	var booked=document.getElementById('hid_booked').innerHTML;
+	var forpc=document.getElementById('hid_forpc').innerHTML;
+	var forassembly=document.getElementById('assembly').value;
+	var groupid=document.getElementById('polling_party_no').value;
+	var usercd=<?php print $user_cd; ?>;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		window.open(xmlhttp.responseText);
+		//document.getElementById('msg').innerHTML=xmlhttp.responseText;
+		}
+	  }
+
+	xmlhttp.open("GET","ajax-appointment.php?poststat="+poststat+"&p_id="+new_p_id+"&booked="+booked+"&forpc="+forpc+"&forassembly="+forassembly+"&groupid="+groupid+"&opn=gp_replacement6",true);
 	xmlhttp.send();
 }
 </script>
@@ -271,7 +325,8 @@ function print_appletter()
     	<td align="center" colspan="2">
         	<input id="search" name="search" value="Search" type="button" onclick="return new_per_search();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input id="replace" name="replace" value="Replace" type="button" onclick="return replacement();" disabled="true" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input id="print" name="print" value="Print Appointment Letter" type="button" onclick="return print_appletter();" disabled="true" />
+             <input id="print" name="print" value="Print Appt Letter (4 or 5)" type="button" onclick="return print_appletter();" disabled="true" />
+            <input id="print1" name="print1" value="Print Appt Letter (6)" type="button" onclick="return print_appletter1();" disabled="true" />
         </td>
     </tr>
 </table>

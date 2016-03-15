@@ -33,7 +33,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   	Inner Join district On district.districtcd = subdivision.districtcd 
 	Left Join termination On personnela.personcd = termination.personal_id";
 	$sqlc.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.subdivisioncd='$for_subdiv'";
+	$sqlc.=" and (personnela.booked='' or personnela.booked is null) and personnela.forsubdivision='$for_subdiv'";
 
 	$rsc=execSelect($sqlc);
 	$rowc=getRows($rsc);
@@ -45,9 +45,9 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   office.pin,DATE_FORMAT(personnela.dateofbirth,'%d-%m-%Y') as dateofbirth,personnela.gender,personnela.epic,
   	poststat.poststatus,personnela.present_addr1,personnela.present_addr2,
 	
-	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp) As pre_ass,
-         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off) As post_ass,
-         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm) As per_ass
+	(Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_temp limit 1) As pre_ass,
+         (Select distinct  assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_off limit 1) As post_ass,
+         (Select distinct assemblyname from assembly asmb where asmb.assemblycd = personnela.assembly_perm limit 1) As per_ass
 	
 	From personnela Inner Join office On personnela.officecd = office.officecd
   	Inner Join policestation On office.policestn_cd = policestation.policestationcd 
@@ -57,7 +57,7 @@ function fatch_Random_personnel_for_replacement($for_subdiv,$assembly,$posting_s
   	Inner Join district On district.districtcd = subdivision.districtcd
 	Left Join termination On personnela.personcd = termination.personal_id ";
 	$sql.=" WHERE termination.personal_id is null and personnela.gender='$gender' and personnela.assembly_temp<>'$assembly' and personnela.assembly_perm<>'$assembly' and personnela.assembly_off<>'$assembly' and personnela.poststat='$posting_status' ";
-	$sql.=" and (personnela.booked='' or personnela.booked is null)  and personnela.subdivisioncd='$for_subdiv'";
+	$sql.=" and (personnela.booked='' or personnela.booked is null)  and personnela.forsubdivision='$for_subdiv'";
 	$sql.=" limit 1 offset $random_no";
 	$rs=execSelect($sql);
 	connection_close();
@@ -78,7 +78,14 @@ function reserve_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd)
 	connection_close();
 	return $i;
 }
-
+function fetch_newid_replacement_log_reserve($new_p_id)
+{
+	$sql="Select count(*) as cnt from relpacement_log_reserve where new_personnel='$new_p_id'";
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
+}
 function delete_prev_data_second_rand_reserve($personcd,$new_p_id)
 {
 	$sql="delete from second_rand_table_reserve where personcd='$personcd' or personcd='$new_p_id'";
@@ -140,7 +147,7 @@ function second_appointment_letter_reserve($personcd)
 }
 function second_appointment_letter_reserve3_print($personcd)
 {
-	$sql="SELECT `slno`,`groupid`,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
+	$sql="SELECT `slno`,`groupid`,assemblycd,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
 	`post_stat`,`officecd`,`office_name`,`office_address`,`post_office`,`subdivision`,`police_stn`,`district`,
 	`pincode`,`dc_venue`,`dc_address`,date_format(`dc_date`,'%d/%m/%Y') as dc_date,`dc_time`,`rc_venue`,`traingcode`,`training_venue`,`venuecode`,
 	`venue_addr1`,`venue_addr2`,date_format(`training_date`,'%d/%m/%Y') as training_date,`training_time`,date_format(`polldate`,'%d/%m/%Y') as polldate,`polltime` 

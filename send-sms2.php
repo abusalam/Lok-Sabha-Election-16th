@@ -8,7 +8,38 @@ session_start();
 <?php
 include('header/header.php');
 ?>
-
+<script>
+function validate()
+{
+	
+	var from=document.getElementById("from").value;
+	var to=document.getElementById("to").value;
+	if($.trim(from)=="")
+	{
+		document.getElementById("msg").innerHTML="Enter From";
+		document.getElementById("from").focus();
+		return false;
+	}
+	if($.trim(to)=="")
+	{
+		document.getElementById("msg").innerHTML="Enter To";
+		document.getElementById("to").focus();
+		return false;
+	}
+	/*if((+from)>(+to))
+	{
+		document.getElementById("msg").innerHTML="Please check record no";
+		document.getElementById("from").focus();
+		return false;
+	}
+	if(((+to)-(+from))>500)
+	{
+		document.getElementById("msg").innerHTML="Record should not be greater than 500";
+		document.getElementById("from").focus();
+		return false;
+	}*/
+}
+</script>
 </head>
 <?php
 include_once('function/sms_fun.php');
@@ -71,7 +102,7 @@ if(isset($_REQUEST['msg']))
 	<td align="center" width="50%">To : <input type="text" name="to" id="to" style="width:50px;" onkeypress="javascript:return wholenumbersonly(event);" /></td></tr>
     <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<tr>
-	  <td align="center" colspan="2"><input type="submit" name="send" id="send" value="Send SMS" class="button" /></td></tr>
+	  <td align="center" colspan="2"><input type="submit" name="send" id="send" value="Send SMS" class="button" onclick="javascript:return validate();" /></td></tr>
     <tr>
       <td align="left">&nbsp;</td>
       <td align="left">&nbsp;</td>

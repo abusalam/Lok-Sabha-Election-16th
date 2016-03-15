@@ -84,6 +84,12 @@ $i=execUpdate($sql19);
 $sql20="UPDATE second_rand_table_reserve a  JOIN training_venue_2 b ON a.venuecode=b.venue_cd SET  a.`training_venue` = b.venuename,a.`venue_addr1` =b.venueaddress1,  a.`venue_addr2`=b.venueaddress2 where a.	subdivisioncd='$subdiv_cd'";
 $i=execUpdate($sql20);
 
+$sql21="update second_rand_table_reserve a 
+Inner join assembly on assembly.assemblycd=a.assemblycd and assembly.subdivisioncd=a.subdivisioncd
+Inner join pc b on assembly.pccd=b.pccd
+set a.pcname=b.pcname,a.pccd=b.pccd where a.subdivisioncd='$subdiv_cd'";
+$i=execUpdate($sql21);
+
 $sql22="update second_rand_table_reserve a join subdivision b on a.subdivision=b.subdivisioncd set a.subdivision=b.subdivision where a.subdivisioncd='$subdiv_cd'";
 $i=execUpdate($sql22);
 

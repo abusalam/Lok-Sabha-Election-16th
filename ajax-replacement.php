@@ -79,7 +79,7 @@ if($p_id != '')
 		echo "<tr><td align='left' colspan='2'>Present Address: </td><td align='left' colspan='2'>".$row_person['pre_ass']."<hidden id='hid_pre_ass' name='hid_pre_ass' style='display:none;'>".$row_person['pre_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Permanent Address: </td><td align='left' colspan='2'>".$row_person['per_ass']."<hidden id='hid_per_ass' name='hid_per_ass' style='display:none;'>".$row_person['per_ass_cd']."</hidden></td></tr>\n";
 		echo "<tr><td align='left' colspan='2'>Place of Posting: </td><td align='left' colspan='2'>".$row_person['post_ass']."<hidden id='hid_post_ass' name='hid_post_ass' style='display:none;'>".$row_person['post_ass_cd']."</hidden></td></tr>\n";
-		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_sub_div' name='hid_sub_div' style='display:none;'>".$row_person['subdivisioncd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
+		echo "<tr><td align='left' colspan='4'><hidden id='hid_forpc' name='hid_forpc' style='display:none;'>".$row_person['forpc']."</hidden>\n<hidden id='hid_forassembly' name='hid_forassembly' style='display:none;'>".$row_person['forassembly']."</hidden>\n<hidden id='hid_groupid' name='hid_groupid' style='display:none;'>".$row_person['groupid']."</hidden>\n<hidden id='hid_booked' name='hid_booked' style='display:none;'>".$row_person['booked']."</hidden>\n<hidden id='hid_per_cd' name='hid_per_cd' style='display:none;'>".$row_person['personcd']."</hidden>\n <hidden id='hid_for_subdiv' name='hid_for_subdiv' style='display:none;'>".$row_person['forsubdivision']."</hidden>\n <hidden id='hid_dcrccd' name='hid_dcrccd' style='display:none;'>".$row_person['dcrccd']."</hidden>\n <hidden id='hid_sub_div' name='hid_sub_div' style='display:none;'>".$row_person['subdivisioncd']."</hidden>\n <hidden id='hid_ofc_cd' name='hid_ofc_cd' style='display:none;'>".$row_person['officecd']."</hidden>\n <hidden id='hid_training2_sch' name='hid_training2_sch' style='display:none;'>".$row_person['training2_sch']."</hidden></td></tr>\n";
 		
 		echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='o_booked'>Yes</td></tr>\n";
 		echo "</table>";
@@ -102,13 +102,14 @@ $posting_status=isset($_GET["posting_status"])?$_GET["posting_status"]:"";
 $groupid=isset($_GET["groupid"])?$_GET["groupid"]:"";
 $gender=isset($_GET["gender"])?$_GET["gender"]:"";
 $draft_subdiv=isset($_GET["draft_subdiv"])?$_GET["draft_subdiv"]:"";
+$ofc_code=isset($_GET["hid_ofccd"])?$_GET["hid_ofccd"]:"";
 if($opn=='g_new_per')
 {
 	$forpc=isset($_GET["forpc"])?$_GET["forpc"]:"";
 	if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 	{
 		$rs_new_per; $row_new_per;
-		$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv);
+		$rs_new_per=fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$ofc_code);
 		//$random_rs_person=array_rand($rs_new_per);
 		$num_rows_new_per=rowCount($rs_new_per);
 		if($num_rows_new_per>0)
@@ -131,6 +132,10 @@ if($opn=='g_new_per')
 			echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='n_booked'>No</td></tr>\n";
 			echo "</table>";
 		}
+		else
+		{
+			echo "Not Found.";
+		}
 	}
 }
 
@@ -140,7 +145,7 @@ if($opn=='g_new_per_res')
 	if($assembly!='' && $posting_status!='' && $groupid!='' && $gender!='')
 	{
 		$rs_new_per; $row_new_per;
-		$rs_new_per=fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$draft_subdiv);
+		$rs_new_per=fatch_Random_personnel_for_replacement_r($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$ofc_code);
 		//$random_rs_person=array_rand($rs_new_per);
 		$num_rows_new_per=rowCount($rs_new_per);
 		if($num_rows_new_per>0)
@@ -163,6 +168,10 @@ if($opn=='g_new_per_res')
 			echo "<tr><td align='right' colspan='2'>Booked : </td><td colspan='2' align='left' id='n_booked'>No</td></tr>\n";
 			echo "</table>";
 		}
+		else
+		{
+			echo "Not Found.";
+		}
 	}
 }
 
@@ -183,21 +192,30 @@ if($opn=='g_rplc')
 	//if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 	if($old_p_id!='' && $new_p_id!='' && $ass!='' && $groupid!='')
 	{
-		$selected=1;
-		$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch);
-		if($ret==1)
+		$duplicate_id=fetch_newid_replacement_log_post_group($new_p_id);
+		if($duplicate_id==0)
 		{
-			$selected=0;
-			$res1=update_personnel_replacement($old_p_id,0,'',$forpc,'C',$selected,'','');
-			if($res1==1)
+			$selected=1;
+			
+			$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch);
+			if($ret==1)
 			{
-				echo "Changed";
+				$selected=0;
+				$res1=update_personnel_replacement($old_p_id,0,'',$forpc,'C',$selected,'','');
+				if($res1==1)
+				{
+					echo "Changed";
+				}
+				$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
+				delete_second_rand_table_reserve($new_p_id);
 			}
-			$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
-			delete_second_rand_table_reserve($new_p_id);
+			save_data_in_second_appt_after_rplc($ass,$groupid,$poststat);
 		}
-		save_data_in_second_appt_after_rplc($ass,$groupid,$poststat);
-		
+		else
+		{
+			echo "Click again search button or refresh the page";
+		}
+			
 	}
 }
 //================================ Single Replacement Personnel =======================================
@@ -315,96 +333,107 @@ if($opn=='pg_rplc')
 	if($old_p_id!='' && $new_p_id!='')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
-		$selected=1;
-		//update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
-		$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
-		if($ret==1)
+		$duplicate_id=fetch_newid_replacement_log_pregroup($new_p_id);
+		if($duplicate_id==0)
 		{
-			if($samevenuetraining=='true')
+			$selected=1;
+			//update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
+			$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
+			if($ret==1)
 			{
-				update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
-			
-				
-			}
-			else
-			{
-				//fetch old schedule code
-				$old_s_cd=fetch_training_schedule_code($old_p_id);
-				//fetch old no used
-				$old_noused=fetch_no_used_training_schedule($old_s_cd);
-				//update no used
-				update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
-				//replace
-				update_personnel_PreGroupReplacement_training_pp($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id,$training_sch);
-				
-				if($training_sch !='' && $training_sch !='0')
+				if($samevenuetraining=='true')
 				{
-					//fetch new no used if shdule_code exist
-					$new_noused=fetch_no_used_training_schedule($training_sch);
-					//update new no used if shdule_code exist
-					update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+					update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
+						
 				}
 				else
 				{
-					update_training_booked_denied($new_p_id);
+					//fetch old schedule code
+					$old_s_cd=fetch_training_schedule_code($old_p_id);
+					//fetch old no used
+					$old_noused=fetch_no_used_training_schedule($old_s_cd);
+					//update no used
+					update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
+					//replace
+					update_personnel_PreGroupReplacement_training_pp($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id,$training_sch);
+					
+					if($training_sch !='' && $training_sch !='0')
+					{
+						//fetch new no used if shdule_code exist
+						$new_noused=fetch_no_used_training_schedule($training_sch);
+						//update new no used if shdule_code exist
+						update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+					}
+					else
+					{
+						update_training_booked_denied($new_p_id);
+					}
+					
+					
 				}
-				
-				
-			}
-			$selected=0;
-			if($chngepoststatus=='true')
-			{
-			    $res1=update_personnel_PreGroupReplacement_change_post_status($old_p_id,'',$post_status,'',$selected);
-			}
-			else
-			{
-				$res1=update_personnel_PreGroupReplacement($old_p_id,'','','C',$selected);
-			}
-			if($res1==1)
-			{
-				echo "Changed";
-			}
-			$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
-			
-			//record add in first rand table//
-			
-			
-			   // delete_temp_app_letter($usercd);
-				
-
-				/*include_once('inc/commit_con.php');
-				mysqli_autocommit($link,FALSE);
-				$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
-				$stmt = mysqli_prepare($link, $sql1);
-				mysqli_stmt_bind_param($stmt, 'si', $new_p_id,$usercd);
-				mysqli_stmt_execute($stmt);
-			
-				if (!mysqli_commit($link)) {
-					print("Transaction commit failed\n");
-					exit();
+				$selected=0;
+				if($chngepoststatus=='true')
+				{
+					$res1=update_personnel_PreGroupReplacement_change_post_status($old_p_id,'',$post_status,'',$selected);
 				}
-				mysqli_stmt_close($stmt);
-				mysqli_close($link);*/
+				else
+				{
+					$res1=update_personnel_PreGroupReplacement($old_p_id,'','','C',$selected);
+				}
+				if($res1==1)
+				{
+					echo "Changed";
+				}
+				$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
+				
+				//record add in first rand table//
 				
 				
+				   // delete_temp_app_letter($usercd);
+					
+	
+					/*include_once('inc/commit_con.php');
+					mysqli_autocommit($link,FALSE);
+					$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
+					$stmt = mysqli_prepare($link, $sql1);
+					mysqli_stmt_bind_param($stmt, 'si', $new_p_id,$usercd);
+					mysqli_stmt_execute($stmt);
 				
-				//$str_per_code=$_GET['old_p_id'];
-				//echo $str_per_code;
-				//exit;
+					if (!mysqli_commit($link)) {
+						print("Transaction commit failed\n");
+						exit();
+					}
+					mysqli_stmt_close($stmt);
+					mysqli_close($link);*/
+					
+					
+					
+					//$str_per_code=$_GET['old_p_id'];
+					//echo $str_per_code;
+					//exit;
+				
+					$del_ret=delete_prev_data_single($old_p_id);
+					
+					$del_ret1=delete_prev_data_single($new_p_id);
+					
+					//$rsId=fetch_id_temp_app_letter($usercd);
+					//$num_row1=rowCount($rsId);
+					//if($num_row1>0)
+					//{
+					  first_appointment_letter_replace_new_id($new_p_id);
+					//}
+				//end//
 			
-				$del_ret=delete_prev_data_single($old_p_id);
-				
-				$del_ret1=delete_prev_data_single($new_p_id);
-				
-				//$rsId=fetch_id_temp_app_letter($usercd);
-				//$num_row1=rowCount($rsId);
-				//if($num_row1>0)
-				//{
-				  first_appointment_letter_replace_new_id($new_p_id);
-				//}
-			//end//
-		
+			}
 		}
+		else
+		{
+			echo "Click again search button or refresh the page";
+		}
+	}
+	else
+	{
+		echo "";
 	}
 	
 }

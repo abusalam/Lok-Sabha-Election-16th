@@ -38,6 +38,7 @@ function per_id_change(str)
 				document.getElementById("op_dtl").innerHTML=xmlhttp1.responseText;
 				document.getElementById('search').disabled=false;
 			}
+			document.getElementById('replace').disabled=true;
 		}
 	  }
 	xmlhttp.open("GET","ajax-reserve-replacement.php?p_id="+str,true);
@@ -54,7 +55,7 @@ function new_per_search()
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var gender=document.getElementById('hid_gender').innerHTML;
 	var post_stat=document.getElementById('hid_post_stat').innerHTML;
-    var for_subdiv=document.getElementById('hid_sub_div').innerHTML;
+    var for_subdiv=document.getElementById('hid_for_subdiv').innerHTML;
 
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -107,13 +108,32 @@ function replacement()
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
+		/*document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
 		document.getElementById('n_booked').innerHTML='Yes';
 		document.getElementById('replace').disabled=true;
 		document.getElementById('search').disabled=true;
 		//document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
-		document.getElementById('fakecontainer').style.display= 'none';
+		document.getElementById('fakecontainer').style.display= 'none';*/
+		    if(xmlhttp.responseText.length==8)
+			{
+				document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
+				document.getElementById('n_booked').innerHTML='Yes';
+				document.getElementById('replace').disabled=true;
+				document.getElementById('search').disabled=true;
+				//document.getElementById('p_id').disabled=true;
+				document.getElementById('print').disabled=false;
+				document.getElementById('fakecontainer').style.display= 'none';
+			}
+			else
+			{
+				document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
+					document.getElementById('replace').disabled=false;
+					document.getElementById('search').disabled=false;
+					//document.getElementById('p_id').disabled=true;
+					document.getElementById('print').disabled=true;
+					document.getElementById('fakecontainer').style.display= 'none';
+			}
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);

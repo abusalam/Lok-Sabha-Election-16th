@@ -104,7 +104,12 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 		  {
 			  $Message.= ", concat('$text_msg', '(',pr_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
-		  } 
+		  }
+		   else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	if($post_stat=='P1')
@@ -119,6 +124,11 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 			  $Message.= ", concat('$text_msg', '(',p1_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
+		   else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	if($post_stat=='P2')
@@ -133,6 +143,11 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 			  $Message.= ", concat('$text_msg', '(',p2_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
+		   else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	if($post_stat=='P3')
@@ -147,6 +162,11 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 			  $Message.= ", concat('$text_msg', '(',p3_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
+		   else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	if($post_stat=='PA')
@@ -161,6 +181,11 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 			  $Message.= ", concat('$text_msg', '(',pa_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
+		   else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	if($post_stat=='PB')
@@ -175,6 +200,11 @@ function fetch_second_appt_member_available($post_stat,$Subdivision,$type_detail
 			  $Message.= ", concat('$text_msg', '(',pb_post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
+		  else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 		
 	}
 	
@@ -212,7 +242,11 @@ function fetch_second_appt_reserve_member_available($post_stat,$Subdivision,$typ
 			  $Message.= ", concat('$text_msg', '(',second_rand_table_reserve.post_stat,') venue :',training_venue,' date: ',training_date,' time: ',training_time)";
 	  
 		  } 
-	
+	       else if($type_details=='0')
+		  {
+			  $Message.= ",'$text_msg'";
+	  
+		  }
 	$sql="Insert into tblsms2 (name,phone_no,message) 		
 		  SELECT 
 		  $Message

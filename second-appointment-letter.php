@@ -152,13 +152,13 @@ function validate()
 			assembly.focus();
 			return false;
 		}
-		var txtGroupId=document.getElementById('txtGroupId');
+		/*var txtGroupId=document.getElementById('txtGroupId');
 		if(txtGroupId.value=='')
 		{
 			document.getElementById('msg').innerHTML="Enter Group Id";
 			txtGroupId.focus();
 			return false;
-		}
+		}*/
 	}
 }
 </script>
@@ -189,7 +189,7 @@ if($submit=="Submit")
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 <tr><td align="center"><?php echo isset($subdiv_name)?$subdiv_name." SUBDIVISION":""; ?></td></tr>
-<tr><td align="center">SECOND APPOINTMENT LETTER</td></tr>
+<tr><td align="center">SECOND APPOINTMENT LETTER <span class="error">(Available 4 or 5 Member)</span></td></tr>
 <tr><td align="center"><form method="post" name="form1" id="form1">
 	<table width="75%" class="form" cellpadding="0">
     <tr>
@@ -202,7 +202,7 @@ if($submit=="Submit")
     <tr>
       <td align="left"><input type="checkbox" id="chksetsubdivision" name="chksetsubdivision" onclick="return chksetsubdivision_change();" />
         <label for="chksetsubdivision" class="text_small">Sub division wise</label></td>
-        <td align="left"><span class="error">*</span>Subdivision</td>
+        <td align="left"><span class="error">*</span>For Subdivision</td>
         <td align="left"><select name="Subdivision" id="Subdivision" style="width:180px;" disabled="disabled">
           					<option value="0">-Select Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;
@@ -260,7 +260,7 @@ if($submit=="Submit")
      </tr> 
      <tr>
          <td></td>
-         <td><span class="error">*</span>Group ID</td><td><input type="text" name="txtGroupId" id="txtGroupId" width="130px" disabled="disabled"/></td>
+         <td>&nbsp;&nbsp; Group ID</td><td><input type="text" name="txtGroupId" id="txtGroupId" width="130px" disabled="disabled"/></td>
      </tr>    
     
     <tr><td colspan="3" align="center"><img src="images/blank.gif" alt="" height="10px" /></td></tr>

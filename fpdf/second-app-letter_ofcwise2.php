@@ -7,20 +7,41 @@ include_once('../inc/db_trans.inc.php');
 include_once('../function/training2_fun.php');
 $subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 $office_cd=isset($_POST['office'])?$_POST['office']:"";
-$rsOff=office_details_ag_forsuboffice($subdiv,$office_cd);
-$num_rows_Off=rowCount($rsOff);
+$from=(isset($_POST['txtfrom'])?$_POST['txtfrom']:'0');
+$to=(isset($_POST['txtto'])?$_POST['txtto']:'0');
 
-if($subdiv==0)
+if($subdiv=="0")
 { 
     echo "Please Select Subdivision.";
 	exit;
 }
+if($subdiv !='0')
+	{
+		/* if($from>$hid_rec || $to>$hid_rec)
+		{
+			echo "Please check record no";
+			exit;
+		}*/
+		if($from>$to || $from<1 || $to<1)
+		{
+			echo "Please check record no";
+			exit;
+		}
+		if((($to)-($from))>900)
+		{
+			echo "Office records should not be greater than 900";
+			exit;
+		}
+	}
+$rsOff=office_details_ag_forsuboffice2($subdiv,$from-1,$to-$from+1);
+$num_rows_Off=rowCount($rsOff);
+
 class PDF extends FPDF
 {
 
 function Header()
 {
-	$this->SetFont('','B',9);
+	  $this->SetFont('','B',9);
 	$this->Cell(190,5,'GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016',0,0,'C');
 	$this->Ln(8);
 	$this->Cell(190,0,'',1,0,'C');
@@ -71,15 +92,15 @@ function FancyTable($header, $data)
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
 			
-			$head = array('PIN','Name','Designation','Posting Status','Mobile No');
-			$w = array(18,57,68,27,20);
+			$head = array('SL#','PIN','Name','Designation','Posting Status','Mobile No');
+			$w = array(7,18,58,65,24,18);
 			//	$this->SetFont('Arial','',9);
 			for($j=0;$j<count($head);$j++)
 				$this->Cell($w[$j],7,$head[$j],1,0,'C',true);
 				 
 			$this->Ln();
 	
-			$rsPersonnel=second_appoint_letter_ofcwise($office,$subdiv);
+			$rsPersonnel=second_appoint_letter_ofcwise2($office,$subdiv);
 			for($k=1;$k<=rowCount($rsPersonnel);$k++)
 	        {
 				$rowPersonnel=getRows($rsPersonnel);
@@ -122,25 +143,34 @@ function FancyTable($header, $data)
 						 $post_stat=$rowPersonnel['pa_post_stat'];
 						 $mobno=$rowPersonnel['pa_mobno'];
 						  break;
+					case ($poststat=='PB'):
+					     $pin=$rowPersonnel['pb_personcd'];
+						 $name=$rowPersonnel['pb_name'];
+						 $desg=$rowPersonnel['pb_designation'];
+						 $post_stat=$rowPersonnel['pb_post_stat'];
+						 $mobno=$rowPersonnel['pb_mobno'];
+						  break;
 					  default:
 					   echo "";
 					  break;
 				 }
-				
-					$this->Cell($w[0],6,$pin,'LRT',0,'L',$fill);						
-					$this->Cell($w[1],6,$name,'LRT',0,'L',$fill);
-					$this->Cell($w[2],6,$desg,'LRT',0,'L',$fill);
-					$this->Cell($w[3],6,$post_stat,'LRT',0,'L',$fill);
-					$this->Cell($w[4],6,$mobno,'LRT',0,'L',$fill);
+				    $this->Cell($w[0],6,$k,'LRT',0,'C',$fill);
+					$this->Cell($w[1],6,$pin,'LRT',0,'L',$fill);						
+					$this->Cell($w[2],6,$name,'LRT',0,'L',$fill);
+					$this->Cell($w[3],6,$desg,'LRT',0,'L',$fill);
+					$this->Cell($w[4],6,$post_stat,'LRT',0,'L',$fill);
+					$this->Cell($w[5],6,$mobno,'LRT',0,'L',$fill);
 					//count1++;
 					
 					$this->Ln();
 					$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
 					$this->Ln();
 					
-			
 				
 			}
+			$this->Ln(10);
+			 $this->SetFont('','B',9);
+			 $this->Cell(50,5,"Head of the office signature  .................................",0,0,'L');
 			
 			$fill = !$fill;
 		    $count++;

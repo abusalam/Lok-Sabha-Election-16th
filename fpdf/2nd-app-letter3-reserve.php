@@ -52,7 +52,7 @@ function FancyTable($header, $data)
     $fill = false;
 	$count=0;
 	$per_page=1;
-	$signature="../images/deo/img.jpg";
+	//$signature="../images/deo/img.jpg";
     for($i=1;$i<=rowCount($data);$i++)
 	{
 		$this->SetFont('Arial','',9);
@@ -71,32 +71,91 @@ function FancyTable($header, $data)
 			$dc_time=($row['dc_time']!=''?$row['dc_time']:"___________");
 			$rcvenue=($row['rc_venue']!=''?$row['rc_venue']:"_______________________________");
 			
-			$euname="ELECTION URGENT";
+			/*$euname="ELECTION URGENT";
 			$euname1="ORDER OF APPOINTMENT FOR POLLING DUTIES";
 			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016";
 			$euname3="* Reserve Serial No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
+			$euname5="Date: ".$_SESSION['apt2_date'];*/
+			$euname="ELECTION URGENT";
+			$euname1="ORDER OF APPOINTMENT FOR POLLING DUTIES";
+			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE";
+			$euname21="ASSEMBLY ELECTION, 2016";
+			$euname3="";
+			$euname22="Reserve Serial No. ".$row['groupid'];
+			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
-			$euname6="In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act,1963(43 of 1951), I hereby";
-			$euname7="appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling";
-			$euname8="Station specified in corresponding entry in column(1) of the table provided by me for $row[assembly] - $row[assembly_name] L.A. Constituency";
-			$euname78="forming part of .. Parliamentary Constituency.";
+			
+			$euname6="     In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
+			$euname7="appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
+			$euname8="Station specified in corresponding entry in column(1) of the table provided by me for ".$row['assemblycd']." - ".$row['assembly']." L.A. Constituency ";
+			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
 			$euname81="I also authorise the Polling Officer specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
 			$euname82="during the unavoidable absence, if any, of the Presiding Officer.";
 			
-			$euname9="The Poll will be taken on $poll_date during the hours $poll_time. The Presiding Officer should arrange to collect the Polling ";
-			$euname10="materials from $dc on $dc_date at $dc_time  ";
-			$euname11="and after the Poll, these should be returned to collecting centre at $rcvenue";
+			$euname9="The Poll will be taken on ".$poll_date." during the hours ".$poll_time.". The Presiding Officer should arrange to collect the Polling ";
+			$euname10="materials from ".$dc." on ".$dc_date." at $dc_time  ";
+			$euname11="and after the Poll, these should be returned to collecting centre at ".$rcvenue;
 			
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
 			$euname13="Date: ".date("d/m/Y");
 			$euname14="District ".wordcase($_SESSION['dist_name']);
-			$nb1="You are requested to attend the training at $training_venue , $venue_addr";
-			$nb2="on $training_date from $training_time";
+			$nb1="You are requested to attend the training at ".$training_venue." , ".$venue_addr;
+			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
+			$signature="../images/ro/".$row['assemblycd'].".jpg";
 			
-	
+			$this->SetFont('Arial','B',10);
+			$this->Cell(37,6,$euname,1,0,'L');
+			$this->SetFont('Arial','B',10);
+			$this->Cell(20);
+			$this->Cell(84,4,$euname1,'B',0,'C');
 			$this->SetFont('Arial','B',8);
+			$this->Cell(28);
+			$this->Cell(10,3,$euname3,0,0,'R');
+			   
+			// Line break
+			$this->Ln(6);
+			
+			//$this->Cell(90);
+			$this->SetFont('Arial','B',8);
+			$this->Cell(15,10,'',0,0,'L');
+			$this->SetFont('Arial','',10);
+			$this->Cell(38);
+			$this->Cell(92,4,$euname2,'B',0,'C');
+			$this->SetFont('Arial','B',8);
+			$this->Cell(8);
+			$this->SetFont('Arial','B',10);
+			$this->Cell(38,6,$euname22,1,0,'R');
+			
+			$this->Ln(5);
+			
+			$this->SetFont('Arial','B',8);
+			$this->Cell(15,10,'',0,0,'L');
+			$this->SetFont('Arial','',10);
+			$this->Cell(60);
+			$this->Cell(47,4,$euname21,'B',0,'C');
+			$this->SetFont('Arial','B',8);
+			$this->Cell(13);
+			$this->SetFont('Arial','B',10);
+			$this->Cell(33,6,'',0,0,'R');
+			// Line break
+			
+			$this->Ln(4);
+			
+			$this->SetFont('Arial','',9);
+			$this->Cell(15,10,$euname4,0,0,'L');
+			$this->SetFont('Arial','',10);
+			$this->Cell(60);
+			$this->Cell(47,4,'','',0,'C');
+			$this->SetFont('Arial','',8);
+			$this->Cell(33);
+			$this->SetFont('Arial','',9);
+			$this->Cell(33,6,$euname5,0,0,'R');
+			
+			$this->Ln(11);
+	
+			/*$this->SetFont('Arial','B',8);
 			$this->Cell(30,5,$euname,1,0,'L');
 			$this->SetFont('Arial','B',10);
 			$this->Cell(50);
@@ -119,9 +178,9 @@ function FancyTable($header, $data)
 			$this->Cell(10,10,$euname5,0,0,'R');
 			   
 			// Line break
-			$this->Ln(17);
+			$this->Ln(7);
 			
-			$this->SetFont('Arial','',8.7);
+			/*$this->SetFont('Arial','',8.7);
 			$this->Cell(87);
 			$this->Cell(20,10,$euname6,0,0,'C');
 			
@@ -140,10 +199,15 @@ function FancyTable($header, $data)
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',8.7);
-			$this->Cell(50,10,$euname78,0,0,'L');
-		
+			$this->Cell(50,10,$euname78,0,0,'L');*/
+		     
+			$this->Ln();
+			$this->SetFont('Arial','',8.7);
+			$this->MultiCell(190,4,$euname6.$euname7.$euname8.$euname78,0,'J');
+			
+			
 			// Line break
-			$this->Ln(10);
+			$this->Ln(6);
 			
 			$this->SetFont('Arial','',8.7);
 			$this->Cell(87);
@@ -226,7 +290,7 @@ function FancyTable($header, $data)
 				$pr_code=$row['personcd'];
 				$pr_office=$row['office_name'];
 				$pr_ofc_address=$row['office_address'];
-				$pr_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", Dist. - ".$row['district'];
+				$pr_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", ".$row['district'];
 				$pr_ofc_cd="OFFICE - (".$row['officecd'].")";
 				$pr_post_stat=$row['post_stat'];
 				$pr_join=$pr_post_stat." PIN - (".$pr_code.")";
@@ -252,14 +316,14 @@ function FancyTable($header, $data)
 				$pp_join='';
 				
 			}
-		    if ($row['post_status']=='P1' || $row['post_status']=='P2' || $row['post_status']=='P3' || $row['post_status']=='PA')
+		    if($row['post_status']=='P1' || $row['post_status']=='P2' || $row['post_status']=='P3' || $row['post_status']=='PA' ||  $row['post_status']=='PB')
 			{
 				$p1_name=$row['person_name'];
 				$p1_desig=$row['person_designation'];
 				$p1_code=$row['personcd'];
 				$p1_office=$row['office_name'];
 				$p1_ofc_address=$row['office_address'];
-				$p1_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", Dist. - ".$row['district'];
+				$p1_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", ".$row['district'];
 				$p1_ofc_cd="OFFICE - (".$row['officecd'].")";
 				$p1_post_stat=$row['post_stat'];
 				$p1_join=$p1_post_stat." PIN - (".$p1_code.")";
@@ -273,7 +337,7 @@ function FancyTable($header, $data)
 				$pr_ofc_cd='';
 				$pr_post_stat='';
 				$pr_join='';
-				 if ($row['post_status']!='P1')
+				 if($row['post_status']!='P1')
 				 {
 					$pp_name='';
 					$pp_desig='';
@@ -296,7 +360,7 @@ function FancyTable($header, $data)
 				$pp_code=$row['personcd'];
 				$pp_office=$row['office_name'];
 				$pp_ofc_address=$row['office_address'];
-				$pp_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", Dist. - ".$row['district'];
+				$pp_ofc_address1="P.O. - ".$row['post_office'].", Subdiv. - ".$row['subdivision'].", ".$row['district'];
 				$pp_ofc_cd="OFFICE - (".$row['officecd'].")";
 				$pp_post_stat=$row['post_stat'];
 				$pp_join=$pp_post_stat." PIN - (".$pp_code.")";
@@ -315,13 +379,13 @@ function FancyTable($header, $data)
 			
 		
 		   $this->SetFont('Arial','B','7');
-			$this->Cell($w[0],6,$row['groupid'],'LR',0,'L',$fill);						
-			$this->Cell($w[1],6,$pr_name,'LR',0,'L',$fill);
-			$this->Cell($w[2],6,$p1_name,'LR',0,'L',$fill);
-			$this->Cell($w[3],6,$pp_name,'LR',0,'L',$fill);
+			$this->Cell($w[0],6,$row['groupid'],'LTR',0,'C',$fill);						
+			$this->Cell($w[1],6,$pr_name,'LTR',0,'L',$fill);
+			$this->Cell($w[2],6,$p1_name,'LTR',0,'L',$fill);
+			$this->Cell($w[3],6,$pp_name,'LTR',0,'L',$fill);
 			$this->Ln(4);
 			
-			$this->SetFont('Arial','','4.7');
+			$this->SetFont('Arial','','4.5');
 			
 			$this->Cell($w[0],4,'','LR',0,'L',$fill);						
 			$this->Cell($w[1],4,$pr_desig,'LR',0,'L',$fill);
@@ -365,7 +429,7 @@ function FancyTable($header, $data)
 			$this->Ln(4);
 			
 			$this->SetFont('Arial','',8.7);
-			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11,0,'J',$fill);
+			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11.".",0,'J',$fill);
 			/*$this->SetFont('Arial','',8.7);
 			$this->Cell(87);
 			$this->Cell(20,10,$euname9,0,0,'C');

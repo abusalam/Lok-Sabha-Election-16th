@@ -75,6 +75,13 @@ function validate()
 				document.getElementById("post_status").focus();
 				return false;
 			}
+			var hid_post_stat=document.getElementById("hid_post_stat").innerHTML;
+			if(hid_post_stat==post_status)
+			{
+				document.getElementById("msg").innerHTML="Select diifferent Post Status";
+				document.getElementById("post_status").focus();
+				return false;
+			}
 	}
 }
 </script>
@@ -88,6 +95,9 @@ if($action=='Submit')
 	$post_status=isset($_REQUEST['post_status'])?$_REQUEST['post_status']:"";
 	$usercd=$user_cd;
 	
+	$dt = new DateTime();
+	$posted_date=$dt->format('Y-m-d H:i:s');
+	
 	include_once('function/add_fun.php');
 	//fetch old shedule cd
 	$old_s_cd=fetch_training_schedule_code($PersonalID);
@@ -98,7 +108,7 @@ if($action=='Submit')
     
 	if($post_status =='')
 	{
-		$ret=save_pregroup_cancelletion($PersonalID,$usercd);	
+		$ret=save_pregroup_cancelletion($PersonalID,$usercd,$posted_date);	
 		if($ret==1)
 		{
 			$msg="<div class='alert-success'>Polling Personnel Cancelled Successfully</div>";
@@ -106,7 +116,7 @@ if($action=='Submit')
 	}
 	else
 	{
-		$ret1=save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd);	
+		$ret1=save_pregroup_post_status_cancelletion($PersonalID,$post_status,$usercd,$posted_date);	
 		if($ret1==1)
 		{
 			$msg="<div class='alert-success'>Polling Personnel Cancelled and Post Status Changed Successfully</div>";

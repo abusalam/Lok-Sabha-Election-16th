@@ -1,19 +1,19 @@
 <?php
 //include 'mysqliconn.php';
 
-class countpp {
+class countpp1 {
 
 private $result;
 private $msqli;
 private $sobj;
-function __construct($fpc) {
+function __construct($subdiv) {
 
 // select QUERY ON A assembly TABLE
     
 	
  	$this->sobj= new mysqliconn();
     $this->msqli=$this->sobj->getconn();
-	$this->result = $this->msqli->query("SELECT no_of_member,no_party   FROM `assembly_party` where pccd='$fpc' ") or die($this->msqli->error.__LINE__);
+	$this->result = $this->msqli->query("SELECT no_of_member,no_party   FROM `assembly_party` where subdivisioncd='$subdiv' ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
   $totreq=0;
@@ -26,26 +26,25 @@ function __construct($fpc) {
 	}
 	
 	else {
-		print 'Assembly requirement not filled  ';
+		//print 'Assembly requirement not filled  ';
 	}
 
-$this->result = $this->msqli->query("SELECT *   FROM `personnela` where forpc='$fpc' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
+$this->result = $this->msqli->query("SELECT poststat,booked  FROM `personnela` where forsubdivision='$subdiv' and (booked='P' or booked='R' ) ") or die($this->msqli->error.__LINE__);
 
 // GOING THROUGH THE DATA
 $prp=0;
 $p1p=0;
 $p2p=0;
 $p3p=0;
-$p4p=0;
-$p5p=0;
+$pap=0;
 
 $prr=0;
 $p1r=0;
 $p2r=0;
 $p3r=0;
-$p4r=0;
-$p5r=0;
-
+$par=0;
+$pbp=0;
+$pbr=0;
 
 
 	if($this->result->num_rows > 0) {
@@ -87,29 +86,32 @@ $p5r=0;
 			 }
 			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'P')==0) ){
 			 
-			 	$p4p=$p4p+1;
+			 	$pap=$pap+1;
 			 }
 			 if ((strcmp($pst,'PA')==0) and (strcmp($bk,'R')==0) ){
 			 
-			 	$p4r=$p4r+1;
+			 	$par=$par+1;
 			 }
-			 if ((strcmp($pst,'PB')==0) and (strcmp($bk,'P')==0) ){
 			 
-			 	$p5p=$p5p+1;
+			  if ((strcmp($pst,'PB')==0) and (strcmp($bk,'P')==0) ){
+			 
+			 	$pbp=$pbp+1;
 			 }
 			 if ((strcmp($pst,'PB')==0) and (strcmp($bk,'R')==0) ){
 			 
-			 	$p5r=$p5r+1;
+			 	$pbr=$pbr+1;
 			 }
+			 
+			 
 		}
 	}
 	
 	else {
-		print 'Predsiding Officer  : '. ' NA';
+		print 'Presiding Officer  : '. ' NA';
 	}
 	echo ' <br />';
 		
-       if (($totreq-($prp+$p1p+$p2p+$p3p+$p4p+$p5p))>0) {
+       if (($totreq-($prp+$p1p+$p2p+$p3p+$pap+$pbp))>0) {
 	      		
 		   print 'Total PP requirement : ' .$totreq;
 		   print '.....Requirement not fulfilled ';
@@ -119,21 +121,21 @@ $p5r=0;
 		else
 		{
 			print 'Total PP requirement (excluding Reserve) : ' .$totreq;
+			print ' .. Requirement fulfilled ';
 			echo ' <br>';
 		echo ' <br>';
 		}
 		print 'Booked Status :-> ';
 		echo ' <br>';
 		
-		print 'PR in Party :-- '.$prp.' + '.$prr .' ::   ';
-		print 'P1 in Party :-- '.$p1p.' + '.$p1r .' ::   ';
+		print 'PR in Party :-- '.$prp.' ::   ';
+		print 'P1 in Party :-- '.$p1p.' ::   ';
 		print '<br />';
-		print 'P2 in Party :-- '.$p2p.' + '.$p2r .' ::   '; 
-		print 'P3 in Party :-- '.$p3p.' + '.$p3r .' ::   ';
+		print 'P2 in Party :-- '.$p2p.' ::   '; 
+		print 'P3 in Party :-- '.$p3p.' ::   ';
 		echo ' <br>';
-		print 'P4 in Party :-- '.$p4p.' + '.$p4r .' ::   '; 
-		//echo ' <br>';
-		//print 'P5 in Party :-- '.$p5p.' + '.$p5r .' ::   ';
+		print 'PP Addl-1 in Party :-- '.$pap.' ::   '; 
+		print 'PP Addl-2 in Party :-- '.$pbp.' ::   ';
 		/*print 'PR in reserve :-- '.$prr.'  ::   ';
 		print 'P1 in reserve :-- '.$p1r.'  ::  ';
 		print 'P2 in reserve :-- '.$p2r.'  ::  ';

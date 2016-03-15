@@ -19,9 +19,9 @@ class PDF extends FPDF
 
 function Header()
 {
-	$this->SetFont('','B',10);
-	$this->Cell(275,5,'SCROLL (POLLING PERSONNEL)',0,0,'C');
-	$this->Ln(6);
+	//$this->SetFont('','B',10);
+	///$this->Cell(275,5,'SCROLL (POLLING PERSONNEL)',0,0,'C');
+	//$this->Ln(6);
 //	$this->SetFont('','B',9);
 	//$this->Cell(275,5,'ASSEMBLY ELECTION 2016',0,0,'C');
 	//$this->Ln(7);
@@ -34,7 +34,7 @@ function Header()
 	$rsAssembly=assembly_name_ag_code($forassembly);
 	$rowAssembly=getRows($rsAssembly);
 	$assem="ASSEMBLY : ".$rowAssembly['assemblycd']." - ".$rowAssembly['assemblyname'];
-	$this->SetFont('','B',8.5);
+	$this->SetFont('','B',10);
 	$this->Cell(275,4,$assem,0,0,'C');
 	$this->Ln(6);
 	//$this->Cell(275,0,'',1,0,'C');

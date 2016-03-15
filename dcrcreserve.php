@@ -104,7 +104,7 @@ echo $fasm;
 	}
 	
 	else {
-		echo 'NO RESULTS';	
+		echo 'CHECK  DCRC';	
 	}
 
 

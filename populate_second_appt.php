@@ -118,8 +118,11 @@ $sql20="UPDATE second_appt a  JOIN training_venue_2 b ON a.venuecode=b.venue_cd 
 $i=execUpdate($sql20);
 //=================================END of Second Training==============================================//
 
-//$sql21="update second_appt a join  pc b on a.pccd=b.pccd set a.pcname=b.pcname where a.pccd='$pc_cd'";
-//$i=execUpdate($sql21);
+$sql21="update second_appt a 
+Inner join assembly on assembly.assemblycd=a.assembly and assembly.subdivisioncd=a.subdivcd
+Inner join pc b on assembly.pccd=b.pccd
+set a.pcname=b.pcname,a.pccd=b.pccd where a.subdivcd='$subdiv_cd'";
+$i=execUpdate($sql21);
 
 $sql22="update second_appt a join subdivision b on a.pr_subdivision=b.subdivisioncd set a.pr_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql22);

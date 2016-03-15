@@ -104,7 +104,7 @@ function validate()
 	
 	if(Subdivision=="0")
 	{
-		document.getElementById("msg").innerHTML="Select Subdivision";
+		document.getElementById("msg").innerHTML="Select For Subdivision";
 		document.getElementById("Subdivision").focus();
 		return false;
 	}
@@ -296,9 +296,9 @@ if($submit=="Submit")
     <tr><td align="center">
       <table width="80%">
         <tr><input type="hidden" id="hid_subdiv" value="<?php print $subdiv_cd; ?>" />
-	  <td align="left" width="35%"><span class="error">*</span>Subdivision</td>
+	  <td align="left" width="35%"><span class="error">*</span>For Subdivision</td>
 	  <td align="left" width="65%"><select name="Subdivision" id="Subdivision" style="width:180px;" onchange="javascript:return subdiv_change(this.value);">
-      						<option value="0">-Select Subdivision-</option>
+      						<option value="0">-Select For Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;
 									$rsBn=fatch_Subdivision($districtcd);
 									$num_rows=rowCount($rsBn);

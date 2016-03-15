@@ -59,6 +59,7 @@ extract($_POST);
 $submit=isset($_POST['submit'])?$_POST['submit']:"";
 if($submit=="Submit")
 {
+	$sub_div=encode($_POST['sub_div']);
 	$assembly=encode($_POST['assembly']);
 	$master_scroll=$_POST['master_scroll'];
 	if($master_scroll=="masterroll")
@@ -69,11 +70,19 @@ if($submit=="Submit")
 	</script>
     <?php
 	}
-	else
+	else if($master_scroll=="scroll")
 	{
 	?>
 	<script>
 		window.open("fpdf/pp-scroll.php?assembly=<?php echo $assembly; ?>");
+	</script>
+	<?php
+	}
+	else if($master_scroll=="Venue wise")
+	{
+	?>
+	<script>
+		window.open("fpdf/venue-wise-party-scroll.php?assembly=<?php echo $assembly; ?>&subdivision=<?php echo $sub_div;?>");
 	</script>
 	<?php
 	}
@@ -88,7 +97,7 @@ if($submit=="Submit")
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 
-<tr><td align="center">PP SCROLL / MASTER ROLL REPORT</td></tr>
+<tr><td align="center">PP SCROLL / MASTER ROLL / VENUE WISE REPORT</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="65%" class="form" cellpadding="0">
     <tr>
@@ -101,7 +110,7 @@ if($submit=="Submit")
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
     <tr>
-      <td align="left"><span class="error">*</span>Subdivision Name</td>
+      <td align="left"><span class="error">*</span>For Subdivision</td>
       <td align="left"><select name="sub_div" id="sub_div" style="width:200px;" onchange="return subdivision_change(this.value);">
       							<option value='0'>Select</option>
       					<?php
@@ -123,10 +132,11 @@ if($submit=="Submit")
       <td align="left" id="assembly_result"><select name="assembly" id="assembly" style="width:200px;"></select></td>
     </tr>
 	<tr>
-      <td align="left"><span class="error">&nbsp;&nbsp;</span>Master Roll/ Scroll</td>
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Master Roll / Scroll / Venue Wise</td>
       <td align="left" id="assembly_result"><select name="master_scroll" id="master_scroll" style="width:200px;">
 		  <option value="masterroll">Master Roll</option>
 		  <option value="scroll">Scroll</option>
+          <option value="Venue wise">Venue wise</option>
 	  </select></td>
     </tr>
 	<tr>

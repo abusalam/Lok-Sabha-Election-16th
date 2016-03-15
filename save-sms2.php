@@ -86,12 +86,14 @@ function validate()
 		  document.getElementById("party").focus();
 		  return false;
 	  }
-	
-	/*if(post_status=="0")
+	if(party=="P")
 	{
-		document.getElementById("msg").innerHTML="Select Post Status";
-		document.getElementById("post_status").focus();
-		return false;
+		if(post_status=="0")
+		{
+			document.getElementById("msg").innerHTML="Select Post Status for Party";
+			document.getElementById("post_status").focus();
+			return false;
+		}
 	}
 	/*if($.trim(from)=="")
 	{

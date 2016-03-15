@@ -40,7 +40,7 @@ include_once('../function/training2_fun.php');
 			exit;
 		}
 	}
-$rsApp=second_appointment_letter_print_4_5($sub,$assembly,$group_id,$mem_no,$from-1,$to-$from+1);
+$rsApp=second_appointment_letter_print_6($sub,$assembly,$group_id,$mem_no,$from-1,$to-$from+1);
 
 
 class PDF extends FPDF
@@ -75,7 +75,7 @@ function FancyTable($header, $data)
     $fill = false;
 	$count=0;
 	$per_page=1;
-	
+	//$signature="../images/deo/img.jpg";
     for($i=1;$i<=rowCount($data);$i++)
 	{
 		$this->SetFont('Arial','',9);
@@ -118,7 +118,7 @@ function FancyTable($header, $data)
 			$euname82="during the unavoidable absence, if any, of the Presiding Officer.";
 			
 			$euname9="The Poll will be taken on ".$poll_date." during the hours ".$poll_time.". The Presiding Officer should arrange to collect the Polling ";
-			$euname10="materials from ".$dc." on ".$dc_date." at ".$dc_time." ";
+			$euname10="materials from ".$dc." on ".$dc_date." at $dc_time  ";
 			$euname11="and after the Poll, these should be returned to collecting centre at ".$rcvenue;
 			
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
@@ -178,7 +178,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(33,6,$euname5,0,0,'R');
 			
-			$this->Ln(9);
+			$this->Ln(7);
 			
 			/*$this->SetFont('Arial','B',8);
 			$this->Cell(30,5,$euname,1,0,'L');
@@ -247,7 +247,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname82,0,0,'L');
 		
 			// Line break
-			$this->Ln(14);
+			$this->Ln(10);
 			
 			
 						
@@ -274,12 +274,12 @@ function FancyTable($header, $data)
 			for($j2=0;$j2<count($head2);$j2++)
 				$this->Cell($w[$j2],5,$head2[$j2],'LR',0,'C',true);
 			$this->Ln();
-			
+		
 			for($j3=0;$j3<count($head3);$j3++)
 				$this->Cell($w[$j3],7,$head3[$j3],1,0,'C',true);
 			$this->Ln();
 			
-	        
+	        $this->SetFont('Arial','B','7');
 			
 			$pr_name=$row['pr_name'];
 			$pr_desig=$row['pr_designation'];
@@ -350,7 +350,7 @@ function FancyTable($header, $data)
 			
 			
 		
-		   $this->SetFont('Arial','B','7');
+		   
 			$this->Cell($w[0],6,$row['groupid'],'LTR',0,'C',$fill);						
 			$this->Cell($w[1],6,$pr_name,'LTR',0,'L',$fill);
 			$this->Cell($w[2],6,$p1_name,'LTR',0,'L',$fill);
@@ -582,7 +582,7 @@ function FancyTable($header, $data)
 			$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
 		//	$this->Ln(5);
 			
-			$this->Ln(4);
+			$this->Ln(2);
 			
 			$this->SetFont('Arial','',8.7);
 			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11.".",0,'J',$fill);
@@ -601,7 +601,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname11,0,0,'L');*/
 		
 			// Line break
-			$this->Ln(5);
+			$this->Ln(2);
 			
 			
 			$this->SetFont('Arial','',9);
@@ -618,9 +618,9 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',10);			
 			$this->Cell(110);
 		//	$this->Cell(10,10,"yuyu",0,0,'R');
-			$this->Cell(10, 10, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
+			$this->Cell(10, 8, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
 			// Line break
-			$this->Ln(7);
+			$this->Ln(4);
 			
 			$this->SetFont('Arial','',8);
 			$this->Cell(164);
@@ -645,7 +645,7 @@ function FancyTable($header, $data)
 			
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Ln(2);
+			$this->Ln(1);
 			$this->MultiCell(190,4,$nb1.$nb2,0,'J',$fill);
 		/*	$this->Cell(10,10,$nb1,0,0,'L');
 			$this->Ln(4);

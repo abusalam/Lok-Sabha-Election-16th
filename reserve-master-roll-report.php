@@ -59,14 +59,25 @@ extract($_POST);
 $submit=isset($_POST['submit'])?$_POST['submit']:"";
 if($submit=="Submit")
 {
+	$sub_div=encode($_POST['sub_div']);
 	$post_status=isset($_POST['post_status'])?encode($_POST['post_status']):"";
 	$assembly=encode($_POST['assembly']);
+	$master_scroll=$_POST['master_scroll'];
+	if($master_scroll=="masterroll")
 	{
 	?>
     <script>
 		window.open("fpdf/master-roll-reserve1.php?assembly=<?php echo $assembly; ?>&post_status=<?php echo $post_status;?>");
 	</script>
     <?php
+	}
+	else if($master_scroll=="Venue wise")
+	{
+	?>
+	<script>
+		window.open("fpdf/venue-wise-reserve.php?assembly=<?php echo $assembly; ?>&post_status=<?php echo $post_status;?>");
+	</script>
+	<?php
 	}
 }
 ?>
@@ -79,7 +90,7 @@ if($submit=="Submit")
 </tr>
 <tr><td align="center"><?php print $district; ?> DISTRICT</td></tr>
 
-<tr><td align="center">RESERVE MASTER ROLL REPORT</td></tr>
+<tr><td align="center">RESERVE MASTER ROLL /VENUE WISE REPORT</td></tr>
 <tr><td align="center" valign="top"><form method="post" name="form1" id="form1">
   <table width="65%" class="form" cellpadding="0">
     <tr>
@@ -92,7 +103,7 @@ if($submit=="Submit")
       <td align="center" colspan="4"><img src="images/blank.gif" alt="" height="2px" /></td>
     </tr>
     <tr>
-      <td align="left"><span class="error">*</span>Subdivision Name</td>
+      <td align="left"><span class="error">*</span>For Subdivision</td>
       <td align="left"><select name="sub_div" id="sub_div" style="width:200px;" onchange="return subdivision_change(this.value);">
       							<option value='0'>-Select-</option>
       					<?php
@@ -131,6 +142,13 @@ if($submit=="Submit")
 									unset($rsP,$num_rows,$rowP);
 							?>
       </select></td>
+    </tr>
+    <tr>
+      <td align="left"><span class="error">&nbsp;&nbsp;</span>Master Roll / Venue Wise</td>
+      <td align="left" id="assembly_result"><select name="master_scroll" id="master_scroll" style="width:200px;">
+		  <option value="masterroll">Master Roll</option>
+          <option value="Venue wise">Venue wise</option>
+	  </select></td>
     </tr>
 	<tr>
 	  <td align="left" colspan="2">&nbsp;</td></tr>

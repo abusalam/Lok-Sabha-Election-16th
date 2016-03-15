@@ -12,11 +12,11 @@ $subdiv=(isset($_REQUEST['Subdivision'])?decode($_REQUEST['Subdivision']):'0');
 	$office=(isset($_REQUEST['office'])?$_REQUEST['office']:'0');
 	$env=isset($_SESSION['environment'])?$_SESSION['environment']:"";
 	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
-	/*if($from>$hid_rec || $to>$hid_rec)
+	if($from>$hid_rec || $to>$hid_rec)
 	{
 		echo "Please check record no";
 		exit;
-	}*/
+	}
 	if($from>$to || $from<1 || $to<1)
 	{
 		echo "Please check record no";
@@ -33,7 +33,7 @@ $subdiv=(isset($_REQUEST['Subdivision'])?decode($_REQUEST['Subdivision']):'0');
 		echo "Please check record no";
 		exit;
 	}*/
-$rsApp=first_app_letter3_print1_draft($subdiv,$from-1,$to-$from+1);
+$rsApp=first_app_letter3_print1($subdiv,$from-1,$to-$from+1);
 
 //echo $subdiv;
 class PDF extends FPDF

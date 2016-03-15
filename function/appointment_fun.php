@@ -700,7 +700,7 @@ function first_app_letter3_print($sub_div)
 	$sql.="SET @ordering = 0;";
     $sql.="UPDATE first_rand_table
 	 SET sl_no = (@ordering := @ordering + 1) ";
-	$sql.=" Where first_rand_table.forsubdivision = '$sub_div'";
+	$sql.=" Where first_rand_table.forsubdivision = '$sub_div' order by first_rand_table.block_muni,first_rand_table.officecd";
 	
 	execMultiQuery($sql);	
 	connection_close();	
@@ -727,6 +727,7 @@ function first_app_letter3_print_draft($sub_div)
     $sql.="UPDATE first_rand_table
 	 SET sl_no = (@ordering := @ordering + 1) ";
 	$sql.=" Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
+	$sql.=" order by first_rand_table.block_muni,first_rand_table.officecd";
 	
 	execMultiQuery($sql);	
 	connection_close();	
@@ -790,6 +791,18 @@ function first_appointment_letter_ofcwise_percd($subdiv,$office,$percd)
 	
 	connection_close();
 	return $rs;
+}
+//ofc wise mb
+function fetch_mobileno_ofc_wise($ofc)
+{
+	$sql="select mobileno from sub_mobile where sub_mobile.subdivisioncd = substr($ofc,1,4)";
+	//echo $sql;
+	//exit;
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$mb=$row['mobileno'];
+	connection_close();
+	return $mb;
 }
 //excel format
 function first_appointment_letter_excel($subdiv,$from,$to)
@@ -865,7 +878,10 @@ function first_app_letter3_print1_draft($sub_div,$from,$to)
 	  first_rand_table.venuename,first_rand_table.venueaddress,first_rand_table.training_dt,first_rand_table.training_time,
 	  first_rand_table.forsubdivision,first_rand_table.token,first_rand_table.poststatus as post_stat,first_rand_table.block_muni_name
 	From first_rand_table 
-	Where substr(first_rand_table.officecd,1,4) = '$sub_div'";
+	Inner Join replacement_log_pregroup on replacement_log_pregroup.new_personnel=first_rand_table.personcd
+	Where substr(first_rand_table.officecd,1,4) = '$sub_div'
+	and date(replacement_log_pregroup.posted_date)='2016-03-12'
+	";
 	$sql.=" group by first_rand_table.personcd";	
 	$sql.=" order by sl_no limit $from,$to";
 	//echo $sql; exit;
@@ -975,7 +991,45 @@ function second_app_hrd($forassembly,$forpc,$group_id)
 	connection_close();
 	return $rs;
 }
-//master roll report second appt
+//venue wise party
+function master_roll_second_app_venue_wise_party($forassembly,$subdiv)
+{
+		$sql="Select distinct second_appt.assembly,second_appt.assembly_name,second_appt.training_venue,
+	  second_appt.venue_addr1,
+	  second_appt.venue_addr2,
+	  second_appt.training_date,
+	  second_appt.training_time,
+	  second_appt.venuecode
+	From second_appt
+where   second_appt.venuecode is not Null ";
+      if($forassembly!='' && $forassembly!=null && $forassembly!=0)
+		$sql.=" and second_appt.assembly='$forassembly'";
+	if($subdiv!='' && $subdiv!=null)
+		$sql.=" and second_appt.subdivcd='$subdiv'";
+	$sql.=" order by second_appt.venuecode";
+	//echo $sql;
+	//exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+
+function master_roll_second_app_venue_wise_party_group($venue_cd)
+{
+	$sql="Select Distinct second_appt.groupid,
+	second_appt.assembly	  
+	From second_appt
+	Where second_appt.groupid Is Not Null And second_appt.groupid != '0'";
+	if($venue_cd!='' && $venue_cd!=null)
+		$sql.=" and second_appt.venuecode='$venue_cd'";
+	$sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
+	//echo $sql;
+	//exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+//master roll report second appt party
 function master_roll_second_app_hrd($forassembly,$forpc,$group_id)
 {
 	$sql="Select Distinct personnela.groupid,
@@ -995,7 +1049,7 @@ function master_roll_second_app_hrd($forassembly,$forpc,$group_id)
 	connection_close();
 	return $rs;
 }
-//master roll second appoint letter
+//master roll second appoint letter party
 function master_roll_second_appointment_letter($group_id,$forassembly)
 {
 	$sql="Select personnela.groupid,
@@ -1082,11 +1136,76 @@ function delete_prev_data_second_rand($forassembly,$forpc,$group_id)
 	connection_close();
 	return $i;
 }
+//Venue wise reserve
+function venue_wise_second_reserve1($forassembly,$subdiv)
+{
+		$sql="Select distinct second_rand_table_reserve.assemblycd,second_rand_table_reserve.assembly,second_rand_table_reserve.training_venue,
+	  second_rand_table_reserve.venue_addr1,
+	  second_rand_table_reserve.venue_addr2,
+	  second_rand_table_reserve.training_date,
+	  second_rand_table_reserve.training_time,
+	  second_rand_table_reserve.venuecode
+	From second_rand_table_reserve
+where   second_rand_table_reserve.venuecode is not Null ";
+      if($forassembly!='' && $forassembly!=null && $forassembly!=0)
+		$sql.=" and second_rand_table_reserve.assemblycd='$forassembly'";
+	if($subdiv!='' && $subdiv!=null)
+		$sql.=" and second_rand_table_reserve.subdivisioncd='$subdiv'";
+	$sql.=" order by second_rand_table_reserve.venuecode";
+	//echo $sql;
+	//exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function second_app_venue_wise_reserve_group($venue_cd,$post_status)
+{
+	$sql="Select personnela.groupid,
+	  assembly.assemblycd,
+	  assembly.assemblyname,
+	  personnela.officer_name,
+	  personnela.personcd,
+	  office.office,
+	  office.address1,
+	  office.address2,
+	  office.postoffice,
+	  subdivision.subdivision,
+	  policestation.policestation,
+	  district.district,
+	  office.pin,
+	  office.officecd,
+	  personnela.poststat,
+	  personnela.off_desg,
+	  personnela.dcrccd,
+	  poststat.poststatus
+	From personnela
+	  Inner Join office On personnela.officecd = office.officecd
+	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
+	  Inner Join policestation
+		On office.policestn_cd = policestation.policestationcd
+	  Inner Join district On office.districtcd = district.districtcd        
+	  
+	  Left Join assembly On personnela.forassembly = assembly.assemblycd
+	       and personnela.forsubdivision = assembly.subdivisioncd
+	  Inner Join poststat On personnela.poststat = poststat.post_stat 
+	  Inner Join second_rand_table_reserve On personnela.personcd = second_rand_table_reserve.	personcd ";
+	$sql.=" where personnela.booked='R'";
+	if($forassembly!='' && $forassembly!='0')
+	    $sql.=" and personnela.forassembly='$forassembly'";
+	if($post_status!='' && $post_status!='0')
+    	$sql.=" and personnela.poststat='$post_status'";
+	if($venue_cd!='' && $venue_cd!='0')
+    	$sql.=" and second_rand_table_reserve.venuecode='$venue_cd'";
+
+	$sql.=" order by personnela.forassembly, poststat.post_stat";
+	//print $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();       
+	return $rs;
+}
 //===================== Reserve ========================
 function master_roll_second_appointment_letter_reserve1($subdiv,$forassembly,$post_status)
 {
-
-
 	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
 	  assembly.assemblyname,
@@ -1126,8 +1245,7 @@ function master_roll_second_appointment_letter_reserve1($subdiv,$forassembly,$po
 	$sql.=" order by personnela.forassembly, poststat.post_stat";
 	//print $sql; exit;
 	$rs=execSelect($sql);
-	connection_close();
-        
+	connection_close();       
 	return $rs;
 }
 function master_roll_second_app_hrd_reserve($group_id,$forassembly,$forpc)
@@ -1262,7 +1380,7 @@ function master_roll_second_appointment_letter_reserve($group_id,$forassembly,$f
 }*/
 function second_appointment_letter_reserve1($sub,$assembly,$group_id,$from,$to)
 {
-	$sql="SELECT `slno`,`groupid`,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
+	$sql="SELECT `slno`,`groupid`,assemblycd,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
 	`post_stat`,`officecd`,`office_name`,`office_address`,`post_office`,`subdivision`,`police_stn`,`district`,
 	`pincode`,`dc_venue`,`dc_address`,date_format(`dc_date`,'%d/%m/%Y') as dc_date,`dc_time`,`rc_venue`,`traingcode`,`training_venue`,`venuecode`,
 	`venue_addr1`,`venue_addr2`,date_format(`training_date`,'%d/%m/%Y') as training_date,`training_time`,date_format(`polldate`,'%d/%m/%Y') as polldate,`polltime` 
@@ -1275,6 +1393,8 @@ function second_appointment_letter_reserve1($sub,$assembly,$group_id,$from,$to)
 		$sql.=" and groupid='$group_id' ";
 	if($from!='-1')
 		$sql.=" order by slno limit $from,$to";
+	else
+	    $sql.=" order by slno";
 	//echo $sql; exit;
 	$rs=execSelect($sql);
 	connection_close();

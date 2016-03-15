@@ -8,7 +8,8 @@ include 'ppdata.php';
 include 'ppdatar.php';
 include 'randno1.php';
 include 'reserve1.php';
-include 'reserve2.php';
+include 'reserve1a.php';
+include 'reserve1o.php';
 include 'dcrc.php';
 include 'dcrcreserve.php';
 include 'countpp1.php';
@@ -227,7 +228,7 @@ while ($i<=$asmparty->countnumb()-1)
 				}
 				else
 				{
-					echo ' Check Data ....Group Can not be formed ...';
+				//	echo ' Check Data ....Group Can not be formed ...';
 					break;
 				
 				}
@@ -245,14 +246,15 @@ $stmt->close();
 $msqli->close();
 
 new reserve1($dist,$sub,2);
+new  reserve1o($dist,$sub,2);
+
 /*new  reserve2($dist,$sub);
-new  reserve2($dist,$sub);
 new  reserve2($dist,$sub);
 new  reserve2($dist,$sub);
 */
 new dcrc($dist,$sub);
 
 new dcrcreserve($dist,$sub);
-//new countpp($sub);
+new countpp1($sub);
 //print_r($grpdata);
 ?>

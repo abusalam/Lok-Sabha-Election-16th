@@ -166,12 +166,25 @@ function replacement()
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
-		document.getElementById('n_booked').innerHTML='Yes';
-		document.getElementById('replace').disabled=true;
-		document.getElementById('search').disabled=true;
-		//document.getElementById('p_id').disabled=true;
-		document.getElementById('print').disabled=false;
+			//alert(xmlhttp.responseText.length);
+			if(xmlhttp.responseText.length==8)
+			{
+					document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
+					document.getElementById('n_booked').innerHTML='Yes';
+					document.getElementById('replace').disabled=true;
+					document.getElementById('search').disabled=true;
+					//document.getElementById('p_id').disabled=true;
+					document.getElementById('print').disabled=false;
+			}
+			else 
+			{
+				    document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
+					document.getElementById('replace').disabled=false;
+					document.getElementById('search').disabled=false;
+					//document.getElementById('p_id').disabled=true;
+					document.getElementById('print').disabled=true;
+			}
+	
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);

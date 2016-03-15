@@ -77,7 +77,7 @@ function office_n_forsub_wise_list($office,$subdiv)
 	  Inner Join personnela On office.officecd = personnela.officecd
 	  Inner Join poststat On personnela.poststat = poststat.post_stat
 	Where personnela.personcd<>''";
-	$sql.=" and personnela.officecd='$office' and personnela.subdivisioncd='$subdiv' and personnela.selected='1'";
+	$sql.=" and personnela.officecd='$office' and personnela.subdivisioncd='$subdiv' and personnela.selected=1";
 	$sql.=" Order By personnela.personcd,
 	  poststat.poststatus,
 	  personnela.off_desg";
@@ -105,9 +105,9 @@ function office_details_ag_forsub($subdiv,$from,$to)
 		On office.policestn_cd = policestation.policestationcd 
 		inner join personnela on personnela.officecd=office.officecd where personnela.subdivisioncd='$subdiv' and personnela.selected=1";
 		if($from!='-1')
-		  $sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd limit $from,$to";
+		  $sql.=" order by office.officecd limit $from,$to";
 		else
-		   $sql.=" order by office.subdivisioncd,office.blockormuni_cd,office.officecd";
+		   $sql.=" order by office.officecd";
 		
 		
 	//echo $sql;
