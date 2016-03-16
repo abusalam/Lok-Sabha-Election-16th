@@ -691,6 +691,14 @@ function fetch_newid_replacement_log_pregroup($new_p_id)
 	$cnt=$rowc['cnt'];
 	return $cnt;
 }
+function fetch_old_newid_replacement_log_pregroup($old_p_id,$new_p_id)
+{
+	$sql="Select count(*) as cnt from replacement_log_pregroup where new_personnel='$new_p_id' and old_personnel='$old_p_id'";
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
+}
 /************************* Second apppt replace *******************************/
 function fatch_Random_personnel_for_replacement($for_subdiv,$forpc,$assembly,$posting_status,$groupid,$gender,$ofc_code)
 {
@@ -977,6 +985,14 @@ $i=execUpdate($sql192);
 		$d1=execUpdate($sql28);
 	}*/
 	return 1;
+}
+function fetch_old_newid_replacement_log_post_group($old_p_id,$new_p_id)
+{
+	$sql="Select count(*) as cnt from relpacement_log where new_personnel='$new_p_id' and old_personnel='$old_p_id'";
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
 }
 function fetch_newid_replacement_log_post_group($new_p_id)
 {

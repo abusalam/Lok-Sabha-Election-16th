@@ -192,28 +192,36 @@ if($opn=='g_rplc')
 	//if($old_p_id!='' && $new_p_id!='' && $ass!='' && $forpc!='' && $groupid!='')
 	if($old_p_id!='' && $new_p_id!='' && $ass!='' && $groupid!='')
 	{
-		$duplicate_id=fetch_newid_replacement_log_post_group($new_p_id);
-		if($duplicate_id==0)
+		$d_on_id=fetch_old_newid_replacement_log_post_group($old_p_id,$new_p_id);
+		if($d_on_id==0)
 		{
-			$selected=1;
-			
-			$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch);
-			if($ret==1)
-			{
-				$selected=0;
-				$res1=update_personnel_replacement($old_p_id,0,'',$forpc,'C',$selected,'','');
-				if($res1==1)
+		   $duplicate_id=fetch_newid_replacement_log_post_group($new_p_id);
+		   if($duplicate_id==0)
+		   {
+				$selected=1;
+				
+				$ret=update_personnel_replacement($new_p_id,$groupid,$ass,$forpc,$booked,$selected,$dcrccd,$training2_sch);
+				if($ret==1)
 				{
-					echo "Changed";
+					$selected=0;
+					$res1=update_personnel_replacement($old_p_id,0,'',$forpc,'C',$selected,'','');
+					if($res1==1)
+					{
+						echo "Changed";
+					}
+					$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
+					delete_second_rand_table_reserve($new_p_id);
 				}
-				$res2=add_employee_replacement_log($new_p_id,$old_p_id,$ass,$groupid,$usercd);
-				delete_second_rand_table_reserve($new_p_id);
+				save_data_in_second_appt_after_rplc($ass,$groupid,$poststat);
 			}
-			save_data_in_second_appt_after_rplc($ass,$groupid,$poststat);
+			else
+			{
+				echo "Dulplicate record not allowed.Please try aagain";
+			}
 		}
 		else
 		{
-			echo "Click again search button or refresh the page";
+			echo "Dulplicate record not allowed.Please try aagain";
 		}
 			
 	}
@@ -333,102 +341,110 @@ if($opn=='pg_rplc')
 	if($old_p_id!='' && $new_p_id!='')
 	{
 		//echo $old_p_id.' '.$new_p_id.' '.$forassembly.' '.$forpc;
-		$duplicate_id=fetch_newid_replacement_log_pregroup($new_p_id);
-		if($duplicate_id==0)
+		$d_on_id=fetch_old_newid_replacement_log_pregroup($old_p_id,$new_p_id);
+		if($d_on_id==0)
 		{
-			$selected=1;
-			//update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
-			$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
-			if($ret==1)
+			$duplicate_id=fetch_newid_replacement_log_pregroup($new_p_id);
+			if($duplicate_id==0)
 			{
-				if($samevenuetraining=='true')
+				$selected=1;
+				//update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
+				$ret=update_personnel_PreGroupReplacement($new_p_id,$forassembly,$forpc,$booked,$selected);
+				if($ret==1)
 				{
-					update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
-						
-				}
-				else
-				{
-					//fetch old schedule code
-					$old_s_cd=fetch_training_schedule_code($old_p_id);
-					//fetch old no used
-					$old_noused=fetch_no_used_training_schedule($old_s_cd);
-					//update no used
-					update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
-					//replace
-					update_personnel_PreGroupReplacement_training_pp($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id,$training_sch);
-					
-					if($training_sch !='' && $training_sch !='0')
+					if($samevenuetraining=='true')
 					{
-						//fetch new no used if shdule_code exist
-						$new_noused=fetch_no_used_training_schedule($training_sch);
-						//update new no used if shdule_code exist
-						update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+						update_personnel_PreGroupReplacement_training($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id);
+							
 					}
 					else
 					{
-						update_training_booked_denied($new_p_id);
+						//fetch old schedule code
+						$old_s_cd=fetch_training_schedule_code($old_p_id);
+						//fetch old no used
+						$old_noused=fetch_no_used_training_schedule($old_s_cd);
+						//update no used
+						update_training_schedule_PreGroupReplacement($old_noused-1,$old_s_cd);
+						//replace
+						update_personnel_PreGroupReplacement_training_pp($new_p_id,$per_name,$desig,$post_stat,$subdiv,$for_subdiv,$for_pc,$ass_temp,$ass_off, $ass_perm,$usercd,$posted_date,$old_p_id,$training_sch);
+						
+						if($training_sch !='' && $training_sch !='0')
+						{
+							//fetch new no used if shdule_code exist
+							$new_noused=fetch_no_used_training_schedule($training_sch);
+							//update new no used if shdule_code exist
+							update_training_schedule_PreGroupReplacement($new_noused+1,$training_sch);
+						}
+						else
+						{
+							update_training_booked_denied($new_p_id);
+						}
+						
+						
 					}
-					
-					
-				}
-				$selected=0;
-				if($chngepoststatus=='true')
-				{
-					$res1=update_personnel_PreGroupReplacement_change_post_status($old_p_id,'',$post_status,'',$selected);
-				}
-				else
-				{
-					$res1=update_personnel_PreGroupReplacement($old_p_id,'','','C',$selected);
-				}
-				if($res1==1)
-				{
-					echo "Changed";
-				}
-				$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
-				
-				//record add in first rand table//
-				
-				
-				   // delete_temp_app_letter($usercd);
-					
-	
-					/*include_once('inc/commit_con.php');
-					mysqli_autocommit($link,FALSE);
-					$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
-					$stmt = mysqli_prepare($link, $sql1);
-					mysqli_stmt_bind_param($stmt, 'si', $new_p_id,$usercd);
-					mysqli_stmt_execute($stmt);
-				
-					if (!mysqli_commit($link)) {
-						print("Transaction commit failed\n");
-						exit();
+					$selected=0;
+					if($chngepoststatus=='true')
+					{
+						$res1=update_personnel_PreGroupReplacement_change_post_status($old_p_id,'',$post_status,'',$selected);
 					}
-					mysqli_stmt_close($stmt);
-					mysqli_close($link);*/
+					else
+					{
+						$res1=update_personnel_PreGroupReplacement($old_p_id,'','','C',$selected);
+					}
+					if($res1==1)
+					{
+						echo "Changed";
+					}
+					$res2=add_employee_PreGroupReplacement_log($new_p_id,$old_p_id,$forassembly,$forpc,$reason,$usercd);
+					
+					//record add in first rand table//
 					
 					
+					   // delete_temp_app_letter($usercd);
+						
+		
+						/*include_once('inc/commit_con.php');
+						mysqli_autocommit($link,FALSE);
+						$sql1="insert into tmp_app_let (per_code,usercode) values (?,?)";
+						$stmt = mysqli_prepare($link, $sql1);
+						mysqli_stmt_bind_param($stmt, 'si', $new_p_id,$usercd);
+						mysqli_stmt_execute($stmt);
 					
-					//$str_per_code=$_GET['old_p_id'];
-					//echo $str_per_code;
-					//exit;
+						if (!mysqli_commit($link)) {
+							print("Transaction commit failed\n");
+							exit();
+						}
+						mysqli_stmt_close($stmt);
+						mysqli_close($link);*/
+						
+						
+						
+						//$str_per_code=$_GET['old_p_id'];
+						//echo $str_per_code;
+						//exit;
+					
+						$del_ret=delete_prev_data_single($old_p_id);
+						
+						$del_ret1=delete_prev_data_single($new_p_id);
+						
+						//$rsId=fetch_id_temp_app_letter($usercd);
+						//$num_row1=rowCount($rsId);
+						//if($num_row1>0)
+						//{
+						  first_appointment_letter_replace_new_id($new_p_id);
+						//}
+					//end//
 				
-					$del_ret=delete_prev_data_single($old_p_id);
-					
-					$del_ret1=delete_prev_data_single($new_p_id);
-					
-					//$rsId=fetch_id_temp_app_letter($usercd);
-					//$num_row1=rowCount($rsId);
-					//if($num_row1>0)
-					//{
-					  first_appointment_letter_replace_new_id($new_p_id);
-					//}
-				//end//
-			
+				}
+			}
+			else
+			{
+				echo "Dulplicate record not allowed.Please try aagain";
 			}
 		}
 		else
 		{
-			echo "Click again search button or refresh the page";
+				echo "Dulplicate record not allowed.Please try aagain";
 		}
 	}
 	else

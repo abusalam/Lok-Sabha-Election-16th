@@ -87,6 +87,7 @@ function new_per_search()
 }
 function replacement()
 {
+	document.getElementById('replace').disabled=true;
 	var old_p_id=document.getElementById('hid_per_cd').innerHTML;
 	var booked=document.getElementById('hid_booked').innerHTML;
 	var new_p_id=document.getElementById('new_per_id').innerHTML;
@@ -124,16 +125,19 @@ function replacement()
 				//document.getElementById('p_id').disabled=true;
 				document.getElementById('print').disabled=false;
 				document.getElementById('fakecontainer').style.display= 'none';
-			}
+		    }
 			else
 			{
-				document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
-					document.getElementById('replace').disabled=false;
-					document.getElementById('search').disabled=false;
-					//document.getElementById('p_id').disabled=true;
-					document.getElementById('print').disabled=true;
-					document.getElementById('fakecontainer').style.display= 'none';
+				  document.getElementById('fakecontainer').style.display= 'none';
+				   alert("Dulplicate record not allowed.Please try aagain");
+				    document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
+					document.getElementById('search').disabled=true;
+					document.getElementById('replace').disabled=true;
+					
+					location.replace("reserve-replacement.php");
+					
 			}
+			 document.getElementById('fakecontainer').style.display= 'none';
 		}
 	  }
 	  //alert("ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&forassembly="+forassembly+"&forpc="+forpc+"&opn=pg_rplc&samevenuetraining="+samevenuetraining);

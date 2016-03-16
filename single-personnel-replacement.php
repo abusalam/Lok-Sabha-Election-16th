@@ -111,6 +111,7 @@ function new_per_search()
 }
 function replacement()
 {
+	document.getElementById('replace').disabled=true;
 	var training_sch=document.getElementById('training_sch').value;
 	var old_p_id=document.getElementById('hid_per_cd').innerHTML;
 	var booked=document.getElementById('hid_booked').innerHTML;
@@ -123,6 +124,7 @@ function replacement()
 	//var per_id1=document.getElementById('per_id').value;
 	var post_status=document.getElementById("post_status").value;
 	var usercd=<?php print $user_cd; ?>;
+	
 	//alert(per_id1);
 	/*if(per_id1=="")
 	{
@@ -167,7 +169,7 @@ function replacement()
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			//alert(xmlhttp.responseText.length);
-			if(xmlhttp.responseText.length==8)
+		    if(xmlhttp.responseText.length==8)
 			{
 					document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
 					document.getElementById('n_booked').innerHTML='Yes';
@@ -178,12 +180,20 @@ function replacement()
 			}
 			else 
 			{
+				    alert("Dulplicate record not allowed.Please try aagain");
 				    document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
-					document.getElementById('replace').disabled=false;
-					document.getElementById('search').disabled=false;
-					//document.getElementById('p_id').disabled=true;
-					document.getElementById('print').disabled=true;
+					document.getElementById('search').disabled=true;
+					document.getElementById('replace').disabled=true;
+					location.replace("single-personnel-replacement.php");
+				  /*  document.getElementById('per_id').value='';
+					var pp_id=document.getElementById('per_id').value;
+					per_id_change(pp_id);
+					document.getElementById('search').disabled=true;
+					document.getElementById('replace').disabled=true;
+					document.getElementById('print').disabled=true;*/
+					
 			}
+			
 	
 		}
 	  }

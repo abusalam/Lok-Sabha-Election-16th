@@ -114,6 +114,7 @@ function new_per_search()
 }
 function replacement()
 {
+	document.getElementById('replace').disabled=true;
 	var old_p_id=document.getElementById('p_id').value;
 	var new_p_id=document.getElementById('new_per_id').innerHTML;
 	var assembly=document.getElementById('assembly').value;
@@ -144,7 +145,7 @@ function replacement()
 		document.getElementById('p_id').disabled=true;
 		document.getElementById('print').disabled=false;
 		document.getElementById('fakecontainer').style.display= 'none';*/
-		  if(xmlhttp.responseText.length==8)
+		    if(xmlhttp.responseText.length==8)
 			{
 				document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
 				document.getElementById('n_booked').innerHTML='Yes';
@@ -154,17 +155,19 @@ function replacement()
 				document.getElementById('print').disabled=false;
 				document.getElementById('print1').disabled=false;
 				document.getElementById('fakecontainer').style.display= 'none';
-			}
+		    }
 			else
 			{
-				document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
-					document.getElementById('replace').disabled=false;
-					document.getElementById('search').disabled=false;
-					//document.getElementById('p_id').disabled=true;
-					document.getElementById('print').disabled=true;
-					document.getElementById('print1').disabled=true;
-					document.getElementById('fakecontainer').style.display= 'none';
+				  document.getElementById('fakecontainer').style.display= 'none';
+				   alert("Dulplicate record not allowed.Please try aagain");
+				    document.getElementById("new_personnel").innerHTML=xmlhttp.responseText;
+					document.getElementById('search').disabled=true;
+					document.getElementById('replace').disabled=true;
+					
+					location.replace("emp-replacement-reserve.php");
+					
 			}
+			 document.getElementById('fakecontainer').style.display= 'none';
 		}
 	  }
 	xmlhttp.open("GET","ajax-replacement.php?old_p_id="+old_p_id+"&new_p_id="+new_p_id+"&ass="+assembly+"&forpc="+forpc+"&groupid="+groupid+"&poststat="+poststat+"&booked="+booked+"&dcrccd="+dcrccd+"&training2_sch="+training2_sch+"&opn=g_rplc",true);

@@ -86,6 +86,15 @@ function fetch_newid_replacement_log_reserve($new_p_id)
 	$cnt=$rowc['cnt'];
 	return $cnt;
 }
+function fetch_old_newid_replacement_log_reserve($old_p_id,$new_p_id)
+{
+	$sql="Select count(*) as cnt from relpacement_log_reserve where new_personnel='$new_p_id' and old_personnel='$old_p_id'";
+
+	$rsc=execSelect($sql);
+	$rowc=getRows($rsc);
+	$cnt=$rowc['cnt'];
+	return $cnt;
+}
 function delete_prev_data_second_rand_reserve($personcd,$new_p_id)
 {
 	$sql="delete from second_rand_table_reserve where personcd='$personcd' or personcd='$new_p_id'";
