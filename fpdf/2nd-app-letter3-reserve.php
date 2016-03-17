@@ -104,7 +104,7 @@ function FancyTable($header, $data)
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			$signature="../images/ro/".$row['assemblycd'].".jpg";
-			
+			$roname="RO/".$row['assemblycd']." - ".$row['assembly'];
 			
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
@@ -474,7 +474,7 @@ function FancyTable($header, $data)
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
 			$this->Cell(160);
-			$this->Cell(10,10,"District Election Officer",0,0,'R');
+			$this->Cell(10,10,$roname,0,0,'R');
 		
 			// Line break
 			$this->Ln(4);

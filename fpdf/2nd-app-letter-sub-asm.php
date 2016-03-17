@@ -44,7 +44,7 @@ include_once('../function/training2_fun.php');
 	}
 	if($chksub=='on')
 	{
-		$rsApp=second_appointment_letter_print_4_5_sub($sub,$assembly,$group_id,$mem_no,$from,$to);
+		$rsApp=second_appointment_letter_print_4_5_sub($sub,$assembly,$group_id,$mem_no,$from-1,$to-$from+1);
 	}
 	if($chkasm=='on')
 	{
@@ -141,6 +141,7 @@ function FancyTable($header, $data)
 			
 	        $signature="../images/ro/".$row['assembly'].".jpg";
 			//$signature="../images/ro/259.jpg";
+			$roname="RO/".$row['assembly']." - ".$row['assembly_name'];
 			
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
@@ -642,7 +643,7 @@ function FancyTable($header, $data)
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
 			$this->Cell(160);
-			$this->Cell(10,10,"District Election Officer",0,0,'R');
+			$this->Cell(10,10,$roname,0,0,'R');
 		
 			// Line break
 			$this->Ln(4);

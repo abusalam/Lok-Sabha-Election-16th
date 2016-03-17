@@ -46,6 +46,27 @@ if($opn=='for_sub_emp_office')
 	$num_rows=0;
 	echo "</select>";
 }
+if($opn=='for_sub_venue')
+{
+	include_once('function/training_fun.php');
+	$sub_div=$_GET['sub_div'];
+	echo "<select id='training_venue' name='training_venue' style='width:240px;'>\n";
+	      $rsTrainingVenue=fatch_training_venue_ag_subdiv1($sub_div);
+			$num_rows=rowCount($rsTrainingVenue);
+			if($num_rows>0)
+			{
+				echo "<option value='0'>-Select Training Venue-</option>\n";
+				for($i=1;$i<=$num_rows;$i++)
+				{
+					$rowTrainingVenue=getRows($rsTrainingVenue);
+					echo "<option value='$rowTrainingVenue[0]'>$rowTrainingVenue[1]</option>\n";
+					$rowTrainingVenue=null;
+				}
+			}
+			$rowTrainingVenue=null;
+			$num_rows=0;
+	echo "</select>";
+}
 if($opn=='personnel')
 {
 	$office=$_GET['office'];

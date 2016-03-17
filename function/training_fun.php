@@ -208,6 +208,15 @@ function fatch_training_venue($venue_cd)
 	$rs=execSelect($sql);
 	return $rs;
 }
+function fatch_training_venue_ag_subdiv1($subdiv)
+{
+	$sql="Select training_venue.venue_cd, training_venue.venuename From training_venue where 1=1";
+	if($subdiv !='' && $subdiv!="0")
+		$sql.=" and  training_venue.subdivisioncd='$subdiv'";
+	$sql.=" order by training_venue.venuename";
+	$rs=execSelect($sql);
+	return $rs;
+}
 function fatch_training_venue_ag_subdiv($areapref,$subdiv)
 {
 	$sql="Select training_venue.venue_cd, training_venue.venuename From training_venue where 1=1";
@@ -706,7 +715,7 @@ function update_training_pp_attendance_per_id($per_cd,$trn_type,$attend)
 	return $i;
 }
 //============================= Venue wise List (Attendance) ===============================
-function venue_name_training_date_and_time($training_venue,$training_type)
+function venue_name_training_date_and_time($sub_div,$training_venue,$training_type)
 {
 	$sql=""; $rs=null;
 	$sql="Select distinct training_venue.venuename,
@@ -719,6 +728,8 @@ function venue_name_training_date_and_time($training_venue,$training_type)
 	  Inner Join training_schedule On training_venue.venue_cd =
 		training_schedule.training_venue
 	Where training_venue.venue_cd<>''";
+	if($sub_div!="0")
+		$sql.=" and training_venue.subdivisioncd='$sub_div'";
 	if($training_venue!="0")
 		$sql.=" and training_venue.venue_cd='$training_venue'";
 	if($training_type!="0")

@@ -144,6 +144,7 @@ function FancyTable($header, $data)
 			$nb3="(__________________________)";
 			
 	        $signature="../images/ro/".$row['assembly'].".jpg";
+			$roname="RO/".$row['assembly']." - ".$row['assembly_name'];
 			//$signature="../images/ro/259.jpg";
 			
 			$this->SetFont('Arial','B',10);
@@ -647,7 +648,7 @@ function FancyTable($header, $data)
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
 			$this->Cell(160);
-			$this->Cell(10,10,"District Election Officer",0,0,'R');
+			$this->Cell(10,10,$roname,0,0,'R');
 		
 			// Line break
 			$this->Ln(4);

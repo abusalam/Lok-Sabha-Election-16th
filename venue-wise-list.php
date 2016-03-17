@@ -15,18 +15,47 @@ if(isset($_SESSION['subdiv_cd']))
 ?>
 
 <script type="text/javascript" language="javascript">
+function subdivision_change(str)
+{
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("row_traning").innerHTML=xmlhttp.responseText;
+		document.getElementById("load_result").innerHTML="";
+		}
+	  }
+	xmlhttp.open("GET","ajax-appointment.php?sub_div="+str+"&opn=for_sub_venue",true);
+	document.getElementById("load_result").innerHTML="<img src='images/loading1.gif' alt='' height='90px' width='90px' />";
+	xmlhttp.send();
+}
 function validate()
 {
 	
 	var training_venue=document.getElementById("training_venue").value;
 	var training_type=document.getElementById("training_type").value;
-	
-	if(training_venue=="0")
+	var subdivision=document.getElementById("Subdivision");
+
+	if(subdivision.value=="0")
+	{
+		document.getElementById("msg").innerHTML="Select Subdivision";
+		document.getElementById("Subdivision").focus();
+		return false;
+	}
+	/*if(training_venue=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Training Venue";
 		document.getElementById("training_venue").focus();
 		return false;
-	}
+	}*/
 	if(training_type=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Training Type";
@@ -53,26 +82,34 @@ include_once('function/training_fun.php');
 <table width="70%" class="form" cellpadding="0">
 	<tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="2px" /></td></tr>
     <tr><td height="18px" colspan="2" align="center"><?php print isset($msg)?$msg:""; ?><span id="msg" class="error"></span></td></tr>
-    <tr><td align="center" colspan="2"><img src="images/blank.gif" alt="" height="5px" /></td></tr>
+    <tr>
+      <td align="center" colspan="2"><div id="load_result"></div></td></tr>
 	<tr>
-	  <td align="left"><span class="error">*</span>Training Venue</td>
-	  <td align="left" width="60%"><select name="training_venue" id="training_venue" style="width:220px;">
+    <tr>
+	  <td align="left"><span class="error">*</span>Subdivision</td>
+	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:240px;" onchange="javascript:return subdivision_change(this.value);">
+      						<option value="0">-Select Subdivision-</option>
+                            <?php 	$districtcd=$dist_cd;
+									$rsBn=fatch_Subdivision($districtcd);
+									$num_rows=rowCount($rsBn);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowSubDiv=getRows($rsBn);
+											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
+										}
+									}
+									$rsBn=null;
+									$num_rows=0;
+									$rowSubDiv=null;
+							?>
+      				</select></td></tr>
+    <tr>
+	<tr>
+	  <td align="left"><span class="error">&nbsp;&nbsp;</span>Training Venue</td>
+	  <td align="left" width="60%" id="row_traning"><select name="training_venue" id="training_venue" style="width:220px;">
 	    <option value="0">-Select Training Venue-</option>
-		<?php
-			$rsTrainingVenue=fatch_training_venue_ag_subdiv($subdiv_cd);
-			$num_rows=rowCount($rsTrainingVenue);
-			if($num_rows>0)
-			{
-				for($i=1;$i<=$num_rows;$i++)
-				{
-					$rowTrainingVenue=getRows($rsTrainingVenue);
-					echo "<option value='$rowTrainingVenue[0]'>$rowTrainingVenue[1]</option>\n";
-					$rowTrainingVenue=null;
-				}
-			}
-			$rowTrainingVenue=null;
-			$num_rows=0;
-		?>
 	    </select></td></tr>
     <tr>
       <td align="left"><span class="error">*</span>Training Type</td>

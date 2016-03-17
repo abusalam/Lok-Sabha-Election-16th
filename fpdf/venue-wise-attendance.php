@@ -5,9 +5,10 @@ extract($_POST);
 require('fpdf.php');
 include_once('../inc/db_trans.inc.php');
 include_once('../function/training_fun.php');
-$training_venue=$_POST['training_venue'];
-$training_type=$_POST['training_type'];
-$rsTV=venue_name_training_date_and_time($training_venue,$training_type);
+$sub_div=isset($_REQUEST['Subdivision'])?$_REQUEST['Subdivision']:"";
+$training_venue=isset($_REQUEST['training_venue'])?$_REQUEST['training_venue']:"";
+$training_type=isset($_REQUEST['training_type'])?$_REQUEST['training_type']:"";
+$rsTV=venue_name_training_date_and_time($sub_div,$training_venue,$training_type);
 
 
 
@@ -99,7 +100,7 @@ function FancyTable($header, $data)
  
     // Color and font restoration
     //$this->SetFillColor(224,235,255);
-  //  $this->SetTextColor(0);
+    // $this->SetTextColor(0);
     //$this->SetDisplayMode('fullwidth','default');
     // Data
     $fill = false;
