@@ -148,7 +148,7 @@ function replacement()
 		    if(xmlhttp.responseText.length==8)
 			{
 				document.getElementById("o_booked").innerHTML=xmlhttp.responseText;
-				document.getElementById('n_booked').innerHTML='Yes';
+				document.getElementById('n_booked').innerHTML='Party';
 				document.getElementById('replace').disabled=true;
 				document.getElementById('search').disabled=true;
 				document.getElementById('p_id').disabled=true;

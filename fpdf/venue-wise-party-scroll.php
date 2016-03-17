@@ -60,6 +60,7 @@ function FancyTable($header, $data)
 				
 		if($count<$per_page)
 	    {
+			$forassembly=isset($_GET["assembly"])?decode($_GET["assembly"]):"";
 			$date=new DateTime($rec_arr_hdr['training_date']);
 			
 			//$assem="ASSEMBLY : ".$rec_arr_hdr['assembly']." - ".$rec_arr_hdr['assembly_name'];
@@ -76,7 +77,7 @@ function FancyTable($header, $data)
 			//$this->Cell(275,5,$venue1,"LR",0,'L');
 			//$this->Ln();
 			
-		    $rec_set_ven=master_roll_second_app_venue_wise_party_group($venue_cd);	
+		    $rec_set_ven=master_roll_second_app_venue_wise_party_group($venue_cd,$forassembly);	
 			$count1=0;
 	        $per_page1=3;
 			$num_rows_ven=rowCount($rec_set_ven);

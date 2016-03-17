@@ -48,22 +48,22 @@ $i=execUpdate($sql7);
 //echo $subdiv_cd;
 //exit;
 //================================office join=================================//
-$sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pr_status = 'PR'";
+$sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd,second_appt.pr_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pr_status = 'PR'";
 $i=execUpdate($sql8);
 
-$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd'  and second_appt.p1_status = 'P1' ";
+$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd,second_appt.p1_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd'  and second_appt.p1_status = 'P1' ";
 $i=execUpdate($sql9);
 
-$sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd  WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.p2_status = 'P2' ";
+$sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd,second_appt.p2_block=office.blockormuni_cd  WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.p2_status = 'P2' ";
 $i=execUpdate($sql10);
 
-$sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.p3_status = 'P3' ";
+$sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd,second_appt.p3_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.p3_status = 'P3' ";
 $i=execUpdate($sql11);
 
-$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pa_status = 'PA' ";
+$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd,second_appt.pa_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pa_status = 'PA' ";
 $i=execUpdate($sql12);
 
-$sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pb_status = 'PB' ";
+$sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd, second_appt.pb_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pb_status = 'PB' ";
 $i=execUpdate($sql13);
 //================================End of office join=================================//
 

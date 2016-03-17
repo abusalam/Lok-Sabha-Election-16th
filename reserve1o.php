@@ -100,7 +100,18 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		        if ($x< $ppall1->countnumb())
 				{
 		  			$psd=$ppall1->getperscdpp($x);
-					$gpd=$x+1;
+					
+					$this->result_max = $this->msqli->query("SELECT max(groupid) as cnt_g FROM personnela where substr(personnela.forsubdivision,1,2)='$dist' and personnela.forsubdivision='$sub' and personnela.forassembly='$fasm1' and personnela.poststat='$pst' and booked='R'") or die($this->msqli->error.__LINE__);
+					  while($row_max = $this->result_max->fetch_assoc()) {
+						   if($row_max['cnt_g']==null)
+						   {
+							   $gpd=$x+1;
+						   }
+						   else
+						   {
+							   $gpd=$row_max['cnt_g']+1;
+						   }
+					  }
 					$fasm=$fasm1;
 					$this->stmt->execute();
 					$x=$x+1;
@@ -125,7 +136,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 							// echo $sql1;
 							   if($this->result1->num_rows > 0) 
 							   {
-								  $gd=$x+1; 
+								  $gd=$gpd+1; 
 								 $this->msqli->query("update personnela set forassembly='$fasm1',groupid='$gd' where personcd='$psd_g'") or die($this->msqli->error.__LINE__);
 								  while($row1 = $this->result1->fetch_assoc()) 
 								  {

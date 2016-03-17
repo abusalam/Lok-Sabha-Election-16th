@@ -128,7 +128,8 @@ function FancyTable($header, $data)
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			
-	        $signature="../images/ro/".$row['assembly'].".jpg";
+	       // $signature="../images/ro/".$row['assembly'].".jpg";
+			$signature="../images/ro/".$row['assembly'].".jpg";
 			
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');

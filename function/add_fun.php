@@ -778,20 +778,25 @@ function save_data_in_second_appt_after_rplc($forassembly,$groupid,$poststat)
 	  SET second_appt.pr_personcd = personnela.personcd,second_appt.pr_name = personnela.officer_name,second_appt.`pr_designation` =personnela.off_desg,second_appt.`pr_officecd`= personnela.officecd,second_appt.pr_mobno =personnela.mob_no
 	WHERE personnela.booked = 'P'  and personnela.poststat = 'PR' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	        $c=execUpdate($sql2);
-	       $sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd WHERE second_appt.pr_status = 'PR' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+	       $sql8="UPDATE second_appt JOIN office ON second_appt.pr_officecd = office.officecd 
+		   SET  second_appt.pr_officename =  office.office,second_appt.`pr_officeaddress`= concat(office.address1,',',office.address2),second_appt.pr_postoffice=office.postoffice,second_appt.pr_pincode=office.pin, second_appt.pr_subdivision=office.subdivisioncd,second_appt.pr_block=office.blockormuni_cd WHERE second_appt.pr_status = 'PR' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	        $i=execUpdate($sql8);
-			$sql28="update second_appt set second_appt.pers_off= second_appt.pr_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and second_appt.per_poststat='PR'";
+			$sql28="update second_appt set second_appt.pers_off= second_appt.pr_officecd,second_appt.block_muni_cd= second_appt.pr_block where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and second_appt.per_poststat='PR'";
 		   $d1=execUpdate($sql28);
+		   $sql22="update second_appt a join subdivision b on a.pr_subdivision=b.subdivisioncd set a.pr_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid' and a.per_poststat='PR'";
+           $i=execUpdate($sql22);
 			break;
 		case ($poststat=='P1'):
          $sql3="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
 	second_appt.groupid=personnela.groupid  SET second_appt.p1_personcd = personnela.personcd,second_appt.p1_name = personnela.officer_name,second_appt.`p1_designation`=personnela.off_desg,second_appt.`p1_officecd`=personnela.officecd,second_appt.p1_mobno =personnela.mob_no 
 	WHERE  personnela.booked = 'P' and personnela.poststat = 'P1' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	       $i=execUpdate($sql3);
-			$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd WHERE second_appt.p1_status = 'P1' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+			$sql9="UPDATE second_appt JOIN office ON second_appt.p1_officecd = office.officecd   SET  second_appt.p1_officename =  office.office,second_appt.`p1_officeaddress`= concat(office.address1,',',office.address2),second_appt.p1_postoffice=office.postoffice,second_appt.p1_pincode=office.pin ,second_appt.p1_subdivision=office.subdivisioncd,second_appt.p1_block=office.blockormuni_cd WHERE second_appt.p1_status = 'P1' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	        $j=execUpdate($sql9);
-	        $sql28="update second_appt set second_appt.pers_off= second_appt.p1_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and  second_appt.per_poststat='P1'";
-		$d1=execUpdate($sql28); 
+	        $sql28="update second_appt set second_appt.pers_off= second_appt.p1_officecd,second_appt.block_muni_cd=second_appt.p1_block where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid' and  second_appt.per_poststat='P1'";
+		    $d1=execUpdate($sql28); 
+			 $sql22="update second_appt a join subdivision b on a.p1_subdivision=b.subdivisioncd set a.p1_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+           $i=execUpdate($sql22);
 		break;	
 		
 		case ($poststat=='P2'):
@@ -800,10 +805,12 @@ function save_data_in_second_appt_after_rplc($forassembly,$groupid,$poststat)
 	=personnela.off_desg,second_appt.`p2_officecd`= personnela.officecd,second_appt.p2_mobno =personnela.mob_no
 	WHERE personnela.booked = 'P'  and personnela.poststat = 'P2' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	      $e=execUpdate($sql4);
-		  $sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd  WHERE second_appt.p2_status = 'P2' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+		  $sql10="UPDATE second_appt JOIN office ON second_appt.p2_officecd = office.officecd   SET  second_appt.p2_officename =  office.office,second_appt.`p2_officeaddress`= concat(office.address1,',',office.address2),second_appt.p2_postoffice=office.postoffice,second_appt.p2_pincode=office.pin,second_appt.p2_subdivision=office.subdivisioncd,second_appt.p2_block=office.blockormuni_cd  WHERE second_appt.p2_status = 'P2' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	      $k=execUpdate($sql10);
-		  $sql28="update second_appt set second_appt.pers_off= second_appt.p2_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P2'";
-		$d1=execUpdate($sql28);
+		  $sql28="update second_appt set second_appt.pers_off= second_appt.p2_officecd,second_appt.block_muni_cd= second_appt.p2_block where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P2'";
+		  $d1=execUpdate($sql28);
+		   $sql22="update second_appt a join subdivision b on a.p2_subdivision=b.subdivisioncd set a.p2_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+           $i=execUpdate($sql22);
 		break;	
 	   case ($poststat=='P3'):
            $sql5="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
@@ -811,30 +818,36 @@ function save_data_in_second_appt_after_rplc($forassembly,$groupid,$poststat)
 	=personnela.off_desg,second_appt.`p3_officecd`= personnela.officecd,second_appt.p3_mobno =personnela.mob_no
 	WHERE  personnela.booked = 'P'  and personnela.poststat = 'P3' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	     $f=execUpdate($sql5);
-		 $sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd WHERE second_appt.p3_status = 'P3' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+		 $sql11="UPDATE second_appt JOIN office ON second_appt.p3_officecd = office.officecd   SET  second_appt.p3_officename =  office.office,second_appt.`p3_officeaddress`= concat(office.address1,',',office.address2),second_appt.p3_postoffice=office.postoffice,second_appt.p3_pincode=office.pin, second_appt.p3_subdivision=office.subdivisioncd,second_appt.p3_block=office.blockormuni_cd WHERE second_appt.p3_status = 'P3' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	     $l=execUpdate($sql11);
-		 $sql28="update second_appt set second_appt.pers_off= second_appt.p3_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P3'";
-		$d1=execUpdate($sql28);
+		 $sql28="update second_appt set second_appt.pers_off= second_appt.p3_officecd,second_appt.block_muni_cd=second_appt.p3_block where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='P3'";
+		 $d1=execUpdate($sql28);
+		  $sql22="update second_appt a join subdivision b on a.p3_subdivision=b.subdivisioncd set a.p3_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+           $i=execUpdate($sql22);
 		break;	
 	    case ($poststat=='PA'):
            $sql6="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
 	second_appt.groupid=personnela.groupid  SET second_appt.pa_personcd = personnela.personcd,second_appt.pa_name = personnela.officer_name,second_appt.`pa_designation`=personnela.off_desg, second_appt.`pa_officecd`= personnela.officecd,second_appt.`pa_status`='PA', second_appt.pa_post_stat='Addl. 2nd Polling Officer-1' ,second_appt.pa_mobno =personnela.mob_no
 	WHERE personnela.booked = 'P'  and personnela.poststat = 'PA' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	    $g=execUpdate($sql6);
-		$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd WHERE second_appt.pa_status = 'PA' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+		$sql12="UPDATE second_appt JOIN office ON second_appt.pa_officecd = office.officecd   SET  second_appt.pa_officename =  office.office,second_appt.`pa_officeaddress`= concat(office.address1,',',office.address2),second_appt.pa_postoffice=office.postoffice,second_appt.pa_pincode=office.pin , second_appt.pa_subdivision=office.subdivisioncd,second_appt.pa_block=office.blockormuni_cd WHERE second_appt.pa_status = 'PA' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	     $m=execUpdate($sql12);
-		 $sql28="update second_appt set second_appt.pers_off= second_appt.pa_officecd where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PA'";
+		 $sql28="update second_appt set second_appt.pers_off= second_appt.pa_officecd,second_appt.block_muni_cd=second_appt.pa_block where second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PA'";
 		$d1=execUpdate($sql28);
+		 $sql22="update second_appt a join subdivision b on a.pa_subdivision=b.subdivisioncd set a.pa_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+           $i=execUpdate($sql22);
 		break;
 	   case ($poststat=='PB'):
 	      $sql7="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
 	second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.pb_mobno =personnela.mob_no
 	WHERE personnela.booked = 'P'  and personnela.poststat = 'PB' and personnela.forassembly='$forassembly' and personnela.groupid='$groupid'";
 	      $h=execUpdate($sql7);
-		  $sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd WHERE second_appt.pb_status = 'PB' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
+		  $sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd,second_appt.pb_block=office.blockormuni_cd WHERE second_appt.pb_status = 'PB' and second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'";
 	      $n=execUpdate($sql13);
-		  $sql28="update second_appt set second_appt.pers_off= second_appt.pb_officecd where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PB'";
+		  $sql28="update second_appt set second_appt.pers_off= second_appt.pb_officecd,second_appt.block_muni_cd=second_appt.pb_block where  second_appt.assembly='$forassembly' and second_appt.groupid='$groupid'  and second_appt.per_poststat='PB'";
 		$d1=execUpdate($sql28);
+		 $sql22="update second_appt a join subdivision b on a.pb_subdivision=b.subdivisioncd set a.pb_subdivision=b.subdivision where a.assembly='$forassembly' and a.groupid='$groupid'";
+           $i=execUpdate($sql22);
 	   break;
 	   default:
 		break;

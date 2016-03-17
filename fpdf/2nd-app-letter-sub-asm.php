@@ -15,13 +15,15 @@ include_once('../function/training2_fun.php');
 	$distnm_cap=isset($_SESSION['distnm_cap'])?$_SESSION['distnm_cap']:"";
 	$from=(isset($_GET['txtfrom'])?decode($_GET['txtfrom']):'0');
 	$to=(isset($_GET['txtto'])?decode($_GET['txtto']):'0');
+	$chksub=(isset($_GET['chksub'])?decode($_GET['chksub']):'0');
+	$chkasm=(isset($_GET['chkasm'])?decode($_GET['chkasm']):'0');
 	$mem_no='';
 	if($sub=='0' && $assembly='0')
 	{
 		echo "Select Subdivision wise or Assembly wise";
 		exit;
 	}
- 
+    
 	if($sub !='')
 	{
 		/* if($from>$hid_rec || $to>$hid_rec)
@@ -34,15 +36,21 @@ include_once('../function/training2_fun.php');
 			echo "Please check record no";
 			exit;
 		}
-		if((($to)-($from))>1000)
+		if((($to)-($from))>2000)
 		{
-			echo "Records should not be greater than 1000";
+			echo "Records should not be greater than 2000";
 			exit;
 		}
 	}
+	if($chksub=='on')
+	{
+		$rsApp=second_appointment_letter_print_4_5_sub($sub,$assembly,$group_id,$mem_no,$from,$to);
+	}
+	if($chkasm=='on')
+	{
+		$rsApp=second_appointment_letter_print_4_5_asm($sub,$assembly,$group_id,$mem_no,$from-1,$to-$from+1);
 	
-$rsApp=second_appointment_letter_print_6($sub,$assembly,$group_id,$mem_no,$from-1,$to-$from+1);
-
+	}
 
 class PDF extends FPDF
 {
@@ -76,13 +84,15 @@ function FancyTable($header, $data)
     $fill = false;
 	$count=0;
 	$per_page=1;
-	//$signature="../images/deo/img.jpg";
+	
     for($i=1;$i<=rowCount($data);$i++)
 	{
 		$this->SetFont('Arial','',9);
 		$row=getRows($data);
 		if($count<$per_page)
 	    {
+			$chksub=(isset($_GET['chksub'])?decode($_GET['chksub']):'0');
+			
 			$poll_date=$row['polldate'];
 			$poll_time=$row['polltime'];
 			$training_venue=$row['training_venue'];
@@ -106,7 +116,7 @@ function FancyTable($header, $data)
 			$euname1="ORDER OF APPOINTMENT FOR POLLING DUTIES";
 			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE";
 			$euname21="ASSEMBLY ELECTION, 2016";
-			$euname3="";
+			$euname3=($chksub=='on')?$row['pers_off']."/".$row['per_poststat']:"";
 			$euname22="Polling Party No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
@@ -119,7 +129,7 @@ function FancyTable($header, $data)
 			$euname82="during the unavoidable absence, if any, of the Presiding Officer.";
 			
 			$euname9="The Poll will be taken on ".$poll_date." during the hours ".$poll_time.". The Presiding Officer should arrange to collect the Polling ";
-			$euname10="materials from ".$dc." on ".$dc_date." at $dc_time  ";
+			$euname10="materials from ".$dc." on ".$dc_date." at ".$dc_time." ";
 			$euname11="and after the Poll, these should be returned to collecting centre at ".$rcvenue;
 			
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
@@ -129,8 +139,8 @@ function FancyTable($header, $data)
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			
-	        //$signature="../images/ro/".$row['assembly'].".jpg";
-			$signature="../images/ro/259.jpg";
+	        $signature="../images/ro/".$row['assembly'].".jpg";
+			//$signature="../images/ro/259.jpg";
 			
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
@@ -180,7 +190,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(33,6,$euname5,0,0,'R');
 			
-			$this->Ln(7);
+			$this->Ln(9);
 			
 			/*$this->SetFont('Arial','B',8);
 			$this->Cell(30,5,$euname,1,0,'L');
@@ -249,7 +259,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname82,0,0,'L');
 		
 			// Line break
-			$this->Ln(10);
+			$this->Ln(14);
 			
 			
 						
@@ -276,12 +286,12 @@ function FancyTable($header, $data)
 			for($j2=0;$j2<count($head2);$j2++)
 				$this->Cell($w[$j2],5,$head2[$j2],'LR',0,'C',true);
 			$this->Ln();
-		
+			
 			for($j3=0;$j3<count($head3);$j3++)
 				$this->Cell($w[$j3],7,$head3[$j3],1,0,'C',true);
 			$this->Ln();
 			
-	        $this->SetFont('Arial','B','7');
+	        
 			
 			$pr_name=$row['pr_name'];
 			$pr_desig=$row['pr_designation'];
@@ -352,7 +362,7 @@ function FancyTable($header, $data)
 			
 			
 		
-		   
+		   $this->SetFont('Arial','B','7');
 			$this->Cell($w[0],6,$row['groupid'],'LTR',0,'C',$fill);						
 			$this->Cell($w[1],6,$pr_name,'LTR',0,'L',$fill);
 			$this->Cell($w[2],6,$p1_name,'LTR',0,'L',$fill);
@@ -584,7 +594,7 @@ function FancyTable($header, $data)
 			$this->Cell(array_sum($w),0,'',1,0,'L',$fill);
 		//	$this->Ln(5);
 			
-			$this->Ln(2);
+			$this->Ln(4);
 			
 			$this->SetFont('Arial','',8.7);
 			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11.".",0,'J',$fill);
@@ -603,7 +613,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname11,0,0,'L');*/
 		
 			// Line break
-			$this->Ln(2);
+			$this->Ln(5);
 			
 			
 			$this->SetFont('Arial','',9);
@@ -620,9 +630,9 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',10);			
 			$this->Cell(110);
 		//	$this->Cell(10,10,"yuyu",0,0,'R');
-			$this->Cell(10, 8, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
+			$this->Cell(10, 10, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
 			// Line break
-			$this->Ln(4);
+			$this->Ln(7);
 			
 			$this->SetFont('Arial','',8);
 			$this->Cell(164);
@@ -647,8 +657,17 @@ function FancyTable($header, $data)
 			
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Ln(1);
+			$this->Ln(2);
 			$this->MultiCell(190,4,$nb1.$nb2,0,'J',$fill);
+			$this->Ln(5);
+			//$bmname=$row['block_muni_cd'];
+			$bmname=($chksub=='on')?"Block/Municipality: ".$row['block_muni_name']:"";
+			//if($chksub=='on')
+	        //{
+				//$bmname=fetch_block_2nd_appt($row['block_muni_name']);
+				$this->SetFont('Arial','',9);
+				$this->Cell(190,5,$bmname,0,0,'C');
+			//}
 		/*	$this->Cell(10,10,$nb1,0,0,'L');
 			$this->Ln(4);
 			$this->SetFont('Arial','',8.5);

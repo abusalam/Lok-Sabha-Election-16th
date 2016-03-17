@@ -26,7 +26,7 @@ $i=execInsert($sql01);
 
 //update office details
 $sql8="UPDATE second_rand_table_reserve JOIN office ON second_rand_table_reserve.officecd = office.officecd   
-SET  second_rand_table_reserve.office_name =  office.office,second_rand_table_reserve.office_address= concat(office.address1,',',office.address2),second_rand_table_reserve.post_office=office.postoffice,second_rand_table_reserve.pincode=office.pin, second_rand_table_reserve.subdivision=office.subdivisioncd WHERE second_rand_table_reserve.subdivisioncd='$subdiv_cd'";
+SET  second_rand_table_reserve.office_name =  office.office,second_rand_table_reserve.office_address= concat(office.address1,',',office.address2),second_rand_table_reserve.post_office=office.postoffice,second_rand_table_reserve.pincode=office.pin, second_rand_table_reserve.subdivision=office.subdivisioncd,second_rand_table_reserve.block_muni_cd=office.blockormuni_cd WHERE second_rand_table_reserve.subdivisioncd='$subdiv_cd'";
 $i=execUpdate($sql8);
 
 //update post status
@@ -92,6 +92,8 @@ $i=execUpdate($sql21);
 
 $sql22="update second_rand_table_reserve a join subdivision b on a.subdivision=b.subdivisioncd set a.subdivision=b.subdivision where a.subdivisioncd='$subdiv_cd'";
 $i=execUpdate($sql22);
+$sql23="update second_rand_table_reserve a join block_muni b on a.block_muni_cd=b.blockminicd set a.block_muni_name=b.blockmuni where a.subdivisioncd='$subdiv_cd'";
+$i=execUpdate($sql23);
 
 $sql271="update second_rand_table_reserve a join poll_table b on a.assemblycd=b.assembly_cd set a.polldate=b.poll_date, a.polltime=b.poll_time  where a.assemblycd=b.assembly_cd";
 $i=execUpdate($sql271);

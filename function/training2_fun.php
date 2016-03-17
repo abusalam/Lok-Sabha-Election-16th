@@ -234,6 +234,100 @@ function second_appointment_letter_print_4_5($sub,$assembly,$group_id,$mem_no,$f
 	connection_close();
 	return $rs;
 }
+//subdiv wise 4 or 5 member
+function second_appointment_letter_print_4_5_sub($sub,$assembly,$group_id,$mem_no,$from,$to)
+{
+	$sql="Select distinct second_appt.groupid,second_appt.pers_off,second_appt.	block_muni_cd,second_appt.per_poststat,second_appt.assembly,second_appt.assembly_name,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
+	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
+	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
+	  second_appt.pb_designation,  second_appt.pr_status,  second_appt.p1_status,  second_appt.p2_status,  second_appt.p3_status,
+	  second_appt.pa_status,  second_appt.pb_status, second_appt.pr_post_stat, second_appt.p1_post_stat, second_appt.p2_post_stat, 	second_appt.p3_post_stat, second_appt.pa_post_stat, second_appt.pb_post_stat,
+	  second_appt.pr_officecd,  second_appt.p1_officecd,  second_appt.p2_officecd,
+	  second_appt.p3_officecd,  second_appt.pa_officecd,  second_appt.pb_officecd,  second_appt.pr_officename,  second_appt.p1_officename,
+	  second_appt.p2_officename,  second_appt.p3_officename,  second_appt.pa_officename,  second_appt.pb_officename,  second_appt.pr_officeaddress,
+	  second_appt.p1_officeaddress,  second_appt.p2_officeaddress,  second_appt.p3_officeaddress,  second_appt.pa_officeaddress,
+	  second_appt.pb_officeaddress,  second_appt.pr_postoffice,  second_appt.p1_postoffice,  second_appt.p2_postoffice,
+	  second_appt.p3_postoffice,  second_appt.pa_postoffice,  second_appt.pb_postoffice,  second_appt.pr_subdivision,  second_appt.p1_subdivision,
+	  second_appt.p2_subdivision,  second_appt.p3_subdivision,  second_appt.pa_subdivision,  second_appt.pb_subdivision,
+	  second_appt.district,  second_appt.pr_pincode,  second_appt.p1_pincode,  second_appt.p2_pincode,
+	  second_appt.p3_pincode,  second_appt.pa_pincode,  second_appt.pb_pincode,  second_appt.dc_venue,  second_appt.dc_address, 
+	  date_format(second_appt.dc_date,'%d/%m/%Y') as dc_date,  second_appt.dc_time,  second_appt.rc_venue, second_appt.mem_no,
+	  second_appt.dcrcgrp, second_appt.traingcode,  second_appt.training_venue,  second_appt.venue_addr1, second_appt.venue_addr2,
+	  date_format(second_appt.training_date,'%d/%m/%Y') as training_date, 
+	  second_appt.training_time, date_format(second_appt.polldate,'%d/%m/%Y') as polldate, second_appt.polltime,second_appt.block_muni_name
+	From second_appt
+	 where 1=1 and second_appt.mem_no <>'6'";
+	if($sub!='0' && $sub!='')
+		$sql.=" and second_appt.subdivcd='$sub' ";
+	if($assembly!='0' && $assembly!='')
+		$sql.=" and second_appt.assembly='$assembly' ";
+	if($group_id!='0' && $group_id!='')
+		$sql.=" and second_appt.groupid='$group_id' ";
+	if($from!='-1')
+		$sql.=" order by second_appt.slno limit $from,$to";
+	else
+	   $sql.=" order by second_appt.slno"; 
+	//$sql.=" order by second_appt.assembly,second_appt.groupid";
+	//$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+function fetch_block_2nd_appt($bmcode)
+{
+	$sql="select blockmuni as cnt From block_muni where 1=1 ";
+	if($bmcode!='0' && $bmcode!='')
+		$sql.=" and block_muni.blockminicd = '$bmcode' ";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['cnt'];
+	connection_close();
+	return $i;
+}
+//asm wise 4 or 5 member
+function second_appointment_letter_print_4_5_asm($sub,$assembly,$group_id,$mem_no,$from,$to)
+{
+	$sql="Select distinct second_appt.groupid,second_appt.assembly,second_appt.assembly_name,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
+	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
+	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
+	  second_appt.pb_designation,  second_appt.pr_status,  second_appt.p1_status,  second_appt.p2_status,  second_appt.p3_status,
+	  second_appt.pa_status,  second_appt.pb_status, second_appt.pr_post_stat, second_appt.p1_post_stat, second_appt.p2_post_stat, 	second_appt.p3_post_stat, second_appt.pa_post_stat, second_appt.pb_post_stat,
+	  second_appt.pr_officecd,  second_appt.p1_officecd,  second_appt.p2_officecd,
+	  second_appt.p3_officecd,  second_appt.pa_officecd,  second_appt.pb_officecd,  second_appt.pr_officename,  second_appt.p1_officename,
+	  second_appt.p2_officename,  second_appt.p3_officename,  second_appt.pa_officename,  second_appt.pb_officename,  second_appt.pr_officeaddress,
+	  second_appt.p1_officeaddress,  second_appt.p2_officeaddress,  second_appt.p3_officeaddress,  second_appt.pa_officeaddress,
+	  second_appt.pb_officeaddress,  second_appt.pr_postoffice,  second_appt.p1_postoffice,  second_appt.p2_postoffice,
+	  second_appt.p3_postoffice,  second_appt.pa_postoffice,  second_appt.pb_postoffice,  second_appt.pr_subdivision,  second_appt.p1_subdivision,
+	  second_appt.p2_subdivision,  second_appt.p3_subdivision,  second_appt.pa_subdivision,  second_appt.pb_subdivision,
+	  second_appt.district,  second_appt.pr_pincode,  second_appt.p1_pincode,  second_appt.p2_pincode,
+	  second_appt.p3_pincode,  second_appt.pa_pincode,  second_appt.pb_pincode,  second_appt.dc_venue,  second_appt.dc_address, 
+	  date_format(second_appt.dc_date,'%d/%m/%Y') as dc_date,  second_appt.dc_time,  second_appt.rc_venue, second_appt.mem_no,
+	  second_appt.dcrcgrp, second_appt.traingcode,  second_appt.training_venue,  second_appt.venue_addr1, second_appt.venue_addr2,
+	  date_format(second_appt.training_date,'%d/%m/%Y') as training_date, 
+	  second_appt.training_time, date_format(second_appt.polldate,'%d/%m/%Y') as polldate, second_appt.polltime
+	From second_appt where 1=1 and second_appt.mem_no <>'6'";
+	if($sub!='0' && $sub!='')
+		$sql.=" and second_appt.subdivcd='$sub' ";
+	if($assembly!='0' && $assembly!='')
+		$sql.=" and second_appt.assembly='$assembly' ";
+	if($group_id!='0' && $group_id!='')
+		$sql.=" and second_appt.groupid='$group_id' ";
+	if($from!='-1')
+		$sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED) limit $from,$to";
+	else
+	   $sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
+	//$sql.=" order by second_appt.assembly,second_appt.groupid";
+	//$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
 //6 member
 function second_appointment_letter_print_6($sub,$assembly,$group_id,$mem_no,$from,$to)
 {
@@ -275,6 +369,89 @@ function second_appointment_letter_print_6($sub,$assembly,$group_id,$mem_no,$fro
 	connection_close();
 	return $rs;
 }
+//sub div wise 6 memeber
+function second_appointment_letter_print_6_sub($sub,$assembly,$group_id,$mem_no,$from,$to)
+{
+	$sql="Select distinct second_appt.groupid,second_appt.pers_off,second_appt.	block_muni_cd,second_appt.per_poststat,second_appt.assembly,second_appt.assembly_name,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
+	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
+	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
+	  second_appt.pb_designation,  second_appt.pr_status,  second_appt.p1_status,  second_appt.p2_status,  second_appt.p3_status,
+	  second_appt.pa_status,  second_appt.pb_status, second_appt.pr_post_stat, second_appt.p1_post_stat, second_appt.p2_post_stat, 	second_appt.p3_post_stat, second_appt.pa_post_stat, second_appt.pb_post_stat,
+	  second_appt.pr_officecd,  second_appt.p1_officecd,  second_appt.p2_officecd,
+	  second_appt.p3_officecd,  second_appt.pa_officecd,  second_appt.pb_officecd,  second_appt.pr_officename,  second_appt.p1_officename,
+	  second_appt.p2_officename,  second_appt.p3_officename,  second_appt.pa_officename,  second_appt.pb_officename,  second_appt.pr_officeaddress,
+	  second_appt.p1_officeaddress,  second_appt.p2_officeaddress,  second_appt.p3_officeaddress,  second_appt.pa_officeaddress,
+	  second_appt.pb_officeaddress,  second_appt.pr_postoffice,  second_appt.p1_postoffice,  second_appt.p2_postoffice,
+	  second_appt.p3_postoffice,  second_appt.pa_postoffice,  second_appt.pb_postoffice,  second_appt.pr_subdivision,  second_appt.p1_subdivision,
+	  second_appt.p2_subdivision,  second_appt.p3_subdivision,  second_appt.pa_subdivision,  second_appt.pb_subdivision,
+	  second_appt.district,  second_appt.pr_pincode,  second_appt.p1_pincode,  second_appt.p2_pincode,
+	  second_appt.p3_pincode,  second_appt.pa_pincode,  second_appt.pb_pincode,  second_appt.dc_venue,  second_appt.dc_address, 
+	  date_format(second_appt.dc_date,'%d/%m/%Y') as dc_date,  second_appt.dc_time,  second_appt.rc_venue, second_appt.mem_no,
+	  second_appt.dcrcgrp, second_appt.traingcode,  second_appt.training_venue,  second_appt.venue_addr1, second_appt.venue_addr2,
+	  date_format(second_appt.training_date,'%d/%m/%Y') as training_date, 
+	  second_appt.training_time, date_format(second_appt.polldate,'%d/%m/%Y') as polldate, second_appt.polltime,second_appt.block_muni_name
+	From second_appt where 1=1 and second_appt.mem_no ='6'";
+	if($sub!='0' && $sub!='')
+		$sql.=" and second_appt.subdivcd='$sub' ";
+	if($assembly!='0' && $assembly!='')
+		$sql.=" and second_appt.assembly='$assembly' ";
+	if($group_id!='0' && $group_id!='')
+		$sql.=" and second_appt.groupid='$group_id' ";
+	if($from!='-1')
+		$sql.=" order by second_appt.slno limit $from,$to";
+	else
+	   $sql.=" order by second_appt.slno"; 
+	//$sql.=" order by second_appt.assembly,second_appt.groupid";
+	//$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+//asm wise 6 memeber
+function second_appointment_letter_print_6_asm($sub,$assembly,$group_id,$mem_no,$from,$to)
+{
+	$sql="Select distinct second_appt.groupid,second_appt.assembly,second_appt.assembly_name,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
+	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
+	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
+	  second_appt.pb_designation,  second_appt.pr_status,  second_appt.p1_status,  second_appt.p2_status,  second_appt.p3_status,
+	  second_appt.pa_status,  second_appt.pb_status, second_appt.pr_post_stat, second_appt.p1_post_stat, second_appt.p2_post_stat, 	second_appt.p3_post_stat, second_appt.pa_post_stat, second_appt.pb_post_stat,
+	  second_appt.pr_officecd,  second_appt.p1_officecd,  second_appt.p2_officecd,
+	  second_appt.p3_officecd,  second_appt.pa_officecd,  second_appt.pb_officecd,  second_appt.pr_officename,  second_appt.p1_officename,
+	  second_appt.p2_officename,  second_appt.p3_officename,  second_appt.pa_officename,  second_appt.pb_officename,  second_appt.pr_officeaddress,
+	  second_appt.p1_officeaddress,  second_appt.p2_officeaddress,  second_appt.p3_officeaddress,  second_appt.pa_officeaddress,
+	  second_appt.pb_officeaddress,  second_appt.pr_postoffice,  second_appt.p1_postoffice,  second_appt.p2_postoffice,
+	  second_appt.p3_postoffice,  second_appt.pa_postoffice,  second_appt.pb_postoffice,  second_appt.pr_subdivision,  second_appt.p1_subdivision,
+	  second_appt.p2_subdivision,  second_appt.p3_subdivision,  second_appt.pa_subdivision,  second_appt.pb_subdivision,
+	  second_appt.district,  second_appt.pr_pincode,  second_appt.p1_pincode,  second_appt.p2_pincode,
+	  second_appt.p3_pincode,  second_appt.pa_pincode,  second_appt.pb_pincode,  second_appt.dc_venue,  second_appt.dc_address, 
+	  date_format(second_appt.dc_date,'%d/%m/%Y') as dc_date,  second_appt.dc_time,  second_appt.rc_venue, second_appt.mem_no,
+	  second_appt.dcrcgrp, second_appt.traingcode,  second_appt.training_venue,  second_appt.venue_addr1, second_appt.venue_addr2,
+	  date_format(second_appt.training_date,'%d/%m/%Y') as training_date, 
+	  second_appt.training_time, date_format(second_appt.polldate,'%d/%m/%Y') as polldate, second_appt.polltime
+	From second_appt where 1=1 and second_appt.mem_no ='6'";
+	if($sub!='0' && $sub!='')
+		$sql.=" and second_appt.subdivcd='$sub' ";
+	if($assembly!='0' && $assembly!='')
+		$sql.=" and second_appt.assembly='$assembly' ";
+	if($group_id!='0' && $group_id!='')
+		$sql.=" and second_appt.groupid='$group_id' ";
+	if($from!='-1')
+		$sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED) limit $from,$to";
+	else
+	   $sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
+	//$sql.=" order by second_appt.assembly,second_appt.groupid";
+	//$sql.=" order by sl_no limit $from,$to";
+	//echo $sql; exit;
+	$rs=execSelect($sql);
+	connection_close();
+	return $rs;
+}
+
 ///===========2nd pp list
 function office_details_ag_forsuboffice2($subdiv,$from,$to)
 {
@@ -368,7 +545,8 @@ function fetch_second_apt($sub_div)
             second_appt SET slno = (@ordering := @ordering + 1) where 1=1 ";
 	if($sub_div!='0' && $sub_div!='')
 		$sql.=" and second_appt.subdivcd = '$sub_div' ";
-	$sql.=" order by second_appt.subdivcd,second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
+	//$sql.=" order by second_appt.subdivcd,second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
+	$sql.=" order by second_appt.block_muni_cd,second_appt.pers_off";
 	execMultiQuery($sql);	
 	connection_close();	
 	
@@ -407,7 +585,8 @@ function fetch_second_apt_reserve($sub_div)
             second_rand_table_reserve SET slno = (@ordering := @ordering + 1) where 1=1 ";
 	if($sub_div!='0' && $sub_div!='')
 		$sql.=" and second_rand_table_reserve.subdivisioncd = '$sub_div' ";
-	$sql.=" order by second_rand_table_reserve.subdivisioncd,second_rand_table_reserve.assemblycd,CAST(second_rand_table_reserve.groupid AS UNSIGNED)";
+	//$sql.=" order by second_rand_table_reserve.subdivisioncd,second_rand_table_reserve.assemblycd,CAST(second_rand_table_reserve.groupid AS UNSIGNED)";
+    $sql.=" order by second_rand_table_reserve.block_muni_cd,second_rand_table_reserve.officecd";
 	execMultiQuery($sql);	
 	connection_close();	
 	

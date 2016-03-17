@@ -246,7 +246,7 @@ $stmt->close();
 $msqli->close();
 
 new reserve1($dist,$sub,2);
-new  reserve1o($dist,$sub,2);
+new reserve1o($dist,$sub,2);
 
 /*new  reserve2($dist,$sub);
 new  reserve2($dist,$sub);

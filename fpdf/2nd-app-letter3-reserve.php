@@ -105,6 +105,7 @@ function FancyTable($header, $data)
 			$nb3="(__________________________)";
 			$signature="../images/ro/".$row['assemblycd'].".jpg";
 			
+			
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
 			$this->SetFont('Arial','B',10);

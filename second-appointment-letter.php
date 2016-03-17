@@ -174,9 +174,11 @@ if($submit=="Submit")
 	$group_id=isset($_POST['txtGroupId'])?encode($_POST['txtGroupId']):"";
 	$from=(isset($_POST['txtfrom'])?encode($_POST['txtfrom']):'0');
 	$to=(isset($_POST['txtto'])?encode($_POST['txtto']):'0');
+	$chksub=(isset($_POST['chksetsubdivision'])?encode($_POST['chksetsubdivision']):'0');
+	$chkasm=(isset($_POST['chksetassembly'])?encode($_POST['chksetassembly']):'0');
 	?>
     <script>
-		window.open("fpdf/2nd-app-letter.php?sub=<?php echo $Subdivision; ?>&assembly=<?php echo $assembly; ?>&group_id=<?php echo $group_id; ?>&txtfrom=<?php echo $from; ?>&txtto=<?php echo $to; ?>");
+		window.open("fpdf/2nd-app-letter-sub-asm.php?sub=<?php echo $Subdivision; ?>&assembly=<?php echo $assembly; ?>&group_id=<?php echo $group_id; ?>&txtfrom=<?php echo $from; ?>&txtto=<?php echo $to; ?>&chksub=<?php echo $chksub;?>&chkasm=<?php echo $chkasm;?>");
 	</script>
     <?php
 }

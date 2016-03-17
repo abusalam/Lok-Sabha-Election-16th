@@ -35,9 +35,9 @@ extract($_GET);
 			echo "Please check record no";
 			exit;
 		}
-		if((($to)-($from))>1000)
+		if((($to)-($from))>2000)
 		{
-			echo "Records should not be greater than 1000";
+			echo "Records should not be greater than 2000";
 			exit;
 		}
 	}
@@ -128,6 +128,7 @@ function FancyTable($header, $data)
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			$signature="../images/ro/".$row['assemblycd'].".jpg";
+			//$signature="../images/ro/259.jpg";
 			
 				$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
@@ -519,7 +520,10 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',8.5);
 			$this->Cell(10,10,$nb2,0,0,'L');*/
 			$this->Ln(4);
-			
+		
+				//$bmname=fetch_block_2nd_appt_reserve($row['block_muni_name']);
+				$this->SetFont('Arial','',9);
+				$this->Cell(190,5,"Block/Municipality: ".$row['block_muni_name'],0,0,'C');
 			
 			$fill = !$fill;
 		    $count++;

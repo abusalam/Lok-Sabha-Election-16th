@@ -127,7 +127,8 @@ if($opn=='g_rplc')
 				//include_once('inc/commit_con.php');
 			//	mysqli_autocommit($link,FALSE);
 				
-							$sql11="insert into second_rand_table_reserve (groupid,assembly,personcd,person_name,person_designation,post_status,post_stat,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue,dc_address,dc_date,dc_time,rc_venue,assemblycd,dcrccd,training_schd,districtcd,subdivisioncd,pccd) Select personnela.groupid,
+							$sql11="insert into second_rand_table_reserve (groupid,assembly,personcd,person_name,person_designation,post_status,post_stat,officecd,office_name,office_address,post_office,subdivision,police_stn,district,pincode,dc_venue,dc_address,dc_date,dc_time,rc_venue,assemblycd,dcrccd,training_schd,districtcd,subdivisioncd,pccd,block_muni_cd,block_muni_name) 
+							Select personnela.groupid,
 							  assembly.assemblyname,	 
 							  personnela.personcd,
 						 personnela.officer_name,
@@ -155,10 +156,13 @@ if($opn=='g_rplc')
 							  personnela.training2_sch,
 								  personnela.districtcd,
 							   personnela.forsubdivision,
-						personnela.forpc
+						personnela.forpc,
+						office.blockormuni_cd,
+						block_muni.blockmuni
 							From personnela
 							  Inner Join office On personnela.officecd = office.officecd
 							  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
+							  Inner join block_muni on office.blockormuni_cd=block_muni.blockminicd
 							  Inner Join policestation
 								On office.policestn_cd = policestation.policestationcd
 							  Inner Join district On office.districtcd = district.districtcd        

@@ -81,7 +81,7 @@ function first_appointment_letter_replace_new_id($per_code)
 	  personnela.bank_acc_no,
 	  branch.ifsc_code,
 	 
-	  REPLACE(concat(SUBSTRING(subdivision1.subdivision,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
+	  REPLACE(concat(SUBSTRING(subdivision1.subdivisioncd,1,4),'/',poststat.post_stat,'/',training_pp.token),'','') 
  as r_token
 	  
 	From personnela
@@ -1011,12 +1011,12 @@ where   second_appt.venuecode is not Null ";
 	return $rs;
 }
 
-function master_roll_second_app_venue_wise_party_group($venue_cd)
+function master_roll_second_app_venue_wise_party_group($venue_cd,$assembly)
 {
 	$sql="Select Distinct second_appt.groupid,
 	second_appt.assembly	  
 	From second_appt
-	Where second_appt.groupid Is Not Null And second_appt.groupid != '0'";
+	Where second_appt.groupid Is Not Null And second_appt.groupid != '0' and second_appt.assembly='$assembly'";
 	if($venue_cd!='' && $venue_cd!=null)
 		$sql.=" and second_appt.venuecode='$venue_cd'";
 	$sql.=" order by second_appt.assembly,CAST(second_appt.groupid AS UNSIGNED)";
@@ -1155,7 +1155,7 @@ where   second_rand_table_reserve.venuecode is not Null ";
 	connection_close();
 	return $rs;
 }
-function second_app_venue_wise_reserve_group($venue_cd,$post_status)
+function second_app_venue_wise_reserve_group($venue_cd,$post_status,$forassembly)
 {
 	$sql="Select personnela.groupid,
 	  assembly.assemblycd,
@@ -1204,6 +1204,7 @@ function second_app_venue_wise_reserve_group($venue_cd,$post_status)
 function master_roll_second_appointment_letter_reserve1($subdiv,$forassembly,$post_status)
 {
 	$sql="Select personnela.groupid,
+	
 	  assembly.assemblycd,
 	  assembly.assemblyname,
 	  personnela.officer_name,
@@ -1377,7 +1378,7 @@ function master_roll_second_appointment_letter_reserve($group_id,$forassembly,$f
 }*/
 function second_appointment_letter_reserve1($sub,$assembly,$group_id,$from,$to)
 {
-	$sql="SELECT `slno`,`groupid`,assemblycd,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
+	$sql="SELECT `slno`,`groupid`,block_muni_cd,block_muni_name,assemblycd,`assembly`,`pcname`,`personcd`,`person_name`,`person_designation`,`post_status`,	
 	`post_stat`,`officecd`,`office_name`,`office_address`,`post_office`,`subdivision`,`police_stn`,`district`,
 	`pincode`,`dc_venue`,`dc_address`,date_format(`dc_date`,'%d/%m/%Y') as dc_date,`dc_time`,`rc_venue`,`traingcode`,`training_venue`,`venuecode`,
 	`venue_addr1`,`venue_addr2`,date_format(`training_date`,'%d/%m/%Y') as training_date,`training_time`,date_format(`polldate`,'%d/%m/%Y') as polldate,`polltime` 
@@ -1396,6 +1397,17 @@ function second_appointment_letter_reserve1($sub,$assembly,$group_id,$from,$to)
 	$rs=execSelect($sql);
 	connection_close();
 	return $rs;
+}
+function fetch_block_2nd_appt_reserve($bmcode)
+{
+	$sql="select blockmuni as cnt From block_muni where 1=1 ";
+	if($bmcode!='0' && $bmcode!='')
+		$sql.=" and block_muni.blockminicd = '$bmcode' ";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$i=$row['cnt'];
+	connection_close();
+	return $i;
 }
 
 function assembly_name_ag_code($assembly)
