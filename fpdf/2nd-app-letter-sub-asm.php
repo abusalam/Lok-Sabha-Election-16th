@@ -120,6 +120,9 @@ function FancyTable($header, $data)
 			$euname22="Polling Party No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
+			$post=$row['per_poststat'];
+			$ass_code=$row['assembly'];
+			$groupid=$row['groupid'];
 			
 			$euname6="     In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
 			$euname7="appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
@@ -135,6 +138,14 @@ function FancyTable($header, $data)
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
 			$euname13="Date: ".date("d/m/Y");
 			$euname14="District ".wordcase($_SESSION['dist_name']);
+			$a= "Note: Only Presiding Officer & Addl. 2nd Polling Officer will attend VVPAT training at Nirmal Hriday Ashram High School on 29/03/2016 at ";
+			if($groupid<=178){
+				$a=$a."10:00 AM"
+;			}
+			else{
+				$a=$a."1:30 PM";
+			}
+			
 			$nb1="You are requested to attend the training at ".$training_venue." , ".$venue_addr;
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
@@ -599,6 +610,13 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',8.7);
 			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11.".",0,'J',$fill);
+			
+			if($ass_code=="236" && ($post=="PR"||$post=="PA"))
+			{
+				$this->Ln();
+			$this->SetFont('Arial','B',8);
+			$this->MultiCell(190,4,"     ".$a.".",0,'J',$fill);
+			}
 			/*$this->SetFont('Arial','',8.7);
 			$this->Cell(87);
 			$this->Cell(20,10,$euname9,0,0,'C');
