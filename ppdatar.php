@@ -26,11 +26,11 @@ function __construct($sub,$pst,$var,$asm,$stat,$phase) {
 	{ 
 	  
        if ($phase==1) {
-	   $this->result = $this->msqli->query("SELECT forpc,personcd,officecd,poststat,booked,assembly_perm,assembly_temp,assembly_off,groupid,forassembly FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and forassembly<> '$asm' and booked='R' and selected=1 and forsubdivision='$sub' order by rand_numb,personcd ") or die($this->msqli->error.__LINE__);
+	   $this->result = $this->msqli->query("SELECT forpc,personcd,officecd,poststat,booked,assembly_perm,assembly_temp,assembly_off,groupid,forassembly FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and forassembly<> '$asm' and booked='R' and selected=1 and forsubdivision='$sub' order by left(personcd,1), rand_numb ") or die($this->msqli->error.__LINE__);
 		}
 	   else
 		{
-			$sql="SELECT forpc,personcd,officecd,poststat,booked,assembly_perm,assembly_temp,assembly_off,groupid,forassembly FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and selected=1 and forsubdivision='$sub' order by rand_numb,personcd Limit 1";
+			$sql="SELECT forpc,personcd,officecd,poststat,booked,assembly_perm,assembly_temp,assembly_off,groupid,forassembly FROM `personnela` where poststat= '$pst' and substr(forsubdivision,1,2)='$var' and assembly_off<> '$asm' and assembly_temp<> '$asm' and assembly_perm<> '$asm' and booked=' ' and selected=1 and forsubdivision='$sub' order by left(personcd,1),rand_numb Limit 1";
 		$this->result = $this->msqli->query($sql) or die($this->msqli->error.__LINE__);
 		echo $sql;
 		
