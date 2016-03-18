@@ -12,7 +12,7 @@ include 'reserve1a.php';
 include 'reserve1o.php';
 include 'dcrc.php';
 include 'dcrcreserve.php';
-include 'countpp.php';
+include 'countpp1.php';
 
 if(isset($_GET['subdiv_cd']) && $_GET['subdiv_cd']!=null)
 {
