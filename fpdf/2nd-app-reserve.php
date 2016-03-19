@@ -113,11 +113,11 @@ function FancyTable($header, $data)
 			$ass_code=$row['assemblycd'];
 			//$groupid=$row['groupid'];
 			
-			$euname6="     In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
-			$euname7="appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
-			$euname8="Station specified in corresponding entry in column(1) of the table provided by me for ".$row['assemblycd']." - ".$row['assembly']." L.A. Constituency ";
+			$euname6="     In persuance of sub-section(1) and sub-section(3) of Section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
+			$euname7="appoint the officers specified in column(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
+			$euname8="Station specified in corresponding entry in column(1) of the table provided below for ".$row['assemblycd']." - ".$row['assembly']." L.A. Constituency ";
 			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
-			$euname81="I also authorise the Polling Officer specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
+			$euname81="I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
 			$euname82="during the unavoidable absence, if any, of the Presiding Officer.";
 			
 			$euname9="The Poll will be taken on ".$poll_date." during the hours ".$poll_time.". The Presiding Officer should arrange to collect the Polling ";
@@ -126,14 +126,14 @@ function FancyTable($header, $data)
 			
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
 			$euname13="Date: ".date("d/m/Y");
-			$euname14="District ".wordcase($_SESSION['dist_name']);
+			$euname14="".wordcase($_SESSION['dist_name']);
 			$a= "Note: Only Presiding Officer & Addl. 2nd Polling Officer will attend VVPAT training at Nirmal Hriday Ashram High School on 29/03/2016 at 1:30 PM";
 			$nb1="You are requested to attend the training at ".$training_venue." , ".$venue_addr;
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			$signature="../images/ro/".$row['assemblycd'].".jpg";
 			//$signature="../images/ro/259.jpg";
-			$roname="RO/".$row['assemblycd']." - ".$row['assembly'];
+			$roname="Returning Officer/".$row['assemblycd']." - ".$row['assembly']." AC";
 			
 				$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
@@ -502,14 +502,14 @@ function FancyTable($header, $data)
 			$this->Ln(8);
 			
 			$this->SetFont('Arial','',8);
-			$this->Cell(164);
+			$this->Cell(165);
 			$this->Cell(10,10,$nb3,0,0,'R');
 			
 		
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(160);
+			$this->Cell(170);
 			$this->Cell(10,10,$roname,0,0,'R');
 		
 			// Line break
@@ -526,7 +526,11 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',8.7);
 			$this->Ln(4);
-			$this->MultiCell(190,4,$nb1.$nb2,0,'J',$fill);
+			$this->SetFont('Arial','B',9);
+			$this->MultiCell(190,4,"Second Training: ".$nb1.$nb2,0,'J',$fill);
+			$this->Ln();			
+			$this->Cell(190,0,'',1,0,'L',$fill);
+			$this->Ln();
 			/*$this->Cell(10,10,$nb1,0,0,'L');
 			$this->Ln(4);
 			$this->SetFont('Arial','',8.5);

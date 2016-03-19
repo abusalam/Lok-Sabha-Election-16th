@@ -291,7 +291,7 @@ function fetch_block_2nd_appt($bmcode)
 function second_appointment_letter_print_4_5_asm($sub,$assembly,$group_id,$mem_no,$from,$to)
 {
 	$sql="Select distinct second_appt.groupid,second_appt.assembly,second_appt.assembly_name,
-	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,second_appt.per_poststat,  second_appt.p1_personcd,  second_appt.p2_personcd,
 	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
 	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
 	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
@@ -372,7 +372,7 @@ function second_appointment_letter_print_6($sub,$assembly,$group_id,$mem_no,$fro
 //sub div wise 6 memeber
 function second_appointment_letter_print_6_sub($sub,$assembly,$group_id,$mem_no,$from,$to)
 {
-	$sql="Select distinct second_appt.groupid,second_appt.pers_off,second_appt.	block_muni_cd,second_appt.per_poststat,second_appt.assembly,second_appt.assembly_name,
+	$sql="Select distinct second_appt.groupid,second_appt.pers_off,second_appt.	block_muni_cd,second_appt.per_poststat,second_appt.assembly,second_appt.assembly_name,second_appt.per_poststat,
 	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
 	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
 	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
@@ -414,7 +414,7 @@ function second_appointment_letter_print_6_sub($sub,$assembly,$group_id,$mem_no,
 function second_appointment_letter_print_6_asm($sub,$assembly,$group_id,$mem_no,$from,$to)
 {
 	$sql="Select distinct second_appt.groupid,second_appt.assembly,second_appt.assembly_name,
-	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
+	  second_appt.pccd,  second_appt.pcname,  second_appt.pr_personcd,second_appt.per_poststat,  second_appt.p1_personcd,  second_appt.p2_personcd,
 	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
 	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
 	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
