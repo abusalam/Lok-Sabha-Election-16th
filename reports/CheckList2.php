@@ -62,6 +62,8 @@ echo getHtmlTable($Query);
 $Query = 'select forsubdivision,sum(numb) from reserve group by forsubdivision';
 echo getHtmlTable($Query);
 
+$Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
+echo getHtmlTable($Query);
 
 ?>
 </body>
