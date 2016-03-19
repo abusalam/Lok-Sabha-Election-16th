@@ -124,27 +124,37 @@ function FancyTable($header, $data)
 			$euname22="Polling Party No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
+			$post=$row['per_poststat'];
+			$ass_code=$row['assembly'];
+			$groupid=$row['groupid'];
 			
-			$euname6="     In persuance of sub-selection(1) and sub-selection(3) of section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
-			$euname7="appoint the officers specified in columb(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
-			$euname8="Station specified in corresponding entry in column(1) of the table provided by me for ".$row['assembly']." - ".$row['assembly_name']." L.A. Constituency ";
+			$euname6="     In persuance of sub-section(1) and sub-section(3) of Section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
+			$euname7="appoint the officers specified in column(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
+			$euname8="Station specified in corresponding entry in column(1) of the table provided below for ".$row['assembly']." - ".$row['assembly_name']." L.A. Constituency ";
 			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
-			$euname81="I also authorise the Polling Officer specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
+			$euname81="I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding";
 			$euname82="during the unavoidable absence, if any, of the Presiding Officer.";
 			
 			$euname9="The Poll will be taken on ".$poll_date." during the hours ".$poll_time.". The Presiding Officer should arrange to collect the Polling ";
 			$euname10="materials from ".$dc." on ".$dc_date." at $dc_time  ";
-			$euname11="and after the Poll, these should be returned to collecting centre at ".$rcvenue;
+			$euname11="and after the Poll, these should be returned to receiving centre at ".$rcvenue;
 			
 			$euname12="Place: ".uppercase($_SESSION['dist_name']);
 			$euname13="Date: ".date("d/m/Y");
-			$euname14="District ".wordcase($_SESSION['dist_name']);
-			$nb1="You are requested to attend the training at ".$training_venue." , ".$venue_addr;
+			$euname14="".wordcase($_SESSION['dist_name']);
+			$a= "Note: Only Presiding Officer & Addl. 2nd Polling Officer will attend VVPAT training at Nirmal Hriday Ashram High School on 29/03/2016 at ";
+			if($groupid<=178){
+				$a=$a."10:00 AM"
+;			}
+			else{
+				$a=$a."1:30 PM";
+			}
+			$nb1="Second Training: You are requested to attend the training at ".$training_venue." , ".$venue_addr;
 			$nb2="on ".$training_date." from ".$training_time;
 			$nb3="(__________________________)";
 			
 	        $signature="../images/ro/".$row['assembly'].".jpg";
-			$roname="RO/".$row['assembly']." - ".$row['assembly_name'];
+			$roname="Returning Officer/".$row['assembly']." - ".$row['assembly_name']." AC";
 			//$signature="../images/ro/259.jpg";
 			
 			$this->SetFont('Arial','B',10);
@@ -183,7 +193,7 @@ function FancyTable($header, $data)
 			$this->Cell(33,6,'',0,0,'R');
 			// Line break
 			
-			$this->Ln(4);
+			$this->Ln(1);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(15,10,$euname4,0,0,'L');
@@ -195,7 +205,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',9);
 			$this->Cell(33,6,$euname5,0,0,'R');
 			
-			$this->Ln(7);
+			$this->Ln(4);
 			
 			/*$this->SetFont('Arial','B',8);
 			$this->Cell(30,5,$euname,1,0,'L');
@@ -603,6 +613,12 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',8.7);
 			$this->MultiCell(190,4,"     ".$euname9.$euname10.$euname11.".",0,'J',$fill);
+			if($ass_code=="236" && ($post=="PR"||$post=="PA"))
+			{
+				$this->Ln();
+			$this->SetFont('Arial','B',8);
+			$this->MultiCell(190,4,"     ".$a.".",0,'J',$fill);
+			}
 			/*$this->SetFont('Arial','',8.7);
 			$this->Cell(87);
 			$this->Cell(20,10,$euname9,0,0,'C');
@@ -619,7 +635,7 @@ function FancyTable($header, $data)
 			$this->Cell(50,10,$euname11,0,0,'L');*/
 		
 			// Line break
-			$this->Ln(2);
+			
 			
 			
 			$this->SetFont('Arial','',9);
@@ -638,22 +654,22 @@ function FancyTable($header, $data)
 		//	$this->Cell(10,10,"yuyu",0,0,'R');
 			$this->Cell(10, 8, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
 			// Line break
-			$this->Ln(4);
+			$this->Ln(5);
 			
 			$this->SetFont('Arial','',8);
-			$this->Cell(164);
+			$this->Cell(165);
 			$this->Cell(10,10,$nb3,0,0,'R');
 		
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(160);
+			$this->Cell(170);
 			$this->Cell(10,10,$roname,0,0,'R');
 		
 			// Line break
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
-			$this->Cell(160);
+			$this->Cell(158);
 			$this->Cell(10,10,$euname14,0,0,'R');
 		
 			// Line break
@@ -664,11 +680,14 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',8.7);
 			$this->Ln(1);
+			$this->SetFont('Arial','B',8);
 			$this->MultiCell(190,4,$nb1.$nb2,0,'J',$fill);
+						
+			$this->Cell(190,0,'',1,0,'L',$fill);
 			
 		//	if($chksub=='on')
 	      //  {
-				$this->Ln(2);
+				$this->Ln();
 				$bmname=($chksub=='on')?"Block/Municipality: ".$row['block_muni_name']:"";
 			//	$bmname=fetch_block_2nd_appt($row['block_muni_cd']);
 				$this->SetFont('Arial','',9);
