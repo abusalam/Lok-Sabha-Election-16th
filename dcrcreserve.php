@@ -72,9 +72,11 @@ $this->stmt->bind_param('ssis',$dc,$fasm,$gpd,$post);
 		   }
 		  
 		//  echo $nors;
-		
+	//$sql="select groupid from personnela where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' and forassembly='$fasm' and booked='R' and poststat='$post' and (dcrccd='      ' or dcrccd is null) limit 0, $nors ";
+	//echo $sql;
+	//exit;
 		  
-		  $this->result1 = $this->msqli->query("select * from personnela where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' and forassembly='$fasm' and booked='R' and poststat='$post' and (dcrccd='      ' or dcrccd is null) limit 0, $nors  ") or die($this->msqli->error.__LINE__);
+		  $this->result1 = $this->msqli->query("select groupid from personnela where substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' and forassembly='$fasm' and booked='R' and poststat='$post' and (dcrccd='      ' or dcrccd is null) limit 0, $nors  ") or die($this->msqli->error.__LINE__);
 /*echo '  ';
 echo $this->result1->num_rows ;
 echo ' ';
@@ -104,7 +106,7 @@ echo $fasm;
 	}
 	
 	else {
-		echo 'CHECK  DCRC';	
+		//echo 'CHECK  DCRC';	
 	}
 
 

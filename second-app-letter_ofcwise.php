@@ -10,8 +10,11 @@ session_start();
 include('header/header.php');
 ?>
 <script type="text/javascript" language="javascript">
-function subdivision_change(str)
+function member_available()
 {
+	var subdivision=document.getElementById("Subdivision").value;
+    var for_subdivision=document.getElementById("for_subdivision").value;
+	
 	if (window.XMLHttpRequest)
 	  {// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();
@@ -24,18 +27,25 @@ function subdivision_change(str)
 	  {
 	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
-		document.getElementById("office_result").innerHTML=xmlhttp.responseText;
-		document.getElementById("loading1").style.visibility="hidden";
+		document.getElementById("member_available").innerHTML=xmlhttp.responseText;
+		//document.getElementById("loading1").style.visibility="hidden";
 		}
 	  }
-	xmlhttp.open("GET","ajax-appointment.php?sub_div="+str+"&opn=for_sub_emp_office",true);
-	document.getElementById("loading1").style.visibility="visible";
+	xmlhttp.open("GET","ajax-appointment.php?sub_div="+subdivision+"&f_sub_div="+for_subdivision+"&opn=membavl",true);
+	//document.getElementById("loading1").style.visibility="visible";
 	xmlhttp.send();
 }
 function validate()
 {
 	var subdivision=document.getElementById("Subdivision").value;
+    var for_subdivision=document.getElementById("for_subdivision").value;
 
+	if(for_subdivision=="0")
+	{
+		document.getElementById("msg").innerHTML="Select For Subdivision";
+		document.getElementById("for_subdivision").focus();
+		return false;
+	}
 	if(subdivision=="0")
 	{
 		document.getElementById("msg").innerHTML="Select Subdivision";
@@ -78,8 +88,8 @@ function validate()
       <td align="center" colspan="2"><img src="images/blank.gif" alt="" height="1px" /></td>
     </tr>
     <tr>
-     <td align="left"><span class="error">*</span>Subdivision</td>
-	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:200px;" onchange="javascript:return subdivision_change(this.value);">
+     <td align="left" width="30%"><span class="error">*</span>For Subdivision</td>
+	  <td align="left"><select name="for_subdivision" id="for_subdivision" style="width:200px;" onchange="javascript:return member_available();">
       						<option value="0">-Select Subdivision-</option>
                             <?php 	$districtcd=$dist_cd;
 									$rsBn=fatch_Subdivision($districtcd);
@@ -95,6 +105,26 @@ function validate()
 									unset($rsBn,$num_rows,$rowSubDiv);
 							?>
       				</select></td></tr>
+    
+	<tr>
+     <tr>
+     <td align="left"><span class="error">*</span>Subdivision</td>
+	  <td align="left"><select name="Subdivision" id="Subdivision" style="width:200px;" onchange="javascript:return member_available();">
+      						<option value="0">-Select Subdivision-</option>
+                            <?php 	$districtcd=$dist_cd;
+									$rsBn=fatch_Subdivision($districtcd);
+									$num_rows=rowCount($rsBn);
+									if($num_rows>0)
+									{
+										for($i=1;$i<=$num_rows;$i++)
+										{
+											$rowSubDiv=getRows($rsBn);
+											echo "<option value='$rowSubDiv[0]'>$rowSubDiv[2]</option>";
+										}
+									}
+									unset($rsBn,$num_rows,$rowSubDiv);
+							?>
+      				</select>&nbsp;&nbsp;<label id="member_available"><span id='memb_avl'></span></label></td></tr>
     
 	<tr>
     <tr>

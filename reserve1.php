@@ -179,7 +179,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 	}
 	
 	else {
-		echo 'NO  RESULTS';	
+		//echo 'NO  RESULTS';	
 	} 
 $this->stmt->close();
 $this->msqli->close();

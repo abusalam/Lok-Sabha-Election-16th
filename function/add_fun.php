@@ -473,6 +473,9 @@ function fatch_PoliceStation($subdiv)
 //=======================Employee Replacement==========================
 function fatch_training_venue_available_subdiv($schedule_cd,$subdiv,$post_stat)
 {
+	$dt = new DateTime();
+	$system_date=$dt->format('Y-m-d H:i:s');
+	
 	$sql="Select training_schedule.schedule_code,
 	  training_venue.venuename,
 	  DATE(training_schedule.training_dt) as t_date,
@@ -483,7 +486,7 @@ function fatch_training_venue_available_subdiv($schedule_cd,$subdiv,$post_stat)
 		training_venue.venue_cd
 	  Inner Join training_type On training_schedule.training_type =
 		training_type.training_code
-	Where (training_schedule.no_pp-training_schedule.no_used) > 0 ";
+	Where (training_schedule.no_pp-training_schedule.no_used) > 0 and training_schedule.training_dt>='$system_date'";
 	if($subdiv !='')
 		$sql.=" and training_schedule.forsubdiv='$subdiv'";
 	if($post_stat !='')

@@ -72,7 +72,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 		  echo ' ';
 		  */
 		  
-		  $this->result1 = $this->msqli->query("SELECT count(forassembly) as cnt  from personnela  WHERE forassembly = '$fasm1' and poststat='$pst'   and substr(forsubdivision,1,2)='$dist' and forsubdivision='$sub' and booked='R'") or die($this->msqli->error.__LINE__);
+		  $this->result1 = $this->msqli->query("SELECT count(forassembly) as cnt  from personnela  WHERE forassembly = '$fasm1' and poststat='$pst' and forsubdivision='$sub' and booked='R'") or die($this->msqli->error.__LINE__);
 		  
 		  while($row = $this->result1->fetch_assoc()) {
 		  
@@ -185,7 +185,7 @@ $this->stmt->bind_param('isss',$gpd,$bk,$fasm,$psd);
 	}
 	
 	else {
-		echo 'NO  RESULTS';	
+		//echo 'NO  RESULTS';	
 	} 
 $this->stmt->close();
 $this->msqli->close();

@@ -8,7 +8,7 @@ include 'ppdata.php';
 include 'ppdatar.php';
 include 'randno1.php';
 include 'reserve1.php';
-include 'reserve1a.php';
+//include 'reserve1a.php';
 include 'reserve1o.php';
 include 'dcrc.php';
 include 'dcrcreserve.php';
@@ -255,6 +255,7 @@ new  reserve2($dist,$sub);
 new dcrc($dist,$sub);
 
 new dcrcreserve($dist,$sub);
-new countpp1($sub);
+echo "<div class='alert-success'>Completed</div>";
+//new countpp1($sub);
 //print_r($grpdata);
 ?>

@@ -4,7 +4,7 @@ include_once('inc/db_trans.inc.php');
 $subdiv_cd=isset($_GET['subdiv_cd'])?$_GET['subdiv_cd']:"";
 $dist_cd=isset($_GET['dist'])?$_GET['dist']:"";
 //$pc_cd='39'; 
-$sql0="delete from second_rand_table_reserve where subdivisioncd='$subdiv_cd'";
+$sql0="delete from second_rand_table_reserve where subdivisioncd='$subdiv_cd' ";
 $i=execDelete($sql0);
 
 

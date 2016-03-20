@@ -46,6 +46,32 @@ if($opn=='for_sub_emp_office')
 	$num_rows=0;
 	echo "</select>";
 }
+if($opn=='membavl')
+{
+   include_once('function/training_fun.php');
+	$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
+	$f_sub_div=isset($_GET['f_sub_div'])?$_GET['f_sub_div']:"";
+	if($f_sub_div!='' && $sub_div!='')
+	{
+		$rsMembAvl=member_available_forsub_pp($sub_div,$f_sub_div);
+		/*$num_rows_MembAvl=rowCount($rsMembAvl);
+		$rowMembAvl=getRows($rsMembAvl);
+		if($num_rows_MembAvl>0)
+		{	*/	
+			echo "Records Available: <span id='memb_avl'>".$rsMembAvl."</span>";
+		/*}
+		else
+			echo "";*/
+		
+		$rowMembAvl=NULL;
+		$rsMembAvl=NULL;
+		unset($rsMembAvl,$rowMembAvl,$num_rows_MembAvl);
+	}
+	else
+	{
+		echo "";
+	}
+}
 if($opn=='for_sub_venue')
 {
 	include_once('function/training_fun.php');

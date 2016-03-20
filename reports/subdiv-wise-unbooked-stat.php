@@ -13,7 +13,7 @@ body{ font: 14px "Trebuchet MS", Arial, Helvetica, sans-serif;}
 	date_default_timezone_set('Asia/Calcutta');
 	include_once('../inc/db_trans.inc.php');
 	//$sub_div=isset($_GET['sub_div'])?$_GET['sub_div']:"";
-	$sql_sub="select subdivisioncd, subdivision from subdivision where subdivisioncd<>'1800'";
+	$sql_sub="select subdivisioncd, subdivision from subdivision ";
 	//if($subdiv!="")
 	//$sql_sub.=" and subdivisioncd='$sub_div'";
 	$sql_sub.=" order by subdivisioncd";
@@ -24,7 +24,7 @@ body{ font: 14px "Trebuchet MS", Arial, Helvetica, sans-serif;}
 <div align="center"><br /><br /><strong>Subdivision wise No of Unbooked Personnel</strong><br /><br />
 <table width='800px' cellpadding="0" cellspacing="0" border="0"><tr><td align="center">
 <?php
-for($i=0;$j<rowCount($rs_sub);$j++)
+for($j=0;$j<rowCount($rs_sub);$j++)
 {
 	$row_sub=getRows($rs_sub);
 	$subdivision=$row_sub['subdivision'];
