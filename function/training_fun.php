@@ -51,7 +51,18 @@ function delete_training_type($training_code)
 	$i=execDelete($sql);
 	return $i;
 }
-
+function member_available_forsub_pp($sub_div,$f_sub_div)
+{
+	$sql="Select Count(*) as cnt from personnela where  personnela.selected=1";
+    if($sub_div!='' && $sub_div!='0')
+		$sql.=" and personnela.subdivisioncd='$sub_div'";	
+	 if($f_sub_div!='' && $f_sub_div!='0')
+		$sql.=" and personnela.forsubdivision='$f_sub_div'";
+	$rs=execSelect($sql);
+	$row=getRows($rs);
+	$cnt=$row['cnt'];
+	return $cnt;
+}
 //=========================Training Requirement==========================
 function delete_training_pp($training_type,$post_status,$subdivision)
 {
