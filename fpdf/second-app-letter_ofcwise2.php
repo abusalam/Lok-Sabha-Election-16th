@@ -5,6 +5,7 @@ extract($_POST);
 require('fpdf.php');
 include_once('../inc/db_trans.inc.php');
 include_once('../function/training2_fun.php');
+$f_subdiv=isset($_POST['for_subdivision'])?$_POST['for_subdivision']:"";
 $subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 $office_cd=isset($_POST['office'])?$_POST['office']:"";
 $from=(isset($_POST['txtfrom'])?$_POST['txtfrom']:'0');
@@ -33,7 +34,7 @@ if($subdiv !='0')
 			exit;
 		}
 	}
-$rsOff=office_details_ag_forsuboffice2($subdiv,$from-1,$to-$from+1);
+$rsOff=office_details_ag_forsuboffice2($f_subdiv,$subdiv,$from-1,$to-$from+1);
 $num_rows_Off=rowCount($rsOff);
 
 class PDF extends FPDF
@@ -71,6 +72,7 @@ function FancyTable($header, $data)
 		$rowOff=getRows($data);
 		if($count<$per_page)
 	    {
+			$f_subdiv=isset($_POST['for_subdivision'])?$_POST['for_subdivision']:"";
 			$subdiv=isset($_POST['Subdivision'])?$_POST['Subdivision']:"";
 			$office=$rowOff['officecd'];
 			$office_dtl="OFFICE : (".$office."), ".$rowOff['office'].", ".$rowOff['address1'].", ".$rowOff['address2'];
@@ -100,13 +102,13 @@ function FancyTable($header, $data)
 				 
 			$this->Ln();
 	
-			$rsPersonnel=second_appoint_letter_ofcwise2($office,$subdiv);
+			$rsPersonnel=second_appoint_letter_ofcwise2($office,$subdiv,$f_subdiv);
 			for($k=1;$k<=rowCount($rsPersonnel);$k++)
 	        {
 				$rowPersonnel=getRows($rsPersonnel);
-				$poststat=$rowPersonnel['per_poststat'];
+				//$poststat=$rowPersonnel['per_poststat'];
 				$this->SetFont('','',6);
-                 switch($poststat)
+                 /*switch($poststat)
 				 {
 					  case ($poststat=='PR'):
 					     $pin=$rowPersonnel['pr_personcd'];
@@ -153,13 +155,13 @@ function FancyTable($header, $data)
 					  default:
 					   echo "";
 					  break;
-				 }
+				 }*/
 				    $this->Cell($w[0],6,$k,'LRT',0,'C',$fill);
-					$this->Cell($w[1],6,$pin,'LRT',0,'L',$fill);						
-					$this->Cell($w[2],6,$name,'LRT',0,'L',$fill);
-					$this->Cell($w[3],6,$desg,'LRT',0,'L',$fill);
-					$this->Cell($w[4],6,$post_stat,'LRT',0,'L',$fill);
-					$this->Cell($w[5],6,$mobno,'LRT',0,'L',$fill);
+					$this->Cell($w[1],6,$rowPersonnel['personcd'],'LRT',0,'L',$fill);						
+					$this->Cell($w[2],6,$rowPersonnel['officer_name'],'LRT',0,'L',$fill);
+					$this->Cell($w[3],6,$rowPersonnel['designation'],'LRT',0,'L',$fill);
+					$this->Cell($w[4],6,$rowPersonnel['poststatus'],'LRT',0,'L',$fill);
+					$this->Cell($w[5],6,$rowPersonnel['mob_no'],'LRT',0,'L',$fill);
 					//count1++;
 					
 					$this->Ln();

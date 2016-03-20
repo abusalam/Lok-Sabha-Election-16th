@@ -453,7 +453,7 @@ function second_appointment_letter_print_6_asm($sub,$assembly,$group_id,$mem_no,
 }
 
 ///===========2nd pp list
-function office_details_ag_forsuboffice2($subdiv,$from,$to)
+function office_details_ag_forsuboffice2($f_subdiv,$subdiv,$from,$to)
 {
 	$sql="Select Distinct office.officecd,
 	  office.officer_desg as designation,
@@ -464,17 +464,19 @@ function office_details_ag_forsuboffice2($subdiv,$from,$to)
 	  subdivision.subdivision,
 	  policestation.policestation,
 	  district.district,
-	  office.pin
+	  office.pin,
+	  block_muni.blockmuni
 	From office
 	  Inner Join subdivision On office.subdivisioncd = subdivision.subdivisioncd
 	  Inner Join district On office.districtcd = district.districtcd
+	  Inner Join block_muni On block_muni.blockminicd = office.blockormuni_cd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd 
-		inner join second_appt on second_appt.pers_off=office.officecd where substr(second_appt.pers_off,1,4)='$subdiv'";
+		inner join personnela on personnela.officecd=office.officecd where personnela.subdivisioncd='$subdiv' and personnela.selected=1 and personnela.forsubdivision='$f_subdiv'";
 		if($from!='-1')
-		  $sql.=" order by second_appt.pers_off limit $from,$to";
+		  $sql.=" order by office.blockormuni_cd,office.officecd limit $from,$to";
 		else
-		   $sql.=" order by second_appt.pers_off";
+		   $sql.=" order by office.blockormuni_cd,office.officecd";
 		
 		
 	//echo $sql;
@@ -483,16 +485,22 @@ function office_details_ag_forsuboffice2($subdiv,$from,$to)
 	$rs=execSelect($sql);
 	return $rs;
 }
-function second_appoint_letter_ofcwise2($office,$subdiv)
+function second_appoint_letter_ofcwise2($office,$subdiv,$f_subdiv)
 {
-	$sql="Select pers_off,per_poststat,per_poststat,second_appt.pr_personcd,  second_appt.p1_personcd,  second_appt.p2_personcd,
-	  second_appt.p3_personcd,  second_appt.pa_personcd,  second_appt.pb_personcd,  second_appt.pr_name,  second_appt.p1_name,
-	  second_appt.p2_name,  second_appt.p3_name,  second_appt.pa_name,  second_appt.pb_name,  second_appt.pr_designation,
-	  second_appt.p1_designation,  second_appt.p2_designation,  second_appt.p3_designation,  second_appt.pa_designation,
-	  second_appt.pb_designation,  second_appt.pr_mobno,  second_appt.p1_mobno,  second_appt.p2_mobno,  second_appt.p3_mobno,
-	  second_appt.pa_mobno,  second_appt.pb_mobno, second_appt.pr_post_stat, second_appt.p1_post_stat, second_appt.p2_post_stat, 	second_appt.p3_post_stat, second_appt.pa_post_stat, second_appt.pb_post_stat
-	  from second_appt where second_appt.pers_off='$office'  and substr(second_appt.pers_off,1,4)='$subdiv' order by slno";
-	  $rs=execSelect($sql);
+		$sql="Select Distinct personnela.personcd,
+	  personnela.officer_name,
+	  personnela.off_desg as designation,
+	  poststat.poststatus,
+	  personnela.mob_no
+	From office
+	  Inner Join personnela On office.officecd = personnela.officecd
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
+	Where personnela.personcd<>''";
+	$sql.=" and personnela.officecd='$office' and personnela.subdivisioncd='$subdiv' and personnela.selected=1 and personnela.forsubdivision='$f_subdiv'";
+	$sql.=" Order By personnela.personcd,
+	  poststat.poststatus,
+	  personnela.off_desg";
+	$rs=execSelect($sql);
 	return $rs;
 }
 //======================
