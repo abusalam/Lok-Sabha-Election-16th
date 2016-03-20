@@ -44,6 +44,11 @@ $sql7="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.for
 second_appt.groupid=personnela.groupid  SET second_appt.pb_personcd = personnela.personcd,second_appt.pb_name = personnela.officer_name,second_appt.`pb_designation`=personnela.off_desg,second_appt.`pb_officecd`= personnela.officecd,second_appt.`pb_status`='PB',second_appt.pb_post_stat='Addl. 2nd Polling Officer-2' ,second_appt.pb_mobno =personnela.mob_no
 WHERE personnela.forsubdivision = '$subdiv_cd' and  personnela.booked = 'P'  and personnela.poststat = 'PB'";
 $i=execUpdate($sql7);
+
+$sql71="UPDATE second_appt JOIN personnela ON second_appt.assembly=personnela.forassembly  and 
+second_appt.groupid=personnela.groupid  SET second_appt.mo_personcd = personnela.personcd,second_appt.mo_name = personnela.officer_name,second_appt.`mo_designation`=personnela.off_desg,second_appt.`mo_officecd`= personnela.officecd,second_appt.`mo_status`='MO',second_appt.mo_post_stat='Micro Observer' ,second_appt.mo_mobno =personnela.mob_no
+WHERE personnela.forsubdivision = '$subdiv_cd' and  personnela.booked = 'P'  and personnela.poststat = 'MO'";
+$i=execUpdate($sql71);
 //================================end of personnel join=======================//
 //echo $subdiv_cd;
 //exit;
@@ -65,6 +70,9 @@ $i=execUpdate($sql12);
 
 $sql13="UPDATE second_appt JOIN office ON second_appt.pb_officecd = office.officecd   SET  second_appt.pb_officename =  office.office,second_appt.`pb_officeaddress`= concat(office.address1,',',office.address2),second_appt.pb_postoffice=office.postoffice,second_appt.pb_pincode=office.pin, second_appt.pb_subdivision=office.subdivisioncd, second_appt.pb_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.pb_status = 'PB' ";
 $i=execUpdate($sql13);
+
+$sql131="UPDATE second_appt JOIN office ON second_appt.mo_officecd = office.officecd   SET  second_appt.mo_officename =  office.office,second_appt.`mo_officeaddress`= concat(office.address1,',',office.address2),second_appt.mo_postoffice=office.postoffice,second_appt.mo_pincode=office.pin, second_appt.mo_subdivision=office.subdivisioncd, second_appt.mo_block=office.blockormuni_cd WHERE second_appt.subdivcd='$subdiv_cd' and second_appt.mo_status = 'MO' ";
+$i=execUpdate($sql131);
 //================================End of office join=================================//
 
 
@@ -140,6 +148,9 @@ $i=execUpdate($sql26);
 
 $sql27="update second_appt a join subdivision b on a.pb_subdivision=b.subdivisioncd set a.pb_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
 $i=execUpdate($sql27);
+
+$sql281="update second_appt a join subdivision b on a.mo_subdivision=b.subdivisioncd set a.mo_subdivision=b.subdivision where a.subdivcd='$subdiv_cd'";
+$i=execUpdate($sql281);
 
 $sql271="update second_appt a join poll_table b on a.assembly=b.assembly_cd set a.polldate=b.poll_date, a.polltime=b.poll_time  where a.assembly=b.assembly_cd";
 $i=execUpdate($sql271);
