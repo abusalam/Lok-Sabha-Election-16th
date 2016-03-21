@@ -65,6 +65,12 @@ echo getHtmlTable($Query);
 $Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
 echo getHtmlTable($Query);
 
+$Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_appt GROUP by training_venue,training_date,training_time';
+echo getHtmlTable($Query);
+
+$Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_rand_table_reserve GROUP by training_venue,training_date,training_time';
+echo getHtmlTable($Query);
+
 ?>
 </body>
 
