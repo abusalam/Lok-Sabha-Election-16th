@@ -125,10 +125,10 @@ function FancyTable($header, $data)
 			$ass_code=$row['assembly'];
 			$groupid=$row['groupid'];
 			
-			$euname6="     In persuance of sub-section(1) and sub-section(3) of Section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
+			$euname6="     In pursuance of sub-section(1) and sub-section(3) of Section 26 of the Representation of the People Act,1963(43 of 1951), I hereby ";
 			$euname7="appoint the officers specified in column(2) and (3) of the table below as Presiding Officer and Polling Officers respectively for the Polling ";
 			$euname8="Station specified in corresponding entry in column(1) of the table provided below for ".$row['assembly']." - ".$row['assembly_name']." L.A. Constituency ";
-			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
+			$euname78="";
 			$euname81="I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding ";
 			$euname82="Officer during the unavoidable absence, if any, of the Presiding Officer.";
 			
