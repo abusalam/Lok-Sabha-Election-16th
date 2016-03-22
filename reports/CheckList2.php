@@ -71,7 +71,22 @@ echo getHtmlTable($Query);
 $Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_rand_table_reserve GROUP by training_venue,training_date,training_time';
 echo getHtmlTable($Query);
 
+/**
+ * @filename: currentgitbranch.php
+ * @usage: Include this file after the '<body>' tag in your project
+ * @author Kevin Ridgway
+ */
+$stringfromfile = file('../.git/HEAD', FILE_USE_INCLUDE_PATH);
+
+$firstLine = $stringfromfile[0]; //get the string from the array
+
+$explodedstring = explode("/", $firstLine, 3); //seperate out by the "/" in the string
+
+$branchname = $explodedstring[2]; //get the one that is always the branch name
+
+echo "<div style='clear: both; font-size: 14px; font-family: Helvetica; color: #30121d; background: #bcbf77; padding: 20px; text-align: center;'>Current branch: <span style='color:#fff; font-weight: bold;'>" . $branchname . "</span></div>"; //show it on the page
 ?>
+
 </body>
 
 </html>
