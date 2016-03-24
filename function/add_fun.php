@@ -230,7 +230,7 @@ function save_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$pread
   	}
 }
 function update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$group,$upload_file,$usercd,$posted_date)
-{
+{ $p_id ='_'.substr($p_id,1);
 	$sql="update personnel set 
 			officecd='$offcode',
 			officer_name='$empname',
@@ -266,7 +266,7 @@ function update_personnel($p_id,$offcode,$empname,$designation,$preaddress1,$pre
 			upload_file='$upload_file',
 			usercode='$usercd',
 			posted_date='$posted_date'";
-	$sql.="where personcd='$p_id'";
+	$sql.="where personcd like '$p_id'";
 	//echo $sql;
 	//exit();
 	$i=execUpdate($sql);
@@ -1729,6 +1729,7 @@ INNER JOIN office ON personnela.officecd = office.officecd";
 }
 function update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$preaddress2,$peraddress1,$peraddress2,$workingstatus,$dob,$sex,$scale,$basicpay,$gradepay,$email,$r_no,$m_no,$qualification,$language,$epic_no,$sl_no,$partno,$posting_status,$ac_pre,$ac_posting,$ac_per,$voterof,$acc_no,$bank,$branch,$remarks,$group,$upload_file,$usercd,$posted_date)
 {
+	$p_id ='_'.substr($p_id,1);
 	$sql="update personnela set 
 			officecd='$offcode',
 			officer_name='$empname',
@@ -1764,8 +1765,8 @@ function update_personnela($p_id,$offcode,$empname,$designation,$preaddress1,$pr
 			upload_file='$upload_file',
 			usercode='$usercd',
 			posted_date='$posted_date'";
-	$sql.=" where personcd='$p_id'";
-    //echo $sql;
+	$sql.="where personcd like '$p_id'";
+   // echo $sql;
 	//exit;
 	$i=execUpdate($sql);
 	connection_close();
