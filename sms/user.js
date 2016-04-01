@@ -40,10 +40,12 @@ jQueryInclude(function () {
   var HackUI = '<div style="text-align:center;clear:both;magrin:20px;padding:10px;">'
     + '<div id="HackUI">'
     + '<div style="text-align:right;width:320px;" id="Msg"></div>'
-    + '<label style="font-size:20px;">From: </label><input type="text" id="MsgFrom" size="5"/><br/>'
+    + '<div style="text-align:left;padding:20px;">'
     + '<label style="font-size:20px;">Total Messages to be sent: </label><input type="text" id="MsgCount" size="5"/><br/>'
+    + '<label style="font-size:20px;">Starting From: </label><input type="text" id="MsgFrom" size="5"/>'
+    + '</div>'
     + '<input type="button" id="CmdClear" value="Clear"/>'
-    + '<input type="button" id="CmdStatus" value="Show"/>'
+    + '<input type="hidden" id="CmdStatus" value="Show"/>'
     + '<input type="button" id="CmdGo" value="Send Bulk SMS"/>'
     + '</div><div style="float:left;"><ol id="listItems" style="text-align:left;margin:10px;font-size:12px;"></ol></div>';
   jQ('#form1').after(HackUI);
@@ -252,6 +254,7 @@ jQueryInclude(function () {
     localStorage.setItem('AjaxPending', 0);
     localStorage.setItem('Count', 0);
     localStorage.setItem('OrderNo', 0);
+    jQ('#listItems').html('');
   });
 
 
