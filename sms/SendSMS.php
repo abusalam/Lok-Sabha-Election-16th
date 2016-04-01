@@ -46,6 +46,5 @@ if(rowCount($rs_data)>0)
     $Resp['SentTo']=$name;
     $Resp['Count']=0+$_SESSION['CountSMS']++;
     echo '<li>'.$Resp['MobileNo'].' | '.$Resp['Msg'].' ['.$Resp['Count'].'] '.$Resp['SentTo'].'</li>';
-    sleep(2);
   }
 }

@@ -30,9 +30,16 @@ class SMSGW {
 
     $curl_output = curl_exec($ch);
 
-    curl_close($ch);
+    if($curl_output === false){
+      $Resp['Msg']='Server Error: ' . curl_error($ch);
+      curl_close($ch);
+      return $Resp;
+    }
+    else {
+      curl_close($ch);
+      return $this->Response($curl_output);
+    }
 
-    return $this->Response($curl_output);
   }
 
   public function Response($MsgCode){
