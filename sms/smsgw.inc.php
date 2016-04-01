@@ -28,11 +28,11 @@ class SMSGW {
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    //$curl_output = curl_exec($ch);
+    $curl_output = curl_exec($ch);
 
     curl_close($ch);
 
-    return $this->Response('402');//$curl_output);
+    return $this->Response($curl_output);
   }
 
   public function Response($MsgCode){
