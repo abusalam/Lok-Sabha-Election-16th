@@ -45,6 +45,13 @@ function getHtmlTable($Query) {
 <body>
 <?php
 /* Select queries return a resultset */
+
+$Query = 'SELECT forsubdivision, `forassembly`, member, COUNT(*) AS `Rows` FROM `pollingstation` GROUP BY forsubdivision,`forassembly`,member ORDER BY forsubdivision,`forassembly`,member';
+echo getHtmlTable($Query);
+
+$Query = 'SELECT `forsubdivision`, `forassembly`,`member`, COUNT(*) AS `Rows`  FROM `grp_dcrc` GROUP BY `forsubdivision`, `forassembly`,`member` ORDER BY `forsubdivision`, `forassembly`,`member`';
+echo getHtmlTable($Query);
+
 $Query = 'SELECT `forsubdivision`,`forassembly`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`forassembly`,`booked`';
 echo getHtmlTable($Query);
 

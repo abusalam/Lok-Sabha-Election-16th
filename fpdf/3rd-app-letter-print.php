@@ -38,6 +38,19 @@ function Header()
 	$this->Cell(190,4,$assem,0,0,'C');
 	$this->Ln(8);
 	//$this->Cell(275,0,'',1,0,'C');
+	$fill = false;
+	$this->SetFillColor(255,255,255);
+	//	$this->SetTextColor(0,0,0);
+	$this->SetDrawColor(0,0,0);
+	$this->SetLineWidth(.3);
+	$this->SetFont('','B');
+	$head = array('Polling Party','PS No','PS Name');
+	$w = array(30,20,140);
+	$this->SetFont('Arial','B',9);
+	for($j=0;$j<count($head);$j++)
+		$this->Cell($w[$j],7,$head[$j],1,0,'C',true);
+	$this->Ln();
+
 }
 
 // Page footer
@@ -58,13 +71,8 @@ function FancyTable($header, $data)
 			$this->SetDrawColor(0,0,0);
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
-	$head = array('Polling Party','PS No','PS Name');
 			$w = array(30,20,140);
-				$this->SetFont('Arial','B',9);
-			for($j=0;$j<count($head);$j++)
-				$this->Cell($w[$j],7,$head[$j],1,0,'C',true);
-				 
-			$this->Ln();
+
 	
     for($i=1;$i<=rowCount($data);$i++)
 	{
@@ -90,7 +98,7 @@ function FancyTable($header, $data)
 		if($count==$per_page)
 		{
 			$per_page=$per_page+30;
-			$this->AddPage();
+			//$this->AddPage();
 		} 
 	}
  }
