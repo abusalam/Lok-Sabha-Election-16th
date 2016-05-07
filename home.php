@@ -36,7 +36,7 @@ if (isset($_SESSION['hid_rand3'])) {
       <li class="list-group-item list-group-item-warning"><strong>Before Printing First Appointment Letter</strong></li>
       <li class="list-group-item">Execute the following SQL: <code>ALTER TABLE `environment` ADD `counting_venue` VARCHAR(255) NOT NULL AFTER `apt2_date`, ADD `venue_address` VARCHAR(255) NOT NULL AFTER `counting_venue`;</code></li>
       <li class="list-group-item">Open <code>environment</code> Table and put Counting Venue and Venue Address in their respective fields</li>
-      <li class="list-group-item list-group-item-warning">All the SQL Queries can be found in <a href="db/Counting.sql">Counting-SQL File</a>.</li>
+      <li class="list-group-item list-group-item-danger">All the SQL Queries can be found in <a href="db/Counting.sql">Counting-SQL File</a>. You should not run any query without taking a working backup of your database.</li>
     </ol>
   </div>
 </body>
