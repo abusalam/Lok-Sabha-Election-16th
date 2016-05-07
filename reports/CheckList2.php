@@ -6,19 +6,22 @@ date_default_timezone_set('Asia/Calcutta');
 require_once('../inc/db_trans.inc.php');
 OpenDB();
 
-function getHtmlTable($Query) {
+function getHtmlTable($Query, $QueryNumber) {
   global $DBLink;
   // receive a record set and print
   // it into an html table
-  $out = '<div style="border: 2px dashed goldenrod; float: left; margin: 4px;padding: 4px;">';
-  $out .= '<table rules="all" border="1">';
-  $out .= '<caption>' . $Query . '</caption>';
+  $out = '<div class="col-lg-3"><div class="panel panel-primary pull-left table-responsive">';
+  $out .= '<div class="panel-heading"><strong>Query #' . $QueryNumber .'</strong></div>';
+  $out .= '<div class="panel-body"><span>' . $Query . '</span></div>';
+  $out .= '<table class="table table-striped table-hover">';
 
   if ($result = mysqli_query($DBLink, $Query)) {
-
+    $out .= "<thead>";
     while ($field = $result->fetch_field()) {
       $out .= "<th>" . $field->name . "</th>";
     }
+    $out .= "</thead>";
+    $out .= "<tbody>";
     while ($linea = $result->fetch_assoc()) {
       $out .= "<tr>";
       foreach ($linea as $valor_col) {
@@ -26,10 +29,11 @@ function getHtmlTable($Query) {
       }
       $out .= "</tr>";
     }
+    $out .= "</tbody>";
     /* free result set */
     $result->close();
   }
-  $out .= '</table></div>';
+  $out .= '</table></div></div>';
   return $out;
 }
 
@@ -40,43 +44,46 @@ function getHtmlTable($Query) {
 <head>
   <meta charset="UTF-8">
   <title>Checklist Summary Report</title>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+        crossorigin="anonymous">
 </head>
 
-<body>
+<body style="padding-top: 20px;">
 <?php
 /* Select queries return a resultset */
-
+$QueryNumber=1;
 $Query = 'SELECT forsubdivision, `forassembly`, member, COUNT(*) AS `Rows` FROM `pollingstation` GROUP BY forsubdivision,`forassembly`,member ORDER BY forsubdivision,`forassembly`,member';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'SELECT `forsubdivision`, `forassembly`,`member`, COUNT(*) AS `Rows`  FROM `grp_dcrc` GROUP BY `forsubdivision`, `forassembly`,`member` ORDER BY `forsubdivision`, `forassembly`,`member`';
-echo getHtmlTable($Query);
-
-$Query = 'SELECT `forsubdivision`,`forassembly`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`forassembly`,`booked`';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'SELECT `forsubdivision`,booked,poststat,COUNT(*) AS `Rows` FROM `personnela` where selected=1 GROUP BY `forsubdivision`,booked,poststat';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
-$Query = 'SELECT forsubdivision,booked,left(personcd,1) as `DutyCount`, poststat,count(*) as `PP_Count` from personnela where selected=1 group by forsubdivision, poststat,booked, left(personcd,1) order by forsubdivision,booked,left(personcd,1),poststat';
-echo getHtmlTable($Query);
+$Query = 'SELECT `forsubdivision`,`forassembly`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`forassembly`,`booked`';
+echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'SELECT subdivisioncd,sum(no_party) from assembly_party group by subdivisioncd';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
+$Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
+echo getHtmlTable($Query, $QueryNumber++);
 //echo '<br style="clear:both;"/>';
 
 $Query = 'select forsubdivision,sum(numb) from reserve group by forsubdivision';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
-$Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
-echo getHtmlTable($Query);
+$Query = 'SELECT forsubdivision,booked,left(personcd,1) as `DutyCount`, poststat,count(*) as `PP_Count` from personnela where selected=1 group by forsubdivision, poststat,booked, left(personcd,1) order by forsubdivision,booked,left(personcd,1),poststat';
+echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_appt GROUP by training_venue,training_date,training_time';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_rand_table_reserve GROUP by training_venue,training_date,training_time';
-echo getHtmlTable($Query);
+echo getHtmlTable($Query, $QueryNumber++);
 
 /**
  * @filename: currentgitbranch.php
