@@ -67,6 +67,9 @@ function FancyTable($header, $data)
 	$count=0;
 	$per_page=1;
 	$signature="../images/deo/img.jpg";
+	$cntsql="Select * from environment";
+    $c=execSelect($cntsql);
+	$row3=getRows($c);
     for($i=1;$i<=rowCount($data);$i++)
 	{
 		$this->SetFont('Arial','',9);
@@ -75,23 +78,25 @@ function FancyTable($header, $data)
 	    {
 			
 			$euname="ELECTION URGENT";
-			$euname1="ORDER OF APPOINTMENT FOR TRAINING";
-			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE ASSEMBLY ELECTION, 2016";
+			$euname1="APPOINTMENT OF COUNTING SUPERVISOR / COUNTING ASSISTANT / MICRO OBSERVER";
+			$euname2="ELECTION TO THE WEST BENGAL LEGISLATIVE ASSEMBLY, 2016";
 			$euname3="Token No. ".$row['token'];
-			$euname4="Order No: ".$_SESSION['apt1_orderno'];
+			$euname4="No:  ".$_SESSION['apt1_orderno'];
 			$euname5="Date: ".$_SESSION['apt1_date'];
-			$euname6="          In exercise of the power conferred upon vide Section 26 of the R. P. Act, 1951, I do hereby appoint the officer specified below as ".$row['poststatus']." for undergoing training in connection with the conduct of General Election to West Bengal Legistlative Assembly Election, 2016.";
+			$counting_venue=$row3['counting_venue'];
+			$venue_address=$row3['venue_address'];
+			$euname6="          I, Sri Jagadish Prasad Meena, IAS, District Election Officer & District Magistrate, Paschim Medinipur appoint the person whose name is specified below to act as Counting Supervisor / Assistant for the purpose of assisting the Returning Officer / Observer in the counting of votes at the said election. He/she will attend training & counting duty as per following schedule. The AC wise appointment & table wise assignment will be made on 18.5.16 & 19.5.16 respectively.";
 			//$euname7="as ".$row['poststatus']." for undergoing training in connection with the conduct of General Election to West Bengal Legistlative Assembly Election, 2016.";
 			//$euname8="$row[forpc]-$row[pcname] PC";			
-			$euname9="The Officer should report for Training as per following Schedule.";
+			$euname9="The Officer should report for Training & Counting as per following Schedule.";
 			$euname10="This is a compulsory duty on your part to attend the said programme, as per the provisions of The Representation of the People Act, 1951.";
 			$euname11="You are directed to bring your Elector's Photo Identity Card (EPIC) or any proof of Identity affixed with your Photograph.";
-			$euname12="Place: ".uppercase($_SESSION['distnm_cap']);
-			$euname13="Date: ".date("d/m/Y");
-			$euname14="District ".wordcase($_SESSION['distnm_cap']);
-			$nb1="Please fillup Form 12 (for postal ballot) annexed herewith and submit at the Training Venue on the 1st day of training along with";
-			$nb2="the duplicate copy of your appointment letter and a copy of EPIC or any other ID including service ID.";
-			$nb3="Please indicate your PIN Number as given in your appointment letter on the body of Form 12 to help us locate you for delivery of";
+			$euname12="Medinipur, ".date("d/m/Y");
+			$euname13="Date: ";
+			$euname14="".wordcase($_SESSION['distnm_cap']);
+			$nb1="Copy for information & necessary action to:";
+			$nb2="Sri/Smt.  ";
+			$nb3=" _________________________________";
 			$nb4="postal ballot.Also indicate your EPIC Number on the body of Form 12 for verification of your Electoral roll entry.";
 			$nb5="Please fill up the blank identity card sent herewith and paste your recent colour photograph and bring it at training venue for";
 			$nb6="attestation.";
@@ -107,7 +112,8 @@ function FancyTable($header, $data)
 			$this->Cell(30,5,$euname,1,0,'L');
 			$this->SetFont('Arial','B',10);
 			$this->Cell(50);
-			$this->Cell(40,6,$euname1,0,0,'C');
+			$this->ln(6);
+			$this->Cell(190,6,$euname1,0,0,'C');
 			$this->SetFont('Arial','B',8);
 			$this->Cell(58);
 			$this->Cell(10,7,$euname3,0,0,'R');
@@ -116,6 +122,10 @@ function FancyTable($header, $data)
 			$this->Ln(5);
 			
 			//$this->Cell(90);
+			$this->SetFont('Arial','B',8);
+			
+			$this->Cell(190,10,"ORDER",0,0,'C');
+			$this->Ln(10);
 			$this->SetFont('Arial','B',8);
 			$this->Cell(15,10,$euname4,0,0,'L');
 			$this->SetFont('Arial','B',6.5);
@@ -157,7 +167,7 @@ function FancyTable($header, $data)
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
 			  
-			$head = array('Name of Polling Officer');
+			$head = array('Name of Counting Officer');
 			$w = array(190);
 			//	$this->SetFont('Arial','',9);
 			for($j=0;$j<count($head);$j++)
@@ -182,60 +192,87 @@ function FancyTable($header, $data)
 			$this->Ln(5);
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Cell(50,10,$euname9,0,0,'L');
+			//$this->Cell(50,10,$euname9,0,0,'L');
 		
 			// Line break
 			$this->Ln();
 			
 			$this->SetFont('','B');
-			$header1 = array('Training Schedule');
-			$header2 = array('Training','Venue & Address','Date & Time');
-			$w1 = array(190);
-			$w2 = array(24,136,30);
-			//	$this->SetFont('Arial','',9);
+			$header1 = array('Training Schedule','Counting Schedule');
+			
+			$w1 = array(95,95);
+						//	$this->SetFont('Arial','',9);
 			for($k=0;$k<count($header1);$k++)
 				$this->Cell($w1[$k],7,$header1[$k],1,0,'C',true);
+				 
 			$this->Ln();
-			for($l=0;$l<count($header2);$l++)
-				$this->Cell($w2[$l],7,$header2[$l],1,0,'C',true);	 
-			$this->Ln();
-			
-			$this->SetFont('Arial','',7.5);
 			$data1=fetch_ppwise_training($row['2']);
 			for($m=1;$m<=rowCount($data1);$m++)
 	        {
-				$row2=getRows($data1);
-				$this->Cell($w2[0],5,$row2['training_desc'],'LTR',0,'L',$fill);						
-				$this->Cell($w2[1],5,$row2['venuename'],'LTR',0,'L',$fill);
-				$this->Cell($w2[2],5,$row2['training_dt'],'LTR',0,'L',$fill);
-				
-				$this->Ln(4);
-			    $this->Cell($w2[0],6,'','LR',0,'L',$fill);	
+				$row2=getRows($data1);		
+	        $trdate="Date : ".$row2['training_dt']."";
+			$cudate="Date : 19/05/2016";
+			
+			//$name1=$row['0'].", ".$row['1'].", PIN - (".$row['2'].") ";
+			$trreportinig="Reporting Time: 10:00 AM ";
+			$cureportinig="Reporting Time: 5:30 AM ";
+			$trvenue="Venue:  ".$row2['venuename']."";
+			$trvaddress=" ".$row2['venueaddress']."";
+			//$trvaddress="Address: ".$row2['venueaddress1']."";
+			//$cuvaddress="Address: ".$row2['venueaddress1']."";
+			$cuvaddress="Address: ";
+			$odetails="  OFFICE - (".$row['10'].")                                  Post Status - ".$row['12']."                                      Mobile No : ".$row['11'];
+			
+		    $this->SetFont('Arial','B',10);
+			
+			$this->Cell($w1[0],5,$trvenue,'LR',0,'L',$fill);
+			$this->Cell($w1[1],5,$counting_venue,'LR',0,'L',$fill);
+			$this->Ln();
+			$this->Cell($w1[0],5,$trvaddress,'LR',0,'L',$fill);
+			$this->Cell($w1[1],5,$venue_address,'LR',0,'L',$fill);
+			
+			
+			
+			$this->Ln();
+			$this->SetFont('Arial','',8);
+			
+			$this->Cell($w1[0],3,'','LR','L');
+			$this->Cell($w1[1],3,'','LR','L');
+			$this->Ln();
+			$this->SetFont('Arial','B',8);
+			$this->Cell($w1[0],6,$trdate."    ".$trreportinig,'LRB','J');
+			$this->Cell($w1[1],6,$cudate."    ".$cureportinig,'LRB','J');
+			$this->Ln();
+			$this->SetFont('Arial','B',8);
+			//$this->Cell($w1[0],6,$trvenue,'LRB',0,'L',$fill);
+			//$this->Cell($w1[1],6,$cuvenue,'LRB',0,'L',$fill);
+			$this->Ln(5);
+			
+			}   /*$this->Cell($w2[0],6,'','LR',0,'L',$fill);	
 			    $this->Cell($w2[1],6,$row2['venueaddress'],'LR',0,'L',$fill);			
 			    $this->Cell($w2[2],6,$row2['training_time'],'LR',0,'L',$fill);
 				$this->Ln();
 				$this->Cell(array_sum($w2),0,'',1,0,'L',$fill);
-				$this->Ln();
-			}
+				$this->Ln();*/
+			
 			/*$this->Cell($w2[0],6,$row['training_desc'],'LTR',0,'L',$fill);						
 			$this->Cell($w2[1],6,$row['venuename'],'LTR',0,'L',$fill);
 			$this->Cell($w2[2],6,$row['training_dt'],'LTR',0,'L',$fill);
 			$this->Ln(4);
 			$this->Cell($w2[0],6,'','LR',0,'L',$fill);	
 			$this->Cell($w2[1],6,$row['venueaddress'],'LR',0,'L',$fill);			
-			$this->Cell($w2[2],6,$row['training_time'],'LR',0,'L',$fill);
-			$this->Ln();
-			$this->Cell(array_sum($w2),0,'',1,0,'L',$fill);
-			$this->Ln(5);*/
+			$this->Cell($w2[2],6,$row['training_time'],'LR',0,'L',$fill);*/
+			//$this->Ln();
+			
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Cell(50,10,$euname10,0,0,'L');
+			//$this->Cell(50,10,$euname10,0,0,'L');
 		
 			// Line break
 			$this->Ln(6);
 			
 			$this->SetFont('Arial','',8.7);
-			$this->Cell(50,10,$euname11,0,0,'L');
+			//$this->Cell(50,10,$euname11,0,0,'L');
 		
 			// Line break
 			$this->Ln(11);
@@ -250,17 +287,17 @@ function FancyTable($header, $data)
 			$this->Ln(9);
 			
 			$this->SetFont('Arial','',9);
-			$this->Cell(30,1,$euname13,0,0,'L');
+			//$this->Cell(30,1,$euname13,0,0,'L');
 			$this->SetFont('Arial','',10);			
-			$this->Cell(110);
+			$this->Cell(140);
 		//	$this->Cell(10,10,"yuyu",0,0,'R');
 			$this->Cell(10, 10, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
 			// Line break
 			$this->Ln(5);
 			
 			$this->SetFont('Arial','',9.6);
-			$this->Cell(160);
-			$this->Cell(10,12,"District Election Officer",0,0,'R');
+			$this->Cell(180);
+			$this->Cell(10,12,"District Election Officer & District Magistrate",0,0,'R');
 		
 			// Line break
 			$this->Ln(4);
@@ -273,25 +310,44 @@ function FancyTable($header, $data)
 			$this->Cell(190,0,'',1,0,'L',$fill);
 			$this->Ln();
 			
-			$this->SetFont('Arial','',10);
+			$this->Ln(5);
+			$this->SetFont('Arial','B',10);			
+			$this->Cell(80,0,$euname4,0,0,'L');
+			$this->Cell(80,0,$euname5,0,0,'R');
+			$this->Ln();
+			
+			/*$this->SetFont('Arial','',10);
 			//$this->Cell(160);
 			$this->Cell(10,10,"NB.",0,0,'L');
-			$this->Ln(4);
+			$this->Ln(4);*/
 			
 			$this->SetFont('Arial','',9);
-			$this->Cell(10,10,"1.",0,0,'L');
+			//$this->Cell(10,10,"1.",0,0,'L');
 			$this->Cell(10,10,$nb1,0,0,'L');
-			$this->Ln(4);
-			$this->SetFont('Arial','',9);
-			$this->Cell(10,10,"",0,0,'L');
-			$this->Cell(10,10,$nb2,0,0,'L');
-			$this->Ln(5);
+			$this->Ln(8);
+			$this->SetFont('Arial','B',9);
+			$this->Cell(10,10,"1.",0,0,'L');
+			$this->Cell(10,10,$nb2.$row['0'].", ".$row['1'],0,0,'L');
+			$this->Ln(8);
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"2.",0,0,'L');
 			$this->Cell(10,10,$nb3,0,0,'L');
+			$this->Ln(8);
+			$this->Cell(140);
+		//	$this->Cell(10,10,"yuyu",0,0,'R');
+			$this->Cell(10, 10, $this->Image($signature, $this->GetX(), $this->GetY(), 30.78), 0, 0, 'R', false );
+			// Line break
+			$this->Ln(5);
+			
+			$this->SetFont('Arial','',9.6);
+			$this->Cell(180);
+			$this->Cell(10,12,"District Election Officer & District Magistrate",0,0,'R');
 			$this->Ln(4);
 			$this->SetFont('Arial','',9);
+			$this->Cell(129);
+			$this->Cell(40,12,$euname14,0,0,'R');
+			/*$this->SetFont('Arial','',9);
 			$this->Cell(10,10,"",0,0,'L');
 			$this->Cell(10,10,$nb4,0,0,'L');
 			$this->Ln(5);
@@ -347,11 +403,11 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',9);
 			$this->Cell(136);
-			$this->Cell(10,10,"Date:",0,0,'R');
-			$this->Ln();
+			$this->Cell(10,10,"Date:",0,0,'R');*/
+			$this->Ln(30);
 			
 			$bmname=$row['block_muni_name'];
-			$this->SetFont('Arial','',9);
+			$this->SetFont('Arial','B',9);
 			$this->Cell(190,5,"Block/Municipality: ".$bmname,0,0,'C');
 			
 			$fill = !$fill;
