@@ -48,6 +48,9 @@ $branchname = $explodedstring[2]; //get the one that is always the branch name
       <li class="list-group-item list-group-item-warning"><strong>Before Printing First Appointment Letter</strong></li>
       <li class="list-group-item">Execute the following SQL: <code>ALTER TABLE `environment` ADD `counting_venue` VARCHAR(255) NOT NULL AFTER `apt2_date`, ADD `venue_address` VARCHAR(255) NOT NULL AFTER `counting_venue`;</code></li>
       <li class="list-group-item">Open <code>environment</code> Table and put Counting Venue and Venue Address in their respective fields.</li>
+      <li class="list-group-item list-group-item-warning"><strong>Before Printing Second Appointment Letter</strong></li>
+      <li class="list-group-item">Execute the following SQL: <code>ALTER TABLE `assembly` ADD `ro_name` VARCHAR(255) NOT NULL AFTER `posted_date`;</code></li>
+      <li class="list-group-item">Open <code>assembly</code> Table and put the Name of Returning Officers in <code>ro_name</code> field for their respective ACs.</li>
       <li class="list-group-item list-group-item-danger">All the SQL Queries can be found in <a href="db/Counting.sql">Counting-SQL File</a>. You should not run any query without taking a working backup of your database. Using the <a href="reports/CheckList2.php" target="_blank">Check List</a> You can check status of your data.</li>
     </ol>
   </div>
