@@ -10,21 +10,22 @@
 4. Open phpMyAdmin URL(http://localhost/phpmyadmin) in browser
 	UserName: root [no password required]
 
-5. Create Database: ppds colation "utf8_bin"
-6. Create User: pp4ds with password ppds
-7. Open Laragon Terminal and Restore Blank Database using the command below:
+5. Execute the following SQL:
+        CREATE DATABASE `ppds_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;CREATE USER 'pp4ds'@'localhost' IDENTIFIED BY 'ppds';GRANT SELECT, INSERT, UPDATE, DELETE ON `ppds`.* TO 'pp4ds'@'localhost';
+        
+6. Open Laragon Terminal and Restore Blank Database using the command below:
 	mysql -u root ppds < ppds.sql
 
-8. Login to ppds URL(http://localhost/ppds)
+7. Login to ppds URL(http://localhost/ppds)
 	UserName: admin
 	Password: nimda
 
-9. Check the Master Data, Create One User for your Subdivision login to that user and Make the Dataentry for Office and Polling Personnel using their respective menus.
+8. Check the Master Data, Create One User for your Subdivision login to that user and Make the Dataentry for Office and Polling Personnel using their respective menus.
 
-10. Take regular Backup of your Database using the following Command(Replace Datetime Format with with actual values):
+9. Take regular Backup of your Database using the following Command(Replace Datetime Format with with actual values):
 	mysqldump -u root --databases ppds > ppds_YYYYMMDDHHMM.sql
 
-11. To Update the "PPDS Counting Software" use the following commands:
+10. To Update the "PPDS Counting Software" use the following commands:
       cd ppds
       git checkout Counting
       git pull
