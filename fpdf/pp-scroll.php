@@ -65,7 +65,7 @@ function FancyTable($header, $data)
 	    {
 			$this->SetFont('','B',8);	
 			$grp_id=$rec_arr_hdr['groupid'];
-			$this->Cell(275,5,"Polling Party : ".$grp_id,'LTR',0,'C');
+			$this->Cell(275,5,"Party No: ".$grp_id,'LTR',0,'C');
 	        $this->Ln();
 			$this->SetFillColor(255,255,255);
 		//	$this->SetTextColor(0,0,0);
@@ -86,7 +86,7 @@ function FancyTable($header, $data)
 				$p_dtl2=", P.O. - ".$rec_arr['postoffice'].", Subdiv.-".$rec_arr['subdivision'].", Dist.-".$rec_arr['district'].", PIN - ".$rec_arr['pin'].", OFFICE - ".$rec_arr['officecd'].")";
 								
 
-				$this->Cell($w[0],4.5,$rec_arr['poststat'],"LTR",0,'C',$fill);						
+				$this->Cell($w[0],4.5,$rec_arr['poststatus'],"LTR",0,'C',$fill);
 				$this->Cell($w[1],4.5,$p_dtl,"LTR",0,'L',$fill);
 				$this->Ln(4);
 				$this->Cell($w[0],4.3,"","LR",0,'L',$fill);						
@@ -104,7 +104,7 @@ function FancyTable($header, $data)
 			$per_page=$per_page+3;
 			if($count!=rowCount($data))
 		    {		
-			  $this->AddPage();
+			  //$this->AddPage();
 			}
 		} 
     }

@@ -44,8 +44,8 @@ function Header()
 	$this->SetDrawColor(0,0,0);
 	$this->SetLineWidth(.3);
 	$this->SetFont('','B');
-	$head = array('Polling Party','PS No','PS Name');
-	$w = array(30,20,140);
+	$head = array('Party No','Table');
+	$w = array(30,160);
 	$this->SetFont('Arial','B',9);
 	for($j=0;$j<count($head);$j++)
 		$this->Cell($w[$j],7,$head[$j],1,0,'C',true);
@@ -71,7 +71,7 @@ function FancyTable($header, $data)
 			$this->SetDrawColor(0,0,0);
 			$this->SetLineWidth(.3);
 			$this->SetFont('','B');
-			$w = array(30,20,140);
+			$w = array(30,160);
 
 	
     for($i=1;$i<=rowCount($data);$i++)
@@ -83,7 +83,7 @@ function FancyTable($header, $data)
 			
 			$this->SetFont('Arial','',7);
 			$this->Cell($w[0],6,$rowOff['groupid'],'LRT',0,'C',$fill);						
-			$this->Cell($w[1],6,$rowOff['psno']."".$rowOff['psfix'],'LRT',0,'C',$fill);
+			//$this->Cell($w[1],6,$rowOff['psno']."".$rowOff['psfix'],'LRT',0,'C',$fill);
 			$this->Cell($w[2],6,$rowOff['psname'],'LRT',0,'L',$fill);
 			//count1++;
 			
