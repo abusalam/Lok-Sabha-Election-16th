@@ -127,7 +127,7 @@ function Footer()
 			$euname2="GENERAL ELECTION TO WEST BENGAL LEGISLATIVE";
 			$euname21="ORDER";
 			$euname3=($chksub=='on')?$row['pers_off']."/".$row['per_poststat']:"";
-			$euname22="Polling Party No. ".$row['groupid'];
+			$euname22="Party No. ".$row['groupid'];
 			$euname4="Order No: ".$_SESSION['apt2_orderno'];
 			$euname5="Date: ".$_SESSION['apt2_date'];
 			$post=$row['per_poststat'];
@@ -167,13 +167,15 @@ function Footer()
 			$this->ln(20);
 			$this->SetFont('Arial','B',10);
 			$this->Cell(37,6,$euname,1,0,'L');
+			$this->Cell(130);
+			$this->Cell(24,6,$euname22,1,0,'R');
 			$this->ln(5);
 			$this->SetFont('Arial','B',11);
 			$this->Cell(45);
 			$this->Cell(110,5,$euname1,'B',0,'C');
-			$this->SetFont('Arial','B',8);
-			$this->Cell(28);
-			//$this->Cell(5,3,$euname3,0,0,'R');
+			$this->SetFont('Arial','B',9);
+			$this->Cell(5);
+			
 			   
 			// Line break
 			$this->Ln(10);
@@ -393,14 +395,11 @@ function Footer()
 			{
 				$a="For the Post: Counting Assistant";
 			}
-			else if($row['per_poststat']=="P2")
+			else if($row['per_poststat']=="P2" || $row['per_poststat']=="PA")
 			{
-				$a="For the Post: Counting Sup PB";
+				$a="For the Post: Counting Supervisor";
 			}
-			else if($row['per_poststat']=="PA")
-			{
-				$a="For the Post: Counting Sup PB1";
-			}
+			
 			if($row['pa_name']!='' && $row['p2_name']!='')
 			{
 			$this->Ln(4);
