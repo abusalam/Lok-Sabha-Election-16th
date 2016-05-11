@@ -21,7 +21,7 @@ $i=execUpdate($sql192);
 
 
 //insert data into second_rand_table_reserve
-$sql01="insert into second_rand_table_reserve (groupid,assemblycd,subdivisioncd,pccd,personcd,person_name,person_designation,post_status,officecd,districtcd,dcrccd, training_schd) select groupid,forassembly, forsubdivision,' ',personcd,officer_name,off_desg,poststat,officecd,districtcd,dcrccd,training2_sch from personnela where booked='R' and forsubdivision='$subdiv_cd' and training2_sch is not null";
+$sql01="insert into second_rand_table_reserve (groupid,assemblycd,subdivisioncd,pccd,personcd,person_name,person_designation,post_status,officecd,districtcd,dcrccd, training_schd) select groupid,forassembly, forsubdivision,' ',personcd,officer_name,off_desg,poststat,officecd,districtcd,dcrccd,training2_sch from personnela where booked='R' and forsubdivision='$subdiv_cd'";
 $i=execInsert($sql01);
 
 //update office details

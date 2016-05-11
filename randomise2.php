@@ -8,11 +8,11 @@ include 'ppdata.php';
 include 'ppdatar.php';
 include 'randno1.php';
 include 'reserve1.php';
-//include 'reserve1a.php';
+include 'reserve1a.php';
 include 'reserve1o.php';
 include 'dcrc.php';
 include 'dcrcreserve.php';
-include 'countpp1.php';
+include 'countpp_mo.php';
 
 if(isset($_GET['subdiv_cd']) && $_GET['subdiv_cd']!=null)
 {
@@ -256,6 +256,6 @@ new dcrc($dist,$sub);
 
 new dcrcreserve($dist,$sub);
 echo "<div class='alert-success'>Completed</div>";
-//new countpp1($sub);
+new countpp_mo($sub);
 //print_r($grpdata);
 ?>

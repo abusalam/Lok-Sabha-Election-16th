@@ -148,7 +148,8 @@ function populate_click()
     <tr><td align="center" colspan="3"><img src="images/blank.gif" alt="" height="1px" /></td></tr>
 	<tr>
 	  <td align="center"><input type="submit" name="populate" id="populate" value="Populate" class="button"  style="height:50px; width:100px;" /></td>
-      <td align="center"><input type="submit" name="multiply" id="multiply" value="Multiply" class="button"  style="height:50px; width:100px;" /></td>
+	  <td align="left">&nbsp;</td>
+	  <!--td align="center"><input type="submit" name="multiply" id="multiply" value="Multiply" class="button"  style="height:50px; width:100px;" /></td-->
       <td align="center"><input type="submit" name="gensl" id="gensl" value="Serial" class="button"  style="height:50px; width:100px;" /></td></tr>
     <tr>
       <td align="left">&nbsp;</td>

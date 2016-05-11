@@ -1066,10 +1066,11 @@ function master_roll_second_appointment_letter($group_id,$forassembly)
 	  district.district,
 	  office.pin,
 	  office.officecd,
-	  personnela.poststat,
+	  poststat.poststatus,
 	  personnela.off_desg
 	From personnela
 	  Inner Join office On personnela.officecd = office.officecd
+	  Inner Join poststat On personnela.poststat = poststat.post_stat
 	  Inner Join subdivision On subdivision.subdivisioncd = office.subdivisioncd
 	  Inner Join policestation
 		On office.policestn_cd = policestation.policestationcd
@@ -1453,7 +1454,7 @@ function delete_prev_data_second_rand_reserve($forassembly,$forpc,$group_id)
 //=========================Third app letter print====================
 function third_app_print($forassembly)
 {
-	$sql="Select groupid,psname,psno,psfix
+	$sql="Select groupid,psname,psfix
 	From pollingstation
 	Where 1=1 ";
 	if($forassembly!='' && $forassembly!=null && $forassembly!=0)

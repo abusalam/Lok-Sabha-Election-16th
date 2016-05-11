@@ -160,6 +160,10 @@ $i=execUpdate($sql271);
 $sql272="update second_appt a join district b on substr(a.dcrcgrp,1,2)=b.districtcd set a.district=b.district";
 $i=execUpdate($sql272);
 
+$sqlblock="update second_appt join block_muni on second_appt.mo_block=block_muni.blockminicd
+set second_appt.block_muni_name=block_muni.blockmuni where second_appt.subdivcd='$subdiv_cd'";
+$i=execUpdate($sqlblock);
+
 //$sql28="update second_appt join second_appt as a on second_appt.`pr_personcd`=a.`pr_personcd` set second_appt.pers_off= a.pr_officecd, second_appt.per_poststat= a.pr_status where a.subdivcd='$subdiv_cd'";
 //$i=execUpdate($sql28);
 //echo "Completed";
