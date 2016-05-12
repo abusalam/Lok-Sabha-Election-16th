@@ -84,7 +84,7 @@ function FancyTable($header, $data)
 			$this->SetFont('Arial','',7);
 			$this->Cell($w[0],6,$rowOff['groupid'],'LRT',0,'C',$fill);						
 			//$this->Cell($w[1],6,$rowOff['psno']."".$rowOff['psfix'],'LRT',0,'C',$fill);
-			$this->Cell($w[2],6,$rowOff['psname'],'LRT',0,'L',$fill);
+			$this->Cell($w[1],6,$rowOff['psname'],'LRT',0,'L',$fill);
 			//count1++;
 			
 			$this->Ln();
