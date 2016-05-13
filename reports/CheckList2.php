@@ -54,29 +54,28 @@ function getHtmlTable($Query, $QueryNumber) {
 <?php
 /* Select queries return a resultset */
 $QueryNumber=1;
-$Query = 'SELECT forsubdivision, `forassembly`, member, COUNT(*) AS `Rows` FROM `pollingstation` GROUP BY forsubdivision,`forassembly`,member ORDER BY forsubdivision,`forassembly`,member';
+$Query = 'SELECT selected,block_muni.blockmuni, count(*) as `Count` FROM `personnela` join office on (personnela.officecd=office.officecd) join block_muni on (block_muni.blockminicd=office.blockormuni_cd) GROUP by selected,block_muni.blockmuni';
+echo getHtmlTable($Query, $QueryNumber++);
+
+$Query = 'SELECT forsubdivision,booked,left(personcd,1) as `DutyCount`, poststat,count(*) as `PP_Count` from personnela where selected=1 group by forsubdivision, poststat,booked, left(personcd,1) order by forsubdivision,booked,left(personcd,1),poststat';
 echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'SELECT `forsubdivision`, `forassembly`,`member`, COUNT(*) AS `Rows`  FROM `grp_dcrc` GROUP BY `forsubdivision`, `forassembly`,`member` ORDER BY `forsubdivision`, `forassembly`,`member`';
 echo getHtmlTable($Query, $QueryNumber++);
 
-$Query = 'SELECT `forsubdivision`,booked,poststat,COUNT(*) AS `Rows` FROM `personnela` where selected=1 GROUP BY `forsubdivision`,booked,poststat';
-echo getHtmlTable($Query, $QueryNumber++);
-
 $Query = 'SELECT `forsubdivision`,`forassembly`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`forassembly`,`booked`';
 echo getHtmlTable($Query, $QueryNumber++);
-
-$Query = 'SELECT subdivisioncd,sum(no_party) from assembly_party group by subdivisioncd';
-echo getHtmlTable($Query, $QueryNumber++);
-
-$Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
-echo getHtmlTable($Query, $QueryNumber++);
-//echo '<br style="clear:both;"/>';
 
 $Query = 'select forsubdivision,sum(numb) from reserve group by forsubdivision';
 echo getHtmlTable($Query, $QueryNumber++);
 
-$Query = 'SELECT forsubdivision,booked,left(personcd,1) as `DutyCount`, poststat,count(*) as `PP_Count` from personnela where selected=1 group by forsubdivision, poststat,booked, left(personcd,1) order by forsubdivision,booked,left(personcd,1),poststat';
+$Query = 'SELECT `forsubdivision`,`booked`,count(*) FROM `personnela` group by `forsubdivision`,`booked`';
+echo getHtmlTable($Query, $QueryNumber++);
+
+$Query = 'SELECT `forsubdivision`,booked,poststat,COUNT(*) AS `Rows` FROM `personnela` where selected=1 GROUP BY `forsubdivision`,booked,poststat';
+echo getHtmlTable($Query, $QueryNumber++);
+
+$Query = 'SELECT forsubdivision, `forassembly`, member, COUNT(*) AS `Rows` FROM `pollingstation` GROUP BY forsubdivision,`forassembly`,member ORDER BY forsubdivision,`forassembly`,member';
 echo getHtmlTable($Query, $QueryNumber++);
 
 $Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_appt GROUP by training_venue,training_date,training_time';
