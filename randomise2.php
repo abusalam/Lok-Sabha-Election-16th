@@ -47,7 +47,7 @@ $i=0;
 
 $sobj= new mysqliconn();
  $msqli=$sobj->getconn();
- $msqli->query("update personnela set booked=' ',groupid=0,forassembly=' ' where forsubdivision='$sub'");
+ $msqli->query("update personnela set booked=' ',groupid=0,forassembly=' ' where forsubdivision='$sub' and booked!='C'");
  //echo $sub;
 //exit;
  $msqli->autocommit(FALSE);
