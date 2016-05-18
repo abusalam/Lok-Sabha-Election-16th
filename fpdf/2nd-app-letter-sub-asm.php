@@ -102,13 +102,13 @@ class PDF extends FPDF {
         $ass_code = $row['assembly'];
         $groupid = $row['groupid'];
 
-        $sql = "select * from assembly where assemblycd=" . $ass_code . "";// RO Name & Deseignation
+        $sql = "select * from assembly where assemblycd=" . $ass_code;// RO Name & Deseignation
         $rs1 = execSelect($sql);
         $row3 = getRows($rs1);
         $ro_name = $row3['ro_name'];
         //$ro_desig=$row3['ro_desig'];
-        $euname6 = "     Election to the Legislative Assembly " . $row['assembly_name'] . " Constituency. ";
-        $euname7 = "     I  " . $ro_name . ", Observer, " . $row['assembly_name'] . " AC, appoint the persons whose names are specified below to act as Counting Supervisors/ Assistants and to attend " . $row4['counting_venue'] . ", " . $row4['venue_address'] . ", for the purpose of assisting me in the counting of votes at the said election.   ";
+        $euname6 = "     Election to the West Bengal Legislative Assembly - 2016 " . $row['assembly_name'] . " Constituency. ";
+        $euname7 = "     I  " . $ro_name . ", Observer, " . $row['assembly_name'] . " AC, appoint the persons whose names are specified below to act as Counting Micro Observer and to attend " . $row4['counting_venue'] . ", " . $row4['venue_address'] . ", for the purpose of assisting me in the counting of votes at the said election.   ";
         $euname8 = "Station specified in corresponding entry in column(1) of the table provided below for " . $row['assembly'] . " - " . $row['assembly_name'] . " L.A. Constituency ";
         $euname78 = "";
         $euname81 = "I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding ";

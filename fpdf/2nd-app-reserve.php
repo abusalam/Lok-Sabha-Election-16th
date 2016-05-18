@@ -116,12 +116,12 @@ function FancyTable($header, $data)
 			$post=$row['post_status'];
 			$ass_code=$row['assemblycd'];
 			//$groupid=$row['groupid'];
-			$sql="select * from assembly where assemblycd=".$ass_code."";// RO Name & Deseignation
+			$sql="select * from assembly where assemblycd=".$ass_code;// RO Name & Deseignation
 			$rs1=execSelect($sql);
 			$row3=getRows($rs1);
 			$ro_name=$row3['ro_name'];
-			$euname6="     Election to the Legislative Assembly ".$row['assembly']." Constituency. ";
-			$euname7="     I  ".$ro_name.", Observer, ".$row['assembly']." AC, appoint the persons whose names are specified bellow to act as Counting Supervisors/ Assistants and to attend at ".$row4['counting_venue'].", ".$row4['venue_address'].", for the purpose of assisting me in the counting of votes at the said election.   ";
+			$euname6="     Election to the West Bengal Legislative Assembly - 2016 ".$row['assembly']." Constituency. ";
+			$euname7="     I  ".$ro_name.", Observer, ".$row['assembly']." AC, appoint the persons whose names are specified bellow to act as Counting Micro Observer and to attend ".$row4['counting_venue'].", ".$row4['venue_address'].", for the purpose of assisting me in the counting of votes at the said election.   ";
 			$euname8="Station specified in corresponding entry in column(1) of the table provided below for ".$row['assemblycd']." - ".$row['assembly']." L.A. Constituency ";
 			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
 			$euname81="I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
