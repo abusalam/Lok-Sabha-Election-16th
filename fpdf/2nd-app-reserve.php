@@ -120,8 +120,8 @@ function FancyTable($header, $data)
 			$rs1=execSelect($sql);
 			$row3=getRows($rs1);
 			$ro_name=$row3['ro_name'];
-			$euname6="     Election to the House of the People/ Legislative Assembly ".$row['assembly']." Constituency. ";
-			$euname7="     I  ".$ro_name.", Reurning Officer/".$row['assembly']." AC, appoint the persons whose names are specified bellow to act as Counting Supervisors/ Assistants and to attend at ".$row4['counting_venue'].", ".$row4['venue_address'].", for the purpose of assisting me in the counting of votes at the said election.   ";
+			$euname6="     Election to the Legislative Assembly ".$row['assembly']." Constituency. ";
+			$euname7="     I  ".$ro_name.", Observer, ".$row['assembly']." AC, appoint the persons whose names are specified bellow to act as Counting Supervisors/ Assistants and to attend at ".$row4['counting_venue'].", ".$row4['venue_address'].", for the purpose of assisting me in the counting of votes at the said election.   ";
 			$euname8="Station specified in corresponding entry in column(1) of the table provided below for ".$row['assemblycd']." - ".$row['assembly']." L.A. Constituency ";
 			$euname78="forming part of ".$row['pcname']." Parliamentary Constituency.";
 			$euname81="I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding Officer";
@@ -140,7 +140,7 @@ function FancyTable($header, $data)
 			$nb3="(__________________________)";
 			$signature="../images/ro/".$row['assemblycd'].".jpg";
 			//$signature="../images/ro/259.jpg";
-			$roname="Returning Officer/".$row['assemblycd']." - ".$row['assembly']." AC";
+			$roname="Observer, ".$row['assemblycd']." - ".$row['assembly']." AC";
 			
 				$this->ln(20);
 			$this->SetFont('Arial','B',10);
@@ -396,19 +396,7 @@ function FancyTable($header, $data)
 				$pr_post_stat='';
 				$pr_join='';
 			}*/
-			if($row['post_status']=="PR")
-			{
-				$a="For the Post: Counting Supervisor";
-;			}
-			else if($row['post_status']=="P1")
-			{
-				$a="For the Post: Counting Assistant";
-			}
-			else if($row['post_status']=="P2" || $row['post_status']=="PA")
-			{
-				$a="For the Post: Counting Supervisor";
-			}
-			
+
 		$this->Ln(4);
 			$this->SetFont('Arial','B',9);
 			$this->Cell(50,4,$p1_name.",".$p1_desig." (Pin-".$p1_code.")",0,'L');

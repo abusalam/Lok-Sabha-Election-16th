@@ -98,7 +98,7 @@ class PDF extends FPDF {
         $euname22 = "Party No. " . $row['groupid'];
         $euname4 = "Order No: " . $_SESSION['apt2_orderno'];
         $euname5 = "Date: " . $_SESSION['apt2_date'];
-        $post = $row5['per_poststat'];
+        //$post = $row5['per_poststat'];
         $ass_code = $row['assembly'];
         $groupid = $row['groupid'];
 
@@ -107,8 +107,8 @@ class PDF extends FPDF {
         $row3 = getRows($rs1);
         $ro_name = $row3['ro_name'];
         //$ro_desig=$row3['ro_desig'];
-        $euname6 = "     Election to the House of the People/ Legislative Assembly " . $row['assembly_name'] . " Constituency. ";
-        $euname7 = "     I  " . $ro_name . ", Reurning Officer/" . $row['assembly_name'] . " AC, appoint the persons whose names are specified bellow to act as Counting Supervisors/ Assistants and to attend at " . $row4['counting_venue'] . ", " . $row4['venue_address'] . ", for the purpose of assisting me in the counting of votes at the said election.   ";
+        $euname6 = "     Election to the Legislative Assembly " . $row['assembly_name'] . " Constituency. ";
+        $euname7 = "     I  " . $ro_name . ", Observer, " . $row['assembly_name'] . " AC, appoint the persons whose names are specified below to act as Counting Supervisors/ Assistants and to attend " . $row4['counting_venue'] . ", " . $row4['venue_address'] . ", for the purpose of assisting me in the counting of votes at the said election.   ";
         $euname8 = "Station specified in corresponding entry in column(1) of the table provided below for " . $row['assembly'] . " - " . $row['assembly_name'] . " L.A. Constituency ";
         $euname78 = "";
         $euname81 = "I also authorise the Polling Officer of Sl. No.1 specified in column(4) of the table against that entry to perform the functions of the Presiding ";
@@ -130,7 +130,7 @@ class PDF extends FPDF {
 
         $signature = "../images/ro/" . $row['assembly'] . ".jpg";
         //$signature="../images/ro/259.jpg";
-        $roname = "Returning Officer/" . $row['assembly'] . " - " . $row['assembly_name'] . " AC";
+        $roname = "Observer, " . $row['assembly'] . " - " . $row['assembly_name'] . " AC";
 
         $this->ln(20);
         $this->SetFont('Arial', 'B', 10);
@@ -211,7 +211,7 @@ class PDF extends FPDF {
 
         $this->Ln(4);
         $this->SetFont('Arial', 'B', 9);
-        $this->Cell(50, 4, $mo_name . "," . $mo_desig . " (Pin-" . $mo_code . ")", 0, 'L');
+        $this->Cell(50, 4, $mo_name . ", " . $mo_desig . " (Pin-" . $mo_code . ")", 0, 'L');
         $this->Ln(4);
         $this->SetFont('Arial', '', 9);
         $this->Cell(140, 4, "      " . $mo_ofc_address, 0, 0, 'L');
