@@ -84,6 +84,9 @@ echo getHtmlTable($Query, $QueryNumber++);
 $Query = 'select training_venue,training_date,training_time,count(slno) as `PP_Count` from second_rand_table_reserve GROUP by training_venue,training_date,training_time';
 echo getHtmlTable($Query, $QueryNumber++);
 
+$Query = 'select personnela.personcd,personnela.officer_name,personnela.off_desg,personnela.forassembly,personnela.booked,personnela.groupid from personnela WHERE personnela.selected=1';
+echo getHtmlTable($Query, $QueryNumber++);
+
 /**
  * @filename: currentgitbranch.php
  * @usage: Include this file after the '<body>' tag in your project
